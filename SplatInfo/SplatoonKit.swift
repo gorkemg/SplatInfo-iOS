@@ -14,7 +14,6 @@ struct GameModeTimeline: Codable {
     static func empty(_ mode: GameModeType) -> GameModeTimeline {
         return GameModeTimeline(modeType: mode, schedule: [])
     }
-    
 }
 
 struct GameMode: Codable {
@@ -88,6 +87,10 @@ struct WeaponDetails: Codable {
 struct CoopTimeline: Codable {
     let detailedSchedules: [CoopEventDetail]
     let otherSchedules: [EventTimeframe]
+
+    static func empty() -> CoopTimeline {
+        return CoopTimeline(detailedSchedules: [], otherSchedules: [])
+    }
 }
 
 struct CoopEventDetail: Codable {
