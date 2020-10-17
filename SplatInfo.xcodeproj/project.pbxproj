@@ -13,6 +13,33 @@
 		DE2BD6012538489C006E5531 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE2BD6002538489C006E5531 /* Preview Assets.xcassets */; };
 		DE2BD60C2538489D006E5531 /* SplatInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2BD60B2538489D006E5531 /* SplatInfoTests.swift */; };
 		DE2BD6172538489D006E5531 /* SplatInfoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2BD6162538489D006E5531 /* SplatInfoUITests.swift */; };
+		DE50121425385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */; };
+		DE50121525385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */; };
+		DE50121625385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */; };
+		DE50121B2539D22800A73F7A /* SplatoonKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121A2539D22800A73F7A /* SplatoonKit.swift */; };
+		DE50121C2539D22800A73F7A /* SplatoonKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121A2539D22800A73F7A /* SplatoonKit.swift */; };
+		DE50121D2539D22800A73F7A /* SplatoonKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121A2539D22800A73F7A /* SplatoonKit.swift */; };
+		DE5012222539E24A00A73F7A /* ScheduleFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5012212539E24A00A73F7A /* ScheduleFetcher.swift */; };
+		DE5012232539E24A00A73F7A /* ScheduleFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5012212539E24A00A73F7A /* ScheduleFetcher.swift */; };
+		DE5012242539E24A00A73F7A /* ScheduleFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5012212539E24A00A73F7A /* ScheduleFetcher.swift */; };
+		DE50122D253A1B7500A73F7A /* schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50122C253A1B7500A73F7A /* schedules.json */; };
+		DE50122E253A1B7500A73F7A /* schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50122C253A1B7500A73F7A /* schedules.json */; };
+		DE50122F253A1B7500A73F7A /* schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50122C253A1B7500A73F7A /* schedules.json */; };
+		DE501237253A1BA300A73F7A /* coop-schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501236253A1BA300A73F7A /* coop-schedules.json */; };
+		DE501238253A1BA300A73F7A /* coop-schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501236253A1BA300A73F7A /* coop-schedules.json */; };
+		DE501239253A1BA300A73F7A /* coop-schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501236253A1BA300A73F7A /* coop-schedules.json */; };
+		DE50123E253A1BC600A73F7A /* timeline.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50123D253A1BC600A73F7A /* timeline.json */; };
+		DE50123F253A1BC600A73F7A /* timeline.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50123D253A1BC600A73F7A /* timeline.json */; };
+		DE501240253A1BC600A73F7A /* timeline.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50123D253A1BC600A73F7A /* timeline.json */; };
+		DE501245253A1BE200A73F7A /* merchandise.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501244253A1BE200A73F7A /* merchandise.json */; };
+		DE501246253A1BE200A73F7A /* merchandise.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501244253A1BE200A73F7A /* merchandise.json */; };
+		DE501247253A1BE200A73F7A /* merchandise.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501244253A1BE200A73F7A /* merchandise.json */; };
+		DE50124C253A1BFF00A73F7A /* festivals.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50124B253A1BFF00A73F7A /* festivals.json */; };
+		DE50124D253A1BFF00A73F7A /* festivals.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50124B253A1BFF00A73F7A /* festivals.json */; };
+		DE50124E253A1BFF00A73F7A /* festivals.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50124B253A1BFF00A73F7A /* festivals.json */; };
+		DE501256253A1C2400A73F7A /* na-5060-rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501255253A1C2400A73F7A /* na-5060-rankings.json */; };
+		DE501257253A1C2400A73F7A /* na-5060-rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501255253A1C2400A73F7A /* na-5060-rankings.json */; };
+		DE501258253A1C2400A73F7A /* na-5060-rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501255253A1C2400A73F7A /* na-5060-rankings.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +72,15 @@
 		DE2BD6122538489D006E5531 /* SplatInfoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SplatInfoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE2BD6162538489D006E5531 /* SplatInfoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatInfoUITests.swift; sourceTree = "<group>"; };
 		DE2BD6182538489D006E5531 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splatoon2InkAPI.swift; sourceTree = "<group>"; };
+		DE50121A2539D22800A73F7A /* SplatoonKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatoonKit.swift; sourceTree = "<group>"; };
+		DE5012212539E24A00A73F7A /* ScheduleFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleFetcher.swift; sourceTree = "<group>"; };
+		DE50122C253A1B7500A73F7A /* schedules.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = schedules.json; sourceTree = "<group>"; };
+		DE501236253A1BA300A73F7A /* coop-schedules.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "coop-schedules.json"; sourceTree = "<group>"; };
+		DE50123D253A1BC600A73F7A /* timeline.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = timeline.json; sourceTree = "<group>"; };
+		DE501244253A1BE200A73F7A /* merchandise.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = merchandise.json; sourceTree = "<group>"; };
+		DE50124B253A1BFF00A73F7A /* festivals.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = festivals.json; sourceTree = "<group>"; };
+		DE501255253A1C2400A73F7A /* na-5060-rankings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "na-5060-rankings.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +136,9 @@
 				DE2BD5FD2538489C006E5531 /* Assets.xcassets */,
 				DE2BD6022538489C006E5531 /* Info.plist */,
 				DE2BD5FF2538489C006E5531 /* Preview Content */,
+				DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */,
+				DE50121A2539D22800A73F7A /* SplatoonKit.swift */,
+				DE5012212539E24A00A73F7A /* ScheduleFetcher.swift */,
 			);
 			path = SplatInfo;
 			sourceTree = "<group>";
@@ -108,6 +147,12 @@
 			isa = PBXGroup;
 			children = (
 				DE2BD6002538489C006E5531 /* Preview Assets.xcassets */,
+				DE50122C253A1B7500A73F7A /* schedules.json */,
+				DE501236253A1BA300A73F7A /* coop-schedules.json */,
+				DE50123D253A1BC600A73F7A /* timeline.json */,
+				DE50124B253A1BFF00A73F7A /* festivals.json */,
+				DE501255253A1C2400A73F7A /* na-5060-rankings.json */,
+				DE501244253A1BE200A73F7A /* merchandise.json */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -233,8 +278,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE50122D253A1B7500A73F7A /* schedules.json in Resources */,
+				DE501245253A1BE200A73F7A /* merchandise.json in Resources */,
+				DE501237253A1BA300A73F7A /* coop-schedules.json in Resources */,
+				DE50124C253A1BFF00A73F7A /* festivals.json in Resources */,
 				DE2BD6012538489C006E5531 /* Preview Assets.xcassets in Resources */,
 				DE2BD5FE2538489C006E5531 /* Assets.xcassets in Resources */,
+				DE501256253A1C2400A73F7A /* na-5060-rankings.json in Resources */,
+				DE50123E253A1BC600A73F7A /* timeline.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +293,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE50123F253A1BC600A73F7A /* timeline.json in Resources */,
+				DE50122E253A1B7500A73F7A /* schedules.json in Resources */,
+				DE501257253A1C2400A73F7A /* na-5060-rankings.json in Resources */,
+				DE501238253A1BA300A73F7A /* coop-schedules.json in Resources */,
+				DE50124D253A1BFF00A73F7A /* festivals.json in Resources */,
+				DE501246253A1BE200A73F7A /* merchandise.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,6 +306,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE501240253A1BC600A73F7A /* timeline.json in Resources */,
+				DE50122F253A1B7500A73F7A /* schedules.json in Resources */,
+				DE501258253A1C2400A73F7A /* na-5060-rankings.json in Resources */,
+				DE501239253A1BA300A73F7A /* coop-schedules.json in Resources */,
+				DE50124E253A1BFF00A73F7A /* festivals.json in Resources */,
+				DE501247253A1BE200A73F7A /* merchandise.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,8 +322,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE50121B2539D22800A73F7A /* SplatoonKit.swift in Sources */,
 				DE2BD5FC25384899006E5531 /* ContentView.swift in Sources */,
+				DE5012222539E24A00A73F7A /* ScheduleFetcher.swift in Sources */,
 				DE2BD5FA25384899006E5531 /* SplatInfoApp.swift in Sources */,
+				DE50121425385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,7 +334,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE50121525385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */,
 				DE2BD60C2538489D006E5531 /* SplatInfoTests.swift in Sources */,
+				DE5012232539E24A00A73F7A /* ScheduleFetcher.swift in Sources */,
+				DE50121C2539D22800A73F7A /* SplatoonKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,7 +345,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE50121625385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */,
 				DE2BD6172538489D006E5531 /* SplatInfoUITests.swift in Sources */,
+				DE5012242539E24A00A73F7A /* ScheduleFetcher.swift in Sources */,
+				DE50121D2539D22800A73F7A /* SplatoonKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
