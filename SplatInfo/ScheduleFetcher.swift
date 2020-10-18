@@ -111,7 +111,32 @@ extension SchedulesAPIResponse {
 extension CoopSchedulesAPIResponse {
     
     var coopTimeline : CoopTimeline {
-        return CoopTimeline(detailedSchedules: [], otherSchedules: [])
+        var detailedEvents : [CoopEventDetail] = []
+        for event in self.details {
+            let timeframe = EventTimeframe(startDate: event.startTime, endDate: event.endTime)
+            var weapons: [Weapon] = []
+            for weaponDetails in event.weapons {
+                
+                if let weaponDetails = weaponDetails.weapon {
+                    let details = WeaponDetails(id: weaponDetails.id, name: weaponDetails.name, imageUrl: "\(splatnetImageHostUrl)\(weaponDetails.image)")
+                    let weapon = Weapon.weapon(details: details)
+                    weapons.append(weapon)
+                }else if let coopWeaponDetails = weaponDetails.coopSpecialWeapon {
+                    let details = WeaponDetails(id: UUID().uuidString, name: coopWeaponDetails.name, imageUrl: "\(splatnetImageHostUrl)\(coopWeaponDetails.image)")
+                    let weapon = Weapon.weapon(details: details)
+                    weapons.append(weapon)
+                }
+            }
+            let stage = Stage(id: UUID().uuidString, name: event.stage.name, imageUrl: "\(splatnetImageHostUrl)\(event.stage.image)")
+            let eventDetails = CoopEventDetail(timeframe: timeframe, weapons: weapons, stage: stage)
+            detailedEvents.append(eventDetails)
+        }
+        var otherEvents : [EventTimeframe] = []
+        for otherEvent in self.schedules {
+            let timeframe = EventTimeframe(startDate: otherEvent.startTime, endDate: otherEvent.endTime)
+            otherEvents.append(timeframe)
+        }
+        return CoopTimeline(detailedSchedules: detailedEvents, otherSchedules: otherEvents)
     }
 }
 

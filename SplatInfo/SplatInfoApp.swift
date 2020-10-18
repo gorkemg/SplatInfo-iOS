@@ -13,13 +13,16 @@ import Foundation
 struct SplatInfoApp: App {
     
     private let scheduleFetcher = ScheduleFetcher()
+    @State var schedule = Schedule.empty
     
     var body: some Scene {
         WindowGroup {
-            ScheduleGrid(schedule: scheduleFetcher.schedule).onAppear {
+            ScheduleGrid(schedule: schedule).onAppear {
                 scheduleFetcher.fetchGameModeTimelines { (gameModeTimelines, error) in
+                    schedule = scheduleFetcher.schedule
                 }
                 scheduleFetcher.fetchCoopTimeline { (coopTimeline, error) in
+                    schedule = scheduleFetcher.schedule
                 }
             }
         }
@@ -39,10 +42,10 @@ struct ScheduleGrid: View {
             Image("bg-squids").resizable(resizingMode: .tile).ignoresSafeArea()
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 50) {
-                    GameModeScheduleView(gameModeTimeline: schedule.gameModes.regular)
-                    GameModeScheduleView(gameModeTimeline: schedule.gameModes.ranked)
-                    GameModeScheduleView(gameModeTimeline: schedule.gameModes.league)
-                    CoopScheduleView(coopTimeline: schedule.coop)
+                    GameModeTimelineView(timeline: .gameModeTimeline(timeline: schedule.gameModes.regular))
+                    GameModeTimelineView(timeline: .gameModeTimeline(timeline: schedule.gameModes.ranked))
+                    GameModeTimelineView(timeline: .gameModeTimeline(timeline: schedule.gameModes.league))
+                    GameModeTimelineView(timeline: .coopTimeline(timeline: schedule.coop))
                 }
                 .padding()
             }
@@ -50,15 +53,28 @@ struct ScheduleGrid: View {
     }
 }
 
-struct GameModeScheduleView: View {
-    let gameModeTimeline : GameModeTimeline
+
+struct GameModeTimelineView: View {
+    
+    public enum TimelineType {
+        case gameModeTimeline(timeline: GameModeTimeline)
+        case coopTimeline(timeline: CoopTimeline)
+    }
+    
+    let timeline : TimelineType
+    
     var body: some View {
         ZStack(alignment: .top) {
             color
-            Image("splatoon-card-bg").resizable(resizingMode: .tile)
+            bgImage
             VStack {
-                if let event = gameModeTimeline.schedule.first {
-                    GameModeEventView(gameModeEvent: event)
+                switch timeline {
+                case .gameModeTimeline(timeline: let timeline):
+                    if let event = timeline.schedule.first {
+                        GameModeEventView(gameModeEvent: event)
+                    }
+                case .coopTimeline(timeline: let timeline):
+                    CoopEventView(coopTimeline: timeline)
                 }
             }
             .frame(minWidth: 0, idealWidth: 300, maxWidth: .infinity, minHeight: 0, idealHeight: 400, maxHeight: .infinity, alignment: .center)
@@ -67,13 +83,107 @@ struct GameModeScheduleView: View {
     }
     
     var color : Color {
-        switch gameModeTimeline.modeType {
-        case .regular:
-            return Color("RegularModeColor")
-        case .ranked:
-            return Color("RankedModeColor")
-        case .league:
-            return Color("LeagueModeColor")
+        switch timeline {
+        case .gameModeTimeline(timeline: let timeline):
+            switch timeline.modeType {
+            case .regular:
+                return Color("RegularModeColor")
+            case .ranked:
+                return Color("RankedModeColor")
+            case .league:
+                return Color("LeagueModeColor")
+            }
+        case .coopTimeline(timeline: let timeline):
+            return Color("CoopModeColor")
+        }
+    }
+    
+    var bgImage : Image {
+        switch timeline {
+        case .gameModeTimeline(timeline: let timeline):
+            return Image("splatoon-card-bg").resizable(resizingMode: .tile)
+        case .coopTimeline(timeline: let timeline):
+            return Image("bg-spots").resizable(resizingMode: .tile)
+        }
+    }
+}
+
+struct CoopEventView: View {
+    let coopTimeline: CoopTimeline
+    
+    var body: some View {
+        VStack {
+            TitleView(title: "Salmon Run", logoName: "mr-grizz-logo")
+            ForEach(coopTimeline.detailedSchedules, id: \.id) { detail in
+                CoopEventDetailsView(details: detail)
+            }
+        }
+        .padding(10)
+        .foregroundColor(.white)
+    }
+}
+
+struct CoopEventDetailsView: View {
+    let details : CoopEventDetail
+    
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("Open or Soon")
+                Text("Time remaining")
+            }
+            Text("Start Time - End Time")
+            HStack {
+                if let stage = details.stage {
+                    StageImage(stage: stage)
+                }
+                VStack {
+                    Text("Available Weapons")
+                    LazyVGrid(columns: columns, content: {
+                        ForEach(weapons, id: \.id) { item in
+                            AsyncImage(url: URL(string: item.imageUrl)!) {
+                                Text("*")
+                            }
+                        }
+                    })
+                }
+            }
+        }
+    }
+
+    var weapons : [WeaponDetails] {
+        var weaponDetails : [WeaponDetails] = []
+        for weapon in details.weapons {
+            switch weapon {
+            case .weapon(details: let details):
+                weaponDetails.append(details)
+            case .coopSpecialWeapon(details: let details):
+                weaponDetails.append(details)
+            }
+        }
+        return weaponDetails
+    }
+}
+
+
+struct TitleView: View {
+    let title: String
+    let logoName: String
+    
+    var body: some View {
+        HStack(spacing: 5) {
+            Image(logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 40, height: 40)
+            Text(title)
+                .multilineTextAlignment(.leading)
+                .font(.largeTitle)
+            Spacer()
         }
     }
 }
@@ -83,13 +193,7 @@ struct GameModeEventView: View {
     
     var body: some View {
         VStack {
-            HStack(spacing: 5) {
-                Image(logo)
-                Text(gameModeEvent.mode.name)
-                    .multilineTextAlignment(.leading)
-                    .font(.largeTitle)
-                Spacer()
-            }
+            TitleView(title: gameModeEvent.mode.name, logoName: logo)
 
             VStack (spacing: 10) {
                 HStack {
@@ -133,23 +237,6 @@ struct GameModeEventView: View {
     }
 }
 
-struct CoopScheduleView: View {
-    let coopTimeline : CoopTimeline
-    var body: some View {
-        ZStack(alignment: .top) {
-            Color("CoopModeColor")
-            Image("splatoon-card-bg").resizable(resizingMode: .tile)
-            VStack {
-                if let event = coopTimeline.detailedSchedules.first {
-//                    GameModeEventView(gameModeEvent: event)
-                }
-            }
-            .frame(minWidth: 0, idealWidth: 300, maxWidth: .infinity, minHeight: 0, idealHeight: 400, maxHeight: .infinity, alignment: .center)
-        }.cornerRadius(30)
-
-    }
-}
-
 struct StageImage: View {
     let stage : Stage
     
@@ -169,7 +256,7 @@ struct StageImage: View {
             .background(Color.black.opacity(0.5))
             .cornerRadius(8)
             .padding(4)
-        }
+        }.aspectRatio(16/10, contentMode: .fit)
     }
 }
 
@@ -273,7 +360,7 @@ struct AsyncImage<Placeholder: View>: View {
             Group {
                 if let image = loader.image {
                     Image(uiImage: image)
-                        .resizable()
+                        .resizable().aspectRatio(contentMode: .fit)
                 } else {
                     placeholder
                 }

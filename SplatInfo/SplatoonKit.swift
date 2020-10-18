@@ -94,6 +94,7 @@ struct CoopTimeline: Codable {
 }
 
 struct CoopEventDetail: Codable {
+    var id = UUID().uuidString
     let timeframe: EventTimeframe
     let weapons: [Weapon]
     let stage: Stage
