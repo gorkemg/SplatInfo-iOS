@@ -139,7 +139,7 @@ struct CoopEventDetailsView: View {
                 Text("Open or Soon")
                 Text("Time remaining")
             }
-            Text("Start Time - End Time")
+            TimeframeView(timeframe: details.timeframe, datesEnabled: true)
             HStack {
                 if let stage = details.stage {
                     StageImage(stage: stage)
@@ -150,6 +150,10 @@ struct CoopEventDetailsView: View {
                         ForEach(weapons, id: \.id) { item in
                             AsyncImage(url: URL(string: item.imageUrl)!) {
                                 Text("*")
+                            } image: { (uiImage) in
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
                             }
                         }
                     })
@@ -157,6 +161,7 @@ struct CoopEventDetailsView: View {
             }
         }
     }
+        
 
     var weapons : [WeaponDetails] {
         var weaponDetails : [WeaponDetails] = []
@@ -172,6 +177,24 @@ struct CoopEventDetailsView: View {
     }
 }
 
+struct TimeframeView: View {
+    let timeframe: EventTimeframe
+    var datesEnabled: Bool = false
+
+    var body: some View {
+        Text(timeframeString)
+    }
+
+    var timeframeString : String {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = datesEnabled ? .short : .none
+        dateFormatter.timeStyle = .short
+        let startString = dateFormatter.string(from: timeframe.startDate)
+        let endString = dateFormatter.string(from: timeframe.endDate)
+        return "\(startString) - \(endString)"
+    }
+}
 
 struct TitleView: View {
     let title: String
@@ -200,7 +223,7 @@ struct GameModeEventView: View {
                     Text(gameModeEvent.rule.name)
                         .font(.title2)
                     Spacer()
-                    Text("Date")
+                    TimeframeView(timeframe: gameModeEvent.timeframe)
                 }
                 LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
                     if let stage = stageA {
@@ -242,9 +265,11 @@ struct StageImage: View {
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            AsyncImage(url: URL(string: stage.imageUrl)!, placeholder: {
+            AsyncImage(url: URL(string: stage.imageUrl)!) {
                 Image("bg-squids").resizable(resizingMode: .tile)
-            })
+            } image: { (uiImage) in
+                Image(uiImage: uiImage).resizable().aspectRatio(contentMode: .fit)
+            }
             .cornerRadius(10.0)
             .frame(minWidth: 0, idealWidth: .infinity, maxWidth: .infinity, minHeight: 0, idealHeight: 100, maxHeight: .infinity, alignment: .center)
 
@@ -263,12 +288,12 @@ struct StageImage: View {
 
 struct SplatInfoApp_Previews: PreviewProvider {
     
-    let fakeSchedule = Schedule.empty
+    static let exampleSchedule = Schedule.example
     
     static var previews: some View {
         Group {
-            ScheduleGrid(schedule: Schedule.example).previewDevice(PreviewDevice(rawValue: "iPad Air 2"))
-            ScheduleGrid(schedule: Schedule.example).previewDevice(PreviewDevice(rawValue: "iPhone SE"))
+            ScheduleGrid(schedule: exampleSchedule).previewDevice(PreviewDevice(rawValue: "iPad Air 2"))
+            ScheduleGrid(schedule: exampleSchedule).previewDevice(PreviewDevice(rawValue: "iPhone SE"))
         }
     }
 }
@@ -342,25 +367,25 @@ extension EnvironmentValues {
 }
 
 
-struct AsyncImage<Placeholder: View>: View {
+struct AsyncImage<Placeholder: View, ResultHolder: View>: View {
     @StateObject private var loader: ImageLoader
     private let placeholder: Placeholder
-
-    init(url: URL, @ViewBuilder placeholder: () -> Placeholder) {
+    private let image: (UIImage) -> ResultHolder
+    
+    init(url: URL, @ViewBuilder placeholder: () -> Placeholder, @ViewBuilder image: @escaping (UIImage) -> ResultHolder) {
         self.placeholder = placeholder()
-        _loader = StateObject(wrappedValue: ImageLoader(url: url))
+        self.image = image
+        _loader = StateObject(wrappedValue: ImageLoader(url: url, cache: Environment(\.imageCache).wrappedValue))
     }
 
     var body: some View {
-        content
-            .onAppear(perform: loader.load)
+        content.onAppear(perform: loader.load)
     }
 
     private var content: some View {
             Group {
-                if let image = loader.image {
-                    Image(uiImage: image)
-                        .resizable().aspectRatio(contentMode: .fit)
+                if let loadedImage = loader.image {
+                    image(loadedImage)
                 } else {
                     placeholder
                 }
