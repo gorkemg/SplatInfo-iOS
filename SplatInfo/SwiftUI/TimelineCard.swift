@@ -58,7 +58,7 @@ struct TimelineCard: View {
                     CoopTimelineView(coopTimeline: timeline)
                 }
             }
-            .padding(20.0)
+            .padding(10.0)
         }
         .cornerRadius(30)
         .foregroundColor(.white)

@@ -16,6 +16,15 @@ struct GameModeEventView: View {
         case narrow
     }
     
+//    let timer = Timer.publish(
+//        every: 1, // second
+//        on: .main,
+//        in: .common
+//    ).autoconnect()
+//
+//    @State var relativeTimeString: String = "in ..."
+
+    
     var body: some View {
         VStack {
             switch style {
@@ -24,9 +33,15 @@ struct GameModeEventView: View {
                     VStack (spacing: 10) {
                         HStack {
                             Text(gameModeEvent.rule.name)
-                                .font(.title2)
+                                .splat2Font(size: 18)
                             Spacer()
-                            TimeframeView(timeframe: gameModeEvent.timeframe)
+                            VStack(alignment: .trailing) {
+                                TimeframeView(timeframe: gameModeEvent.timeframe)
+                                RelativeTimeframeView(timeframe: gameModeEvent.timeframe)
+                                    .splat2Font(size: 9)
+                                    .lineLimit(2)
+                                    .minimumScaleFactor(0.5)
+                            }
                         }
                         LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
                             if let stage = gameModeEvent.stageA {
@@ -46,7 +61,12 @@ struct GameModeEventView: View {
                     LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible()),GridItem(.flexible())]) {
                         VStack(alignment: .center) {
                             Text(gameModeEvent.rule.name)
-                                .font(.headline)
+                                .splat2Font(size: 16)
+                            
+                            RelativeTimeframeView(timeframe: gameModeEvent.timeframe)
+                                .lineLimit(2)
+                                .minimumScaleFactor(0.5)
+                            
                             TimeframeView(timeframe: gameModeEvent.timeframe)
                                 .font(.caption)
                                 .lineLimit(1)
@@ -63,6 +83,11 @@ struct GameModeEventView: View {
             }
         }
     }
+    
+//    var date : Date {
+//        return gameModeEvent.timeframe.isActive ? gameModeEvent.timeframe.endDate : gameModeEvent.timeframe.startDate
+//    }
+
 }
 
 extension GameModeEvent {

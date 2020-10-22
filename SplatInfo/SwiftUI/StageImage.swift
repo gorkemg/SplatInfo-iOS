@@ -22,8 +22,8 @@ struct StageImage: View {
 
             VStack {
                 Text(stage.name)
-                    .font(.caption2)
-                    .padding(2)
+                    .splat2Font(size: 10)
+                    .padding(.horizontal, 6.0)
             }
             .background(Color.black.opacity(0.5))
             .cornerRadius(8)

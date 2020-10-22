@@ -7,8 +7,29 @@
 
 import SwiftUI
 
+extension Date {
+    
+    func relativeTimeAhead(in locale: Locale = .current) -> String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.dateTimeStyle = .numeric
+        formatter.unitsStyle = .abbreviated
+        formatter.locale = locale
+        return formatter.localizedString(for: self, relativeTo: Date())
+    }
+    
+    func relativeTimeRemaining(in locale: Locale = .current) -> String {
+        let dateComponents = Calendar.current.dateComponents([.day, .hour, .minute, .second], from: Date(), to: self)
+        let componentFormatter = DateComponentsFormatter()
+        componentFormatter.allowedUnits = [.day, .hour, .minute]
+        componentFormatter.unitsStyle = .abbreviated
+        componentFormatter.maximumUnitCount = 3
+        componentFormatter.includesTimeRemainingPhrase = true
+        return componentFormatter.string(from: dateComponents)!
+    }
+}
+
 struct CoopEventView: View {
-    let details : CoopEvent
+    let event : CoopEvent
     
     let columns = [
         GridItem(.flexible()),
@@ -16,20 +37,27 @@ struct CoopEventView: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-
+    
+    var currentActivityText : String {
+        return event.timeframe.isActive ? "Open!" : "Soon!"
+    }
+            
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 5.0) {
             HStack {
-                Text("Open or Soon")
-                Text("Time remaining")
+                Text(currentActivityText).splat1Font(size: 20)
+                Spacer()
+                RelativeTimeframeView(timeframe: event.timeframe)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.5)
             }
-            TimeframeView(timeframe: details.timeframe, datesEnabled: true)
+            TimeframeView(timeframe: event.timeframe, datesEnabled: true)
             HStack {
-                if let stage = details.stage {
+                if let stage = event.stage {
                     StageImage(stage: stage)
                 }
                 VStack {
-                    Text("Available Weapons")
+                    Text("Available Weapons").splat1Font(size: 14).minimumScaleFactor(0.5)
                     LazyVGrid(columns: columns, content: {
                         ForEach(weapons, id: \.id) { item in
                             AsyncImage(url: URL(string: item.imageUrl)!) {
@@ -49,7 +77,7 @@ struct CoopEventView: View {
 
     var weapons : [WeaponDetails] {
         var weaponDetails : [WeaponDetails] = []
-        for weapon in details.weapons {
+        for weapon in event.weapons {
             switch weapon {
             case .weapon(details: let details):
                 weaponDetails.append(details)

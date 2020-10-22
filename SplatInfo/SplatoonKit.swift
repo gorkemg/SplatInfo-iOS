@@ -163,7 +163,7 @@ enum GearKind: String, Codable {
 // MARK: - TimeframeActivity Protocol
 
 protocol TimeframeActivity {
-
+    
     var startDate : Date { get }
     var endDate : Date { get }
     var isActive : Bool { get }

@@ -12,12 +12,20 @@ struct TitleView: View {
     let logoName: String
     
     var body: some View {
-        HStack(spacing: 5) {
+        HStack(spacing: 10) {
             Image(logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 40, height: 40)
             Text(title)
-                .multilineTextAlignment(.leading)
-                .font(.largeTitle)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+                .splat1Font(size: 30)
             Spacer()
         }
+    }
+}
+
+struct TitleView_Previews: PreviewProvider {
+    static var previews: some View {
+        TitleView(title: "Hello World", logoName: "mr-grizz-logo")
+            .previewLayout(.sizeThatFits)
     }
 }
