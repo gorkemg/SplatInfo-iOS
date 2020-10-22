@@ -87,9 +87,10 @@ struct WeaponDetails: Codable {
 struct CoopTimeline: Codable {
     let detailedSchedules: [CoopEventDetail]
     let otherSchedules: [EventTimeframe]
+    let date: Date
 
     static func empty() -> CoopTimeline {
-        return CoopTimeline(detailedSchedules: [], otherSchedules: [])
+        return CoopTimeline(detailedSchedules: [], otherSchedules: [], date: Date())
     }
 }
 
@@ -100,7 +101,7 @@ struct CoopEventDetail: Codable {
     let stage: Stage
 }
 
-struct EventTimeframe: Codable {
+struct EventTimeframe: Codable, TimeframeActivity {
     let startDate: Date
     let endDate: Date
 }
@@ -157,4 +158,31 @@ enum GearKind: String, Codable {
     case shoes
     case clothes
     case head
+}
+
+// MARK: - TimeframeActivity Protocol
+
+protocol TimeframeActivity {
+
+    var startDate : Date { get }
+    var endDate : Date { get }
+    var isActive : Bool { get }
+    var isUpcoming : Bool { get }
+    var isOver : Bool { get }
+}
+
+extension TimeframeActivity {
+    
+    var isActive : Bool {
+        let date = Date()
+        return self.startDate <= date && date < self.endDate
+    }
+    var isUpcoming : Bool {
+        let date = Date()
+        return date < self.startDate
+    }
+    var isOver : Bool {
+        let date = Date()
+        return self.endDate < date
+    }
 }

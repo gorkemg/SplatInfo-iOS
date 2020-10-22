@@ -10,7 +10,7 @@ import Combine
 
 private let splatnetImageHostUrl = "https://splatoon2.ink/assets/splatnet"
 
-struct Schedule {
+struct Schedule: Codable {
     var gameModes = GameModesTimelines.empty
     var coop = CoopTimeline.empty()
     
@@ -30,14 +30,36 @@ struct Schedule {
     }
 }
 
-struct GameModesTimelines {
+protocol Outdated {
+
+    var date : Date { get }
+    var isOutdated : Bool { get }
+}
+
+extension Outdated {
+
+    var isOutdated : Bool {
+        return self.date < Date().addingTimeInterval(-3600) // is stored date older than one hour ago
+    }
+}
+
+struct GameModesTimelines: Codable, Outdated {
     let regular: GameModeTimeline
     let ranked: GameModeTimeline
     let league: GameModeTimeline
+    let date: Date
 
     static var empty : GameModesTimelines {
-        return GameModesTimelines(regular: GameModeTimeline.empty(.regular), ranked: GameModeTimeline.empty(.ranked), league: GameModeTimeline.empty(.league))
+        return GameModesTimelines(regular: GameModeTimeline.empty(.regular), ranked: GameModeTimeline.empty(.ranked), league: GameModeTimeline.empty(.league), date: Date())
     }
+}
+
+extension CoopTimeline : Outdated {
+    // make CoopTimeline extend Outdated protocol
+}
+
+extension Encodable {
+    func toJSONData() -> Data? { try? JSONEncoder().encode(self) }
 }
 
 class ScheduleFetcher: ObservableObject {
@@ -46,7 +68,33 @@ class ScheduleFetcher: ObservableObject {
     
     @Published var schedule : Schedule = Schedule.empty
     
-    func fetchGameModeTimelines(completion: @escaping (_ schedule: GameModesTimelines?, _ error: Error?) -> Void) {
+    func loadCachedData<T>(filename: String, resultType: T.Type) -> T? where T:Codable {
+        let filePath = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
+        let fileManager = FileManager.default
+        if let path = filePath, fileManager.fileExists(atPath: path.path) {
+            if let data = try? Data(contentsOf: path) {
+                let decodedObject = try? JSONDecoder().decode(T.self, from: data)
+                return decodedObject
+            }
+        }
+        return nil
+    }
+    
+    func cacheData<T:Encodable>(data: T, filename: String) {
+        let filePath = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
+        if let path = filePath, let data = data.toJSONData() {
+            try? data.write(to: path)
+        }
+    }
+    
+    func fetchGameModeTimelines(completion: @escaping (_ timelines: GameModesTimelines?, _ error: Error?) -> Void) {
+        
+        let filename = "schedules.json"
+        if let timelines = loadCachedData(filename: filename, resultType: GameModesTimelines.self), !timelines.isOutdated {
+            self.schedule.gameModes = timelines
+            completion(timelines, nil)
+            return
+        }
         
         api.requestSchedules { [weak self] (response, error) in
             guard let self = self else { return }
@@ -62,13 +110,21 @@ class ScheduleFetcher: ObservableObject {
             }
 
             let gameModesTimelines = response.gameModesTimelines
+            self.cacheData(data: gameModesTimelines, filename: filename)
             self.schedule.gameModes = gameModesTimelines
             completion(gameModesTimelines, nil)
         }
     }
     
-    func fetchCoopTimeline(completion: @escaping (_ schedule: CoopTimeline?, _ error: Error?) -> Void) {
-                
+    func fetchCoopTimeline(completion: @escaping (_ timeline: CoopTimeline?, _ error: Error?) -> Void) {
+
+        let filename = "coop-schedules.json"
+        if let timeline = loadCachedData(filename: filename, resultType: CoopTimeline.self), !timeline.isOutdated {
+            self.schedule.coop = timeline
+            completion(timeline, nil)
+            return
+        }
+
         api.requestCoopSchedules { [weak self] (coopResponse, error) in
             guard let self = self else { return }
             
@@ -83,6 +139,7 @@ class ScheduleFetcher: ObservableObject {
             }
             
             let coopTimeline = coopResponse.coopTimeline
+            self.cacheData(data: coopTimeline, filename: filename)
             self.schedule.coop = coopTimeline
             completion(coopTimeline, nil)
         }
@@ -103,7 +160,7 @@ extension SchedulesAPIResponse {
         let regular = GameModeTimeline(modeType: .regular, schedule: regularEvents)
         let ranked = GameModeTimeline(modeType: .ranked, schedule: rankedEvents)
         let league = GameModeTimeline(modeType: .league, schedule: leagueEvents)
-        let schedule = GameModesTimelines(regular: regular, ranked: ranked, league: league)
+        let schedule = GameModesTimelines(regular: regular, ranked: ranked, league: league, date: Date())
         return schedule
     }
 }
@@ -136,7 +193,7 @@ extension CoopSchedulesAPIResponse {
             let timeframe = EventTimeframe(startDate: otherEvent.startTime, endDate: otherEvent.endTime)
             otherEvents.append(timeframe)
         }
-        return CoopTimeline(detailedSchedules: detailedEvents, otherSchedules: otherEvents)
+        return CoopTimeline(detailedSchedules: detailedEvents, otherSchedules: otherEvents, date: Date())
     }
 }
 
