@@ -85,16 +85,16 @@ struct WeaponDetails: Codable {
 }
 
 struct CoopTimeline: Codable {
-    let detailedSchedules: [CoopEventDetail]
-    let otherSchedules: [EventTimeframe]
+    let detailedEvents: [CoopEvent]
+    let eventTimeframes: [EventTimeframe]
     let date: Date
 
     static func empty() -> CoopTimeline {
-        return CoopTimeline(detailedSchedules: [], otherSchedules: [], date: Date())
+        return CoopTimeline(detailedEvents: [], eventTimeframes: [], date: Date())
     }
 }
 
-struct CoopEventDetail: Codable {
+struct CoopEvent: Codable {
     var id = UUID().uuidString
     let timeframe: EventTimeframe
     let weapons: [Weapon]

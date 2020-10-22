@@ -168,7 +168,7 @@ extension SchedulesAPIResponse {
 extension CoopSchedulesAPIResponse {
     
     var coopTimeline : CoopTimeline {
-        var detailedEvents : [CoopEventDetail] = []
+        var detailedEvents : [CoopEvent] = []
         for event in self.details {
             let timeframe = EventTimeframe(startDate: event.startTime, endDate: event.endTime)
             var weapons: [Weapon] = []
@@ -185,15 +185,15 @@ extension CoopSchedulesAPIResponse {
                 }
             }
             let stage = Stage(id: UUID().uuidString, name: event.stage.name, imageUrl: "\(splatnetImageHostUrl)\(event.stage.image)")
-            let eventDetails = CoopEventDetail(timeframe: timeframe, weapons: weapons, stage: stage)
+            let eventDetails = CoopEvent(timeframe: timeframe, weapons: weapons, stage: stage)
             detailedEvents.append(eventDetails)
         }
-        var otherEvents : [EventTimeframe] = []
+        var eventTimeFrames : [EventTimeframe] = []
         for otherEvent in self.schedules {
             let timeframe = EventTimeframe(startDate: otherEvent.startTime, endDate: otherEvent.endTime)
-            otherEvents.append(timeframe)
+            eventTimeFrames.append(timeframe)
         }
-        return CoopTimeline(detailedSchedules: detailedEvents, otherSchedules: otherEvents, date: Date())
+        return CoopTimeline(detailedEvents: detailedEvents, eventTimeframes: eventTimeFrames, date: Date())
     }
 }
 
