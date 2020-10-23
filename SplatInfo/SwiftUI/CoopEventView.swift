@@ -136,12 +136,13 @@ struct WeaponsList: View {
         HStack(alignment: .center, spacing: 2, content: {
             ForEach(weapons, id: \.id) { item in
                 AsyncImage(url: URL(string: item.imageUrl)!) {
-                    Color.black.opacity(0.5)
+                    Circle()
+                        .fill(Color.black.opacity(0.5))
                 } image: { (uiImage) in
                     Image(uiImage: uiImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        
+
                 }
             }
         })

@@ -17,7 +17,7 @@ struct SplatInfoApp: App {
         WindowGroup {
             ScheduleGrid(schedule: schedule)
                 .onAppear {
-                        scheduleFetcher.fetchGameModeTimelines { (gameModeTimelines, error) in
+                    scheduleFetcher.fetchGameModeTimelines { (gameModeTimelines, error) in
                         schedule = scheduleFetcher.schedule
                     }
                     scheduleFetcher.fetchCoopTimeline { (coopTimeline, error) in

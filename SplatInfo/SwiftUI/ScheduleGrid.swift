@@ -63,7 +63,7 @@ struct ScheduleGrid_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            ScheduleGrid(schedule: exampleSchedule).preferredColorScheme(.dark).previewDevice(PreviewDevice(rawValue: "iPad Air 2"))
+            ScheduleGrid(schedule: exampleSchedule).previewDevice(PreviewDevice(rawValue: "iPad Air 2"))
             ScheduleGrid(schedule: exampleSchedule).previewDevice(PreviewDevice(rawValue: "iPhone SE"))
         }
     }
