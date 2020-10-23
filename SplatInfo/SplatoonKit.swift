@@ -11,6 +11,14 @@ struct GameModeTimeline: Codable {
     let modeType: GameModeType
     let schedule: [GameModeEvent]
     
+    var upcomingEvents : [GameModeEvent] {
+        let filtered = schedule.filter({ !$0.timeframe.isOver })
+        if filtered.count == 0 {
+            return schedule
+        }
+        return filtered
+    }
+    
     static func empty(_ mode: GameModeType) -> GameModeTimeline {
         return GameModeTimeline(modeType: mode, schedule: [])
     }
@@ -178,11 +186,9 @@ extension TimeframeActivity {
         return self.startDate <= date && date < self.endDate
     }
     var isUpcoming : Bool {
-        let date = Date()
-        return date < self.startDate
+        return Date() < self.startDate
     }
     var isOver : Bool {
-        let date = Date()
-        return self.endDate < date
+        return self.endDate < Date()
     }
 }

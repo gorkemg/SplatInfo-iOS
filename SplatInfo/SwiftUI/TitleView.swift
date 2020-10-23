@@ -13,7 +13,11 @@ struct TitleView: View {
     
     var body: some View {
         HStack(spacing: 10) {
-            Image(logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 40, height: 40)
+            Image(logoName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 40, height: 40)
+                .shadow(color: .black, radius: 1, x: 0.0, y: 1)
             Text(title)
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)

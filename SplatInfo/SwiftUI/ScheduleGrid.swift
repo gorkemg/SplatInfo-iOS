@@ -36,8 +36,10 @@ struct CoopTimelineView: View {
     
     var body: some View {
         VStack {
-            ForEach(coopTimeline.detailedEvents, id: \.id) { event in
-                CoopEventView(event: event)
+            if coopTimeline.detailedEvents.count > 0 {
+                ForEach(0..<coopTimeline.detailedEvents.count) { i in
+                    CoopEventView(event: coopTimeline.detailedEvents[i], style: i == 0 ? .large : .narrow)
+                }
             }
         }
     }
@@ -47,17 +49,12 @@ struct GameModeTimelineView: View {
     let events : [GameModeEvent]
     
     var body: some View {
-        if filteredEvents.count > 0 {
-            ForEach(0..<filteredEvents.count) { i in
-                GameModeEventView(gameModeEvent: filteredEvents[i], style: i == 0 ? .large : .narrow)
+        if events.count > 0 {
+            ForEach(0..<events.count) { i in
+                GameModeEventView(gameModeEvent: events[i], style: i == 0 ? .large : .narrow)
             }
         }
     }
-    
-    var filteredEvents : [GameModeEvent] {
-        return events.filter({ !$0.timeframe.isOver })
-    }
-    
 }
 
 struct ScheduleGrid_Previews: PreviewProvider {

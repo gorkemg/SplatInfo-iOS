@@ -53,7 +53,7 @@ struct TimelineCard: View {
                 TitleView(title: timeline.modeName, logoName: timeline.logo)
                 switch timeline {
                 case .gameModeTimeline(timeline: let timeline):
-                    GameModeTimelineView(events: Array(timeline.schedule.prefix(3)))
+                    GameModeTimelineView(events: Array(timeline.upcomingEvents.prefix(3)))
                 case .coopTimeline(timeline: let timeline):
                     CoopTimelineView(coopTimeline: timeline)
                 }

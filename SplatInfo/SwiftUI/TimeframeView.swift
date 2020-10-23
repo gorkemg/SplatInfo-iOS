@@ -10,18 +10,18 @@ import SwiftUI
 struct TimeframeView: View {
     let timeframe: EventTimeframe
     var datesEnabled: Bool = false
+    var fontSize: CGFloat = 14
 
     var body: some View {
-        Text(timeframeString).splat2Font(size: 14)
+        Text(timeframeString).splat2Font(size: fontSize)
     }
 
     var timeframeString : String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = datesEnabled ? .short : .none
-        dateFormatter.timeStyle = .short
-        let startString = dateFormatter.string(from: timeframe.startDate)
-        let endString = dateFormatter.string(from: timeframe.endDate)
-        return "\(startString) - \(endString)"
+        
+        let formatter = DateIntervalFormatter()
+        formatter.dateStyle = datesEnabled ? .short : .none
+        formatter.timeStyle = .short
+        return formatter.string(from: timeframe.startDate, to: timeframe.endDate)
     }
 }
 
@@ -29,18 +29,31 @@ struct RelativeTimeframeView : View {
     
     let timeframe : EventTimeframe
     
-    let timer = Timer.publish(
-        every: 1, // second
-        on: .main,
-        in: .common
-    ).autoconnect()
-
-    @State var relativeTimeString: String = ""
-
-    var body: some View {
-        Text(relativeTimeString).onReceive(timer) { (_) in
-            self.relativeTimeString = timeframe.isActive ? timeframe.endDate.relativeTimeRemaining() : timeframe.startDate.relativeTimeAhead()
+    var formatter : Formatter {
+        if timeframe.isActive {
+            let formatter = RelativeDateTimeFormatter()
+            formatter.dateTimeStyle = .numeric
+            formatter.unitsStyle = .abbreviated
+            return formatter
+        }else{
+            let formatter = DateFormatter()
+            formatter.timeStyle = .short
+            formatter.doesRelativeDateFormatting = true
+            return formatter
         }
-        .splat2Font(size: 12)
     }
+        
+    var body: some View {
+        // ** CRASH when using custom fonts or shadow **
+        Text(date, style: .relative)
+            //.shadow(color: .black, radius: 1, x: 0, y: 1)
+        //.splat2Font(size: 12)
+        //Text(date, formatter: formatter)
+            //.splat2Font(size: 12)
+    }
+    
+    var date : Date {
+        return timeframe.isActive ? timeframe.endDate : timeframe.startDate
+    }
+    
 }
