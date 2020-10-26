@@ -49,12 +49,16 @@ enum GameModeType: String, Codable {
     }    
 }
 
-struct GameModeEvent: Codable {
+struct GameModeEvent: Codable, Equatable {
     let id: String
     let mode: GameMode
     let timeframe: EventTimeframe
     let stages: [Stage]
     let rule: GameModeRule
+    
+    static func == (lhs: GameModeEvent, rhs: GameModeEvent) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
 
 struct GameModeRule: Codable {

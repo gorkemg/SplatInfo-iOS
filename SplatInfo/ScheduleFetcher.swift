@@ -65,6 +65,8 @@ extension Encodable {
 class ScheduleFetcher: ObservableObject {
     
     private let api = Splatoon2InkAPI.shared()
+    var defaultCacheDirectory: String = NSTemporaryDirectory()
+    var useSharedFolderForCaching: Bool = false
     
     @Published var schedule : Schedule = Schedule.empty
     
@@ -89,7 +91,10 @@ class ScheduleFetcher: ObservableObject {
     }
 
     private func cacheFileURL(filename: String) -> URL? {
-        return NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
+        if useSharedFolderForCaching, let sharedContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) {
+            return sharedContainerURL.appendingPathComponent(filename)
+        }
+        return NSURL(fileURLWithPath: defaultCacheDirectory).appendingPathComponent(filename)
     }
     
     private func copyCacheFileToAppGroupDirectory(_ filename: String) {
@@ -219,7 +224,8 @@ extension ModeAPIResponse {
         let stageA = Stage(id: self.stageA.id, name: self.stageA.name, imageUrl: "\(splatnetImageHostUrl)\(self.stageA.image)")
         let stageB = Stage(id: self.stageB.id, name: self.stageB.name, imageUrl: "\(splatnetImageHostUrl)\(self.stageB.image)")
         let rule = GameModeRule(key: self.rule.key, name: self.rule.name)
-        let event = GameModeEvent(id: String(id), mode: self.gameMode.gameMode, timeframe: timeframe, stages: [stageA, stageB], rule: rule)
+        let eventId = String("\(id)\(startTime.timeIntervalSinceReferenceDate)\(endTime.timeIntervalSinceReferenceDate)")
+        let event = GameModeEvent(id: eventId, mode: self.gameMode.gameMode, timeframe: timeframe, stages: [stageA, stageB], rule: rule)
         return event
     }
     
