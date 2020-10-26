@@ -11,6 +11,7 @@ import Intents
 
 struct Provider: IntentTimelineProvider {
     
+    let scheduleFetcher = ScheduleFetcher()
     static let schedule = Schedule.example
     
     static var regularEvents : [GameModeEvent] {
@@ -22,7 +23,7 @@ struct Provider: IntentTimelineProvider {
     }
 
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (GameModeEntry) -> ()) {
-        let scheduleFetcher = ScheduleFetcher()
+        scheduleFetcher.useSharedFolderForCaching = true
         scheduleFetcher.fetchGameModeTimelines { (timelines, error) in
             guard let timelines = timelines else {
                 let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Provider.regularEvents), configuration: configuration)
@@ -36,8 +37,8 @@ struct Provider: IntentTimelineProvider {
 
     func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         let mode = configuration.scheduleType
-        let scheduleFetcher = ScheduleFetcher()
-        
+        scheduleFetcher.useSharedFolderForCaching = true
+
         // load data according to mode
         switch mode {
         
@@ -171,20 +172,24 @@ struct GameModeEntryView : View {
     @Environment(\.widgetFamily) private var widgetFamily
     
     var body: some View {
-        if let event = event {
-            switch widgetFamily {
-            case .systemSmall:
-                SmallWidgetView(stages: event.stages, timeframe: event.timeframe, title: event.rule.name, modeLogo: event.mode.type.logoName, backgroundColor: event.mode.type.color)
-            case .systemMedium:
-                SmallWidgetView(stages: event.stages, timeframe: event.timeframe, title: event.rule.name, modeLogo: event.mode.type.logoName, backgroundColor: event.mode.type.color)
-            case .systemLarge:
-                SmallWidgetView(stages: event.stages, timeframe: event.timeframe, title: event.rule.name, modeLogo: event.mode.type.logoName, backgroundColor: event.mode.type.color)
-            @unknown default:
-                Text("No event available")
+        ZStack {
+            Image("bg-squids").resizable(resizingMode: .tile).ignoresSafeArea()
+            
+            if let event = event {
+                switch widgetFamily {
+                case .systemSmall:
+                    SmallGameModeWidgetView(event: event, nextEvent: nextEvent)
+                case .systemMedium:
+                    SmallGameModeWidgetView(event: event, nextEvent: nextEvent)
+                case .systemLarge:
+                    SmallGameModeWidgetView(event: event, nextEvent: nextEvent)
+                @unknown default:
+                    Text("No event available").splat1Font(size: 20)
+                }
+            }else{
+                Text("No event available").splat1Font(size: 20)
             }
-        }else{
-            Text("No event available")
-        }
+        }.foregroundColor(.white)
     }
     
     var event: GameModeEvent? {
@@ -193,7 +198,12 @@ struct GameModeEntryView : View {
         }
         return events.first
     }
-    
+    var nextEvent: GameModeEvent? {
+        if let currentEvent = self.event, let index = events.firstIndex(where: { $0 == currentEvent }), events.count > index+1 {
+            return events[(index+1)]
+        }
+        return nil
+    }
 }
 
 struct CoopEntryView : View {
@@ -215,6 +225,59 @@ struct CoopEntryView : View {
         }
         return events.first
     }
+}
+
+struct SmallGameModeWidgetView : View {
+    let event: GameModeEvent
+    var nextEvent: GameModeEvent? = nil
+
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+
+            event.mode.type.color
+            
+            GeometryReader { geometry in
+                VStack(spacing: 0.0) {
+                    ForEach(event.stages, id: \.id) { stage in
+                        Image("thumb_\(stage.id)").resizable().aspectRatio(contentMode: .fill).frame(width: geometry.size.width, height: geometry.size.height/2).clipped()
+                    }
+                }.cornerRadius(10.0)
+            }
+            
+            //LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.1), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
+            
+            VStack(alignment: .leading, spacing: 0.0) {
+                
+                VStack(alignment: .leading, spacing: 0.0) {
+                    HStack {
+                        Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
+                        Text(event.rule.name).splat2Font(size: 14).minimumScaleFactor(0.5)
+                    }
+                }
+                                
+                Spacer()
+                
+                VStack(alignment: .leading, spacing: 0.0) {
+                    if let next = nextEvent {
+                        Text(next.rule.name)
+                        + relativeTimeText(event: next)
+                    }
+                }.splat2Font(size: 12).lineLimit(2).minimumScaleFactor(0.5)
+            }.padding(.horizontal, 10.0)
+        }
+    }
+
+    func relativeTimeText(event: GameModeEvent) -> Text {
+        switch event.timeframe.status(date: Date()) {
+        case .active:
+            return Text(" since ") + Text(event.timeframe.startDate, style: .relative)
+        case .soon:
+            return Text(" in ") + Text(event.timeframe.startDate, style: .relative)
+        case .over:
+            return Text(" ended ") + Text(event.timeframe.endDate, style: .relative) + Text(" ago")
+        }
+    }
+    
 }
 
 struct SmallWidgetView : View {
@@ -286,11 +349,28 @@ struct Schedule_Previews: PreviewProvider {
         return schedule.gameModes.league.schedule
     }
 
+    static var intent : ConfigurationIntent {
+        return ConfigurationIntent()
+    }
+
+    static var intentWithDisplayNext : ConfigurationIntent {
+        let intent = ConfigurationIntent()
+        intent.displayNext = true
+        return intent
+    }
+    
+
     static var previews: some View {
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: []), configuration: ConfigurationIntent()))
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
+        
         ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
 
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: rankedEvents), configuration: ConfigurationIntent()))
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: rankedEvents), configuration: intent))
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
+
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: rankedEvents), configuration: intentWithDisplayNext))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
 
         ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: leagueEvents), configuration: ConfigurationIntent()))
