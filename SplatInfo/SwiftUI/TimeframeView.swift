@@ -7,6 +7,22 @@
 
 import SwiftUI
 
+//struct AdaptiveTimeframeView: View {
+//    let timeframe: EventTimeframe
+//    var datesEnabled: Bool = false
+//    var fontSize: CGFloat = 14
+//    let date: Date
+//
+//    var body: some View {
+//        switch timeframe.status(date: date) {
+//        case active:
+//            RelativeTimeframeView(timeframe: timeframe, date: date)
+//        default:
+//            TimeframeView(timeframe: timeframe, datesEnabled: datesEnabled, fontSize: fontSize)
+//        }
+//    }
+//}
+
 struct TimeframeView: View {
     let timeframe: EventTimeframe
     var datesEnabled: Bool = false
@@ -28,9 +44,10 @@ struct TimeframeView: View {
 struct RelativeTimeframeView : View {
     
     let timeframe : EventTimeframe
+    let date: Date
     
     var formatter : Formatter {
-        if timeframe.isActive {
+        if timeframe.status(date: date) == .active {
             let formatter = RelativeDateTimeFormatter()
             formatter.dateTimeStyle = .numeric
             formatter.unitsStyle = .abbreviated
@@ -45,15 +62,15 @@ struct RelativeTimeframeView : View {
         
     var body: some View {
         // ** CRASH when using custom fonts or shadow **
-        Text(date, style: .relative)
+        Text(relativeDate, style: .relative)
             //.shadow(color: .black, radius: 1, x: 0, y: 1)
         //.splat2Font(size: 12)
         //Text(date, formatter: formatter)
             //.splat2Font(size: 12)
     }
     
-    var date : Date {
-        return timeframe.isActive ? timeframe.endDate : timeframe.startDate
+    var relativeDate : Date {
+        return timeframe.status(date: date) == .active ? timeframe.endDate : timeframe.startDate
     }
     
 }

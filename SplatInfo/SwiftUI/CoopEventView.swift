@@ -48,9 +48,10 @@ struct CoopEventView: View {
 }
 struct CoopLargeEventView : View {
     let event: CoopEvent
-    
+    var date: Date = Date()
+
     var currentActivityText : String {
-        return event.timeframe.isActive ? "Open!" : "Soon!"
+        return event.timeframe.status(date: date) == .active ? "Open!" : "Soon!"
     }
 
     var body: some View {
@@ -58,7 +59,7 @@ struct CoopLargeEventView : View {
             HStack {
                 Text(currentActivityText).splat1Font(size: 20)
                 Spacer()
-                RelativeTimeframeView(timeframe: event.timeframe)
+                RelativeTimeframeView(timeframe: event.timeframe, date: date)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }
@@ -84,9 +85,10 @@ struct CoopLargeEventView : View {
 
 struct CoopNarrowEventView : View {
     let event: CoopEvent
+    var date: Date = Date()
     
     var currentActivityText : String {
-        return event.timeframe.isActive ? "Open!" : "Soon!"
+        return event.timeframe.status(date: date) == .active ? "Open!" : "Soon!"
     }
 
     var body: some View {
@@ -98,7 +100,7 @@ struct CoopNarrowEventView : View {
                         ImageOverlayText(text: currentActivityText)
                         Spacer()
                         VStack {
-                            RelativeTimeframeView(timeframe: event.timeframe)
+                            RelativeTimeframeView(timeframe: event.timeframe, date: date)
                                 //.splat1Font(size: 10)
                                 //.shadow(color: .black, radius: 1, x: 0.0, y: 1)
                                 .lineLimit(1)

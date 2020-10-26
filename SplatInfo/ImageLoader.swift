@@ -44,7 +44,7 @@ class ImageLoader: ObservableObject {
             .handleEvents(receiveOutput: { [weak self] in
                 if let image = $0, let url = self?.url {
                     self?.cacheOnDisk(image, filename: url.lastPathComponent)
-                    if let fileUrl = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(url.lastPathComponent) {
+                    if let fileUrl = self?.cacheFileURL(filename: url.lastPathComponent) {
                         if let downscaledImage = self?.downsample(imageAt: fileUrl, to: CGSize(width: image.size.width/2, height: image.size.height/2), scale: image.scale) {
                             self?.cacheOnDisk(downscaledImage, filename: url.lastPathComponent)
                             self?.cache(downscaledImage)
@@ -70,7 +70,7 @@ class ImageLoader: ObservableObject {
     
     func loadFromDisk(filename: String) -> UIImage? {
         if !isCachingOnDiskEnabled { return nil }
-        let filePath = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
+        let filePath = cacheFileURL(filename: filename)
         if let path = filePath, FileManager.default.fileExists(atPath: path.path) {
             return UIImage(contentsOfFile: path.path)
         }
@@ -79,12 +79,27 @@ class ImageLoader: ObservableObject {
     
     func cacheOnDisk(_ image: UIImage, filename: String) {
         if !isCachingOnDiskEnabled { return }
-        let filePath = NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
+        let filePath = cacheFileURL(filename: filename)
         if let path = filePath, let data = image.pngData() {
             try? data.write(to: path)
+            copyCacheFileToAppGroupDirectory(filename)
         }
     }
     
+    private func cacheFileURL(filename: String) -> URL? {
+        return NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
+    }
+    
+    private func copyCacheFileToAppGroupDirectory(_ filename: String) {
+        let sharedContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName)
+        NSLog("sharedContainerURL = \(String(describing: sharedContainerURL))")
+        if let sourceURL = cacheFileURL(filename: filename) {
+            if let destinationURL = sharedContainerURL?.appendingPathComponent(filename) {
+                try? FileManager().copyItem(at: sourceURL, to: destinationURL)
+            }
+        }
+    }
+
     
     // Downsampling large images for display at smaller size
     func downsample(imageAt imageURL: URL, to pointSize: CGSize, scale: CGFloat) -> UIImage {

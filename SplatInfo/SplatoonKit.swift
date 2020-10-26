@@ -12,11 +12,14 @@ struct GameModeTimeline: Codable {
     let schedule: [GameModeEvent]
     
     var upcomingEvents : [GameModeEvent] {
-        let filtered = schedule.filter({ !$0.timeframe.isOver })
+        let filtered = upcomingEventsAfterDate(date: Date())
         if filtered.count == 0 {
             return schedule
         }
         return filtered
+    }
+    func upcomingEventsAfterDate(date: Date) -> [GameModeEvent] {
+        return schedule.filter({ $0.timeframe.status(date: date) != .over })
     }
     
     static func empty(_ mode: GameModeType) -> GameModeTimeline {
@@ -33,6 +36,17 @@ enum GameModeType: String, Codable {
     case league
     case ranked
     case regular
+
+    var logoName : String {
+        switch self {
+        case .regular:
+            return "regular-logo"
+        case .ranked:
+            return "ranked-logo"
+        case .league:
+            return "league-logo"
+        }
+    }    
 }
 
 struct GameModeEvent: Codable {
@@ -107,6 +121,14 @@ struct CoopEvent: Codable {
     let timeframe: EventTimeframe
     let weapons: [Weapon]
     let stage: Stage
+    
+    var logoName : String {
+        return "mr-grizz-logo"
+    }
+    var modeName : String {
+        return "Salmon Run"
+    }
+    
 }
 
 struct EventTimeframe: Codable, TimeframeActivity {
@@ -174,21 +196,39 @@ protocol TimeframeActivity {
     
     var startDate : Date { get }
     var endDate : Date { get }
-    var isActive : Bool { get }
-    var isUpcoming : Bool { get }
-    var isOver : Bool { get }
+//    var isActive : Bool { get }
+//    var isUpcoming : Bool { get }
+//    var isOver : Bool { get }
+}
+
+enum TimeframeActivityStatus {
+    case active
+    case soon
+    case over
 }
 
 extension TimeframeActivity {
     
-    var isActive : Bool {
-        let date = Date()
-        return self.startDate <= date && date < self.endDate
+//    var isActive : Bool {
+//        let date = Date()
+//        return self.startDate <= date && date < self.endDate
+//    }
+//    var isUpcoming : Bool {
+//        return Date() < self.startDate
+//    }
+//    var isOver : Bool {
+//        return self.endDate < Date()
+//    }
+    
+    func status(date: Date) -> TimeframeActivityStatus {
+        
+        if date < self.startDate {
+            return .soon
+        }
+        if self.startDate <= date && date < self.endDate {
+            return .active
+        }
+        return .over
     }
-    var isUpcoming : Bool {
-        return Date() < self.startDate
-    }
-    var isOver : Bool {
-        return self.endDate < Date()
-    }
+
 }

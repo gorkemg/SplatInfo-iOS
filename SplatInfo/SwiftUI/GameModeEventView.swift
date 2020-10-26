@@ -10,6 +10,7 @@ import SwiftUI
 struct GameModeEventView: View {
     let gameModeEvent: GameModeEvent
     let style: Style
+    var date: Date = Date()
     
     enum Style {
         case large
@@ -28,7 +29,7 @@ struct GameModeEventView: View {
                             Spacer()
                             VStack(alignment: .trailing) {
                                 TimeframeView(timeframe: gameModeEvent.timeframe)
-                                RelativeTimeframeView(timeframe: gameModeEvent.timeframe)
+                                RelativeTimeframeView(timeframe: gameModeEvent.timeframe, date: date)
                                     .font(.caption)
                                     .lineLimit(2)
                                     .minimumScaleFactor(0.5)
@@ -54,7 +55,7 @@ struct GameModeEventView: View {
                             Text(gameModeEvent.rule.name)
                                 .splat2Font(size: 16)
                             
-                            RelativeTimeframeView(timeframe: gameModeEvent.timeframe)
+                            RelativeTimeframeView(timeframe: gameModeEvent.timeframe, date: date)
                                 .font(.caption2)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
