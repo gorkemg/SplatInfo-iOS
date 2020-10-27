@@ -120,7 +120,7 @@ struct CoopTimeline: Codable {
     }
 }
 
-struct CoopEvent: Codable {
+struct CoopEvent: Codable, Equatable {
     var id = UUID().uuidString
     let timeframe: EventTimeframe
     let weapons: [Weapon]
@@ -132,7 +132,9 @@ struct CoopEvent: Codable {
     var modeName : String {
         return "Salmon Run"
     }
-    
+    static func == (lhs: CoopEvent, rhs: CoopEvent) -> Bool {
+        lhs.id == rhs.id
+    }
 }
 
 struct EventTimeframe: Codable, TimeframeActivity {

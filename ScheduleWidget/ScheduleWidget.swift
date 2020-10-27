@@ -213,7 +213,7 @@ struct CoopEntryView : View {
 
     var body: some View {
         if let event = event {
-            SmallWidgetView(stages: [event.stage], timeframe: event.timeframe, title: event.modeName, modeLogo: event.logoName, backgroundColor: event.color)
+            SmallCoopWidgetView(event: event)
         }else{
             Text("No event available")
         }
@@ -225,6 +225,12 @@ struct CoopEntryView : View {
         }
         return events.first
     }
+    var nextEvent: CoopEvent? {
+        if let currentEvent = self.event, let index = events.firstIndex(where: { $0 == currentEvent }), events.count > index+1 {
+            return events[(index+1)]
+        }
+        return nil
+    }
 }
 
 struct SmallGameModeWidgetView : View {
@@ -235,7 +241,9 @@ struct SmallGameModeWidgetView : View {
         ZStack(alignment: .topLeading) {
 
             event.mode.type.color
-            
+
+            Image("splatoon-card-bg").resizable(resizingMode: .tile)
+
             GeometryReader { geometry in
                 VStack(spacing: 0.0) {
                     ForEach(event.stages, id: \.id) { stage in
@@ -251,7 +259,9 @@ struct SmallGameModeWidgetView : View {
                 VStack(alignment: .leading, spacing: 0.0) {
                     HStack {
                         Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
-                        Text(event.rule.name).splat2Font(size: 14).minimumScaleFactor(0.5)
+                        if event.mode.type != .regular {
+                            Text(event.rule.name).splat2Font(size: 14).minimumScaleFactor(0.5)
+                        }
                     }
                 }
                                 
@@ -259,11 +269,11 @@ struct SmallGameModeWidgetView : View {
                 
                 VStack(alignment: .leading, spacing: 0.0) {
                     if let next = nextEvent {
-                        Text(next.rule.name)
+                        Text(event.mode.type != .regular ? next.rule.name : "Changes")
                         + relativeTimeText(event: next)
                     }
                 }.splat2Font(size: 12).lineLimit(2).minimumScaleFactor(0.5)
-            }.padding(.horizontal, 10.0)
+            }.padding(.horizontal, 10.0).padding(.vertical, 4)
         }
     }
 
@@ -280,23 +290,20 @@ struct SmallGameModeWidgetView : View {
     
 }
 
-struct SmallWidgetView : View {
-    let stages: [Stage]
-    let timeframe: EventTimeframe
-    let title: String
-    let modeLogo: String
-    var backgroundColor: Color? = nil
+struct SmallCoopWidgetView : View {
+    let event: CoopEvent
+    var date: Date = Date()
 
     var body: some View {
         ZStack(alignment: .topLeading) {
 
-            backgroundColor
-            
+            event.color
+
+            Image("bg-spots").resizable(resizingMode: .tile)
+
             GeometryReader { geometry in
                 VStack(spacing: 0.0) {
-                    ForEach(stages, id: \.id) { stage in
-                        Image("thumb_\(stage.id)").resizable().aspectRatio(contentMode: .fill).frame(width: geometry.size.width, height: geometry.size.height/2).clipped()
-                    }
+                    Image("thumb_\(event.stage.id)").resizable().aspectRatio(contentMode: .fill).frame(width: geometry.size.width, height: geometry.size.height).clipped()
                 }.cornerRadius(10.0)
             }
             
@@ -304,18 +311,76 @@ struct SmallWidgetView : View {
             
             VStack(alignment: .leading, spacing: 0.0) {
                 
-                HStack {
-                    Image(modeLogo).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
-                    Text(title).splat2Font(size: 14).minimumScaleFactor(0.5)
+                VStack(alignment: .leading, spacing: 0.0) {
+                    HStack {
+                        Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
+                        Text(event.modeName).splat2Font(size: 14).minimumScaleFactor(0.5)
+                    }
+                    Text(event.stage.name).splat2Font(size: 12)
                 }
-                                
+
                 Spacer()
                 
-                VStack(alignment: .leading) {
-                    TimeframeView(timeframe: timeframe).lineLimit(2).minimumScaleFactor(0.5)
+                VStack(alignment: .leading, spacing: 2.0) {
+                    HStack {
+                        currentActivityTextView
+                        RelativeTimeframeView(timeframe: event.timeframe, date: date)
+                    }.splat2Font(size: 12)
+                    
+                    ActivityTimeFrameView(event: event, date: date).lineLimit(2).minimumScaleFactor(0.5)
+                    HStack(spacing: 4.0) {
+                        WeaponsList(event: event).frame(maxHeight: 20, alignment: .leading)
+                        Spacer()
+                    }
                 }
             }.padding(.horizontal, 10.0)
         }.foregroundColor(.white)
+    }
+    
+    var currentActivityTextView : some View {
+        HStack {
+            Text(currentActivityText)
+        }.padding(.horizontal, 4.0).background(Color.black.opacity(0.5)).cornerRadius(5.0)
+    }
+    
+    var currentActivityText : String {
+        return event.timeframe.status(date: date).activityText
+    }
+}
+
+struct ActivityTimeFrameView : View {
+    let event: CoopEvent
+    var date: Date = Date()
+
+    var body: some View {
+        switch event.timeframe.status(date: date) {
+        case .active:
+            Text("- \(timeframeString)").splat2Font(size: 10)
+        case .soon:
+            TimeframeView(timeframe: event.timeframe, datesEnabled: true, fontSize: 10)
+        case .over:
+            Text("- \(timeframeString)").splat2Font(size: 10)
+        }
+    }
+    var timeframeString: String {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .short
+        return formatter.string(from: event.timeframe.endDate)
+    }
+
+}
+
+extension TimeframeActivityStatus {
+    var activityText: String {
+        switch self {
+        case .active:
+            return "Open!"
+        case .soon:
+            return "Soon!"
+        case .over:
+            return "Ended!"
+        }
     }
 }
 
@@ -376,7 +441,10 @@ struct Schedule_Previews: PreviewProvider {
         ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: leagueEvents), configuration: ConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
 
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: ConfigurationIntent()))
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: intent))
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
+
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: intentWithDisplayNext))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
 
         ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
