@@ -142,15 +142,6 @@ struct WeaponsList: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                 }
-//                AsyncImage(url: URL(string: weapon.imageUrl)!) {
-//                    Circle()
-//                        .fill(Color.black.opacity(0.5))
-//                } image: { (uiImage) in
-//                    Image(uiImage: uiImage)
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//
-//                }
             }
         })
     }

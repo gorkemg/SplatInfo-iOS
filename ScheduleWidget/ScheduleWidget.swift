@@ -293,7 +293,7 @@ struct SmallGameModeWidgetView : View {
                         Text(event.mode.type != .regular ? next.rule.name : "Changes")
                         + relativeTimeText(event: next)
                     }
-                }.splat2Font(size: 12).lineLimit(2).minimumScaleFactor(0.5)
+                }.splat2Font(size: 10).lineLimit(1).minimumScaleFactor(0.5)
             }.padding(.horizontal, 10.0).padding(.vertical, 4)
         }
     }
@@ -353,15 +353,13 @@ struct SmallCoopWidgetView : View {
                         RelativeTimeframeView(timeframe: event.timeframe, date: date)
                     }.splat2Font(size: 12)
                     
-                    ActivityTimeFrameView(event: event, date: date).lineLimit(2).minimumScaleFactor(0.5)
+                    ActivityTimeFrameView(event: event, date: date).lineLimit(1).minimumScaleFactor(0.5)
                     HStack(spacing: 4.0) {
                         Group {
                             WeaponsList(event: event)
+                                .shadow(color: .black, radius: 2, x: 0.0, y: 1.0)
                                 .frame(maxHeight: 24, alignment: .leading)
                         }
-                        .padding(.horizontal, 4.0)
-                        .background(Color.white.opacity(0.4))
-                        .cornerRadius(4.0)
                         
                         Spacer()
                     }
@@ -373,11 +371,21 @@ struct SmallCoopWidgetView : View {
     var currentActivityTextView : some View {
         HStack {
             Text(currentActivityText)
-        }.padding(.horizontal, 4.0).background(Color.black.opacity(0.5)).cornerRadius(5.0)
+        }.padding(.horizontal, 4.0).background(currentActivityColor).cornerRadius(5.0)
     }
     
     var currentActivityText : String {
         return event.timeframe.status(date: date).activityText
+    }
+    var currentActivityColor : Color {
+        switch event.timeframe.status(date: date) {
+        case .active:
+            return Color.coopModeColor
+        case .soon:
+            return Color.black
+        case .over:
+            return Color.gray
+        }
     }
 }
 
@@ -388,14 +396,20 @@ struct ActivityTimeFrameView : View {
     var body: some View {
         switch event.timeframe.status(date: date) {
         case .active:
-            Text("- \(timeframeString)").splat2Font(size: 10)
+            Text("- \(timeframeEndString)").splat2Font(size: 10)
         case .soon:
-            TimeframeView(timeframe: event.timeframe, datesEnabled: true, fontSize: 10)
+            Text("\(timeframeStartString) - \(timeframeEndString)").splat2Font(size: 10)
         case .over:
-            Text("- \(timeframeString)").splat2Font(size: 10)
+            Text("- \(timeframeEndString)").splat2Font(size: 10)
         }
     }
-    var timeframeString: String {
+    var timeframeStartString: String {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .short
+        return formatter.string(from: event.timeframe.startDate)
+    }
+    var timeframeEndString: String {
         let formatter = DateFormatter()
         formatter.timeStyle = .short
         formatter.dateStyle = .short

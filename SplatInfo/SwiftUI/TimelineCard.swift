@@ -40,14 +40,29 @@ struct TimelineCard: View {
                 return "mr-grizz-logo"
             }
         }
-        
+
+        var color : Color {
+            switch self {
+            case .gameModeTimeline(timeline: let timeline):
+                switch timeline.modeType {
+                case .regular:
+                    return Color.regularModeColor
+                case .ranked:
+                    return Color.rankedModeColor
+                case .league:
+                    return Color.leagueModeColor
+                }
+            case .coopTimeline(timeline: _):
+                return Color.coopModeColor
+            }
+        }
     }
     
     let timeline : TimelineType
     
     var body: some View {
         ZStack(alignment: .top) {
-            color
+            timeline.color
             bgImage
             VStack {
                 TitleView(title: timeline.modeName, logoName: timeline.logo)
@@ -63,23 +78,7 @@ struct TimelineCard: View {
         .cornerRadius(30)
         .foregroundColor(.white)
     }
-    
-    var color : Color {
-        switch timeline {
-        case .gameModeTimeline(timeline: let timeline):
-            switch timeline.modeType {
-            case .regular:
-                return Color("RegularModeColor")
-            case .ranked:
-                return Color("RankedModeColor")
-            case .league:
-                return Color("LeagueModeColor")
-            }
-        case .coopTimeline(timeline: _):
-            return Color("CoopModeColor")
-        }
-    }
-    
+        
     var bgImage : Image {
         switch timeline {
         case .gameModeTimeline(timeline: _):
@@ -87,6 +86,22 @@ struct TimelineCard: View {
         case .coopTimeline(timeline: _):
             return Image("bg-spots").resizable(resizingMode: .tile)
         }
+    }
+}
+
+extension Color {
+    
+    static var regularModeColor: Color {
+        return Color("RegularModeColor")
+    }
+    static var rankedModeColor: Color {
+        return Color("RankedModeColor")
+    }
+    static var leagueModeColor: Color {
+        return Color("LeagueModeColor")
+    }
+    static var coopModeColor: Color {
+        return Color("CoopModeColor")
     }
 }
 

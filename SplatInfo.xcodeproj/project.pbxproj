@@ -14,7 +14,6 @@
 		DE2BD60C2538489D006E5531 /* SplatInfoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2BD60B2538489D006E5531 /* SplatInfoTests.swift */; };
 		DE2BD6172538489D006E5531 /* SplatInfoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2BD6162538489D006E5531 /* SplatInfoUITests.swift */; };
 		DE41B90025417C8A00AAD49A /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B8FF25417C8A00AAD49A /* ImageLoader.swift */; };
-		DE41B90625417D0A00AAD49A /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B90525417D0A00AAD49A /* AsyncImage.swift */; };
 		DE41B90E25419B4500AAD49A /* StageImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B90D25419B4500AAD49A /* StageImage.swift */; };
 		DE41B91325419B8200AAD49A /* GameModeEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B91225419B8200AAD49A /* GameModeEventView.swift */; };
 		DE41B91825419BC400AAD49A /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B91725419BC400AAD49A /* TitleView.swift */; };
@@ -79,7 +78,6 @@
 		DEAFEA4C25431BFB00FFA812 /* StageImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B90D25419B4500AAD49A /* StageImage.swift */; };
 		DEAFEA4D25431BFC00FFA812 /* GameModeEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B91225419B8200AAD49A /* GameModeEventView.swift */; };
 		DEAFEA4E25431BFC00FFA812 /* TimeframeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B91C25419BDA00AAD49A /* TimeframeView.swift */; };
-		DEAFEA4F25431BFC00FFA812 /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B90525417D0A00AAD49A /* AsyncImage.swift */; };
 		DEAFEA5025431BFC00FFA812 /* CoopEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B92125419C2B00AAD49A /* CoopEventView.swift */; };
 		DEAFEA5125431BFC00FFA812 /* TimelineCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B92625419C5600AAD49A /* TimelineCard.swift */; };
 		DEAFEA5225431BFC00FFA812 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B91725419BC400AAD49A /* TitleView.swift */; };
@@ -141,7 +139,6 @@
 		DE2BD6162538489D006E5531 /* SplatInfoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatInfoUITests.swift; sourceTree = "<group>"; };
 		DE2BD6182538489D006E5531 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DE41B8FF25417C8A00AAD49A /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
-		DE41B90525417D0A00AAD49A /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		DE41B90D25419B4500AAD49A /* StageImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StageImage.swift; sourceTree = "<group>"; };
 		DE41B91225419B8200AAD49A /* GameModeEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModeEventView.swift; sourceTree = "<group>"; };
 		DE41B91725419BC400AAD49A /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
@@ -287,7 +284,6 @@
 		DE41B90425417CE400AAD49A /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
-				DE41B90525417D0A00AAD49A /* AsyncImage.swift */,
 				DE41B90D25419B4500AAD49A /* StageImage.swift */,
 				DE41B91225419B8200AAD49A /* GameModeEventView.swift */,
 				DE41B91725419BC400AAD49A /* TitleView.swift */,
@@ -527,7 +523,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE41B90625417D0A00AAD49A /* AsyncImage.swift in Sources */,
 				DEAFEA5E25431D0A00FFA812 /* Constants.swift in Sources */,
 				DE50121B2539D22800A73F7A /* SplatoonKit.swift in Sources */,
 				DE41B91325419B8200AAD49A /* GameModeEventView.swift in Sources */,
@@ -575,7 +570,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DEAFEA4F25431BFC00FFA812 /* AsyncImage.swift in Sources */,
 				DEAFEA4625431BF400FFA812 /* Splatoon2InkAPI.swift in Sources */,
 				DEAFEA5425431BFC00FFA812 /* ScheduleGrid.swift in Sources */,
 				DEAFEA4E25431BFC00FFA812 /* TimeframeView.swift in Sources */,
