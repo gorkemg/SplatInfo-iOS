@@ -13,12 +13,17 @@ struct StageImage: View {
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            Image("thumb_\(stage.id)").resizable().aspectRatio(contentMode: .fit)
-            AsyncImage(url: URL(string: stage.imageUrl)!) {
-                Color.black.opacity(0.5)
-            } image: { (uiImage) in
-                Image(uiImage: uiImage).resizable().aspectRatio(contentMode: .fit)
+            Group {
+                if let image = stage.image {
+                    Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
+                }
             }
+//            Image("thumb_\(stage.id)").resizable().aspectRatio(contentMode: .fit)
+//            AsyncImage(url: URL(string: stage.imageUrl)!) {
+//                Color.black.opacity(0.5)
+//            } image: { (uiImage) in
+//                Image(uiImage: uiImage).resizable().aspectRatio(contentMode: .fit)
+//            }
             .cornerRadius(10.0)
             .frame(minWidth: 0, idealWidth: .infinity, maxWidth: .infinity, minHeight: 0, idealHeight: 100, maxHeight: .infinity, alignment: .center)
 

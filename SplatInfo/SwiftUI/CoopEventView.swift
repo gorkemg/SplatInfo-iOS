@@ -136,16 +136,21 @@ struct WeaponsList: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 2, content: {
-            ForEach(weapons, id: \.id) { item in
-                AsyncImage(url: URL(string: item.imageUrl)!) {
-                    Circle()
-                        .fill(Color.black.opacity(0.5))
-                } image: { (uiImage) in
-                    Image(uiImage: uiImage)
+            ForEach(weapons, id: \.id) { weapon in
+                if let image = weapon.image {
+                    Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-
                 }
+//                AsyncImage(url: URL(string: weapon.imageUrl)!) {
+//                    Circle()
+//                        .fill(Color.black.opacity(0.5))
+//                } image: { (uiImage) in
+//                    Image(uiImage: uiImage)
+//                        .resizable()
+//                        .aspectRatio(contentMode: .fit)
+//
+//                }
             }
         })
     }
@@ -161,5 +166,34 @@ struct WeaponsList: View {
             }
         }
         return weaponDetails
+    }
+}
+
+extension WeaponDetails {
+    
+    var image : UIImage? {
+        return cachedImage() ?? cachedImage(directory: FileManager.default.appGroupContainerURL) ?? assetImage
+    }
+
+    func cachedImage(directory: URL? = URL(fileURLWithPath: NSTemporaryDirectory())) -> UIImage? {
+        let fileManager = FileManager.default
+        let imageURL = URL(string: imageUrl)
+        if let dir = directory, let url = imageURL {
+            let fileURL = dir.appendingPathComponent(url.lastPathComponent)
+            if fileManager.fileExists(atPath: fileURL.path) {
+                return UIImage(contentsOfFile: fileURL.path)
+            }else{
+                // try JPEG
+                let jpegURL = fileURL.deletingPathExtension().appendingPathExtension("jpeg")
+                if fileManager.fileExists(atPath: jpegURL.path) {
+                    return UIImage(contentsOfFile: jpegURL.path)
+                }
+            }
+        }
+        return nil
+    }
+    
+    var assetImage: UIImage? {
+        return UIImage(named: "thumb_\(id)") ?? UIImage(named: "\(id)")
     }
 }

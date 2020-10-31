@@ -13,7 +13,8 @@ struct Provider: IntentTimelineProvider {
     
     let scheduleFetcher = ScheduleFetcher()
     static let schedule = Schedule.example
-    
+    let imageLoaderManager = ImageLoaderManager()
+
     static var regularEvents : [GameModeEvent] {
         return schedule.gameModes.regular.schedule
     }
@@ -65,8 +66,13 @@ struct Provider: IntentTimelineProvider {
                         completion(timeline)
                         return
                 }
-                let timeline = timelineForGameModeTimeline(selectedTimeline, for: configuration)
-                completion(timeline)
+                let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
+                let multiImageLoader = MultiImageLoader(urls: selectedTimeline.allImageURLs(), directory: destination)
+                imageLoaderManager.imageLoaders.append(multiImageLoader)
+                multiImageLoader.load {
+                    let timeline = timelineForGameModeTimeline(selectedTimeline, for: configuration)
+                    completion(timeline)
+                }
                 return
             }
             break
@@ -80,8 +86,19 @@ struct Provider: IntentTimelineProvider {
                     completion(timeline)
                     return
                 }
-                let timeline = timelineForCoopTimeline(coopTimeline, for: configuration)
-                completion(timeline)
+                let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
+                let multiImageLoader = MultiImageLoader(urls: coopTimeline.allStageImageURLs(), directory: destination)
+                multiImageLoader.storeAsJPEG = true
+                imageLoaderManager.imageLoaders.append(multiImageLoader)
+                multiImageLoader.load {
+                    let multiImageLoader = MultiImageLoader(urls: coopTimeline.allWeaponImageURLs(), directory: destination)
+                    multiImageLoader.storeAsJPEG = false
+                    imageLoaderManager.imageLoaders.append(multiImageLoader)
+                    multiImageLoader.load {
+                        let timeline = timelineForCoopTimeline(coopTimeline, for: configuration)
+                        completion(timeline)
+                    }
+                }
                 return
             }
             break
@@ -247,21 +264,25 @@ struct SmallGameModeWidgetView : View {
             GeometryReader { geometry in
                 VStack(spacing: 0.0) {
                     ForEach(event.stages, id: \.id) { stage in
-                        Image("thumb_\(stage.id)").resizable().aspectRatio(contentMode: .fill).frame(width: geometry.size.width, height: geometry.size.height/2).clipped()
+                        if let image = stage.image {
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: geometry.size.width, height: geometry.size.height/2)
+                                .clipped()
+                        }
                     }
                 }.cornerRadius(10.0)
             }
             
-            //LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.1), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
-            
+            LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.05), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
+
             VStack(alignment: .leading, spacing: 0.0) {
                 
                 VStack(alignment: .leading, spacing: 0.0) {
                     HStack {
                         Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
-                        if event.mode.type != .regular {
-                            Text(event.rule.name).splat2Font(size: 14).minimumScaleFactor(0.5)
-                        }
+                        Text(event.rule.name).splat2Font(size: 14).minimumScaleFactor(0.5)
                     }
                 }
                                 
@@ -287,7 +308,6 @@ struct SmallGameModeWidgetView : View {
             return Text(" ended ") + Text(event.timeframe.endDate, style: .relative) + Text(" ago")
         }
     }
-    
 }
 
 struct SmallCoopWidgetView : View {
@@ -303,20 +323,26 @@ struct SmallCoopWidgetView : View {
 
             GeometryReader { geometry in
                 VStack(spacing: 0.0) {
-                    Image("thumb_\(event.stage.id)").resizable().aspectRatio(contentMode: .fill).frame(width: geometry.size.width, height: geometry.size.height).clipped()
+                    if let image = event.stage.image {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: geometry.size.width, height: geometry.size.height)
+                            .clipped()
+                    }
                 }.cornerRadius(10.0)
             }
             
-            LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.1), Color.black.opacity(0.4)]), startPoint: .top, endPoint: .bottom)
+            LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.05), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
             
             VStack(alignment: .leading, spacing: 0.0) {
                 
                 VStack(alignment: .leading, spacing: 0.0) {
                     HStack {
                         Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
-                        Text(event.modeName).splat2Font(size: 14).minimumScaleFactor(0.5)
+                        Text(event.modeName).splat2Font(size: 14).minimumScaleFactor(0.5).lineSpacing(0)
                     }
-                    Text(event.stage.name).splat2Font(size: 12)
+                    Text(event.stage.name).splat2Font(size: 10)
                 }
 
                 Spacer()
@@ -329,11 +355,18 @@ struct SmallCoopWidgetView : View {
                     
                     ActivityTimeFrameView(event: event, date: date).lineLimit(2).minimumScaleFactor(0.5)
                     HStack(spacing: 4.0) {
-                        WeaponsList(event: event).frame(maxHeight: 20, alignment: .leading)
+                        Group {
+                            WeaponsList(event: event)
+                                .frame(maxHeight: 24, alignment: .leading)
+                        }
+                        .padding(.horizontal, 4.0)
+                        .background(Color.white.opacity(0.4))
+                        .cornerRadius(4.0)
+                        
                         Spacer()
                     }
-                }
-            }.padding(.horizontal, 10.0)
+                }.lineSpacing(0)
+            }.padding(.horizontal, 10.0).padding(.vertical, 4.0)
         }.foregroundColor(.white)
     }
     

@@ -15,6 +15,7 @@ class ImageLoader: ObservableObject {
     private var cache: ImageCache?
     private var cancellable: AnyCancellable?
     var isCachingOnDiskEnabled = true
+    var cacheDirectory: URL? = URL(fileURLWithPath: NSTemporaryDirectory())
 
     deinit {
         cancel()
@@ -37,7 +38,10 @@ class ImageLoader: ObservableObject {
             self.image = image
             return
         }
-        
+        download()
+    }
+    
+    func download() {
         cancellable = URLSession.shared.dataTaskPublisher(for: url)
             .map { UIImage(data: $0.data) }
             .replaceError(with: nil)
@@ -71,6 +75,9 @@ class ImageLoader: ObservableObject {
     func loadFromDisk(filename: String) -> UIImage? {
         if !isCachingOnDiskEnabled { return nil }
         let filePath = cacheFileURL(filename: filename)
+        if let jpegURL = filePath?.deletingPathExtension().appendingPathExtension("jpeg"), FileManager.default.fileExists(atPath: jpegURL.path) {
+            return  UIImage(contentsOfFile: jpegURL.path)
+        }
         if let path = filePath, FileManager.default.fileExists(atPath: path.path) {
             return UIImage(contentsOfFile: path.path)
         }
@@ -80,14 +87,14 @@ class ImageLoader: ObservableObject {
     func cacheOnDisk(_ image: UIImage, filename: String) {
         if !isCachingOnDiskEnabled { return }
         let filePath = cacheFileURL(filename: filename)
-        if let path = filePath, let data = image.pngData() {
+        if let path = filePath, let data = image.jpegData(compressionQuality: 0.8) {
             try? data.write(to: path)
             copyCacheFileToAppGroupDirectory(filename)
         }
     }
     
     private func cacheFileURL(filename: String) -> URL? {
-        return NSURL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(filename)
+        return cacheDirectory?.appendingPathComponent(filename)
     }
     
     private func copyCacheFileToAppGroupDirectory(_ filename: String) {
@@ -129,4 +136,117 @@ struct TemporaryImageCache: ImageCache {
         get { cache.object(forKey: key as NSURL) }
         set { newValue == nil ? cache.removeObject(forKey: key as NSURL) : cache.setObject(newValue!, forKey: key as NSURL) }
     }
+}
+
+
+
+class MultiImageLoader {
+    
+    let urls : [URL]
+    @Published var finishedURLs : [URL] = []
+    let directory: URL
+    var resizeImages = true
+    var storeAsJPEG = true
+    var useCachedImage = true
+    
+
+    var downloadTasks: [URLSessionDownloadTask] = []
+    
+    init(urls: [URL], directory: URL) {
+        self.urls = urls
+        self.directory = directory
+    }
+    
+    func load(completion: @escaping ()->Void) {
+        let count = urls.count
+        var counter = 0
+        for url in urls {
+            let task = URLSession.shared.downloadTask(with: url) { [weak self] location, response, error in
+
+                guard let self = self else { return }
+                guard let tempLocation = location, error == nil else {
+                    print("Error downloading message: \(String(describing: error))")
+                    return
+                }
+                
+                counter += 1
+
+                let fileManager = FileManager.default
+                do {
+                    let fileURL = self.directory.appendingPathComponent(url.lastPathComponent)
+                    let jpegURL = fileURL.deletingPathExtension().appendingPathExtension("jpeg")
+                    if fileManager.fileExists(atPath: fileURL.path) {
+                        if self.useCachedImage {
+                            self.finishedURLs.append(url)
+                            if count == counter {
+                                completion()
+                            }
+                            return
+                        }
+                        try? fileManager.removeItem(at: fileURL)
+                    }else if fileManager.fileExists(atPath: jpegURL.path) {
+                        if self.useCachedImage {
+                            self.finishedURLs.append(url)
+                            if count == counter {
+                                completion()
+                            }
+                            return
+                        }
+                        try? fileManager.removeItem(at: fileURL)
+                    }
+                    
+                    if self.storeAsJPEG, let image = UIImage(contentsOfFile: tempLocation.path), let data = image.jpegData(compressionQuality: 0.8) {
+                        try? data.write(to: jpegURL)
+//                        if let image = UIImage(contentsOfFile: tempLocation.path), let data = image.jpegData(compressionQuality: 0.8) {
+//                            try? data.write(to: jpegURL)
+////                            //let resizedImage = self.downsample(imageAt: tempLocation, to: CGSize(width: image.size.width/2, height: image.size.height/2), scale: image.scale)
+////                            if self.storeAsJPEG {
+////                                if let data = image.jpegData(compressionQuality: 0.8) {
+////                                    try? data.write(to: jpegURL)
+////                                }
+////                            }else{
+////                                if let data = image.pngData() {
+////                                    try? data.write(to: fileURL)
+////                                }
+////                            }
+//                        }
+                    }else{
+                        try fileManager.moveItem(at: tempLocation, to: fileURL)
+                    }
+                    //print("File downloaded successfully: \(fileURL)")
+                } catch {
+                    print("Error downloading message: \(error)")
+                }
+                print("\(count) == \(counter)")
+                self.finishedURLs.append(url)
+                if count == counter {
+                    completion()
+                }
+            }
+            downloadTasks.append(task)
+            task.resume()
+        }
+    }
+    
+    // Downsampling large images for display at smaller size
+//    func downsample(imageAt imageURL: URL, to pointSize: CGSize, scale: CGFloat) -> UIImage {
+//        let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
+//        let imageSource = CGImageSourceCreateWithURL(imageURL as CFURL, imageSourceOptions)!
+//        let maxDimensionInPixels = max(pointSize.width, pointSize.height) * scale
+//        let downsampleOptions =
+//            [kCGImageSourceCreateThumbnailFromImageAlways: true,
+//            kCGImageSourceShouldCacheImmediately: true,
+//            // Should include kCGImageSourceCreateThumbnailWithTransform: true in the options dictionary. Otherwise, the image result will appear rotated when an image is taken from camera in the portrait orientation.
+//            kCGImageSourceCreateThumbnailWithTransform: true,
+//            kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels] as CFDictionary
+//        let downsampledImage =
+//            CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions)!
+//        return UIImage(cgImage: downsampledImage)
+//    }
+}
+
+class ImageLoaderManager {
+
+    var imageLoaders: [MultiImageLoader] = []
+
 }

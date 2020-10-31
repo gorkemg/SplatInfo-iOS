@@ -28,6 +28,28 @@ struct Schedule: Codable {
         let schedule = Schedule(gameModes: scheduleResponse.gameModesTimelines, coop: coopScheduleResponse.coopTimeline)
         return schedule
     }
+    
+    func allImageURLs() -> [URL] {
+        var imageURLs : [URL] = []
+        let modes = [gameModes.regular, gameModes.ranked, gameModes.league]
+        let stageImageURLs = modes.flatMap({ $0.allImageURLs() })
+        imageURLs.append(contentsOf: stageImageURLs)
+        
+//        let coopStageImageURLStrings = coop.detailedEvents.flatMap({ $0.stage.imageUrl })
+//        let coopWeaponImageURLStrings = coop.detailedEvents.flatMap({ $0.weapons.flatMap { (weapon) -> String in
+//            switch weapon {
+//            case .weapon(details: let details):
+//                return details.imageUrl
+//            case .coopSpecialWeapon(details: let details):
+//                return details.imageUrl
+//            }
+//        } })
+//        let coopImageURLs = [coopStageImageURLStrings,coopWeaponImageURLStrings].compactMap({ URL(string: String($0)) })
+        let coopImageURLs = coop.allImageURLs()
+        imageURLs.append(contentsOf: coopImageURLs)
+        
+        return imageURLs
+    }
 }
 
 protocol Outdated {
@@ -54,8 +76,46 @@ struct GameModesTimelines: Codable, Outdated {
     }
 }
 
+extension GameModeTimeline {
+    func allImageURLs() -> [URL] {
+        let stages = self.schedule.flatMap({ $0.stages })
+        let imageURLs = stages.map({ $0.imageUrl })
+//        let stageImageURLStrings = self.schedule.flatMap({ $0.stages.flatMap({ $0.imageUrl }) })
+//        let stageImageURLs = stageImageURLStrings.compactMap({ URL(string: String($0)) })
+        let stageImageURLs = imageURLs.compactMap({ URL(string: $0) })
+        return stageImageURLs
+    }
+}
+
 extension CoopTimeline : Outdated {
     // make CoopTimeline extend Outdated protocol
+}
+
+extension CoopTimeline {
+    func allImageURLs() -> [URL] {
+        let coopStageImageURLStrings = allStageImageURLs()
+        let coopWeaponImageURLStrings = allWeaponImageURLs()
+        let imageURLs = coopStageImageURLStrings + coopWeaponImageURLStrings
+//        let imageURLs = combined.compactMap({ URL(string: $0) })
+        return imageURLs
+    }
+    
+    func allStageImageURLs() -> [URL] {
+        let coopStageImageURLStrings = self.detailedEvents.map({ $0.stage.imageUrl })
+        return coopStageImageURLStrings.compactMap({ URL(string: $0) })
+    }
+    
+    func allWeaponImageURLs() -> [URL] {
+        let coopWeaponImageURLStrings = self.detailedEvents.map({ $0.weapons.map { (weapon) -> String in
+            switch weapon {
+            case .weapon(details: let details):
+                return details.imageUrl
+            case .coopSpecialWeapon(details: let details):
+                return details.imageUrl
+            }
+        } }).flatMap({ $0 })
+        return coopWeaponImageURLStrings.compactMap({ URL(string: $0) })
+    }
 }
 
 extension Encodable {
