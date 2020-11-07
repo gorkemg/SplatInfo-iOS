@@ -74,3 +74,46 @@ struct RelativeTimeframeView : View {
     }
     
 }
+
+
+struct ActivityTimeFrameView : View {
+    let event: CoopEvent
+    var date: Date = Date()
+
+    var body: some View {
+        switch event.timeframe.status(date: date) {
+        case .active:
+            Text("- \(timeframeEndString)").splat2Font(size: 10)
+        case .soon:
+            Text("\(timeframeStartString) - \(timeframeEndString)").splat2Font(size: 10)
+        case .over:
+            Text("- \(timeframeEndString)").splat2Font(size: 10)
+        }
+    }
+    var timeframeStartString: String {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .short
+        return formatter.string(from: event.timeframe.startDate)
+    }
+    var timeframeEndString: String {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .short
+        return formatter.string(from: event.timeframe.endDate)
+    }
+
+}
+
+extension TimeframeActivityStatus {
+    var activityText: String {
+        switch self {
+        case .active:
+            return "Open!"
+        case .soon:
+            return "Soon!"
+        case .over:
+            return "Ended!"
+        }
+    }
+}

@@ -55,25 +55,31 @@ struct CoopLargeEventView : View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 5.0) {
+        VStack(alignment: .leading, spacing: 2.0) {
+            
             HStack {
-                Text(currentActivityText).splat1Font(size: 20)
+                Text(currentActivityText).splat1Font(size: 14)
                 Spacer()
                 RelativeTimeframeView(timeframe: event.timeframe, date: date)
+                    .splat2Font(size: 10)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+                    .minimumScaleFactor(0.5)
             }
-            TimeframeView(timeframe: event.timeframe, datesEnabled: true)
+            
+            
+            TimeframeView(timeframe: event.timeframe, datesEnabled: true, fontSize: 12)
+            
             LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
                 if let stage = event.stage {
                     StageImage(stage: stage)
                 }
-                VStack {
+                VStack(alignment: .center, spacing: 0.0) {
                     Text("Available Weapons")
-                        .splat1Font(size: 14)
+                        .splat1Font(size: 12)
                         .lineLimit(2)
                         .minimumScaleFactor(0.5)
                     WeaponsList(event: event)
+                        .shadow(color: .black, radius: 2, x: 0, y: 1)
                 }
             }
         }
@@ -100,13 +106,15 @@ struct CoopNarrowEventView : View {
                         ImageOverlayText(text: currentActivityText)
                         Spacer()
                         VStack {
-                            RelativeTimeframeView(timeframe: event.timeframe, date: date)
-                                //.splat1Font(size: 10)
-                                //.shadow(color: .black, radius: 1, x: 0.0, y: 1)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.8)
-                                .font(.caption2)
-                                .padding(2)
+                            if isInWidget() {
+                                //RelativeTimeframeView(timeframe: event.timeframe, date: date)
+                                Text(event.timeframe.startDate, style: .relative)
+                                    .splat2Font(size: 10)
+                                    .shadow(color: .black, radius: 1, x: 0.0, y: 1)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.8)
+                                    .padding(2)
+                            }
                         }
                         .background(Color.black.opacity(0.5))
                         .cornerRadius(8)
@@ -118,16 +126,17 @@ struct CoopNarrowEventView : View {
             }
             VStack(alignment: .leading, spacing: 0) {
                 if let stage = event.stage {
-                    Text(stage.name).splat2Font(size: 14)
+                    Text(stage.name).splat2Font(size: 11)
                 }
-                TimeframeView(timeframe: event.timeframe, datesEnabled: true, fontSize: 10).lineLimit(1).minimumScaleFactor(0.5)
+                TimeframeView(timeframe: event.timeframe, datesEnabled: true, fontSize: 9).lineLimit(1).minimumScaleFactor(0.8)
                 HStack {
                     WeaponsList(event: event)
+                        .shadow(color: .black, radius: 2, x: 0, y: 1)
                         .frame(maxHeight: 24, alignment: .leading)
                     Spacer()
                 }
             }
-        }
+        }.frame(minHeight: 0, maxHeight: .infinity, alignment: .center)
     }
 }
 

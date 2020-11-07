@@ -137,7 +137,7 @@ struct CoopEvent: Codable, Equatable {
     }
 }
 
-struct EventTimeframe: Codable, TimeframeActivity {
+struct EventTimeframe: Codable, Hashable, TimeframeActivity {
     let startDate: Date
     let endDate: Date
 }

@@ -128,11 +128,15 @@ struct Provider: IntentTimelineProvider {
         let oneHour = Date(timeIntervalSinceNow: 3600)
         var entries: [GameModeEntry] = []
         let startDates = coopTimeline.detailedEvents.map({ $0.timeframe.startDate })
-        for startDate in startDates {
-            let events = coopTimeline.detailedEvents.filter({ $0.timeframe.startDate >= startDate })
-            let eventTimeframes = coopTimeline.eventTimeframes.filter({ $0.startDate >= startDate })
-            let entry = GameModeEntry(date: startDate, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
-            entries.append(entry)
+        let endDates = coopTimeline.detailedEvents.map({ $0.timeframe.endDate })
+        let dates = (startDates+endDates).sorted()
+        for date in dates {
+            let events = coopTimeline.detailedEvents.filter({ $0.timeframe.startDate >= date })
+            if events.count > 0 {
+                let eventTimeframes = coopTimeline.eventTimeframes.filter({ $0.startDate >= date })
+                let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
+                entries.append(entry)
+            }
         }
         let timeline = Timeline(entries: entries, policy: .after(oneHour))
         return timeline
@@ -197,9 +201,9 @@ struct GameModeEntryView : View {
                 case .systemSmall:
                     SmallGameModeWidgetView(event: event, nextEvent: nextEvent)
                 case .systemMedium:
-                    SmallGameModeWidgetView(event: event, nextEvent: nextEvent)
+                    LargerGameModeWidgetView(event: event, nextEvent: nextEvent)
                 case .systemLarge:
-                    SmallGameModeWidgetView(event: event, nextEvent: nextEvent)
+                    LargerGameModeWidgetView(event: event, nextEvent: nextEvent)
                 @unknown default:
                     Text("No event available").splat1Font(size: 20)
                 }
@@ -223,16 +227,32 @@ struct GameModeEntryView : View {
     }
 }
 
+
 struct CoopEntryView : View {
     let events: [CoopEvent]
     let eventTimeframes: [EventTimeframe]
     let displayNext: Bool
 
+    @Environment(\.widgetFamily) private var widgetFamily
+
     var body: some View {
-        if let event = event {
-            SmallCoopWidgetView(event: event)
-        }else{
-            Text("No event available")
+        switch widgetFamily {
+        case .systemSmall:
+            if let event = event {
+                SmallCoopWidgetView(event: event)
+            }else{
+                Text("No event available")
+            }
+        case .systemMedium:
+            LargerCoopWidgetView(events: events, eventTimeframes: otherTimeframes, style: .narrow)
+        case .systemLarge:
+            LargerCoopWidgetView(events: events, eventTimeframes: otherTimeframes, style: .large)
+        @unknown default:
+            if let event = event {
+                SmallCoopWidgetView(event: event)
+            }else{
+                Text("No event available")
+            }
         }
     }
 
@@ -248,189 +268,14 @@ struct CoopEntryView : View {
         }
         return nil
     }
-}
-
-struct SmallGameModeWidgetView : View {
-    let event: GameModeEvent
-    var nextEvent: GameModeEvent? = nil
-
-    var body: some View {
-        ZStack(alignment: .topLeading) {
-
-            event.mode.type.color
-
-            Image("splatoon-card-bg").resizable(resizingMode: .tile)
-
-            GeometryReader { geometry in
-                VStack(spacing: 0.0) {
-                    ForEach(event.stages, id: \.id) { stage in
-                        if let image = stage.image {
-                            Image(uiImage: image)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: geometry.size.width, height: geometry.size.height/2)
-                                .clipped()
-                        }
-                    }
-                }.cornerRadius(10.0)
-            }
-            
-            LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.05), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
-
-            VStack(alignment: .leading, spacing: 0.0) {
-                
-                VStack(alignment: .leading, spacing: 0.0) {
-                    HStack {
-                        Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
-                        Text(event.rule.name).splat2Font(size: 14).minimumScaleFactor(0.5)
-                    }
-                }
-                                
-                Spacer()
-                
-                VStack(alignment: .leading, spacing: 0.0) {
-                    if let next = nextEvent {
-                        Text(event.mode.type != .regular ? next.rule.name : "Changes")
-                        + relativeTimeText(event: next)
-                    }
-                }.splat2Font(size: 10).lineLimit(1).minimumScaleFactor(0.5)
-            }.padding(.horizontal, 10.0).padding(.vertical, 4)
-        }
-    }
-
-    func relativeTimeText(event: GameModeEvent) -> Text {
-        switch event.timeframe.status(date: Date()) {
-        case .active:
-            return Text(" since ") + Text(event.timeframe.startDate, style: .relative)
-        case .soon:
-            return Text(" in ") + Text(event.timeframe.startDate, style: .relative)
-        case .over:
-            return Text(" ended ") + Text(event.timeframe.endDate, style: .relative) + Text(" ago")
-        }
-    }
-}
-
-struct SmallCoopWidgetView : View {
-    let event: CoopEvent
-    var date: Date = Date()
-
-    var body: some View {
-        ZStack(alignment: .topLeading) {
-
-            event.color
-
-            Image("bg-spots").resizable(resizingMode: .tile)
-
-            GeometryReader { geometry in
-                VStack(spacing: 0.0) {
-                    if let image = event.stage.image {
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: geometry.size.width, height: geometry.size.height)
-                            .clipped()
-                    }
-                }.cornerRadius(10.0)
-            }
-            
-            LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.05), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
-            
-            VStack(alignment: .leading, spacing: 0.0) {
-                
-                VStack(alignment: .leading, spacing: 0.0) {
-                    HStack {
-                        Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
-                        Text(event.modeName).splat2Font(size: 14).minimumScaleFactor(0.5).lineSpacing(0)
-                    }
-                    Text(event.stage.name).splat2Font(size: 10)
-                }
-
-                Spacer()
-                
-                VStack(alignment: .leading, spacing: 2.0) {
-                    HStack {
-                        currentActivityTextView
-                        RelativeTimeframeView(timeframe: event.timeframe, date: date)
-                    }.splat2Font(size: 12)
-                    
-                    ActivityTimeFrameView(event: event, date: date).lineLimit(1).minimumScaleFactor(0.5)
-                    HStack(spacing: 4.0) {
-                        Group {
-                            WeaponsList(event: event)
-                                .shadow(color: .black, radius: 2, x: 0.0, y: 1.0)
-                                .frame(maxHeight: 24, alignment: .leading)
-                        }
-                        
-                        Spacer()
-                    }
-                }.lineSpacing(0)
-            }.padding(.horizontal, 10.0).padding(.vertical, 4.0)
-        }.foregroundColor(.white)
+    
+    var otherTimeframes: [EventTimeframe] {
+        guard eventTimeframes.count > 2 else { return [] }
+        let timeframes = Array(eventTimeframes[2...])
+        return timeframes
     }
     
-    var currentActivityTextView : some View {
-        HStack {
-            Text(currentActivityText)
-        }.padding(.horizontal, 4.0).background(currentActivityColor).cornerRadius(5.0)
-    }
-    
-    var currentActivityText : String {
-        return event.timeframe.status(date: date).activityText
-    }
-    var currentActivityColor : Color {
-        switch event.timeframe.status(date: date) {
-        case .active:
-            return Color.coopModeColor
-        case .soon:
-            return Color.black
-        case .over:
-            return Color.gray
-        }
-    }
 }
-
-struct ActivityTimeFrameView : View {
-    let event: CoopEvent
-    var date: Date = Date()
-
-    var body: some View {
-        switch event.timeframe.status(date: date) {
-        case .active:
-            Text("- \(timeframeEndString)").splat2Font(size: 10)
-        case .soon:
-            Text("\(timeframeStartString) - \(timeframeEndString)").splat2Font(size: 10)
-        case .over:
-            Text("- \(timeframeEndString)").splat2Font(size: 10)
-        }
-    }
-    var timeframeStartString: String {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        formatter.dateStyle = .short
-        return formatter.string(from: event.timeframe.startDate)
-    }
-    var timeframeEndString: String {
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        formatter.dateStyle = .short
-        return formatter.string(from: event.timeframe.endDate)
-    }
-
-}
-
-extension TimeframeActivityStatus {
-    var activityText: String {
-        switch self {
-        case .active:
-            return "Open!"
-        case .soon:
-            return "Soon!"
-        case .over:
-            return "Ended!"
-        }
-    }
-}
-
 
 @main
 struct ScheduleWidget: Widget {
@@ -477,47 +322,24 @@ struct Schedule_Previews: PreviewProvider {
             .previewContext(WidgetPreviewContext(family: .systemSmall))
         
         ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+            .previewContext(WidgetPreviewContext(family: .systemMedium))
 
         ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: rankedEvents), configuration: intent))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+            .previewContext(WidgetPreviewContext(family: .systemMedium))
 
         ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: rankedEvents), configuration: intentWithDisplayNext))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+            .previewContext(WidgetPreviewContext(family: .systemMedium))
 
         ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: leagueEvents), configuration: ConfigurationIntent()))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
+            .previewContext(WidgetPreviewContext(family: .systemMedium))
 
         ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: intent))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
-
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: intentWithDisplayNext))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
-
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
+
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: intent))
+            .previewContext(WidgetPreviewContext(family: .systemLarge))
 
         ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemLarge))
-    }
-}
-
-extension GameModeType {
-    
-    var color : Color {
-        switch self {
-        case .regular:
-            return Color("RegularModeColor")
-        case .ranked:
-            return Color("RankedModeColor")
-        case .league:
-            return Color("LeagueModeColor")
-        }
-    }
-}
-
-extension CoopEvent {
-    var color : Color {
-        return Color("CoopModeColor")
     }
 }

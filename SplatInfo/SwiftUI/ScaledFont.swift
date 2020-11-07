@@ -41,4 +41,9 @@ extension View {
         return scaledSplat2Font(size: size).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
     }
 
+    func isInWidget() -> Bool {
+        guard let extesion = Bundle.main.infoDictionary?["NSExtension"] as? [String: String] else { return false }
+        guard let widget = extesion["NSExtensionPointIdentifier"] else { return false }
+        return widget == "com.apple.widgetkit-extension"
+    }
 }

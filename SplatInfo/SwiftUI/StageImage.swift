@@ -10,6 +10,7 @@ import SwiftUI
 struct StageImage: View {
     let stage : Stage
     var isNameVisible: Bool = true
+    var height: CGFloat = 100
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -19,7 +20,7 @@ struct StageImage: View {
                 }
             }
             .cornerRadius(10.0)
-            .frame(minWidth: 0, idealWidth: .infinity, maxWidth: .infinity, minHeight: 0, idealHeight: 100, maxHeight: .infinity, alignment: .center)
+            .frame(minWidth: 0, idealWidth: .infinity, maxWidth: .infinity, minHeight: 0, idealHeight: height, maxHeight: height, alignment: .center)
 
             if isNameVisible {
                 ImageOverlayText(text: stage.name)

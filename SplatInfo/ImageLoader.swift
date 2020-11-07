@@ -197,23 +197,9 @@ class MultiImageLoader {
                     
                     if self.storeAsJPEG, let image = UIImage(contentsOfFile: tempLocation.path), let data = image.jpegData(compressionQuality: 0.8) {
                         try? data.write(to: jpegURL)
-//                        if let image = UIImage(contentsOfFile: tempLocation.path), let data = image.jpegData(compressionQuality: 0.8) {
-//                            try? data.write(to: jpegURL)
-////                            //let resizedImage = self.downsample(imageAt: tempLocation, to: CGSize(width: image.size.width/2, height: image.size.height/2), scale: image.scale)
-////                            if self.storeAsJPEG {
-////                                if let data = image.jpegData(compressionQuality: 0.8) {
-////                                    try? data.write(to: jpegURL)
-////                                }
-////                            }else{
-////                                if let data = image.pngData() {
-////                                    try? data.write(to: fileURL)
-////                                }
-////                            }
-//                        }
                     }else{
                         try fileManager.moveItem(at: tempLocation, to: fileURL)
                     }
-                    //print("File downloaded successfully: \(fileURL)")
                 } catch {
                     print("Error downloading message: \(error)")
                 }
@@ -226,23 +212,7 @@ class MultiImageLoader {
             downloadTasks.append(task)
             task.resume()
         }
-    }
-    
-    // Downsampling large images for display at smaller size
-//    func downsample(imageAt imageURL: URL, to pointSize: CGSize, scale: CGFloat) -> UIImage {
-//        let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
-//        let imageSource = CGImageSourceCreateWithURL(imageURL as CFURL, imageSourceOptions)!
-//        let maxDimensionInPixels = max(pointSize.width, pointSize.height) * scale
-//        let downsampleOptions =
-//            [kCGImageSourceCreateThumbnailFromImageAlways: true,
-//            kCGImageSourceShouldCacheImmediately: true,
-//            // Should include kCGImageSourceCreateThumbnailWithTransform: true in the options dictionary. Otherwise, the image result will appear rotated when an image is taken from camera in the portrait orientation.
-//            kCGImageSourceCreateThumbnailWithTransform: true,
-//            kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels] as CFDictionary
-//        let downsampledImage =
-//            CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions)!
-//        return UIImage(cgImage: downsampledImage)
-//    }
+    }    
 }
 
 class ImageLoaderManager {

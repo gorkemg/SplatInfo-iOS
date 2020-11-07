@@ -18,7 +18,7 @@ struct ScheduleGrid: View {
     var body: some View {
         ZStack {
             Image("bg-squids").resizable(resizingMode: .tile).ignoresSafeArea()
-            ScrollView {
+            ScrollView(.vertical) {
                 LazyVGrid(columns: columns, spacing: 50) {
                     TimelineCard(timeline: .gameModeTimeline(timeline: schedule.gameModes.regular))
                     TimelineCard(timeline: .gameModeTimeline(timeline: schedule.gameModes.ranked))

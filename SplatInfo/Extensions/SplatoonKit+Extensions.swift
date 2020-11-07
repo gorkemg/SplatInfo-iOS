@@ -1,10 +1,11 @@
 //
-//  Stage+Extensions.swift
+//  SplatoonKit+Extensions.swift
 //  SplatInfo
 //
-//  Created by Görkem Güclü on 29.10.20.
+//  Created by Görkem Güclü on 31.10.20.
 //
 
+import SwiftUI
 import UIKit
 
 extension Stage {
@@ -33,5 +34,26 @@ extension Stage {
     
     var assetImage: UIImage? {
         return UIImage(named: "thumb_\(id)") ?? UIImage(named: "\(id)")
+    }
+}
+
+extension GameModeType {
+
+    var color : Color {
+        switch self {
+        case .regular:
+            return Color.regularModeColor
+        case .ranked:
+            return Color.rankedModeColor
+        case .league:
+            return Color.leagueModeColor
+        }
+    }
+}
+
+extension CoopEvent {
+
+    var color : Color {
+        return Color.coopModeColor
     }
 }
