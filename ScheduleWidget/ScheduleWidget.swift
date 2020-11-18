@@ -114,11 +114,13 @@ struct Provider: IntentTimelineProvider {
     func timelineForGameModeTimeline(_ modeTimeline: GameModeTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
         //let oneHour = Date(timeIntervalSinceNow: 3600)
         var entries: [GameModeEntry] = []
+        let now = Date()
         let startDates = modeTimeline.schedule.map({ $0.timeframe.startDate })
-        for startDate in startDates {
-            let events = modeTimeline.upcomingEventsAfterDate(date: startDate)
+        let dates = ([now]+startDates).sorted()
+        for date in dates {
+            let events = modeTimeline.upcomingEventsAfterDate(date: date)
             if events.count > 1 {
-                let entry = GameModeEntry(date: startDate, events: .gameModeEvents(events: events), configuration: configuration)
+                let entry = GameModeEntry(date: date, events: .gameModeEvents(events: events), configuration: configuration)
                 entries.append(entry)
             }
         }
@@ -129,9 +131,10 @@ struct Provider: IntentTimelineProvider {
     func timelineForCoopTimeline(_ coopTimeline: CoopTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
         //let oneHour = Date(timeIntervalSinceNow: 3600)
         var entries: [GameModeEntry] = []
+        let now = Date()
         let startDates = coopTimeline.detailedEvents.map({ $0.timeframe.startDate })
         let endDates = coopTimeline.detailedEvents.map({ $0.timeframe.endDate })
-        let dates = (startDates+endDates).sorted()
+        let dates = ([now]+startDates+endDates).sorted()
         for date in dates {
             let events = coopTimeline.detailedEvents.filter({ $0.timeframe.startDate >= date })
             let eventTimeframes = coopTimeline.eventTimeframes.filter({ $0.startDate >= date })
