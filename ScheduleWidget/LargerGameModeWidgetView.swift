@@ -10,6 +10,7 @@ import SwiftUI
 struct LargerGameModeWidgetView : View {
     let event: GameModeEvent
     var nextEvent: GameModeEvent? = nil
+    let state: TimeframeActivityState
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -56,7 +57,7 @@ struct LargerGameModeWidgetView : View {
     }
 
     func relativeTimeText(event: GameModeEvent) -> Text {
-        switch event.timeframe.status(date: Date()) {
+        switch state {
         case .active:
             return Text(" since ") + Text(event.timeframe.startDate, style: .relative)
         case .soon:

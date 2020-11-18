@@ -14,7 +14,7 @@ import SwiftUI
 //    let date: Date
 //
 //    var body: some View {
-//        switch timeframe.status(date: date) {
+//        switch timeframe.state(date: date) {
 //        case active:
 //            RelativeTimeframeView(timeframe: timeframe, date: date)
 //        default:
@@ -44,10 +44,10 @@ struct TimeframeView: View {
 struct RelativeTimeframeView : View {
     
     let timeframe : EventTimeframe
-    let date: Date
+    let state: TimeframeActivityState
     
     var formatter : Formatter {
-        if timeframe.status(date: date) == .active {
+        if state == .active {
             let formatter = RelativeDateTimeFormatter()
             formatter.dateTimeStyle = .numeric
             formatter.unitsStyle = .abbreviated
@@ -70,7 +70,7 @@ struct RelativeTimeframeView : View {
     }
     
     var relativeDate : Date {
-        return timeframe.status(date: date) == .active ? timeframe.endDate : timeframe.startDate
+        return state == .active ? timeframe.endDate : timeframe.startDate
     }
     
 }
@@ -78,10 +78,10 @@ struct RelativeTimeframeView : View {
 
 struct ActivityTimeFrameView : View {
     let event: CoopEvent
-    var date: Date = Date()
+    let state: TimeframeActivityState
 
     var body: some View {
-        switch event.timeframe.status(date: date) {
+        switch state {
         case .active:
             Text("- \(timeframeEndString)").splat2Font(size: 10)
         case .soon:
@@ -105,7 +105,7 @@ struct ActivityTimeFrameView : View {
 
 }
 
-extension TimeframeActivityStatus {
+extension TimeframeActivityState {
     var activityText: String {
         switch self {
         case .active:

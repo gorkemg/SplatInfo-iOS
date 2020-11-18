@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SmallCoopWidgetView : View {
     let event: CoopEvent
-    var date: Date = Date()
+    let state: TimeframeActivityState
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -47,10 +47,10 @@ struct SmallCoopWidgetView : View {
                 VStack(alignment: .leading, spacing: 2.0) {
                     HStack {
                         currentActivityTextView
-                        RelativeTimeframeView(timeframe: event.timeframe, date: date)
+                        RelativeTimeframeView(timeframe: event.timeframe, state: state)
                     }.splat2Font(size: 12)
                     
-                    ActivityTimeFrameView(event: event, date: date).lineLimit(1).minimumScaleFactor(0.5)
+                    ActivityTimeFrameView(event: event, state: state).lineLimit(1).minimumScaleFactor(0.5)
                     HStack(spacing: 4.0) {
                         Group {
                             WeaponsList(event: event)
@@ -67,26 +67,12 @@ struct SmallCoopWidgetView : View {
     
     var currentActivityTextView : some View {
         HStack {
-            Text(currentActivityText)
-        }.padding(.horizontal, 4.0).background(currentActivityColor).cornerRadius(5.0)
-    }
-    
-    var currentActivityText : String {
-        return event.timeframe.status(date: date).activityText
-    }
-    var currentActivityColor : Color {
-        switch event.timeframe.status(date: date) {
-        case .active:
-            return Color.coopModeColor
-        case .soon:
-            return Color.black
-        case .over:
-            return Color.gray
-        }
+            Text(state.activityText)
+        }.padding(.horizontal, 4.0).background(state.color).cornerRadius(5.0)
     }
 }
 
-extension TimeframeActivityStatus {
+extension TimeframeActivityState {
     
     var color : Color {
         switch self {

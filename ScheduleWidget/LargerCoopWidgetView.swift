@@ -10,7 +10,7 @@ import SwiftUI
 struct LargerCoopWidgetView : View {
     let events: [CoopEvent]
     var eventTimeframes: [EventTimeframe]?
-    var date: Date = Date()
+    let date: Date
     
     let style: LargerCoopWidgetStyle
     
@@ -49,7 +49,9 @@ struct LargerCoopWidgetView : View {
                 VStack(alignment: .leading, spacing: 2) {
 
                     ForEach(events.indices, id: \.self) { i in
-                        CoopEventView(event: events[i], style: i == 0 && style == .large ? .large : .narrow)
+                        let event = events[i]
+                        let state = event.timeframe.state(date: date)
+                        CoopEventView(event: event, style: i == 0 && style == .large ? .large : .narrow, state: state)
                     }
                     
                     if let timeframes = otherTimeframes {
@@ -76,25 +78,4 @@ struct LargerCoopWidgetView : View {
             return timeframes
         }
     }
-    
-    
-//    var currentActivityTextView : some View {
-//        HStack {
-//            Text(currentActivityText)
-//        }.padding(.horizontal, 4.0).background(currentActivityColor).cornerRadius(5.0)
-//    }
-//
-//    var currentActivityText : String {
-//        return event.timeframe.status(date: date).activityText
-//    }
-//    var currentActivityColor : Color {
-//        switch event.timeframe.status(date: date) {
-//        case .active:
-//            return Color.coopModeColor
-//        case .soon:
-//            return Color.black
-//        case .over:
-//            return Color.gray
-//        }
-//    }
 }

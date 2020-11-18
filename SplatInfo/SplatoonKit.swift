@@ -19,7 +19,7 @@ struct GameModeTimeline: Codable {
         return filtered
     }
     func upcomingEventsAfterDate(date: Date) -> [GameModeEvent] {
-        return schedule.filter({ $0.timeframe.status(date: date) != .over })
+        return schedule.filter({ $0.timeframe.state(date: date) != .over })
     }
     
     static func empty(_ mode: GameModeType) -> GameModeTimeline {
@@ -202,12 +202,9 @@ protocol TimeframeActivity {
     
     var startDate : Date { get }
     var endDate : Date { get }
-//    var isActive : Bool { get }
-//    var isUpcoming : Bool { get }
-//    var isOver : Bool { get }
 }
 
-enum TimeframeActivityStatus {
+enum TimeframeActivityState {
     case active
     case soon
     case over
@@ -215,18 +212,7 @@ enum TimeframeActivityStatus {
 
 extension TimeframeActivity {
     
-//    var isActive : Bool {
-//        let date = Date()
-//        return self.startDate <= date && date < self.endDate
-//    }
-//    var isUpcoming : Bool {
-//        return Date() < self.startDate
-//    }
-//    var isOver : Bool {
-//        return self.endDate < Date()
-//    }
-    
-    func status(date: Date) -> TimeframeActivityStatus {
+    func state(date: Date) -> TimeframeActivityState {
         
         if date < self.startDate {
             return .soon

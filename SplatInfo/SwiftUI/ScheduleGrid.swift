@@ -38,7 +38,9 @@ struct CoopTimelineView: View {
         VStack {
             if coopTimeline.detailedEvents.count > 0 {
                 ForEach(0..<coopTimeline.detailedEvents.count) { i in
-                    CoopEventView(event: coopTimeline.detailedEvents[i], style: i == 0 ? .large : .narrow)
+                    let event = coopTimeline.detailedEvents[i]
+                    let state = event.timeframe.state(date: Date())
+                    CoopEventView(event: event, style: i == 0 ? .large : .narrow, state: state)
                 }
             }
         }

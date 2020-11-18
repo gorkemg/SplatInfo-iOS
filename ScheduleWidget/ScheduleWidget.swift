@@ -48,7 +48,7 @@ struct Provider: IntentTimelineProvider {
             scheduleFetcher.fetchGameModeTimelines { (timelines, error) in
                 guard let timelines = timelines else {
                     let entries: [GameModeEntry] = []
-                    let timeline = Timeline(entries: entries, policy: .after(Date().addingTimeInterval(60)))
+                    let timeline = Timeline(entries: entries, policy: .atEnd)
                     completion(timeline)
                     return
                 }
@@ -62,7 +62,7 @@ struct Provider: IntentTimelineProvider {
                         selectedTimeline = timelines.league
                     default:
                         let entries: [GameModeEntry] = []
-                        let timeline = Timeline(entries: entries, policy:  .after(Date().addingTimeInterval(60)))
+                        let timeline = Timeline(entries: entries, policy: .atEnd)
                         completion(timeline)
                         return
                 }
@@ -82,7 +82,7 @@ struct Provider: IntentTimelineProvider {
             scheduleFetcher.fetchCoopTimeline { (coopTimeline, error) in
                 guard let coopTimeline = coopTimeline else {
                     let entries: [GameModeEntry] = []
-                    let timeline = Timeline(entries: entries, policy:  .after(Date().addingTimeInterval(60)))
+                    let timeline = Timeline(entries: entries, policy: .atEnd)
                     completion(timeline)
                     return
                 }
@@ -112,33 +112,35 @@ struct Provider: IntentTimelineProvider {
     }
     
     func timelineForGameModeTimeline(_ modeTimeline: GameModeTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
-        let oneHour = Date(timeIntervalSinceNow: 3600)
+        //let oneHour = Date(timeIntervalSinceNow: 3600)
         var entries: [GameModeEntry] = []
         let startDates = modeTimeline.schedule.map({ $0.timeframe.startDate })
         for startDate in startDates {
             let events = modeTimeline.upcomingEventsAfterDate(date: startDate)
-            let entry = GameModeEntry(date: startDate, events: .gameModeEvents(events: events), configuration: configuration)
-            entries.append(entry)
+            if events.count > 1 {
+                let entry = GameModeEntry(date: startDate, events: .gameModeEvents(events: events), configuration: configuration)
+                entries.append(entry)
+            }
         }
-        let timeline = Timeline(entries: entries, policy: .after(oneHour))
+        let timeline = Timeline(entries: entries, policy: .atEnd)
         return timeline
     }
     
     func timelineForCoopTimeline(_ coopTimeline: CoopTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
-        let oneHour = Date(timeIntervalSinceNow: 3600)
+        //let oneHour = Date(timeIntervalSinceNow: 3600)
         var entries: [GameModeEntry] = []
         let startDates = coopTimeline.detailedEvents.map({ $0.timeframe.startDate })
         let endDates = coopTimeline.detailedEvents.map({ $0.timeframe.endDate })
         let dates = (startDates+endDates).sorted()
         for date in dates {
             let events = coopTimeline.detailedEvents.filter({ $0.timeframe.startDate >= date })
-            if events.count > 0 {
+            if events.count > 1 {
                 let eventTimeframes = coopTimeline.eventTimeframes.filter({ $0.startDate >= date })
                 let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
                 entries.append(entry)
             }
         }
-        let timeline = Timeline(entries: entries, policy: .after(oneHour))
+        let timeline = Timeline(entries: entries, policy: .atEnd)
         return timeline
     }
 }
@@ -172,23 +174,45 @@ struct ScheduleEntryView : View {
     var body: some View {
         switch entry.events {
         case .gameModeEvents(events: let events):
-            GameModeEntryView(gameMode: gameModeType, events: events, displayNext: displayNext)
+            GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date)
         case .coopEvents(events: let events, timeframes: let timeframes):
-            CoopEntryView(events: events, eventTimeframes: timeframes, displayNext: displayNext)
+            CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date)
         }
     }
     
     var displayNext: Bool {
         guard let displayNext = entry.configuration.displayNext else { return false }
-        return displayNext.boolValue
+        return false // displayNext.boolValue
     }
-    
+
+    var gameModeEvents: [GameModeEvent] {
+        switch entry.events {
+        case .gameModeEvents(events: let events):
+            if displayNext, events.count > 1 { return Array(events.suffix(from: 1)) }
+            return events
+        default:
+            break
+        }
+        return []
+    }
+
+    var coopEvents: [CoopEvent] {
+        switch entry.events {
+        case .coopEvents(events: let events, timeframes: _):
+            if displayNext, events.count > 1 { return Array(events.suffix(from: 1)) }
+            return events
+        default:
+            break
+        }
+        return []
+    }
+
 }
 
 struct GameModeEntryView : View {
     let gameMode: GameModeType
     let events: [GameModeEvent]
-    let displayNext: Bool
+    let date: Date
     
     @Environment(\.widgetFamily) private var widgetFamily
     
@@ -197,13 +221,14 @@ struct GameModeEntryView : View {
             Image("bg-squids").resizable(resizingMode: .tile).ignoresSafeArea()
             
             if let event = event {
+                let state = event.timeframe.state(date: date)
                 switch widgetFamily {
                 case .systemSmall:
-                    SmallGameModeWidgetView(event: event, nextEvent: nextEvent)
+                    SmallGameModeWidgetView(event: event, nextEvent: nextEvent, state: state)
                 case .systemMedium:
-                    LargerGameModeWidgetView(event: event, nextEvent: nextEvent)
+                    LargerGameModeWidgetView(event: event, nextEvent: nextEvent, state: state)
                 case .systemLarge:
-                    LargerGameModeWidgetView(event: event, nextEvent: nextEvent)
+                    LargerGameModeWidgetView(event: event, nextEvent: nextEvent, state: state)
                 @unknown default:
                     Text("No event available").splat1Font(size: 20)
                 }
@@ -214,9 +239,6 @@ struct GameModeEntryView : View {
     }
     
     var event: GameModeEvent? {
-        if displayNext, events.count > 1 {
-            return events[1]
-        }
         return events.first
     }
     var nextEvent: GameModeEvent? {
@@ -231,7 +253,7 @@ struct GameModeEntryView : View {
 struct CoopEntryView : View {
     let events: [CoopEvent]
     let eventTimeframes: [EventTimeframe]
-    let displayNext: Bool
+    let date: Date
 
     @Environment(\.widgetFamily) private var widgetFamily
 
@@ -239,17 +261,17 @@ struct CoopEntryView : View {
         switch widgetFamily {
         case .systemSmall:
             if let event = event {
-                SmallCoopWidgetView(event: event)
+                SmallCoopWidgetView(event: event, state: event.timeframe.state(date: date))
             }else{
                 Text("No event available")
             }
         case .systemMedium:
-            LargerCoopWidgetView(events: events, eventTimeframes: otherTimeframes, style: .narrow)
+            LargerCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date, style: .narrow)
         case .systemLarge:
-            LargerCoopWidgetView(events: events, eventTimeframes: otherTimeframes, style: .large)
+            LargerCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date, style: .large)
         @unknown default:
             if let event = event {
-                SmallCoopWidgetView(event: event)
+                SmallCoopWidgetView(event: event, state: event.timeframe.state(date: date))
             }else{
                 Text("No event available")
             }
@@ -257,9 +279,6 @@ struct CoopEntryView : View {
     }
 
     var event: CoopEvent? {
-        if displayNext, events.count > 1 {
-            return events[1]
-        }
         return events.first
     }
     var nextEvent: CoopEvent? {
@@ -274,7 +293,6 @@ struct CoopEntryView : View {
         let timeframes = Array(eventTimeframes[2...])
         return timeframes
     }
-    
 }
 
 @main

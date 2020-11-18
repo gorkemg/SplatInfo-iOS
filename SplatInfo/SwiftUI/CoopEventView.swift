@@ -31,7 +31,8 @@ extension Date {
 struct CoopEventView: View {
     let event : CoopEvent
     let style: Style
-    
+    let state: TimeframeActivityState
+
     enum Style {
         case large
         case narrow
@@ -40,27 +41,24 @@ struct CoopEventView: View {
     var body: some View {
         switch style {
         case .large:
-            CoopLargeEventView(event: event)
+            CoopLargeEventView(event: event, state: state)
         case .narrow:
-            CoopNarrowEventView(event: event)
+            CoopNarrowEventView(event: event, state: state)
         }
     }
 }
+
 struct CoopLargeEventView : View {
     let event: CoopEvent
-    var date: Date = Date()
-
-    var currentActivityText : String {
-        return event.timeframe.status(date: date) == .active ? "Open!" : "Soon!"
-    }
+    let state: TimeframeActivityState
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2.0) {
             
             HStack {
-                Text(currentActivityText).splat1Font(size: 14)
+                Text(state.activityText).splat1Font(size: 14)
                 Spacer()
-                RelativeTimeframeView(timeframe: event.timeframe, date: date)
+                RelativeTimeframeView(timeframe: event.timeframe, state: state)
                     .splat2Font(size: 10)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
@@ -91,11 +89,7 @@ struct CoopLargeEventView : View {
 
 struct CoopNarrowEventView : View {
     let event: CoopEvent
-    var date: Date = Date()
-    
-    var currentActivityText : String {
-        return event.timeframe.status(date: date) == .active ? "Open!" : "Soon!"
-    }
+    let state: TimeframeActivityState
 
     var body: some View {
         LazyVGrid(columns: [GridItem(.flexible(minimum: 40, maximum: 120)),GridItem(.flexible())]) {
@@ -103,7 +97,7 @@ struct CoopNarrowEventView : View {
                 ZStack(alignment: .topLeading) {
                     StageImage(stage: stage, isNameVisible: false)
                     VStack(alignment: .leading) {
-                        ImageOverlayText(text: currentActivityText)
+                        ImageOverlayText(text: state.activityText)
                         Spacer()
                         VStack {
                             if isInWidget() {
