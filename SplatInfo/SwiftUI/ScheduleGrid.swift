@@ -12,7 +12,7 @@ struct ScheduleGrid: View {
     let schedule: Schedule
     
     let columns = [
-        GridItem(.adaptive(minimum: 300, maximum: 400))
+        GridItem(.adaptive(minimum: 300, maximum: .infinity))
     ]
 
     var body: some View {

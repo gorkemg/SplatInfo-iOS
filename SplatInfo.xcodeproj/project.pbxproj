@@ -134,6 +134,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DE04A0E625653E9600AC7CD1 /* ScheduleWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScheduleWidgetExtension.entitlements; sourceTree = "<group>"; };
 		DE2BD5F625384899006E5531 /* SplatInfo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SplatInfo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE2BD5F925384899006E5531 /* SplatInfoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatInfoApp.swift; sourceTree = "<group>"; };
 		DE2BD5FB25384899006E5531 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -220,6 +221,7 @@
 		DE2BD5ED25384899006E5531 = {
 			isa = PBXGroup;
 			children = (
+				DE04A0E625653E9600AC7CD1 /* ScheduleWidgetExtension.entitlements */,
 				DE2BD5F825384899006E5531 /* SplatInfo */,
 				DE2BD60A2538489D006E5531 /* SplatInfoTests */,
 				DE2BD6152538489D006E5531 /* SplatInfoUITests */,
@@ -764,14 +766,16 @@
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SplatInfo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ggg-apps.SplatInfo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Debug;
 		};
@@ -788,14 +792,16 @@
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SplatInfo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ggg-apps.SplatInfo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
 			name = Release;
 		};
@@ -888,6 +894,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = ScheduleWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2FLHWYJQPA;
 				INFOPLIST_FILE = ScheduleWidget/Info.plist;
@@ -899,6 +906,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ggg-apps.SplatInfo.Schedule";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -909,6 +917,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = ScheduleWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2FLHWYJQPA;
 				INFOPLIST_FILE = ScheduleWidget/Info.plist;
@@ -920,6 +929,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ggg-apps.SplatInfo.Schedule";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
