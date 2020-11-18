@@ -134,11 +134,9 @@ struct Provider: IntentTimelineProvider {
         let dates = (startDates+endDates).sorted()
         for date in dates {
             let events = coopTimeline.detailedEvents.filter({ $0.timeframe.startDate >= date })
-            if events.count > 1 {
-                let eventTimeframes = coopTimeline.eventTimeframes.filter({ $0.startDate >= date })
-                let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
-                entries.append(entry)
-            }
+            let eventTimeframes = coopTimeline.eventTimeframes.filter({ $0.startDate >= date })
+            let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
+            entries.append(entry)
         }
         let timeline = Timeline(entries: entries, policy: .atEnd)
         return timeline
@@ -173,16 +171,16 @@ struct ScheduleEntryView : View {
     
     var body: some View {
         switch entry.events {
-        case .gameModeEvents(events: let events):
+        case .gameModeEvents(events: _):
             GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date)
-        case .coopEvents(events: let events, timeframes: let timeframes):
+        case .coopEvents(events: _, timeframes: let timeframes):
             CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date)
         }
     }
     
     var displayNext: Bool {
         guard let displayNext = entry.configuration.displayNext else { return false }
-        return false // displayNext.boolValue
+        return displayNext.boolValue
     }
 
     var gameModeEvents: [GameModeEvent] {
@@ -221,14 +219,13 @@ struct GameModeEntryView : View {
             Image("bg-squids").resizable(resizingMode: .tile).ignoresSafeArea()
             
             if let event = event {
-                let state = event.timeframe.state(date: date)
                 switch widgetFamily {
                 case .systemSmall:
-                    SmallGameModeWidgetView(event: event, nextEvent: nextEvent, state: state)
+                    SmallGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
                 case .systemMedium:
-                    LargerGameModeWidgetView(event: event, nextEvent: nextEvent, state: state)
+                    LargerGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
                 case .systemLarge:
-                    LargerGameModeWidgetView(event: event, nextEvent: nextEvent, state: state)
+                    LargerGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
                 @unknown default:
                     Text("No event available").splat1Font(size: 20)
                 }
