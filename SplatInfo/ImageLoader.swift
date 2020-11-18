@@ -160,7 +160,36 @@ class MultiImageLoader {
     func load(completion: @escaping ()->Void) {
         let count = urls.count
         var counter = 0
+        let fileManager = FileManager.default
+
         for url in urls {
+            
+            let fileURL = self.directory.appendingPathComponent(url.lastPathComponent)
+            let jpegURL = fileURL.deletingPathExtension().appendingPathExtension("jpeg")
+            if fileManager.fileExists(atPath: fileURL.path) {
+                if self.useCachedImage {
+                    self.finishedURLs.append(url)
+                    counter += 1
+                    if count == counter {
+                        completion()
+                    }
+                    continue
+                }
+                try? fileManager.removeItem(at: fileURL)
+                
+            }else if fileManager.fileExists(atPath: jpegURL.path) {
+                if self.useCachedImage {
+                    self.finishedURLs.append(url)
+                    counter += 1
+                    if count == counter {
+                        completion()
+                    }
+                    continue
+                }
+                try? fileManager.removeItem(at: fileURL)
+            }
+
+            
             let task = URLSession.shared.downloadTask(with: url) { [weak self] location, response, error in
 
                 guard let self = self else { return }
@@ -171,30 +200,7 @@ class MultiImageLoader {
                 
                 counter += 1
 
-                let fileManager = FileManager.default
                 do {
-                    let fileURL = self.directory.appendingPathComponent(url.lastPathComponent)
-                    let jpegURL = fileURL.deletingPathExtension().appendingPathExtension("jpeg")
-                    if fileManager.fileExists(atPath: fileURL.path) {
-                        if self.useCachedImage {
-                            self.finishedURLs.append(url)
-                            if count == counter {
-                                completion()
-                            }
-                            return
-                        }
-                        try? fileManager.removeItem(at: fileURL)
-                    }else if fileManager.fileExists(atPath: jpegURL.path) {
-                        if self.useCachedImage {
-                            self.finishedURLs.append(url)
-                            if count == counter {
-                                completion()
-                            }
-                            return
-                        }
-                        try? fileManager.removeItem(at: fileURL)
-                    }
-                    
                     if self.storeAsJPEG, let image = UIImage(contentsOfFile: tempLocation.path), let data = image.jpegData(compressionQuality: 0.8) {
                         try? data.write(to: jpegURL)
                     }else{
