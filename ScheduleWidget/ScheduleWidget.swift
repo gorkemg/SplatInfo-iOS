@@ -112,7 +112,6 @@ struct Provider: IntentTimelineProvider {
     }
     
     func timelineForGameModeTimeline(_ modeTimeline: GameModeTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
-        //let oneHour = Date(timeIntervalSinceNow: 3600)
         var entries: [GameModeEntry] = []
         let now = Date()
         let startDates = modeTimeline.schedule.map({ $0.timeframe.startDate })
@@ -129,20 +128,38 @@ struct Provider: IntentTimelineProvider {
     }
     
     func timelineForCoopTimeline(_ coopTimeline: CoopTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
-        //let oneHour = Date(timeIntervalSinceNow: 3600)
         var entries: [GameModeEntry] = []
-        let now = Date()
-        let startDates = coopTimeline.detailedEvents.map({ $0.timeframe.startDate })
-        let endDates = coopTimeline.detailedEvents.map({ $0.timeframe.endDate })
-        let dates = ([now]+startDates+endDates).sorted()
+        let dates = coopTimeline.eventChangingDates()
         for date in dates {
-            let events = coopTimeline.detailedEvents.filter({ $0.timeframe.startDate >= date })
-            let eventTimeframes = coopTimeline.eventTimeframes.filter({ $0.startDate >= date })
+            let events = coopTimeline.upcomingEventsAfterDate(date: date)
+            let eventTimeframes = coopTimeline.upcomingTimeframesAfterDate(date: date)
             let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
             entries.append(entry)
         }
         let timeline = Timeline(entries: entries, policy: .atEnd)
         return timeline
+    }
+}
+
+extension CoopTimeline {
+    
+    func eventChangingDates() -> [Date] {
+        let now = Date()
+        let startDates = detailedEvents.map({ $0.timeframe.startDate })
+        let endDates = detailedEvents.map({ $0.timeframe.endDate })
+        var eventDates = (startDates+endDates).sorted()
+        if let firstDate = eventDates.first, now < firstDate {
+            eventDates.insert(now, at: 0)
+        }
+        return eventDates
+    }
+    
+    func upcomingEventsAfterDate(date: Date) -> [CoopEvent] {
+        return detailedEvents.filter({ $0.timeframe.state(date: date) != .over })
+    }
+
+    func upcomingTimeframesAfterDate(date: Date) -> [EventTimeframe] {
+        return eventTimeframes.filter({ $0.state(date: date) != .over })
     }
 }
 
