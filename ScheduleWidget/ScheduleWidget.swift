@@ -136,12 +136,37 @@ struct Provider: IntentTimelineProvider {
             let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
             entries.append(entry)
         }
-        let timeline = Timeline(entries: entries, policy: .atEnd)
+        var updatePolicy: TimelineReloadPolicy = .atEnd
+        if let date = coopTimeline.firstEvent?.timeframe.endDate, date > Date() {
+            updatePolicy = .after(date)
+        }
+        let timeline = Timeline(entries: entries, policy: updatePolicy)
         return timeline
     }
 }
 
+extension ConfigurationIntent {
+    
+    var isDisplayNext: Bool {
+        guard let next = self.displayNext else { return false }
+        return next.boolValue
+    }
+    
+}
+
 extension CoopTimeline {
+    
+    var firstEvent: CoopEvent? {
+        return detailedEvents.first
+    }
+
+    var secondEvent: CoopEvent? {
+        if detailedEvents.count > 1 {
+            return detailedEvents[1]
+        }
+        return nil
+    }
+
     
     func eventChangingDates() -> [Date] {
         let now = Date()

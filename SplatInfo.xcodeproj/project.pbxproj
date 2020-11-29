@@ -70,7 +70,7 @@
 		DEAFEA0E2543121800FFA812 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DEAFEA0D2543121800FFA812 /* Assets.xcassets */; };
 		DEAFEA102543121800FFA812 /* Schedule.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = DEAFEA0C2543121500FFA812 /* Schedule.intentdefinition */; };
 		DEAFEA112543121800FFA812 /* Schedule.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = DEAFEA0C2543121500FFA812 /* Schedule.intentdefinition */; };
-		DEAFEA142543121800FFA812 /* ScheduleWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DEAFEA032543121500FFA812 /* ScheduleWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DEAFEA142543121800FFA812 /* SplatInfoScheduleWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DEAFEA032543121500FFA812 /* SplatInfoScheduleWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DEAFEA3E25431BE800FFA812 /* ScheduleFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5012212539E24A00A73F7A /* ScheduleFetcher.swift */; };
 		DEAFEA4325431BF400FFA812 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B8FF25417C8A00AAD49A /* ImageLoader.swift */; };
 		DEAFEA4425431BF400FFA812 /* Splatoon2.otf in Resources */ = {isa = PBXBuildFile; fileRef = DE41B9392541A11A00AAD49A /* Splatoon2.otf */; };
@@ -126,7 +126,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				DEAFEA142543121800FFA812 /* ScheduleWidgetExtension.appex in Embed App Extensions */,
+				DEAFEA142543121800FFA812 /* SplatInfoScheduleWidgetExtension.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -170,7 +170,7 @@
 		DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extensions.swift"; sourceTree = "<group>"; };
 		DEAE259325541CB300253E79 /* LargerCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargerCoopWidgetView.swift; sourceTree = "<group>"; };
 		DEAE259A25541CDB00253E79 /* LargerGameModeWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargerGameModeWidgetView.swift; sourceTree = "<group>"; };
-		DEAFEA032543121500FFA812 /* ScheduleWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ScheduleWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		DEAFEA032543121500FFA812 /* SplatInfoScheduleWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SplatInfoScheduleWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEAFEA052543121500FFA812 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		DEAFEA072543121500FFA812 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		DEAFEA0A2543121500FFA812 /* ScheduleWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleWidget.swift; sourceTree = "<group>"; };
@@ -237,7 +237,7 @@
 				DE2BD5F625384899006E5531 /* SplatInfo.app */,
 				DE2BD6072538489D006E5531 /* SplatInfoTests.xctest */,
 				DE2BD6122538489D006E5531 /* SplatInfoUITests.xctest */,
-				DEAFEA032543121500FFA812 /* ScheduleWidgetExtension.appex */,
+				DEAFEA032543121500FFA812 /* SplatInfoScheduleWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -410,9 +410,9 @@
 			productReference = DE2BD6122538489D006E5531 /* SplatInfoUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		DEAFEA022543121500FFA812 /* ScheduleWidgetExtension */ = {
+		DEAFEA022543121500FFA812 /* SplatInfoScheduleWidgetExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DEAFEA182543121800FFA812 /* Build configuration list for PBXNativeTarget "ScheduleWidgetExtension" */;
+			buildConfigurationList = DEAFEA182543121800FFA812 /* Build configuration list for PBXNativeTarget "SplatInfoScheduleWidgetExtension" */;
 			buildPhases = (
 				DEAFE9FF2543121500FFA812 /* Sources */,
 				DEAFEA002543121500FFA812 /* Frameworks */,
@@ -422,9 +422,9 @@
 			);
 			dependencies = (
 			);
-			name = ScheduleWidgetExtension;
+			name = SplatInfoScheduleWidgetExtension;
 			productName = ScheduleExtension;
-			productReference = DEAFEA032543121500FFA812 /* ScheduleWidgetExtension.appex */;
+			productReference = DEAFEA032543121500FFA812 /* SplatInfoScheduleWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -468,7 +468,7 @@
 				DE2BD5F525384899006E5531 /* SplatInfo */,
 				DE2BD6062538489D006E5531 /* SplatInfoTests */,
 				DE2BD6112538489D006E5531 /* SplatInfoUITests */,
-				DEAFEA022543121500FFA812 /* ScheduleWidgetExtension */,
+				DEAFEA022543121500FFA812 /* SplatInfoScheduleWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -631,7 +631,7 @@
 		};
 		DEAFEA132543121800FFA812 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DEAFEA022543121500FFA812 /* ScheduleWidgetExtension */;
+			target = DEAFEA022543121500FFA812 /* SplatInfoScheduleWidgetExtension */;
 			targetProxy = DEAFEA122543121800FFA812 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -974,7 +974,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DEAFEA182543121800FFA812 /* Build configuration list for PBXNativeTarget "ScheduleWidgetExtension" */ = {
+		DEAFEA182543121800FFA812 /* Build configuration list for PBXNativeTarget "SplatInfoScheduleWidgetExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DEAFEA162543121800FFA812 /* Debug */,
