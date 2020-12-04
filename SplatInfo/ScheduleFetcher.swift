@@ -264,7 +264,7 @@ extension CoopSchedulesAPIResponse {
                     weapons.append(weapon)
                 }
             }
-            let stage = Stage(id: UUID().uuidString, name: event.stage.name, imageUrl: "\(splatnetImageHostUrl)\(event.stage.image)")
+            let stage = Stage(id: coopStageID(name: event.stage.name), name: event.stage.name, imageUrl: "\(splatnetImageHostUrl)\(event.stage.image)")
             let eventDetails = CoopEvent(timeframe: timeframe, weapons: weapons, stage: stage)
             detailedEvents.append(eventDetails)
         }
@@ -274,6 +274,27 @@ extension CoopSchedulesAPIResponse {
             eventTimeFrames.append(timeframe)
         }
         return CoopTimeline(detailedEvents: detailedEvents, eventTimeframes: eventTimeFrames, date: Date())
+    }
+    
+    func coopStageID(name: String) -> String {
+        guard let stage = CoopStageNames.init(rawValue: name) else { return UUID().uuidString }
+        switch stage {
+        case .SpawningGrounds:
+            return "coop_1"
+        case .MaroonersBay:
+            return "coop_2"
+        case .SalmonidSmokeyard:
+            return "coop_3"
+        case .RuinsOfArkPolaris:
+            return "coop_4"
+        }
+    }
+    
+    enum CoopStageNames: String {
+        case SpawningGrounds = "Spawning Grounds"
+        case MaroonersBay = "Marooner's Bay"
+        case SalmonidSmokeyard = "Salmonid Smokeyard"
+        case RuinsOfArkPolaris = "Ruins of Ark Polaris"
     }
 }
 

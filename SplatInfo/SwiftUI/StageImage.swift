@@ -11,11 +11,12 @@ struct StageImage: View {
     let stage : Stage
     var isNameVisible: Bool = true
     var height: CGFloat = 100
-    
+    var useThumbnailQuality: Bool = true
+
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             Group {
-                if let image = stage.image {
+                if let image = (useThumbnailQuality ? stage.thumbImage : stage.image) {
                     Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
                 }
             }

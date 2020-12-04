@@ -188,6 +188,6 @@ extension WeaponDetails {
     }
     
     var assetImage: UIImage? {
-        return UIImage(named: "thumb_\(id)") ?? UIImage(named: "\(id)")
+        return UIImage(named: "weapon_thumb_\(id)") ?? UIImage(named: "\(id)")
     }
 }

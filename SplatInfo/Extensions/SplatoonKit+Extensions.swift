@@ -11,7 +11,11 @@ import UIKit
 extension Stage {
     
     var image : UIImage? {
-        return cachedImage() ?? cachedImage(directory: FileManager.default.appGroupContainerURL) ?? assetImage
+        return assetImage ?? cachedImage() ?? cachedImage(directory: FileManager.default.appGroupContainerURL)
+    }
+
+    var thumbImage : UIImage? {
+        return assetThumbImage ?? cachedImage() ?? cachedImage(directory: FileManager.default.appGroupContainerURL)
     }
 
     func cachedImage(directory: URL? = URL(fileURLWithPath: NSTemporaryDirectory())) -> UIImage? {
@@ -33,6 +37,10 @@ extension Stage {
     }
     
     var assetImage: UIImage? {
+        return UIImage(named: "\(id)") ?? UIImage(named: "\(id)")
+    }
+
+    var assetThumbImage: UIImage? {
         return UIImage(named: "thumb_\(id)") ?? UIImage(named: "\(id)")
     }
 }
