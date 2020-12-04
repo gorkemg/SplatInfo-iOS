@@ -30,7 +30,7 @@ struct GameModeEventView: View {
                             VStack(alignment: .trailing) {
                                 TimeframeView(timeframe: gameModeEvent.timeframe)
                                 RelativeTimeframeView(timeframe: gameModeEvent.timeframe, state: gameModeEvent.timeframe.state(date: date))
-                                    .font(.caption)
+                                    .splat2Font(size: 12)
                                     .lineLimit(2)
                                     .minimumScaleFactor(0.5)
                             }
@@ -56,12 +56,12 @@ struct GameModeEventView: View {
                                 .splat2Font(size: 16)
                             
                             RelativeTimeframeView(timeframe: gameModeEvent.timeframe, state: gameModeEvent.timeframe.state(date: date))
-                                .font(.caption2)
+                                .splat2Font(size: 12)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
                             
                             TimeframeView(timeframe: gameModeEvent.timeframe)
-                                .font(.caption)
+                                .splat2Font(size: 12)
                                 .lineLimit(2)
                                 .minimumScaleFactor(0.5)
                         }

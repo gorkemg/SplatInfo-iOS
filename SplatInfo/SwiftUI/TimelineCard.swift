@@ -77,6 +77,7 @@ struct TimelineCard: View {
         }
         .cornerRadius(30)
         .foregroundColor(.white)
+        .splat2Font(size: 12)
     }
         
     var bgImage : Image {

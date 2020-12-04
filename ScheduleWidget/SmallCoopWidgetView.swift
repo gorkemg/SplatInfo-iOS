@@ -14,7 +14,7 @@ struct SmallCoopWidgetView : View {
     var body: some View {
         ZStack(alignment: .topLeading) {
 
-            event.color
+            Color.coopModeColor
 
             Image("bg-spots").resizable(resizingMode: .tile)
 
@@ -50,7 +50,7 @@ struct SmallCoopWidgetView : View {
                         RelativeTimeframeView(timeframe: event.timeframe, state: state)
                     }.splat2Font(size: 12)
                     
-                    ActivityTimeFrameView(event: event, state: state).lineLimit(1).minimumScaleFactor(0.5)
+                    ActivityTimeFrameView(timeframe: event.timeframe, state: state).lineLimit(1).minimumScaleFactor(0.5)
                     HStack(spacing: 4.0) {
                         Group {
                             WeaponsList(event: event)

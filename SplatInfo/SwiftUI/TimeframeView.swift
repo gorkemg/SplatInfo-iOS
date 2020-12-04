@@ -77,7 +77,7 @@ struct RelativeTimeframeView : View {
 
 
 struct ActivityTimeFrameView : View {
-    let event: CoopEvent
+    let timeframe: EventTimeframe
     let state: TimeframeActivityState
 
     var body: some View {
@@ -94,13 +94,13 @@ struct ActivityTimeFrameView : View {
         let formatter = DateFormatter()
         formatter.timeStyle = .short
         formatter.dateStyle = .short
-        return formatter.string(from: event.timeframe.startDate)
+        return formatter.string(from: timeframe.startDate)
     }
     var timeframeEndString: String {
         let formatter = DateFormatter()
         formatter.timeStyle = .short
         formatter.dateStyle = .short
-        return formatter.string(from: event.timeframe.endDate)
+        return formatter.string(from: timeframe.endDate)
     }
 
 }

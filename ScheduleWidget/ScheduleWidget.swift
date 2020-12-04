@@ -128,6 +128,12 @@ struct Provider: IntentTimelineProvider {
     }
     
     func timelineForCoopTimeline(_ coopTimeline: CoopTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
+        if configuration.isDisplayNext, let event = coopTimeline.secondEvent {
+            // only show next event
+            let entry = GameModeEntry(date: Date(), events: .coopEvents(events: [event], timeframes: []), configuration: configuration)
+            let timeline = Timeline(entries: [entry], policy: .after(event.timeframe.endDate))
+            return timeline
+        }
         var entries: [GameModeEntry] = []
         let dates = coopTimeline.eventChangingDates()
         for date in dates {

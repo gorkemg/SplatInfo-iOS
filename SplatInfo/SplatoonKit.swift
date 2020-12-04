@@ -137,6 +137,21 @@ struct CoopEvent: Codable, Equatable {
     }
 }
 
+extension CoopEvent {
+    var weaponDetails : [WeaponDetails] {
+        var weaponDetails : [WeaponDetails] = []
+        for weapon in weapons {
+            switch weapon {
+            case .weapon(details: let details):
+                weaponDetails.append(details)
+            case .coopSpecialWeapon(details: let details):
+                weaponDetails.append(details)
+            }
+        }
+        return weaponDetails
+    }
+}
+
 struct EventTimeframe: Codable, Hashable, TimeframeActivity {
     let startDate: Date
     let endDate: Date
