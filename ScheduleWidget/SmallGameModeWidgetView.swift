@@ -22,7 +22,7 @@ struct SmallGameModeWidgetView : View {
             GeometryReader { geometry in
                 VStack(spacing: 0.0) {
                     ForEach(event.stages, id: \.id) { stage in
-                        if let image = stage.image {
+                        if let image = stage.thumbImage {
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
