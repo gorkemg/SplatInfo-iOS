@@ -76,7 +76,7 @@ struct CoopLargeEventView : View {
                         .splat1Font(size: 12)
                         .lineLimit(2)
                         .minimumScaleFactor(0.5)
-                    WeaponsList(event: event)
+                    WeaponsList(weapons: event.weaponDetails)
                         .shadow(color: .black, radius: 2, x: 0, y: 1)
                 }
             }
@@ -124,7 +124,7 @@ struct CoopNarrowEventView : View {
                 }
                 TimeframeView(timeframe: event.timeframe, datesEnabled: true, fontSize: 9).lineLimit(1).minimumScaleFactor(0.8)
                 HStack {
-                    WeaponsList(event: event)
+                    WeaponsList(weapons: event.weaponDetails)
                         .shadow(color: .black, radius: 2, x: 0, y: 1)
                         .frame(maxHeight: 24, alignment: .leading)
                     Spacer()
@@ -135,7 +135,7 @@ struct CoopNarrowEventView : View {
 }
 
 struct WeaponsList: View {
-    let event: CoopEvent
+    let weapons: [WeaponDetails]
     
     var body: some View {
         HStack(alignment: .center, spacing: 2, content: {
@@ -148,25 +148,12 @@ struct WeaponsList: View {
             }
         })
     }
-
-    var weapons : [WeaponDetails] {
-        var weaponDetails : [WeaponDetails] = []
-        for weapon in event.weapons {
-            switch weapon {
-            case .weapon(details: let details):
-                weaponDetails.append(details)
-            case .coopSpecialWeapon(details: let details):
-                weaponDetails.append(details)
-            }
-        }
-        return weaponDetails
-    }
 }
 
 extension WeaponDetails {
     
     var image : UIImage? {
-        return cachedImage() ?? cachedImage(directory: FileManager.default.appGroupContainerURL) ?? assetImage
+        return assetImage ?? cachedImage() ?? cachedImage(directory: FileManager.default.appGroupContainerURL)
     }
 
     func cachedImage(directory: URL? = URL(fileURLWithPath: NSTemporaryDirectory())) -> UIImage? {
@@ -188,6 +175,10 @@ extension WeaponDetails {
     }
     
     var assetImage: UIImage? {
-        return UIImage(named: "weapon_thumb_\(id)") ?? UIImage(named: "\(id)")
+        return UIImage(named: "weapon_\(id)")
+    }
+
+    var assetThumbImage: UIImage? {
+        return UIImage(named: "weapon_thumb_\(id)")
     }
 }

@@ -53,7 +53,7 @@ struct SmallCoopWidgetView : View {
                     ActivityTimeFrameView(timeframe: event.timeframe, state: state).lineLimit(1).minimumScaleFactor(0.5)
                     HStack(spacing: 4.0) {
                         Group {
-                            WeaponsList(event: event)
+                            WeaponsList(weapons: event.weaponDetails)
                                 .shadow(color: .black, radius: 2, x: 0.0, y: 1.0)
                                 .frame(maxHeight: 24, alignment: .leading)
                         }

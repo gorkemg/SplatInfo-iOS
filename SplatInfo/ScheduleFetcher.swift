@@ -133,21 +133,16 @@ class ScheduleFetcher: ObservableObject {
     private func loadCachedData<T>(filename: String, resultType: T.Type) -> T? where T:Codable {
         let filePath = cacheFileURL(filename: filename)
         let fileManager = FileManager.default
-        if let path = filePath, fileManager.fileExists(atPath: path.path) {
-            if let data = try? Data(contentsOf: path) {
-                let decodedObject = try? JSONDecoder().decode(T.self, from: data)
-                return decodedObject
-            }
-        }
-        return nil
+        guard let path = filePath, fileManager.fileExists(atPath: path.path) else { return nil }
+        guard let data = try? Data(contentsOf: path) else { return nil }
+        return try? JSONDecoder().decode(T.self, from: data)
     }
     
     private func cacheData<T:Encodable>(data: T, filename: String) {
         let filePath = cacheFileURL(filename: filename)
-        if let path = filePath, let data = data.toJSONData() {
-            try? data.write(to: path)
-            copyCacheFileToAppGroupDirectory(filename)
-        }
+        guard let path = filePath, let data = data.toJSONData() else { return }
+        try? data.write(to: path)
+        copyCacheFileToAppGroupDirectory(filename)
     }
 
     private func cacheFileURL(filename: String) -> URL? {
@@ -160,11 +155,9 @@ class ScheduleFetcher: ObservableObject {
     private func copyCacheFileToAppGroupDirectory(_ filename: String) {
         let sharedContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName)
         NSLog("sharedContainerURL = \(String(describing: sharedContainerURL))")
-        if let sourceURL = cacheFileURL(filename: filename) {
-            if let destinationURL = sharedContainerURL?.appendingPathComponent(filename) {
-                try? FileManager().copyItem(at: sourceURL, to: destinationURL)
-            }
-        }
+        guard let sourceURL = cacheFileURL(filename: filename) else { return }
+        guard let destinationURL = sharedContainerURL?.appendingPathComponent(filename) else { return }
+        try? FileManager().copyItem(at: sourceURL, to: destinationURL)
     }
     
     func fetchGameModeTimelines(completion: @escaping (_ timelines: GameModesTimelines?, _ error: Error?) -> Void) {
@@ -283,16 +276,19 @@ extension CoopSchedulesAPIResponse {
             return "coop_1"
         case .MaroonersBay:
             return "coop_2"
-        case .SalmonidSmokeyard:
+        case .LostOutpost:
             return "coop_3"
-        case .RuinsOfArkPolaris:
+        case .SalmonidSmokeyard:
             return "coop_4"
+        case .RuinsOfArkPolaris:
+            return "coop_5"
         }
     }
     
     enum CoopStageNames: String {
         case SpawningGrounds = "Spawning Grounds"
         case MaroonersBay = "Marooner's Bay"
+        case LostOutpost = "Lost Outpost"
         case SalmonidSmokeyard = "Salmonid Smokeyard"
         case RuinsOfArkPolaris = "Ruins of Ark Polaris"
     }
