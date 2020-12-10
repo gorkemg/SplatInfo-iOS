@@ -252,7 +252,7 @@ extension CoopSchedulesAPIResponse {
                     let weapon = Weapon.weapon(details: details)
                     weapons.append(weapon)
                 }else if let coopWeaponDetails = weaponDetails.coopSpecialWeapon {
-                    let details = WeaponDetails(id: UUID().uuidString, name: coopWeaponDetails.name, imageUrl: "\(splatnetImageHostUrl)\(coopWeaponDetails.image)")
+                    let details = WeaponDetails(id: weaponDetails.id, name: coopWeaponDetails.name, imageUrl: "\(splatnetImageHostUrl)\(coopWeaponDetails.image)")
                     let weapon = Weapon.weapon(details: details)
                     weapons.append(weapon)
                 }
