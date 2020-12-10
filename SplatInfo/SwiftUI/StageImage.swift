@@ -25,6 +25,7 @@ struct StageImage: View {
 
             if isNameVisible {
                 ImageOverlayText(text: stage.name)
+                    .padding(4)
             }
         }.aspectRatio(16/10, contentMode: .fit)
     }
@@ -36,10 +37,11 @@ struct ImageOverlayText: View {
         VStack {
             Text(text)
                 .splat2Font(size: 10)
-                .padding(.horizontal, 6.0)
+                .padding(.horizontal, 4.0)
+                .lineLimit(1)
         }
         .background(Color.black.opacity(0.5))
-        .cornerRadius(8)
-        .padding(4)
+        .cornerRadius(6)
+        .padding(2)
     }
 }

@@ -55,7 +55,7 @@ struct CoopLargeEventView : View {
     var body: some View {
         VStack(alignment: .leading, spacing: 2.0) {
             
-            HStack {
+            HStack(alignment: .center) {
                 Text(state.activityText).splat1Font(size: 14)
                 Spacer()
                 RelativeTimeframeView(timeframe: event.timeframe, state: state)
@@ -63,7 +63,6 @@ struct CoopLargeEventView : View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
             }
-            
             
             TimeframeView(timeframe: event.timeframe, datesEnabled: true, fontSize: 12)
             
@@ -81,7 +80,8 @@ struct CoopLargeEventView : View {
                 }
             }
         }
-        .padding(10)
+        .padding(.vertical, 4.0)
+        .padding(.horizontal, 8)
         .background(Color.black.opacity(0.5))
         .cornerRadius(10)
     }
@@ -92,27 +92,18 @@ struct CoopNarrowEventView : View {
     let state: TimeframeActivityState
 
     var body: some View {
-        LazyVGrid(columns: [GridItem(.flexible(minimum: 40, maximum: 120)),GridItem(.flexible())]) {
+        LazyVGrid(columns: [GridItem(.flexible(minimum: 80, maximum: 100)),GridItem(.flexible())]) {
             if let stage = event.stage {
                 ZStack(alignment: .topLeading) {
                     StageImage(stage: stage, isNameVisible: false)
-                    VStack(alignment: .leading) {
+                    HStack(alignment: .top, spacing: 2) {
                         ImageOverlayText(text: state.activityText)
-                        Spacer()
-                        VStack {
-                            if isInWidget() {
-                                //RelativeTimeframeView(timeframe: event.timeframe, date: date)
-                                Text(event.timeframe.startDate, style: .relative)
-                                    .splat2Font(size: 10)
-                                    .shadow(color: .black, radius: 1, x: 0.0, y: 1)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.8)
-                                    .padding(2)
-                            }
-                        }
-                        .background(Color.black.opacity(0.5))
-                        .cornerRadius(8)
-                        .padding(4)
+                        RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                            .multilineTextAlignment(.trailing)
+                            .splat2Font(size: 10)
+                            .shadow(color: .black, radius: 1, x: 0.0, y: 1)
+                            .minimumScaleFactor(0.8)
+                            .padding(.trailing, 2)
                     }.padding(2)
                 }
             }else{
@@ -126,7 +117,7 @@ struct CoopNarrowEventView : View {
                 HStack {
                     WeaponsList(weapons: event.weaponDetails)
                         .shadow(color: .black, radius: 2, x: 0, y: 1)
-                        .frame(maxHeight: 24, alignment: .leading)
+                        .frame(maxHeight: 20, alignment: .leading)
                     Spacer()
                 }
             }

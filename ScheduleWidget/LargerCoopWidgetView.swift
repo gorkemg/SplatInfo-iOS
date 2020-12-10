@@ -29,15 +29,9 @@ struct LargerCoopWidgetView : View {
                         
             LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.05), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
             
-            if style == .narrow, let event = events.first {
-                ZStack(alignment: .topTrailing) {
-                    Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 28)
-                }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topTrailing).padding(.horizontal, 8).padding(.vertical, 4)
-            }
-            
             VStack(alignment: .leading, spacing: 2.0) {
 
-                if style == .large {
+                if style == .large || style == .narrow {
                     HStack {
                         if let event = events.first {
                             Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
@@ -56,10 +50,10 @@ struct LargerCoopWidgetView : View {
                     
                     if let timeframes = otherTimeframes {
                         ForEach(timeframes, id: \.self) { timeframe in
-                            TimeframeView(timeframe: timeframe, datesEnabled: true, fontSize: 8)
+                            TimeframeView(timeframe: timeframe, datesEnabled: true, fontSize: 12)
                         }
                     }
-                }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+                }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)                
             }
             .padding(.horizontal, 10.0).padding(.vertical, 4.0)
 
