@@ -50,7 +50,7 @@ struct LargerCoopWidgetView : View {
                     
                     if let timeframes = otherTimeframes {
                         ForEach(timeframes, id: \.self) { timeframe in
-                            TimeframeView(timeframe: timeframe, datesEnabled: true, fontSize: 12)
+                            TimeframeView(timeframe: timeframe, datesStyle: .always, fontSize: 12)
                         }
                     }
                 }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)                

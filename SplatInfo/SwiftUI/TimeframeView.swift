@@ -25,17 +25,28 @@ import SwiftUI
 
 struct TimeframeView: View {
     let timeframe: EventTimeframe
-    var datesEnabled: Bool = false
+    var datesStyle: DateStyle = .adaptive
     var fontSize: CGFloat = 14
 
+    enum DateStyle {
+        case always
+        case adaptive
+        case never
+    }
+    
     var body: some View {
         Text(timeframeString).splat2Font(size: fontSize)
     }
 
     var timeframeString : String {
-        
+        if datesStyle == .never {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .none
+            dateFormatter.timeStyle = .short
+            return "\(dateFormatter.string(from: timeframe.startDate)) - \(dateFormatter.string(from: timeframe.endDate))"
+        }
         let formatter = DateIntervalFormatter()
-        formatter.dateStyle = datesEnabled ? .short : .none
+        formatter.dateStyle = datesStyle == .always ? .short : .none
         formatter.timeStyle = .short
         return formatter.string(from: timeframe.startDate, to: timeframe.endDate)
     }

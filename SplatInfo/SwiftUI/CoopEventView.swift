@@ -64,7 +64,7 @@ struct CoopLargeEventView : View {
                     .minimumScaleFactor(0.5)
             }
             
-            TimeframeView(timeframe: event.timeframe, datesEnabled: true, fontSize: 12)
+            TimeframeView(timeframe: event.timeframe, datesStyle: .always, fontSize: 12)
             
             LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
                 if let stage = event.stage {
@@ -92,28 +92,32 @@ struct CoopNarrowEventView : View {
     let state: TimeframeActivityState
 
     var body: some View {
-        LazyVGrid(columns: [GridItem(.flexible(minimum: 80, maximum: 100)),GridItem(.flexible())]) {
-            if let stage = event.stage {
-                ZStack(alignment: .topLeading) {
-                    StageImage(stage: stage, isNameVisible: false)
-                    HStack(alignment: .top, spacing: 2) {
-                        ImageOverlayText(text: state.activityText)
-                        RelativeTimeframeView(timeframe: event.timeframe, state: state)
-                            .multilineTextAlignment(.trailing)
-                            .splat2Font(size: 10)
-                            .shadow(color: .black, radius: 1, x: 0.0, y: 1)
-                            .minimumScaleFactor(0.8)
-                            .padding(.trailing, 2)
-                    }.padding(2)
+        LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
+            VStack {
+                if let stage = event.stage {
+                    ZStack(alignment: .topLeading) {
+                        StageImage(stage: stage, isNameVisible: false)
+                            .frame(maxHeight: 60, alignment: .center)
+                            .cornerRadius(8)
+                        HStack(alignment: .top, spacing: 2) {
+                            ImageOverlayText(text: state.activityText)
+                            RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                                .multilineTextAlignment(.trailing)
+                                .splat2Font(size: 10)
+                                .shadow(color: .black, radius: 1, x: 0.0, y: 1)
+                                .minimumScaleFactor(0.8)
+                                .padding(.trailing, 2)
+                        }.padding(2)
+                    }.clipped()
+                }else{
+                    Color.black.opacity(0.5)
                 }
-            }else{
-                Color.black.opacity(0.5)
             }
             VStack(alignment: .leading, spacing: 0) {
                 if let stage = event.stage {
                     Text(stage.name).splat2Font(size: 11)
                 }
-                TimeframeView(timeframe: event.timeframe, datesEnabled: true, fontSize: 9).lineLimit(1).minimumScaleFactor(0.8)
+                TimeframeView(timeframe: event.timeframe, datesStyle: .always, fontSize: 9).lineLimit(1).minimumScaleFactor(0.8)
                 HStack {
                     WeaponsList(weapons: event.weaponDetails)
                         .shadow(color: .black, radius: 2, x: 0, y: 1)

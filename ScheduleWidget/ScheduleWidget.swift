@@ -274,9 +274,9 @@ struct GameModeEntryView : View {
                 case .systemSmall:
                     SmallGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
                 case .systemMedium:
-                    LargerGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
+                    MediumGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
                 case .systemLarge:
-                    LargerGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
+                    LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
                 @unknown default:
                     Text("No event available").splat1Font(size: 20)
                 }
@@ -294,6 +294,10 @@ struct GameModeEntryView : View {
             return events[(index+1)]
         }
         return nil
+    }
+    var nextEvents: [GameModeEvent] {
+        if events.count == 0 { return [] }
+        return Array(events[1...])
     }
 }
 
@@ -388,6 +392,9 @@ struct Schedule_Previews: PreviewProvider {
 //            .previewContext(WidgetPreviewContext(family: .systemSmall))
 //
 //        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
+//            .previewContext(WidgetPreviewContext(family: .systemSmall))
+//
+//        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
 //            .previewContext(WidgetPreviewContext(family: .systemMedium))
 //
 //        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: rankedEvents), configuration: intent))
@@ -399,13 +406,16 @@ struct Schedule_Previews: PreviewProvider {
 //        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: leagueEvents), configuration: ConfigurationIntent()))
 //            .previewContext(WidgetPreviewContext(family: .systemMedium))
 
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: intent))
-            .previewContext(WidgetPreviewContext(family: .systemMedium))
+//        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: intent))
+//            .previewContext(WidgetPreviewContext(family: .systemMedium))
+//
+//        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: intent))
+//            .previewContext(WidgetPreviewContext(family: .systemLarge))
 
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: intent))
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemLarge))
 
-//        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
-//            .previewContext(WidgetPreviewContext(family: .systemLarge))
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: rankedEvents), configuration: ConfigurationIntent()))
+            .previewContext(WidgetPreviewContext(family: .systemLarge))
     }
 }

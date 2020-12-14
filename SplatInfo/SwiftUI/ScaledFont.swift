@@ -34,11 +34,11 @@ extension View {
     }
         
     func splat1Font(size: CGFloat) -> some View {
-        return scaledSplat1Font(size: size).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
+        return scaledSplat1Font(size: size).shadow(color: .black, radius: 2, x: 0.0, y: 1.0)
     }
     
     func splat2Font(size: CGFloat) -> some View {
-        return scaledSplat2Font(size: size).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
+        return scaledSplat2Font(size: size).shadow(color: .black, radius: 1, x: 0.0, y: 1.0).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
     }
 
     func isInWidget() -> Bool {

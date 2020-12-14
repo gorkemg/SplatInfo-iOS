@@ -53,7 +53,7 @@ struct GameModeTimelineView: View {
     var body: some View {
         if events.count > 0 {
             ForEach(0..<events.count) { i in
-                GameModeEventView(gameModeEvent: events[i], style: i == 0 ? .large : .narrow)
+                GameModeEventView(gameModeEvent: events[i], style: i == 0 ? .large : .medium)
             }
         }
     }

@@ -10,24 +10,27 @@ import SwiftUI
 struct StageImage: View {
     let stage : Stage
     var isNameVisible: Bool = true
-    var height: CGFloat = 100
     var useThumbnailQuality: Bool = true
+    var width: CGFloat?
+    var height: CGFloat?
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             Group {
                 if let image = (useThumbnailQuality ? stage.thumbImage : stage.image) {
-                    Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
+                    Image(uiImage: image).resizable().aspectRatio(contentMode: .fill)
+                }
+                if isNameVisible {
+                    ImageOverlayText(text: stage.name)
+                        .padding(0)
                 }
             }
-            .cornerRadius(10.0)
-            .frame(minWidth: 0, idealWidth: .infinity, maxWidth: .infinity, minHeight: 0, idealHeight: height, maxHeight: height, alignment: .center)
-
-            if isNameVisible {
-                ImageOverlayText(text: stage.name)
-                    .padding(4)
-            }
-        }.aspectRatio(16/10, contentMode: .fit)
+            .padding(0)
+            .frame(maxWidth: width, maxHeight: height, alignment: .bottomTrailing)
+        }
+        .padding(0)
+        .clipped()
+        .cornerRadius(10.0)
     }
 }
 
