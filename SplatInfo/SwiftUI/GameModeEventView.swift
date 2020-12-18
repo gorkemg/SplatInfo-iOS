@@ -73,7 +73,7 @@ struct GameModeEventView: View {
                             TimeframeView(timeframe: event.timeframe, datesStyle: .never, fontSize: 10)
 
                             //event.timeframe.relativeTimeText(date: date).splat2Font(size: 12).lineLimit(2).minimumScaleFactor(0.5).multilineTextAlignment(.center)
-                        }.frame(minWidth: 80, maxWidth: innerGeo.size.width/3)
+                        }.frame(minWidth: min(80,innerGeo.size.width/3), maxWidth: innerGeo.size.width/3)
 
                         if let stage = event.stageA {
                             StageImage(stage: stage, height: innerGeo.size.height)
