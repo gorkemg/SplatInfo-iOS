@@ -53,37 +53,44 @@ struct CoopLargeEventView : View {
     let state: TimeframeActivityState
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 2.0) {
-            
-            HStack(alignment: .center) {
-                Text(state.activityText).splat1Font(size: 14)
-                Spacer()
-                RelativeTimeframeView(timeframe: event.timeframe, state: state)
-                    .splat2Font(size: 10)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.5)
+        ZStack {
+
+            if let image = event.stage.image {
+                Image(uiImage: image).centerCropped().cornerRadius(10)
             }
-            
-            TimeframeView(timeframe: event.timeframe, datesStyle: .always, fontSize: 12)
-            
-            LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
-                if let stage = event.stage {
-                    StageImage(stage: stage)
-                }
-                VStack(alignment: .center, spacing: 0.0) {
-                    Text("Available Weapons")
-                        .splat1Font(size: 12)
-                        .lineLimit(2)
+
+            VStack(alignment: .leading, spacing: 2.0) {
+                
+                HStack(alignment: .center) {
+                    ColoredActivityTextView(state: state).splat2Font(size: 14)
+                    Spacer()
+                    RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                        .splat2Font(size: 14)
+                        .lineLimit(1)
                         .minimumScaleFactor(0.5)
-                    WeaponsList(weapons: event.weaponDetails)
-                        .shadow(color: .black, radius: 2, x: 0, y: 1)
+                        .multilineTextAlignment(.trailing)
+                }
+                
+                ActivityTimeFrameView(timeframe: event.timeframe, state: state, fontSize: 12).lineLimit(1).minimumScaleFactor(0.5)
+                
+                Spacer()
+                
+                HStack {
+                    VStack(alignment: .center, spacing: 0.0) {
+                        Text("Available Weapons")
+                            .splat1Font(size: 12)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.5)
+                        WeaponsList(weapons: event.weaponDetails)
+                            .shadow(color: .black, radius: 2, x: 0, y: 1)
+                    }
                 }
             }
+            .frame(minHeight: 120)
+            .padding(.vertical, 8.0)
+            .padding(.horizontal, 8)
+            .cornerRadius(10)
         }
-        .padding(.vertical, 4.0)
-        .padding(.horizontal, 8)
-        .background(Color.black.opacity(0.5))
-        .cornerRadius(10)
     }
 }
 
@@ -92,40 +99,43 @@ struct CoopNarrowEventView : View {
     let state: TimeframeActivityState
 
     var body: some View {
-        LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
-            VStack {
-                if let stage = event.stage {
-                    ZStack(alignment: .topLeading) {
-                        StageImage(stage: stage, isNameVisible: false)
-                            .frame(maxHeight: 60, alignment: .center)
-                            .cornerRadius(8)
-                        HStack(alignment: .top, spacing: 2) {
-                            ImageOverlayText(text: state.activityText)
-                            RelativeTimeframeView(timeframe: event.timeframe, state: state)
-                                .multilineTextAlignment(.trailing)
-                                .splat2Font(size: 10)
-                                .shadow(color: .black, radius: 1, x: 0.0, y: 1)
-                                .minimumScaleFactor(0.8)
-                                .padding(.trailing, 2)
-                        }.padding(2)
-                    }.clipped()
-                }else{
-                    Color.black.opacity(0.5)
+        GeometryReader { geo in
+            
+            HStack(alignment: .top, spacing: 4.0) {
+                
+                VStack {
+                    if let stage = event.stage {
+                        ZStack(alignment: .topLeading) {
+                            StageImage(stage: stage, isNameVisible: false)
+                                .cornerRadius(8)
+                            HStack(alignment: .top, spacing: 2) {
+                                ImageOverlayText(text: state.activityText)
+                                RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                                    .multilineTextAlignment(.trailing)
+                                    .splat2Font(size: 10)
+                                    .minimumScaleFactor(0.8)
+                                    .padding(.trailing, 2)
+                            }.padding(2)
+                        }.frame(minHeight: 60)
+                    }else{
+                        Color.black.opacity(0.5)
+                    }
                 }
-            }
-            VStack(alignment: .leading, spacing: 0) {
-                if let stage = event.stage {
-                    Text(stage.name).splat2Font(size: 11)
+                
+                VStack(alignment: .leading, spacing: 0) {
+                    if let stage = event.stage {
+                        Text(stage.name).splat2Font(size: 11)
+                    }
+                    TimeframeView(timeframe: event.timeframe, datesStyle: .always, fontSize: 9).lineLimit(1).minimumScaleFactor(0.8)
+                    HStack {
+                        WeaponsList(weapons: event.weaponDetails)
+                            .shadow(color: .black, radius: 2, x: 0, y: 1)
+                            .frame(minHeight: 20, maxHeight: 40, alignment: .leading)
+                        Spacer()
+                    }
                 }
-                TimeframeView(timeframe: event.timeframe, datesStyle: .always, fontSize: 9).lineLimit(1).minimumScaleFactor(0.8)
-                HStack {
-                    WeaponsList(weapons: event.weaponDetails)
-                        .shadow(color: .black, radius: 2, x: 0, y: 1)
-                        .frame(maxHeight: 20, alignment: .leading)
-                    Spacer()
-                }
-            }
-        }.frame(minHeight: 0, maxHeight: .infinity, alignment: .center)
+            }.frame(minHeight: 0, maxHeight: .infinity, alignment: .center)
+        }
     }
 }
 

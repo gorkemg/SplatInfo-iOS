@@ -35,12 +35,18 @@ struct CoopTimelineView: View {
     let coopTimeline: CoopTimeline
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             if coopTimeline.detailedEvents.count > 0 {
                 ForEach(0..<coopTimeline.detailedEvents.count) { i in
                     let event = coopTimeline.detailedEvents[i]
                     let state = event.timeframe.state(date: Date())
                     CoopEventView(event: event, style: i == 0 ? .large : .narrow, state: state)
+                }
+            }
+            if coopTimeline.eventTimeframes.count > 2 {
+                let eventTimeframes = coopTimeline.eventTimeframes[2...]
+                ForEach(eventTimeframes, id: \.self) { timeframe in
+                    TimeframeView(timeframe: timeframe, datesStyle: .always, fontSize: 12)
                 }
             }
         }
@@ -53,7 +59,7 @@ struct GameModeTimelineView: View {
     var body: some View {
         if events.count > 0 {
             ForEach(0..<events.count) { i in
-                GameModeEventView(gameModeEvent: events[i], style: i == 0 ? .large : .medium)
+                GameModeEventView(event: events[i], style: i == 0 ? .large : .medium)
             }
         }
     }
@@ -65,8 +71,8 @@ struct ScheduleGrid_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            ScheduleGrid(schedule: exampleSchedule).previewDevice(PreviewDevice(rawValue: "iPad Air 2"))
-            ScheduleGrid(schedule: exampleSchedule).previewDevice(PreviewDevice(rawValue: "iPhone SE"))
+            ScheduleGrid(schedule: exampleSchedule)
+                .previewLayout(.sizeThatFits)
         }
     }
 }

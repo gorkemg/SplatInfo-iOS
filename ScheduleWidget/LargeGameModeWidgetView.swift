@@ -21,70 +21,57 @@ struct LargeGameModeWidgetView : View {
 
                 Image("splatoon-card-bg").resizable(resizingMode: .tile)
 
-                VStack(alignment: .center, spacing: 8) {
-                    
-                    VStack(alignment: .center, spacing: 8) {
+                VStack {
+                    GeometryReader { innerGeo in
                         
-                        HStack(alignment: .center) {
-                            HStack(alignment: .center, spacing: 4.0) {
-                                Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 24)
-                                Text(event.rule.name).minimumScaleFactor(0.5)
-                            }.splat2Font(size: 20)
-                            Spacer()
-                            RelativeTimeframeView(timeframe: event.timeframe, state: event.timeframe.state(date: date)).multilineTextAlignment(.trailing).splat2Font(size: 14)
-                        }.padding(.horizontal, 2)
-                        
-                        LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
-                            if let stage = event.stageA {
-                                StageImage(stage: stage, height: 100)
+                        ZStack(alignment: .topLeading) {
+                            
+                            LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
+                                if let stage = event.stageA {
+                                    StageImage(stage: stage, height: innerGeo.size.height)
+                                }
+                                if let stage = event.stageB {
+                                    StageImage(stage: stage, height: innerGeo.size.height)
+                                }
                             }
-                            if let stage = event.stageB {
-                                StageImage(stage: stage, height: 100)
-                            }
+                            
+                            HStack(alignment: .top) {
+                                HStack(alignment: .center, spacing: 2.0) {
+                                    Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 24)
+                                    Text(event.rule.name).splat2Font(size: 16).minimumScaleFactor(0.5)
+                                }
+                                Spacer()
+                            }.padding(.horizontal, 2)
+
                         }
+                    }.frame(minHeight: 100, idealHeight: 120)
+                    
+                    ForEach(nextEvents.indices, id: \.self) { i in
+                        let nextEvent = nextEvents[i]
+                        GeometryReader { innerGeo in
 
-                    }.padding(8).background(Color.black.opacity(0.4)).cornerRadius(10.0)
-
-                    VStack(alignment: .center, spacing: 8) {
-
-                        ForEach(nextEvents.indices, id: \.self) { i in
-                            let next = nextEvents[i]
-                            //let state = event.timeframe.state(date: date)
-
-                            HStack {
+                            HStack(alignment: .top) {
                                 
                                 VStack(spacing: 0.0) {
-                                    Text(next.rule.name).splat2Font(size: 12).minimumScaleFactor(0.5)
-                                    TimeframeView(timeframe: next.timeframe, datesStyle: .never, fontSize: 9).lineLimit(2).minimumScaleFactor(0.5).multilineTextAlignment(.center)
-                                }.frame(minWidth: 80)
-
-                                if let stage = next.stageA {
-                                    StageImage(stage: stage, height: 50)
+                                    Text(nextEvent.rule.name).splat2Font(size: 12).minimumScaleFactor(0.5)
+                                    event.timeframe.relativeTimeText(date: date).splat2Font(size: 9).lineLimit(2).minimumScaleFactor(0.5).multilineTextAlignment(.center)
                                 }
 
-                                if let stage = next.stageB {
-                                    StageImage(stage: stage, height: 50)
+                                if let stage = nextEvent.stageA {
+                                    StageImage(stage: stage, height: 40)
+                                }
+
+                                if let stage = nextEvent.stageB {
+                                    StageImage(stage: stage, height: 40)
                                 }
                             }
-
+                            
                         }
-
                     }
                     
                 }.padding(8)
                 
             }
-        }
-    }
-
-    func relativeTimeText(event: GameModeEvent) -> Text {
-        switch event.timeframe.state(date: date) {
-        case .active:
-            return Text(" since ") + Text(event.timeframe.startDate, style: .relative)
-        case .soon:
-            return Text(" in ") + Text(event.timeframe.startDate, style: .relative)
-        case .over:
-            return Text(" ended ") + Text(event.timeframe.endDate, style: .relative) + Text(" ago")
         }
     }
 }

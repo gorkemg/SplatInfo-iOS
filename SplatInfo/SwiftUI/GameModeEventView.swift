@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct GameModeEventView: View {
-    let gameModeEvent: GameModeEvent
+    let event: GameModeEvent
     let style: Style
     var date: Date = Date()
     
     var isTitleVisible: Bool = true
+    var isRuleLogoVisible: Bool = true
     var isRuleNameVisible: Bool = true
 
     enum Style {
@@ -22,98 +23,84 @@ struct GameModeEventView: View {
     }
     
     var isTurfWar : Bool {
-        return gameModeEvent.mode.type == .regular
+        return event.mode.type == .regular
     }
     
     var body: some View {
         VStack {
             switch style {
             case .large:
-                VStack {
-                    VStack (spacing: 10) {
-                        HStack {
-                            if isRuleNameVisible {
-                                Text(gameModeEvent.rule.name)
-                                    .splat2Font(size: 22)
-                            }
-                            Spacer()
-                            VStack(alignment: .trailing) {
-//                                RelativeTimeframeView(timeframe: gameModeEvent.timeframe, state: gameModeEvent.timeframe.state(date: date))
-//                                    .splat2Font(size: 14)
-//                                    .lineLimit(1)
-//                                    .minimumScaleFactor(0.5)
-//                                    .multilineTextAlignment(.trailing)
-                                TimeframeView(timeframe: gameModeEvent.timeframe)
-                            }
-                        }
+                GeometryReader { innerGeo in
+                    
+                    ZStack(alignment: .topLeading) {
+                        
                         LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
-                            if let stage = gameModeEvent.stageA {
-                                StageImage(stage: stage)
+                            if let stage = event.stageA {
+                                StageImage(stage: stage, height: innerGeo.size.height)
                             }
-                            if let stage = gameModeEvent.stageB {
-                                StageImage(stage: stage)
+                            if let stage = event.stageB {
+                                StageImage(stage: stage, height: innerGeo.size.height)
                             }
                         }
-                    }
-                    .padding(10)
-                    .background(Color.black.opacity(0.5))
-                    .cornerRadius(10)
-                }//.background(Color.red)
-                
-            case .medium:
-                VStack(spacing: 0.0) {
-                    if isTitleVisible {
-                        HStack(alignment: .center, spacing: 0.0) {
-                            Text(gameModeEvent.rule.name)
-                                .splat2Font(size: 16)
-                            Spacer()
-                            RelativeTimeframeView(timeframe: gameModeEvent.timeframe, state: gameModeEvent.timeframe.state(date: date))
-                                .splat2Font(size: 12)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                                .multilineTextAlignment(.trailing)
-                        }
-                    }
-                    LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible()),GridItem(.flexible())]) {
-                        VStack(alignment: .center, spacing: 0.0) {
-                            if !isTitleVisible {
-                                if isRuleNameVisible {
-                                    Text(gameModeEvent.rule.name).lineLimit(1).minimumScaleFactor(0.5)
-                                        .splat2Font(size: 14).multilineTextAlignment(.center)
+                        
+                        HStack(alignment: .center) {
+                            HStack(alignment: .center, spacing: 2.0) {
+                                if isTitleVisible {
+                                    if isRuleLogoVisible {
+                                        Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 24)
+                                    }
+                                    if isRuleNameVisible {
+                                        Text(event.rule.name).splat2Font(size: 16).minimumScaleFactor(0.5)
+                                    }
                                 }
                             }
-                            TimeframeView(timeframe: gameModeEvent.timeframe, fontSize: 12)
-                                .lineLimit(2)
-                                .minimumScaleFactor(0.5)
+                            Spacer()
+                            RelativeTimeframeView(timeframe: event.timeframe, state: event.timeframe.state(date: date))
+                                .splat2Font(size: 12).lineLimit(1).minimumScaleFactor(0.5).multilineTextAlignment(.trailing)
+                            //event.timeframe.relativeTimeText(date: date).splat2Font(size: 12).lineLimit(2).minimumScaleFactor(0.5).multilineTextAlignment(.center)
+                        }.padding(.horizontal, 2)
+
+                    }
+                }.frame(minHeight: 100, idealHeight: 120)
+
+            case .medium:
+                GeometryReader { innerGeo in
+                    
+                    HStack(alignment: .center) {
+                        
+                        VStack(spacing: 0.0) {
+                            Text(event.rule.name).splat2Font(size: 14).minimumScaleFactor(0.5)
+                            TimeframeView(timeframe: event.timeframe, datesStyle: .never, fontSize: 10)
+
+                            //event.timeframe.relativeTimeText(date: date).splat2Font(size: 12).lineLimit(2).minimumScaleFactor(0.5).multilineTextAlignment(.center)
+                        }.frame(minWidth: 80, maxWidth: innerGeo.size.width/3)
+
+                        if let stage = event.stageA {
+                            StageImage(stage: stage, height: innerGeo.size.height)
                         }
-                        Group {
-                            if let stage = gameModeEvent.stageA {
-                                StageImage(stage: stage, height: 50)
-                            }
-                        }
-                        Group {
-                            if let stage = gameModeEvent.stageB {
-                                StageImage(stage: stage, height: 50)
-                            }
+
+                        if let stage = event.stageB {
+                            StageImage(stage: stage, height: innerGeo.size.height)
                         }
                     }
-                }//.background(Color.blue)
-               
+                    
+                }.frame(minHeight: 50, idealHeight: 60)
+
             case .narrow:
-                VStack(spacing: 0.0) {
+                GeometryReader { innerGeo in
                     LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
                         Group {
-                            if let stage = gameModeEvent.stageA {
-                                StageImage(stage: stage)
+                            if let stage = event.stageA {
+                                StageImage(stage: stage, useThumbnailQuality: true)
                             }
                         }
                         Group {
-                            if let stage = gameModeEvent.stageB {
-                                StageImage(stage: stage)
+                            if let stage = event.stageB {
+                                StageImage(stage: stage, useThumbnailQuality: true)
                             }
                         }
                     }
-                }
+                }.background(Color.blue)
                 
             }
         }

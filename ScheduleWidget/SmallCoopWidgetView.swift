@@ -20,7 +20,7 @@ struct SmallCoopWidgetView : View {
 
             GeometryReader { geometry in
                 VStack(spacing: 0.0) {
-                    if let image = event.stage.image {
+                    if let image = event.stage.thumbImage {
                         Image(uiImage: image)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
@@ -46,7 +46,7 @@ struct SmallCoopWidgetView : View {
                 
                 VStack(alignment: .leading, spacing: 2.0) {
                     HStack {
-                        currentActivityTextView
+                        ColoredActivityTextView(state: state)
                         RelativeTimeframeView(timeframe: event.timeframe, state: state)
                     }.splat2Font(size: 12)
                     
@@ -65,7 +65,11 @@ struct SmallCoopWidgetView : View {
         }.foregroundColor(.white)
     }
     
-    var currentActivityTextView : some View {
+}
+
+struct ColoredActivityTextView: View {
+    let state: TimeframeActivityState
+    var body: some View {
         HStack {
             Text(state.activityText)
         }.padding(.horizontal, 4.0).background(state.color).cornerRadius(5.0)
@@ -81,7 +85,7 @@ extension TimeframeActivityState {
         case .soon:
             return Color.black
         case .over:
-            return Color.gray
+            return Color.gray.opacity(0.4)
         }
     }
     

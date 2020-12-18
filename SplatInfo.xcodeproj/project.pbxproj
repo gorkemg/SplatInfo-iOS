@@ -52,6 +52,8 @@
 		DE501256253A1C2400A73F7A /* na-5060-rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501255253A1C2400A73F7A /* na-5060-rankings.json */; };
 		DE501257253A1C2400A73F7A /* na-5060-rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501255253A1C2400A73F7A /* na-5060-rankings.json */; };
 		DE501258253A1C2400A73F7A /* na-5060-rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501255253A1C2400A73F7A /* na-5060-rankings.json */; };
+		DE72E3A12587B69E00CA0BCD /* LargeCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A02587B69E00CA0BCD /* LargeCoopWidgetView.swift */; };
+		DE72E3A72587B99100CA0BCD /* MediumCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */; };
 		DE9BAC8B2543284300F50AD2 /* merchandise.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501244253A1BE200A73F7A /* merchandise.json */; };
 		DE9BAC8C2543284300F50AD2 /* na-5060-rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501255253A1C2400A73F7A /* na-5060-rankings.json */; };
 		DE9BAC8D2543284300F50AD2 /* coop-schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501236253A1BA300A73F7A /* coop-schedules.json */; };
@@ -61,8 +63,6 @@
 		DE9BAC9D25445F9200F50AD2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE2BD5FD2538489C006E5531 /* Assets.xcassets */; };
 		DE9DFA6E254AF6A700267508 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */; };
 		DE9DFA6F254AF6A700267508 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */; };
-		DEAE259425541CB300253E79 /* LargerCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAE259325541CB300253E79 /* LargerCoopWidgetView.swift */; };
-		DEAE259525541CB300253E79 /* LargerCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAE259325541CB300253E79 /* LargerCoopWidgetView.swift */; };
 		DEAE259C25541CDB00253E79 /* LargeGameModeWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAE259A25541CDB00253E79 /* LargeGameModeWidgetView.swift */; };
 		DEAFEA062543121500FFA812 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEAFEA052543121500FFA812 /* WidgetKit.framework */; };
 		DEAFEA082543121500FFA812 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEAFEA072543121500FFA812 /* SwiftUI.framework */; };
@@ -168,8 +168,9 @@
 		DE501244253A1BE200A73F7A /* merchandise.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = merchandise.json; sourceTree = "<group>"; };
 		DE50124B253A1BFF00A73F7A /* festivals.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = festivals.json; sourceTree = "<group>"; };
 		DE501255253A1C2400A73F7A /* na-5060-rankings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "na-5060-rankings.json"; sourceTree = "<group>"; };
+		DE72E3A02587B69E00CA0BCD /* LargeCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeCoopWidgetView.swift; sourceTree = "<group>"; };
+		DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediumCoopWidgetView.swift; sourceTree = "<group>"; };
 		DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extensions.swift"; sourceTree = "<group>"; };
-		DEAE259325541CB300253E79 /* LargerCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargerCoopWidgetView.swift; sourceTree = "<group>"; };
 		DEAE259A25541CDB00253E79 /* LargeGameModeWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeGameModeWidgetView.swift; sourceTree = "<group>"; };
 		DEAFEA032543121500FFA812 /* SplatInfoScheduleWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SplatInfoScheduleWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		DEAFEA052543121500FFA812 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -345,11 +346,12 @@
 				DEAFEA0C2543121500FFA812 /* Schedule.intentdefinition */,
 				DEAFEA0D2543121800FFA812 /* Assets.xcassets */,
 				DEAFEA0F2543121800FFA812 /* Info.plist */,
-				DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */,
-				DEAE259325541CB300253E79 /* LargerCoopWidgetView.swift */,
 				DEE38190254E0300005D5062 /* SmallGameModeWidgetView.swift */,
 				DE0EF5B3258632380088BF45 /* MediumGameModeWidgetView.swift */,
 				DEAE259A25541CDB00253E79 /* LargeGameModeWidgetView.swift */,
+				DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */,
+				DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */,
+				DE72E3A02587B69E00CA0BCD /* LargeCoopWidgetView.swift */,
 			);
 			path = ScheduleWidget;
 			sourceTree = "<group>";
@@ -554,7 +556,6 @@
 				DE2BD5FC25384899006E5531 /* ContentView.swift in Sources */,
 				DE41B90025417C8A00AAD49A /* ImageLoader.swift in Sources */,
 				DE5012222539E24A00A73F7A /* ScheduleFetcher.swift in Sources */,
-				DEAE259425541CB300253E79 /* LargerCoopWidgetView.swift in Sources */,
 				DE2BD5FA25384899006E5531 /* SplatInfoApp.swift in Sources */,
 				DE41B93F2541A8F400AAD49A /* ScaledFont.swift in Sources */,
 				DE50121425385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */,
@@ -595,7 +596,6 @@
 			files = (
 				DEAFEA4625431BF400FFA812 /* Splatoon2InkAPI.swift in Sources */,
 				DEAFEA5425431BFC00FFA812 /* ScheduleGrid.swift in Sources */,
-				DEAE259525541CB300253E79 /* LargerCoopWidgetView.swift in Sources */,
 				DEAFEA4E25431BFC00FFA812 /* TimeframeView.swift in Sources */,
 				DEAFEA0B2543121500FFA812 /* ScheduleWidget.swift in Sources */,
 				DEAFEA4725431BF400FFA812 /* SplatoonKit.swift in Sources */,
@@ -605,6 +605,7 @@
 				DEE38187254E0226005D5062 /* SplatoonKit+Extensions.swift in Sources */,
 				DEAFEA5325431BFC00FFA812 /* ScaledFont.swift in Sources */,
 				DEAFEA4C25431BFB00FFA812 /* StageImage.swift in Sources */,
+				DE72E3A12587B69E00CA0BCD /* LargeCoopWidgetView.swift in Sources */,
 				DEAFEA4325431BF400FFA812 /* ImageLoader.swift in Sources */,
 				DEAFEA4D25431BFC00FFA812 /* GameModeEventView.swift in Sources */,
 				DEAE259C25541CDB00253E79 /* LargeGameModeWidgetView.swift in Sources */,
@@ -614,6 +615,7 @@
 				DEAFEA5025431BFC00FFA812 /* CoopEventView.swift in Sources */,
 				DEE38192254E0300005D5062 /* SmallGameModeWidgetView.swift in Sources */,
 				DE0EF5B4258632380088BF45 /* MediumGameModeWidgetView.swift in Sources */,
+				DE72E3A72587B99100CA0BCD /* MediumCoopWidgetView.swift in Sources */,
 				DE9DFA6F254AF6A700267508 /* FileManager+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

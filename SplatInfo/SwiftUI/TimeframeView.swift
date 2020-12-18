@@ -56,49 +56,32 @@ struct RelativeTimeframeView : View {
     
     let timeframe : EventTimeframe
     let state: TimeframeActivityState
-    
-    var formatter : Formatter {
-        if state == .active {
-            let formatter = RelativeDateTimeFormatter()
-            formatter.dateTimeStyle = .numeric
-            formatter.unitsStyle = .abbreviated
-            return formatter
-        }else{
-            let formatter = DateFormatter()
-            formatter.timeStyle = .short
-            formatter.doesRelativeDateFormatting = true
-            return formatter
-        }
-    }
-        
+            
     var body: some View {
-        // ** CRASH when using custom fonts or shadow **
-        Text(relativeDate, style: .relative)
-            //.shadow(color: .black, radius: 1, x: 0, y: 1)
-        //.splat2Font(size: 12)
-        //Text(date, formatter: formatter)
-            //.splat2Font(size: 12)
+        Text(timeframe.dateForState(state: state), style: .relative)
     }
-    
-    var relativeDate : Date {
-        return state == .active ? timeframe.endDate : timeframe.startDate
-    }
-    
 }
 
+extension EventTimeframe {
+    
+    func dateForState(state: TimeframeActivityState) -> Date {
+        return state == .active ? endDate : startDate
+    }
+}
 
 struct ActivityTimeFrameView : View {
     let timeframe: EventTimeframe
     let state: TimeframeActivityState
+    var fontSize: CGFloat = 10
 
     var body: some View {
         switch state {
         case .active:
-            Text("- \(timeframeEndString)").splat2Font(size: 10)
+            Text("- \(timeframeEndString)").splat2Font(size: fontSize)
         case .soon:
-            Text("\(timeframeStartString) - \(timeframeEndString)").splat2Font(size: 10)
+            Text("\(timeframeStartString) - \(timeframeEndString)").splat2Font(size: fontSize)
         case .over:
-            Text("- \(timeframeEndString)").splat2Font(size: 10)
+            Text("- \(timeframeEndString)").splat2Font(size: fontSize)
         }
     }
     var timeframeStartString: String {

@@ -51,12 +51,12 @@ struct MediumGameModeWidgetView : View {
                     if let nextEvent = nextEvent {
                         GeometryReader { innerGeo in
 
-                            HStack {
+                            HStack(alignment: .center) {
                                 
                                 VStack(spacing: 0.0) {
                                     Text(nextEvent.rule.name).splat2Font(size: 12).minimumScaleFactor(0.5)
-                                    relativeTimeText(event: nextEvent).splat2Font(size: 9).lineLimit(2).minimumScaleFactor(0.5).multilineTextAlignment(.center)
-                                }
+                                    event.timeframe.relativeTimeText(date: date).splat2Font(size: 9).lineLimit(2).minimumScaleFactor(0.5).multilineTextAlignment(.center)
+                                }.frame(minWidth: 80, maxWidth: innerGeo.size.width/3)
 
                                 if let stage = nextEvent.stageA {
                                     StageImage(stage: stage, height: innerGeo.size.height)
@@ -76,14 +76,4 @@ struct MediumGameModeWidgetView : View {
         }
     }
 
-    func relativeTimeText(event: GameModeEvent) -> Text {
-        switch event.timeframe.state(date: date) {
-        case .active:
-            return Text(" since ") + Text(event.timeframe.startDate, style: .relative)
-        case .soon:
-            return Text(" in ") + Text(event.timeframe.startDate, style: .relative)
-        case .over:
-            return Text(" ended ") + Text(event.timeframe.endDate, style: .relative) + Text(" ago")
-        }
-    }
 }

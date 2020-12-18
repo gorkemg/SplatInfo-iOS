@@ -68,7 +68,7 @@ struct TimelineCard: View {
                 TitleView(title: timeline.modeName, logoName: timeline.logo)
                 switch timeline {
                 case .gameModeTimeline(timeline: let timeline):
-                    GameModeTimelineView(events: Array(timeline.upcomingEvents.prefix(3)))
+                    GameModeTimelineView(events: Array(timeline.upcomingEvents.prefix(4)))
                 case .coopTimeline(timeline: let timeline):
                     CoopTimelineView(coopTimeline: timeline)
                 }
@@ -113,11 +113,11 @@ struct TimelineCard_Previews: PreviewProvider {
     static var previews: some View {
         TimelineCard(timeline: .gameModeTimeline(timeline: exampleSchedule.gameModes.regular))
             .previewLayout(.sizeThatFits)
-        TimelineCard(timeline: .gameModeTimeline(timeline: exampleSchedule.gameModes.ranked))
-            .previewLayout(.sizeThatFits)
-        TimelineCard(timeline: .gameModeTimeline(timeline: exampleSchedule.gameModes.league))
-            .previewLayout(.sizeThatFits)
-        TimelineCard(timeline: .coopTimeline(timeline: exampleSchedule.coop))
-            .previewLayout(.sizeThatFits)
+//        TimelineCard(timeline: .gameModeTimeline(timeline: exampleSchedule.gameModes.ranked))
+//            //.previewLayout(.sizeThatFits)
+//        TimelineCard(timeline: .gameModeTimeline(timeline: exampleSchedule.gameModes.league))
+//            //.previewLayout(.sizeThatFits)
+//        TimelineCard(timeline: .coopTimeline(timeline: exampleSchedule.coop))
+//            //.previewLayout(.sizeThatFits)
     }
 }

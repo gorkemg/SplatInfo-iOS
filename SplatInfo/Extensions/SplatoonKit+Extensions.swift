@@ -65,3 +65,17 @@ extension CoopEvent {
         return Color.coopModeColor
     }
 }
+
+extension EventTimeframe {
+
+    func relativeTimeText(date: Date) -> Text {
+        switch state(date: date) {
+        case .active:
+            return Text(" since ") + Text(startDate, style: .relative)
+        case .soon:
+            return Text(" in ") + Text(startDate, style: .relative)
+        case .over:
+            return Text(" ended ") + Text(endDate, style: .relative) + Text(" ago")
+        }
+    }
+}

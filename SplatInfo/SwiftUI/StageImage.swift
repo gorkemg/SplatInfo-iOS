@@ -7,30 +7,42 @@
 
 import SwiftUI
 
+extension Image {
+    func centerCropped() -> some View {
+        GeometryReader { geo in
+            self
+            .resizable()
+            .scaledToFill()
+            .frame(width: geo.size.width, height: geo.size.height)
+            .clipped()
+        }
+    }
+}
+
+
 struct StageImage: View {
     let stage : Stage
     var isNameVisible: Bool = true
-    var useThumbnailQuality: Bool = true
+    var useThumbnailQuality: Bool = false
     var width: CGFloat?
     var height: CGFloat?
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            Group {
+        GeometryReader { geometry in
+            ZStack(alignment: .bottomTrailing) {
                 if let image = (useThumbnailQuality ? stage.thumbImage : stage.image) {
-                    Image(uiImage: image).resizable().aspectRatio(contentMode: .fill)
+                    Image(uiImage: image).centerCropped().scaledToFill()
+                        .frame(maxWidth: width, maxHeight: height, alignment: .center)
                 }
+
                 if isNameVisible {
                     ImageOverlayText(text: stage.name)
                         .padding(0)
                 }
             }
-            .padding(0)
-            .frame(maxWidth: width, maxHeight: height, alignment: .bottomTrailing)
+            .cornerRadius(10.0)
         }
-        .padding(0)
-        .clipped()
-        .cornerRadius(10.0)
+        
     }
 }
 
