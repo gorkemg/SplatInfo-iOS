@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "coop_3.png",
+      "filename" : "coop_3.heic",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "coop_3@2x.png",
+      "filename" : "coop_3@2x.heic",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "coop_3@3x.png",
+      "filename" : "coop_3@3x.heic",
       "idiom" : "universal",
       "scale" : "3x"
     }

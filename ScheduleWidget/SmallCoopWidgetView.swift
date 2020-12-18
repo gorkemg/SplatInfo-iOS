@@ -20,7 +20,7 @@ struct SmallCoopWidgetView : View {
 
             GeometryReader { geometry in
                 VStack(spacing: 0.0) {
-                    if let image = event.stage.thumbImage {
+                    if let image = event.stage.image {
                         Image(uiImage: image)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
