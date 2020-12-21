@@ -69,7 +69,11 @@ extension CoopEvent {
 extension EventTimeframe {
 
     func relativeTimeText(date: Date) -> Text {
-        switch state(date: date) {
+        return relativeTimeText(state: state(date: date))
+    }
+
+    func relativeTimeText(state: TimeframeActivityState) -> Text {
+        switch state {
         case .active:
             return Text(" since ") + Text(startDate, style: .relative)
         case .soon:

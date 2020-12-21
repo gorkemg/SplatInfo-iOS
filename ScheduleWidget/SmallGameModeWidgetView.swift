@@ -39,7 +39,7 @@ struct SmallGameModeWidgetView : View {
                 
                 VStack(alignment: .leading, spacing: 0.0) {
                     HStack {
-                        Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
+                        Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
                         Text(event.rule.name).splat2Font(size: 14).minimumScaleFactor(0.5)
                     }
                 }
@@ -49,21 +49,10 @@ struct SmallGameModeWidgetView : View {
                 VStack(alignment: .leading, spacing: 0.0) {
                     if let next = nextEvent {
                         Text(event.mode.type != .regular ? next.rule.name : "Changes")
-                        + relativeTimeText(event: next)
+                            + next.timeframe.relativeTimeText(date: date)
                     }
                 }.splat2Font(size: 10).lineLimit(1).minimumScaleFactor(0.5)
             }.padding(.horizontal, 10.0).padding(.vertical, 4)
-        }
-    }
-    
-    func relativeTimeText(event: GameModeEvent) -> Text {
-        switch event.timeframe.state(date: date) {
-        case .active:
-            return Text(" since ") + Text(event.timeframe.startDate, style: .relative)
-        case .soon:
-            return Text(" in ") + Text(event.timeframe.startDate, style: .relative)
-        case .over:
-            return Text(" ended ") + Text(event.timeframe.endDate, style: .relative) + Text(" ago")
         }
     }
 }

@@ -25,7 +25,7 @@ struct LargeCoopWidgetView : View {
 
                 HStack {
                     if let event = events.first {
-                        Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
+                        Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
                         Text(event.modeName).splat2Font(size: 14).minimumScaleFactor(0.5).lineSpacing(0)
                     }
                 }
@@ -47,9 +47,7 @@ struct LargeCoopWidgetView : View {
                                 }
                             }
                         }.padding(2)
-                        
-                        Spacer()
-                        
+                                                
                     }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
 
                 }

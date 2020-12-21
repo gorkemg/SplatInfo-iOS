@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
+    
     var body: some View {
         ZStack {
             Image("bg-squids").resizable(resizingMode: .tile).ignoresSafeArea()
         }
     }
+
 }
 
 struct ContentView_Previews: PreviewProvider {

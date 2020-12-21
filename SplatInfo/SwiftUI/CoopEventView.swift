@@ -51,12 +51,14 @@ struct CoopEventView: View {
 struct CoopLargeEventView : View {
     let event: CoopEvent
     let state: TimeframeActivityState
+    @EnvironmentObject var imageQuality: ImageQuality
 
     var body: some View {
         ZStack {
 
-            if let image = event.stage.image {
-                Image(uiImage: image).centerCropped().cornerRadius(10)
+            if let image = (imageQuality.thumbnail ? event.stage.thumbImage : event.stage.image) {
+                Image(uiImage: image).centerCropped()
+                    .cornerRadius(10.0)
             }
 
             VStack(alignment: .leading, spacing: 2.0) {
@@ -97,6 +99,7 @@ struct CoopLargeEventView : View {
 struct CoopNarrowEventView : View {
     let event: CoopEvent
     let state: TimeframeActivityState
+    @EnvironmentObject var imageQuality: ImageQuality
 
     var body: some View {
         GeometryReader { geo in
@@ -106,15 +109,19 @@ struct CoopNarrowEventView : View {
                 VStack {
                     if let stage = event.stage {
                         ZStack(alignment: .topLeading) {
-                            StageImage(stage: stage, isNameVisible: false)
-                                .cornerRadius(8)
-                            HStack(alignment: .top, spacing: 2) {
+                            if let image = (imageQuality.thumbnail ? stage.thumbImage : stage.image) {
+                                Image(uiImage: image).centerCropped()
+                                    .cornerRadius(10.0)
+                            }
+                            HStack(alignment: .center, spacing: 2) {
                                 ImageOverlayText(text: state.activityText)
-                                RelativeTimeframeView(timeframe: event.timeframe, state: state)
-                                    .multilineTextAlignment(.trailing)
+                                Spacer()
+                                event.timeframe.relativeTimeText(state: state)
                                     .splat2Font(size: 10)
-                                    .minimumScaleFactor(0.8)
-                                    .padding(.trailing, 2)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.5)
+                                    .multilineTextAlignment(.trailing)
+                                    .padding(.trailing, 2.0)
                             }.padding(2)
                         }.frame(minHeight: 60)
                     }else{

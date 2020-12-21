@@ -223,11 +223,18 @@ struct ScheduleEntryView : View {
     var body: some View {
         switch entry.events {
         case .gameModeEvents(events: _):
-            GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date)
+            GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date).environmentObject(imageQuality)
         case .coopEvents(events: _, timeframes: let timeframes):
-            CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date)
+            CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date).environmentObject(imageQuality)
         }
     }
+    
+    var imageQuality : ImageQuality {
+        let quality = ImageQuality()
+        quality.thumbnail = true
+        return quality
+    }
+    
     
     var displayNext: Bool {
         guard let displayNext = entry.configuration.displayNext else { return false }
@@ -276,7 +283,7 @@ struct GameModeEntryView : View {
                 case .systemMedium:
                     MediumGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
                 case .systemLarge:
-                    LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(4)), date: date)
+                    LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
                 @unknown default:
                     Text("No event available").splat1Font(size: 20)
                 }
@@ -419,8 +426,8 @@ struct Schedule_Previews: PreviewProvider {
         ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: intent))
             .previewContext(WidgetPreviewContext(family: .systemLarge))
 
-//        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
-//            .previewContext(WidgetPreviewContext(family: .systemLarge))
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
+            .previewContext(WidgetPreviewContext(family: .systemLarge))
 
         ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: rankedEvents), configuration: ConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemLarge))

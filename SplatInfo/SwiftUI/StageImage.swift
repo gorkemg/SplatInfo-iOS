@@ -19,18 +19,22 @@ extension Image {
     }
 }
 
+class ImageQuality: ObservableObject {
+    @Published var thumbnail: Bool = false
+}
 
 struct StageImage: View {
     let stage : Stage
     var isNameVisible: Bool = true
-    var useThumbnailQuality: Bool = false
+    @EnvironmentObject var imageQuality: ImageQuality
+
     var width: CGFloat?
     var height: CGFloat?
 
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .bottomTrailing) {
-                if let image = (useThumbnailQuality ? stage.thumbImage : stage.image) {
+                if let image = (imageQuality.thumbnail ? stage.thumbImage : stage.image) {
                     Image(uiImage: image).centerCropped().scaledToFill()
                         .frame(maxWidth: width, maxHeight: height, alignment: .center)
                 }

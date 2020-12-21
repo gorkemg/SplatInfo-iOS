@@ -41,8 +41,15 @@ struct SplatInfoApp: App {
                             WidgetCenter.shared.reloadAllTimelines()
                         }
                     }
-                }
+                }.environmentObject(imageQuality)
         }
+    }
+    
+    
+    var imageQuality : ImageQuality {
+        let quality = ImageQuality()
+        quality.thumbnail = false
+        return quality
     }
     
     func downloadImages(urls: [URL], asJPEG: Bool = true, completion: @escaping ()->Void) {

@@ -36,7 +36,7 @@ struct SmallCoopWidgetView : View {
                 
                 VStack(alignment: .leading, spacing: 0.0) {
                     HStack {
-                        Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
+                        Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
                         Text(event.modeName).splat2Font(size: 14).minimumScaleFactor(0.5).lineSpacing(0)
                     }
                     Text(event.stage.name).splat2Font(size: 10)
