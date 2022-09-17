@@ -34,7 +34,7 @@ struct GameModeEventView: View {
                     
                     ZStack(alignment: .topLeading) {
                         
-                        LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
+                        HStack {
                             if let stage = event.stageA {
                                 StageImage(stage: stage, height: innerGeo.size.height)
                             }
@@ -112,5 +112,15 @@ extension GameModeEvent {
     }
     var stageB : Stage? {
         return stages.last
+    }
+}
+
+struct GameModeEventTitleView: View {
+    let event: GameModeEvent
+    var body: some View {
+        HStack(alignment: .center, spacing: 4.0) {
+            Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
+            Text(event.rule.name).splat2Font(size: 16).minimumScaleFactor(0.5)
+        }
     }
 }

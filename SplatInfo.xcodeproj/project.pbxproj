@@ -223,7 +223,6 @@
 		DE2BD5ED25384899006E5531 = {
 			isa = PBXGroup;
 			children = (
-				DE04A0E625653E9600AC7CD1 /* ScheduleWidgetExtension.entitlements */,
 				DE2BD5F825384899006E5531 /* SplatInfo */,
 				DE2BD60A2538489D006E5531 /* SplatInfoTests */,
 				DE2BD6152538489D006E5531 /* SplatInfoUITests */,
@@ -342,6 +341,7 @@
 		DEAFEA092543121500FFA812 /* ScheduleWidget */ = {
 			isa = PBXGroup;
 			children = (
+				DE04A0E625653E9600AC7CD1 /* ScheduleWidgetExtension.entitlements */,
 				DEAFEA0A2543121500FFA812 /* ScheduleWidget.swift */,
 				DEAFEA0C2543121500FFA812 /* Schedule.intentdefinition */,
 				DEAFEA0D2543121800FFA812 /* Assets.xcassets */,
@@ -692,7 +692,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -747,7 +747,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -769,8 +769,8 @@
 				DEVELOPMENT_TEAM = 2FLHWYJQPA;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SplatInfo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -795,8 +795,8 @@
 				DEVELOPMENT_TEAM = 2FLHWYJQPA;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SplatInfo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -898,11 +898,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = ScheduleWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ScheduleWidget/ScheduleWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2FLHWYJQPA;
 				INFOPLIST_FILE = ScheduleWidget/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -922,11 +922,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = ScheduleWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ScheduleWidget/ScheduleWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2FLHWYJQPA;
 				INFOPLIST_FILE = ScheduleWidget/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -64,16 +64,21 @@ struct TimelineCard: View {
         ZStack(alignment: .top) {
             timeline.color
             bgImage
-            VStack {
+            VStack(alignment: .center, spacing: 16.0) {
+
                 TitleView(title: timeline.modeName, logoName: timeline.logo)
+
                 switch timeline {
                 case .gameModeTimeline(timeline: let timeline):
                     GameModeTimelineView(events: Array(timeline.upcomingEvents.prefix(4)))
                 case .coopTimeline(timeline: let timeline):
                     CoopTimelineView(coopTimeline: timeline)
                 }
+
+                Spacer()
             }
-            .padding(10.0)
+            .frame(minHeight: 0, maxHeight: .infinity, alignment: .top)
+            .padding()
         }
         .cornerRadius(30)
         .foregroundColor(.white)

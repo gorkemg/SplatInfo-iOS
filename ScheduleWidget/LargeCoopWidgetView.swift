@@ -23,36 +23,46 @@ struct LargeCoopWidgetView : View {
             
             VStack(alignment: .leading, spacing: 2.0) {
 
-                HStack {
-                    if let event = events.first {
-                        Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
-                        Text(event.modeName).splat2Font(size: 14).minimumScaleFactor(0.5).lineSpacing(0)
+                VStack(alignment: .leading, spacing: 8) {
+
+                    ForEach(events.indices, id: \.self) { i in
+                        let event = events[i]
+                        let state = event.timeframe.state(date: date)
+                        CoopEventView(event: event, style: i == 0 ? .large : .sideBySide, state: state, showTitle: i == 0)
                     }
-                }
-
-                GeometryReader { innerGeo in
-
-                    VStack(alignment: .leading, spacing: 8) {
-
-                        ForEach(events.indices, id: \.self) { i in
-                            let event = events[i]
-                            let state = event.timeframe.state(date: date)
-                            CoopEventView(event: event, style: i == 0 ? .large : .narrow, state: state)
-                        }
-                        
-                        VStack {
-                            if let timeframes = otherTimeframes {
-                                ForEach(timeframes, id: \.self) { timeframe in
-                                    TimeframeView(timeframe: timeframe, datesStyle: .always, fontSize: 12)
-                                }
+                    
+                    VStack {
+                        if let timeframes = otherTimeframes {
+                            ForEach(timeframes, id: \.self) { timeframe in
+                                TimeframeView(timeframe: timeframe, datesStyle: .always, fontSize: 12)
                             }
-                        }.padding(2)
-                                                
-                    }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+                        }
+                    }.padding(2)
+                                            
+                }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
 
-                }
+//                GeometryReader { innerGeo in
+//
+//                    VStack(alignment: .leading, spacing: 8) {
+//
+//                        ForEach(events.indices, id: \.self) { i in
+//                            let event = events[i]
+//                            let state = event.timeframe.state(date: date)
+//                            CoopEventView(event: event, style: i == 0 ? .large : .sideBySide, state: state, showTitle: i == 0)
+//                        }
+//
+//                        VStack {
+//                            if let timeframes = otherTimeframes {
+//                                ForEach(timeframes, id: \.self) { timeframe in
+//                                    TimeframeView(timeframe: timeframe, datesStyle: .always, fontSize: 12)
+//                                }
+//                            }
+//                        }.padding(2)
+//
+//                    }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
+//                }
                 
-            }.padding(.horizontal, 10.0).padding(.vertical, 4.0)
+            }.padding(.horizontal, 10.0).padding(.vertical, 8.0)
 
         }.foregroundColor(.white)
     }

@@ -32,18 +32,23 @@ struct CoopEventView: View {
     let event : CoopEvent
     let style: Style
     let state: TimeframeActivityState
+    var showTitle: Bool = true
+    var height: CGFloat? = nil
 
     enum Style {
         case large
+        case sideBySide
         case narrow
     }
                 
     var body: some View {
         switch style {
         case .large:
-            CoopLargeEventView(event: event, state: state)
+            CoopLargeEventView(event: event, state: state, showTitle: showTitle, height: height)
+        case .sideBySide:
+            CoopSideBySideEventView(event: event, state: state, showTitle: showTitle, height: height)
         case .narrow:
-            CoopNarrowEventView(event: event, state: state)
+            CoopNarrowEventView(event: event, state: state, showTitle: showTitle, height: height)
         }
     }
 }
@@ -51,47 +56,62 @@ struct CoopEventView: View {
 struct CoopLargeEventView : View {
     let event: CoopEvent
     let state: TimeframeActivityState
+    var showTitle: Bool = true
+    var height: CGFloat? = nil
     @EnvironmentObject var imageQuality: ImageQuality
 
     var body: some View {
-        ZStack {
+        GeometryReader { geo in
+            ZStack {
 
-            if let image = (imageQuality.thumbnail ? event.stage.thumbImage : event.stage.image) {
-                Image(uiImage: image).centerCropped()
-                    .cornerRadius(10.0)
-            }
+                StageImage(stage: event.stage, height: height ?? geo.size.height)
 
-            VStack(alignment: .leading, spacing: 2.0) {
-                
-                HStack(alignment: .center) {
-                    ColoredActivityTextView(state: state).splat2Font(size: 14)
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading) {
+                        HStack(alignment: .center) {
+                            if showTitle {
+                                CoopEventTitleView(event: event)
+                            }
+                            ColoredActivityTextView(state: state).splat2Font(size: 12)
+                        }
+                        Spacer()
+                        VStack(alignment: .leading) {
+                            VStack(alignment: .center, spacing: 0.0) {
+                                Text("Available Weapons")
+                                    .splat1Font(size: 12)
+                                    .lineLimit(2)
+                                    .minimumScaleFactor(0.5)
+                                WeaponsList(weapons: event.weaponDetails)
+                                    .frame(minHeight: 20, maxHeight: 30.0)
+                                    .shadow(color: .black, radius: 2, x: 0, y: 1)
+                                    .padding(.horizontal, 8.0)
+                                    .background(Color.white.opacity(0.5).cornerRadius(8.0))
+                            }
+                        }
+
+                    }
+                    
                     Spacer()
-                    RelativeTimeframeView(timeframe: event.timeframe, state: state)
-                        .splat2Font(size: 14)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
-                        .multilineTextAlignment(.trailing)
-                }
-                
-                ActivityTimeFrameView(timeframe: event.timeframe, state: state, fontSize: 12).lineLimit(1).minimumScaleFactor(0.5)
-                
-                Spacer()
-                
-                HStack {
-                    VStack(alignment: .center, spacing: 0.0) {
-                        Text("Available Weapons")
-                            .splat1Font(size: 12)
-                            .lineLimit(2)
-                            .minimumScaleFactor(0.5)
-                        WeaponsList(weapons: event.weaponDetails)
-                            .shadow(color: .black, radius: 2, x: 0, y: 1)
+                    
+                    VStack(alignment: .trailing) {
+                        VStack(alignment: .trailing) {
+                            HStack(alignment: .center, spacing: 2.0) {
+
+                                RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                                    .splat2Font(size: 14)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.5)
+                                .multilineTextAlignment(.trailing)
+                            }
+                            
+                            ActivityTimeFrameView(timeframe: event.timeframe, state: state, fontSize: 12).lineLimit(1).minimumScaleFactor(0.5)
+                        }
+
                     }
                 }
+                .padding(8)
+                .cornerRadius(10)
             }
-            .frame(minHeight: 120)
-            .padding(.vertical, 8.0)
-            .padding(.horizontal, 8)
-            .cornerRadius(10)
         }
     }
 }
@@ -99,50 +119,101 @@ struct CoopLargeEventView : View {
 struct CoopNarrowEventView : View {
     let event: CoopEvent
     let state: TimeframeActivityState
+    var showTitle: Bool = true
+    var height: CGFloat? = nil
     @EnvironmentObject var imageQuality: ImageQuality
 
     var body: some View {
         GeometryReader { geo in
-            
-            HStack(alignment: .top, spacing: 4.0) {
-                
-                VStack {
-                    if let stage = event.stage {
-                        ZStack(alignment: .topLeading) {
-                            if let image = (imageQuality.thumbnail ? stage.thumbImage : stage.image) {
-                                Image(uiImage: image).centerCropped()
-                                    .cornerRadius(10.0)
+            ZStack {
+
+                StageImage(stage: event.stage, height: height ?? geo.size.height)
+                    .padding(0)
+
+                HStack(alignment: .top) {
+                    
+                    VStack(alignment: .leading) {
+
+                        HStack(alignment: .center) {
+                            if showTitle {
+                                CoopEventTitleView(event: event)
                             }
-                            HStack(alignment: .center, spacing: 2) {
-                                ImageOverlayText(text: state.activityText)
-                                Spacer()
-                                event.timeframe.relativeTimeText(state: state)
-                                    .splat2Font(size: 10)
+                            ColoredActivityTextView(state: state).splat2Font(size: 10)
+                        }
+
+                        Spacer()
+
+                        WeaponsList(weapons: event.weaponDetails)
+                            .frame(minHeight: 12, maxHeight: 24, alignment: .leading)
+                            .shadow(color: .black, radius: 2, x: 0, y: 1)
+                            .padding(.horizontal, 8.0)
+                            .background(Color.white.opacity(0.5).cornerRadius(8.0))
+
+                    }
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .trailing) {
+                        VStack(alignment: .trailing) {
+                            HStack(alignment: .center, spacing: 2.0) {
+
+                                RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                                    .splat2Font(size: 14)
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.5)
-                                    .multilineTextAlignment(.trailing)
-                                    .padding(.trailing, 2.0)
-                            }.padding(2)
-                        }.frame(minHeight: 60)
-                    }else{
-                        Color.black.opacity(0.5)
+                                .multilineTextAlignment(.trailing)
+                            }
+                        }
                     }
                 }
-                
-                VStack(alignment: .leading, spacing: 0) {
-                    if let stage = event.stage {
-                        Text(stage.name).splat2Font(size: 11)
-                    }
-                    TimeframeView(timeframe: event.timeframe, datesStyle: .always, fontSize: 9).lineLimit(1).minimumScaleFactor(0.8)
-                    HStack {
-                        WeaponsList(weapons: event.weaponDetails)
-                            .shadow(color: .black, radius: 2, x: 0, y: 1)
-                            .frame(minHeight: 20, maxHeight: 40, alignment: .leading)
-                        Spacer()
-                    }
-                }
-            }.frame(minHeight: 0, maxHeight: .infinity, alignment: .center)
+                .padding(4.0)
+                .cornerRadius(10)
+            }
         }
+    }
+}
+
+struct CoopSideBySideEventView : View {
+    let event: CoopEvent
+    let state: TimeframeActivityState
+    var showTitle: Bool = true
+    var height: CGFloat? = nil
+    @EnvironmentObject var imageQuality: ImageQuality
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 8.0) {
+            
+            ZStack(alignment: .topLeading) {
+                StageImage(stage: event.stage, height: height)
+
+                HStack(alignment: .center, spacing: 2) {
+                    VStack(alignment: .leading) {
+                        if showTitle {
+                            CoopEventTitleView(event: event)
+                        }
+                        ColoredActivityTextView(state: state).splat2Font(size: 10)
+                    }
+                    Spacer()
+                    RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                        .splat2Font(size: 10)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+                    .multilineTextAlignment(.trailing)
+                }.padding(2)
+            }
+
+            VStack(alignment: .leading, spacing: 2.0) {
+                TimeframeView(timeframe: event.timeframe, datesStyle: .always, fontSize: 12)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                HStack(alignment: .center, spacing: 4.0) {
+                    WeaponsList(weapons: event.weaponDetails)
+                        .shadow(color: .black, radius: 2, x: 0, y: 1)
+                        .frame(minHeight: 12, maxHeight: 24, alignment: .leading)
+                    Spacer()
+                }
+            }
+        }.frame(maxHeight: 60)
     }
 }
 
@@ -150,17 +221,33 @@ struct WeaponsList: View {
     let weapons: [WeaponDetails]
     
     var body: some View {
-        HStack(alignment: .center, spacing: 2, content: {
+        HStack(alignment: .center, spacing: 2) {
             ForEach(weapons, id: \.id) { weapon in
-                if let image = weapon.image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                }
+                WeaponImage(weapon: weapon)
             }
-        })
+        }
     }
 }
+
+struct WeaponImage: View {
+    let weapon: WeaponDetails
+
+    var body: some View {
+        if let image = weapon.image {
+            Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+        }else{
+            AsyncImage(url: URL(string: weapon.imageUrl)) { image in
+                image.resizable()
+                    .aspectRatio(contentMode: .fit)
+            } placeholder: {
+                ProgressView()
+            }
+        }
+    }
+}
+
 
 extension WeaponDetails {
     
@@ -192,5 +279,28 @@ extension WeaponDetails {
 
     var assetThumbImage: UIImage? {
         return UIImage(named: "weapon_thumb_\(id)")
+    }
+}
+
+struct CoopEventTitleView: View {
+    let event: CoopEvent
+    var body: some View {
+        HStack(alignment: .center, spacing: 4.0) {
+            Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0, y: 1)
+            Text(event.modeName).splat2Font(size: 14).minimumScaleFactor(0.5).lineSpacing(0)
+        }
+    }
+}
+
+struct CoopEventView_Previews: PreviewProvider {
+
+    static var previews: some View {
+
+        if let coopEvent = Schedule.example.coop.firstEvent {
+            CoopEventView(event: coopEvent, style: .narrow, state: .active)
+            Text("no event")
+        }else{
+            Text("no event")
+        }
     }
 }

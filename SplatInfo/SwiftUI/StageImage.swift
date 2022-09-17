@@ -32,11 +32,18 @@ struct StageImage: View {
     var height: CGFloat?
 
     var body: some View {
-        GeometryReader { geometry in
+//        GeometryReader { geometry in
             ZStack(alignment: .bottomTrailing) {
                 if let image = (imageQuality.thumbnail ? stage.thumbImage : stage.image) {
-                    Image(uiImage: image).centerCropped().scaledToFill()
+                    Image(uiImage: image).centerCropped()//.scaledToFill()
                         .frame(maxWidth: width, maxHeight: height, alignment: .center)
+                }else{
+                    AsyncImage(url: URL(string: stage.imageUrl)) { image in
+                        image.centerCropped()//.scaledToFill()
+                            .frame(maxWidth: width, maxHeight: height, alignment: .center)
+                    } placeholder: {
+                        Color.black
+                    }
                 }
 
                 if isNameVisible {
@@ -45,7 +52,8 @@ struct StageImage: View {
                 }
             }
             .cornerRadius(10.0)
-        }
+//        }
+        .shadow(color: .black, radius: 2, x: 0.0, y: 1.0)
         
     }
 }

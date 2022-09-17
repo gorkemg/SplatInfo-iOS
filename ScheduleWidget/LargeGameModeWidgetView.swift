@@ -26,7 +26,7 @@ struct LargeGameModeWidgetView : View {
                         
                         ZStack(alignment: .topLeading) {
                             
-                            LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
+                            HStack {
                                 if let stage = event.stageA {
                                     StageImage(stage: stage, height: innerGeo.size.height)
                                 }
@@ -36,10 +36,11 @@ struct LargeGameModeWidgetView : View {
                             }
                             
                             HStack(alignment: .top) {
-                                HStack(alignment: .center, spacing: 2.0) {
-                                    Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
-                                    Text(event.rule.name).splat2Font(size: 16).minimumScaleFactor(0.5)
-                                }
+                                GameModeEventTitleView(event: event)
+//                                HStack(alignment: .center, spacing: 2.0) {
+//                                    Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
+//                                    Text(event.rule.name).splat2Font(size: 16).minimumScaleFactor(0.5)
+//                                }
                                 Spacer()
                                 RelativeTimeframeView(timeframe: event.timeframe, state: event.timeframe.state(date: date))
                                     .splat2Font(size: 12).lineLimit(1).minimumScaleFactor(0.5).multilineTextAlignment(.trailing)

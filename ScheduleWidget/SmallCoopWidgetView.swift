@@ -29,16 +29,11 @@ struct SmallCoopWidgetView : View {
                     }
                 }.cornerRadius(10.0)
             }
-            
-            LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.05), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
-            
+                        
             VStack(alignment: .leading, spacing: 0.0) {
                 
                 VStack(alignment: .leading, spacing: 0.0) {
-                    HStack {
-                        Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
-                        Text(event.modeName).splat2Font(size: 14).minimumScaleFactor(0.5).lineSpacing(0)
-                    }
+                    CoopEventTitleView(event: event)
                     Text(event.stage.name).splat2Font(size: 10)
                 }
 
@@ -54,8 +49,10 @@ struct SmallCoopWidgetView : View {
                     HStack(spacing: 4.0) {
                         Group {
                             WeaponsList(weapons: event.weaponDetails)
-                                .shadow(color: .black, radius: 2, x: 0.0, y: 1.0)
-                                .frame(maxHeight: 24, alignment: .leading)
+                                .frame(maxHeight: 24.0)
+                                .shadow(color: .black, radius: 2, x: 0, y: 1)
+                                .padding(.horizontal, 8.0)
+                                .background(Color.white.opacity(0.5).cornerRadius(8.0))
                         }
                         
                         Spacer()

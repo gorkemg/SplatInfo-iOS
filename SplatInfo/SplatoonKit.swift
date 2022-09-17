@@ -137,6 +137,40 @@ struct CoopEvent: Codable, Equatable {
     }
 }
 
+extension CoopTimeline {
+    
+    var firstEvent: CoopEvent? {
+        return detailedEvents.first
+    }
+
+    var secondEvent: CoopEvent? {
+        if detailedEvents.count > 1 {
+            return detailedEvents[1]
+        }
+        return nil
+    }
+
+    
+    func eventChangingDates() -> [Date] {
+        let now = Date()
+        let startDates = detailedEvents.map({ $0.timeframe.startDate })
+        let endDates = detailedEvents.map({ $0.timeframe.endDate })
+        var eventDates = (startDates+endDates).sorted()
+        if let firstDate = eventDates.first, now < firstDate {
+            eventDates.insert(now, at: 0)
+        }
+        return eventDates
+    }
+    
+    func upcomingEventsAfterDate(date: Date) -> [CoopEvent] {
+        return detailedEvents.filter({ $0.timeframe.state(date: date) != .over })
+    }
+
+    func upcomingTimeframesAfterDate(date: Date) -> [EventTimeframe] {
+        return eventTimeframes.filter({ $0.state(date: date) != .over })
+    }
+}
+
 extension CoopEvent {
     var weaponDetails : [WeaponDetails] {
         var weaponDetails : [WeaponDetails] = []

@@ -38,10 +38,12 @@ struct SmallGameModeWidgetView : View {
             VStack(alignment: .leading, spacing: 0.0) {
                 
                 VStack(alignment: .leading, spacing: 0.0) {
-                    HStack {
-                        Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
-                        Text(event.rule.name).splat2Font(size: 14).minimumScaleFactor(0.5)
-                    }
+                    GameModeEventTitleView(event: event)
+//
+//                    HStack {
+//                        Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
+//                        Text(event.rule.name).splat2Font(size: 14).minimumScaleFactor(0.5)
+//                    }
                 }
                                 
                 Spacer()
@@ -52,7 +54,7 @@ struct SmallGameModeWidgetView : View {
                             + next.timeframe.relativeTimeText(date: date)
                     }
                 }.splat2Font(size: 10).lineLimit(1).minimumScaleFactor(0.5)
-            }.padding(.horizontal, 10.0).padding(.vertical, 4)
+            }.padding(.horizontal, 10.0).padding(.vertical, 8.0)
         }
     }
 }

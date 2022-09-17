@@ -12,10 +12,12 @@ extension Stage {
     
     var image : UIImage? {
         return assetImage ?? cachedImage() ?? cachedImage(directory: FileManager.default.appGroupContainerURL)
+//        return nil
     }
 
     var thumbImage : UIImage? {
         return assetThumbImage ?? cachedImage() ?? cachedImage(directory: FileManager.default.appGroupContainerURL)
+//        return nil
     }
 
     func cachedImage(directory: URL? = URL(fileURLWithPath: NSTemporaryDirectory())) -> UIImage? {

@@ -115,6 +115,7 @@ struct Provider: IntentTimelineProvider {
         var entries: [GameModeEntry] = []
         let now = Date()
         let startDates = modeTimeline.schedule.map({ $0.timeframe.startDate })
+        print("StartDates: \(startDates)")
         let dates = ([now]+startDates).sorted()
         for date in dates {
             let events = modeTimeline.upcomingEventsAfterDate(date: date)
@@ -123,7 +124,12 @@ struct Provider: IntentTimelineProvider {
                 entries.append(entry)
             }
         }
-        let timeline = Timeline(entries: entries, policy: .atEnd)
+        var updatePolicy: TimelineReloadPolicy = .atEnd
+        if let date = startDates.suffix(2).first, date > Date() {
+            print("Refresh at: \(date)")
+            updatePolicy = .after(date)
+        }
+        let timeline = Timeline(entries: entries, policy: updatePolicy)
         return timeline
     }
     
@@ -135,16 +141,62 @@ struct Provider: IntentTimelineProvider {
             return timeline
         }
         var entries: [GameModeEntry] = []
-        let dates = coopTimeline.eventChangingDates()
+        // coopTimeline consists of 2 detailed events and some additional timeframes for other events.
+        // The widget has to show the first 2 events full
+        // Therefore, the widget timeline consists of only a few dates
+        // Current date: Event 1 (active/soon), Event 2 soon
+        // Event 1 start date: Event 1 active, Event 2 soon
+        // Event 1 end date: Event 2 soon, nothing  <-- NOT GOOD
+        // Therefore, the timeline only consists of 2 timeline entries:
+        // 1: Current Date
+        // 2: Event 1 Start Date
+        // Refresh happens at Event 1 End Date
+        // When the widget refreshes at the end of Event 1, the new coopTimeline will have 2 new events
+        var dates: [Date] = []
+        let now = Date()
+        var updatePolicy: TimelineReloadPolicy = .atEnd
+        if let timeframe = coopTimeline.firstEvent?.timeframe {
+            if now < timeframe.startDate {
+                dates.append(now)
+            }
+            dates.append(timeframe.startDate)
+            dates.append(timeframe.endDate)
+            updatePolicy = .after(timeframe.endDate)
+        }else{
+            dates.append(now)
+        }
+
+        
+        //let dates = coopTimeline.eventChangingDates()
+        print("Dates: \(dates)")
         for date in dates {
             let events = coopTimeline.upcomingEventsAfterDate(date: date)
             let eventTimeframes = coopTimeline.upcomingTimeframesAfterDate(date: date)
-            let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
-            entries.append(entry)
+//            if events.count > 1 {
+                let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
+                entries.append(entry)
+//            }
         }
-        var updatePolicy: TimelineReloadPolicy = .atEnd
-        if let date = coopTimeline.firstEvent?.timeframe.endDate, date > Date() {
-            updatePolicy = .after(date)
+//        if let date = dates.suffix(2).first, date > Date() {
+//            print("Refresh at: \(date)")
+//            updatePolicy = .after(date)
+//        }
+        for entry in entries {
+            print("#########")
+            print("Date: \(entry.date)")
+            switch entry.events {
+            case .gameModeEvents(events: let events):
+                for event in events {
+                    print("\(event.mode.name) from \(event.timeframe.startDate) until \(event.timeframe.endDate)")
+                }
+                break
+            case .coopEvents(events: let events, timeframes: let timeframes):
+                for event in events {
+                    print("\(event.stage.name) from \(event.timeframe.startDate) until \(event.timeframe.endDate)")
+                }
+                break
+            }
+            print("#########")
         }
         let timeline = Timeline(entries: entries, policy: updatePolicy)
         return timeline
@@ -158,40 +210,6 @@ extension ConfigurationIntent {
         return next.boolValue
     }
     
-}
-
-extension CoopTimeline {
-    
-    var firstEvent: CoopEvent? {
-        return detailedEvents.first
-    }
-
-    var secondEvent: CoopEvent? {
-        if detailedEvents.count > 1 {
-            return detailedEvents[1]
-        }
-        return nil
-    }
-
-    
-    func eventChangingDates() -> [Date] {
-        let now = Date()
-        let startDates = detailedEvents.map({ $0.timeframe.startDate })
-        let endDates = detailedEvents.map({ $0.timeframe.endDate })
-        var eventDates = (startDates+endDates).sorted()
-        if let firstDate = eventDates.first, now < firstDate {
-            eventDates.insert(now, at: 0)
-        }
-        return eventDates
-    }
-    
-    func upcomingEventsAfterDate(date: Date) -> [CoopEvent] {
-        return detailedEvents.filter({ $0.timeframe.state(date: date) != .over })
-    }
-
-    func upcomingTimeframesAfterDate(date: Date) -> [EventTimeframe] {
-        return eventTimeframes.filter({ $0.state(date: date) != .over })
-    }
 }
 
 struct GameModeEntry: TimelineEntry {
@@ -284,6 +302,14 @@ struct GameModeEntryView : View {
                     MediumGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
                 case .systemLarge:
                     LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
+                case .systemExtraLarge:
+                    LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
+//                case .accessoryCircular:
+//                    Text("")
+//                case .accessoryRectangular:
+//                    Text("")
+//                case .accessoryInline:
+//                    Text("")
                 @unknown default:
                     Text("No event available").splat1Font(size: 20)
                 }
@@ -332,6 +358,14 @@ struct CoopEntryView : View {
             }
         case .systemLarge:
             LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date)
+        case .systemExtraLarge:
+            LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date)
+//        case .accessoryCircular:
+//            Text("")
+//        case .accessoryRectangular:
+//            Text("")
+//        case .accessoryInline:
+//            Text("")
         @unknown default:
             if let event = event {
                 SmallCoopWidgetView(event: event, state: event.timeframe.state(date: date))
@@ -399,37 +433,15 @@ struct Schedule_Previews: PreviewProvider {
     
 
     static var previews: some View {
-//        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: []), configuration: ConfigurationIntent()))
-//            .previewContext(WidgetPreviewContext(family: .systemSmall))
 
-//        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
-//            .previewContext(WidgetPreviewContext(family: .systemSmall))
-
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: ConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
 
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: rankedEvents), configuration: intent))
-            .previewContext(WidgetPreviewContext(family: .systemMedium))
-
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: rankedEvents), configuration: intentWithDisplayNext))
-            .previewContext(WidgetPreviewContext(family: .systemMedium))
-
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: leagueEvents), configuration: ConfigurationIntent()))
-            .previewContext(WidgetPreviewContext(family: .systemMedium))
-
-//        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: intent))
-//            .previewContext(WidgetPreviewContext(family: .systemSmall))
-
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: intent))
-            .previewContext(WidgetPreviewContext(family: .systemMedium))
-
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: intent))
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: ConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemLarge))
 
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
-            .previewContext(WidgetPreviewContext(family: .systemLarge))
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: ConfigurationIntent()))
+            .previewContext(WidgetPreviewContext(family: .systemExtraLarge))
 
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: rankedEvents), configuration: ConfigurationIntent()))
-            .previewContext(WidgetPreviewContext(family: .systemLarge))
     }
 }

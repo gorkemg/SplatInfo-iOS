@@ -19,27 +19,34 @@ struct SplatInfoApp: App {
         WindowGroup {
             ScheduleGrid(schedule: schedule)
                 .onAppear {
+
+                    // test example
+//                    let coopEvent = Schedule.example.coop.detailedEvents.first
+//                    print("CoopEvent: \(coopEvent)")
+                    
                     scheduleFetcher.fetchGameModeTimelines { (gameModeTimelines, error) in
                         schedule = scheduleFetcher.schedule
+                        WidgetCenter.shared.reloadAllTimelines()
                         guard let timelines = gameModeTimelines else { return }
-                        let urls = [timelines.ranked.allImageURLs(),timelines.regular.allImageURLs(),timelines.league.allImageURLs()].flatMap({ $0 })
-                        downloadImages(urls: urls) {
-                            schedule = scheduleFetcher.schedule
-                            WidgetCenter.shared.reloadAllTimelines()
-                        }
+//                        let urls = [timelines.ranked.allImageURLs(),timelines.regular.allImageURLs(),timelines.league.allImageURLs()].flatMap({ $0 })
+//                        downloadImages(urls: urls) {
+//                            schedule = scheduleFetcher.schedule
+//                            WidgetCenter.shared.reloadAllTimelines()
+//                        }
                     }
                     scheduleFetcher.fetchCoopTimeline { (coopTimeline, error) in
                         schedule = scheduleFetcher.schedule
-                        guard let timeline = coopTimeline else { return }
-                        let stageURLs = timeline.allStageImageURLs()
-                        downloadImages(urls: stageURLs) {
-                            WidgetCenter.shared.reloadAllTimelines()
-                        }
-                        let weaponURLs = timeline.allWeaponImageURLs()
-                        downloadImages(urls: weaponURLs, asJPEG: false) {
-                            schedule = scheduleFetcher.schedule
-                            WidgetCenter.shared.reloadAllTimelines()
-                        }
+                        WidgetCenter.shared.reloadAllTimelines()
+//                        guard let timeline = coopTimeline else { return }
+//                        let stageURLs = timeline.allStageImageURLs()
+//                        downloadImages(urls: stageURLs) {
+//                            WidgetCenter.shared.reloadAllTimelines()
+//                        }
+//                        let weaponURLs = timeline.allWeaponImageURLs()
+//                        downloadImages(urls: weaponURLs, asJPEG: false) {
+//                            schedule = scheduleFetcher.schedule
+//                            WidgetCenter.shared.reloadAllTimelines()
+//                        }
                     }
                 }.environmentObject(imageQuality)
         }
