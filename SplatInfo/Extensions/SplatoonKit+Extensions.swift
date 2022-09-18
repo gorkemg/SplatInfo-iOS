@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 
-extension Splatoon2.Stage {
+extension Stage {
     
     var image : UIImage? {
         return assetImage ?? cachedImage() ?? cachedImage(directory: FileManager.default.appGroupContainerURL)
@@ -22,7 +22,7 @@ extension Splatoon2.Stage {
 
     func cachedImage(directory: URL? = URL(fileURLWithPath: NSTemporaryDirectory())) -> UIImage? {
         let fileManager = FileManager.default
-        let imageURL = URL(string: imageUrl)
+        let imageURL = imageUrl
         if let dir = directory, let url = imageURL {
             let fileURL = dir.appendingPathComponent(url.lastPathComponent)
             if fileManager.fileExists(atPath: fileURL.path) {
@@ -61,7 +61,7 @@ extension Splatoon2.GameModeType {
     }
 }
 
-extension Splatoon2.CoopEvent {
+extension CoopEvent {
 
     var color : Color {
         return Color.coopModeColor

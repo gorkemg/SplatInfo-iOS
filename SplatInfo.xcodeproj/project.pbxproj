@@ -311,13 +311,13 @@
 		DE41B90425417CE400AAD49A /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				DE41B92B25419C7D00AAD49A /* ScheduleGrid.swift */,
 				DE41B90D25419B4500AAD49A /* StageImage.swift */,
 				DE41B91225419B8200AAD49A /* GameModeEventView.swift */,
 				DE41B91725419BC400AAD49A /* TitleView.swift */,
 				DE41B91C25419BDA00AAD49A /* TimeframeView.swift */,
 				DE41B92125419C2B00AAD49A /* CoopEventView.swift */,
 				DE41B92625419C5600AAD49A /* TimelineCard.swift */,
-				DE41B92B25419C7D00AAD49A /* ScheduleGrid.swift */,
 				DE41B93E2541A8F400AAD49A /* ScaledFont.swift */,
 			);
 			path = SwiftUI;

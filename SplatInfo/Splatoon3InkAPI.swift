@@ -121,19 +121,19 @@ class Splatoon3InkAPI {
     
     /// Turf War
     struct RegularScheduleNodes: Codable {
-        let nodes: [RegularSchedule]
+        let nodes: [RegularEvent]
     }
     /// Anarchy Battle [Series and Open]
     struct BankaraScheduleNodes: Codable {
-        let nodes: [BankaraSchedule]
+        let nodes: [BankaraEvent]
     }
     /// X Rank
     struct XScheduleNodes: Codable {
-        let nodes: [XSchedule]
+        let nodes: [XEvent]
     }
     /// League
     struct LeagueScheduleNodes: Codable {
-        let nodes: [LeagueSchedule]
+        let nodes: [LeagueEvent]
     }
     /// Salmon Run
     struct CoopGroupingSchedule: Codable {
@@ -143,10 +143,14 @@ class Splatoon3InkAPI {
 
     // MARK: - Regular
     
-    struct RegularSchedule: Codable, ScheduleDates {
+    struct RegularEvent: Codable, EventDetails {
         var startTime: Date
         var endTime: Date
         let regularMatchSetting: MatchSettings
+
+        var matchSetting: [MatchSetting] {
+            return [self.regularMatchSetting]
+        }
     }
     
     struct MatchSettings: Codable, MatchSetting {
@@ -158,26 +162,38 @@ class Splatoon3InkAPI {
 
     // MARK: - X
     
-    struct XSchedule: Codable, ScheduleDates {
+    struct XEvent: Codable, EventDetails {
         var startTime: Date
         var endTime: Date
         let xMatchSetting: MatchSettings
+
+        var matchSetting: [MatchSetting] {
+            return [self.xMatchSetting]
+        }
     }
     
     // MARK: - League
     
-    struct LeagueSchedule: Codable, ScheduleDates {
+    struct LeagueEvent: Codable, EventDetails {
         var startTime: Date
         var endTime: Date
         let leagueMatchSetting: MatchSettings
+
+        var matchSetting: [MatchSetting] {
+            return [self.leagueMatchSetting]
+        }
     }
     
     // MARK: - Bankara
-    struct BankaraSchedule: Codable, ScheduleDates {
+    struct BankaraEvent: Codable, EventDetails {
         var startTime: Date
         var endTime: Date
         let bankaraMatchSettings: [ModeMatchSettings]
 //        let festMatchSettings: FestSchedulesNodes?
+
+        var matchSetting: [MatchSetting] {
+            return bankaraMatchSettings
+        }
     }
 
     struct ModeMatchSettings: Codable, MatchSetting {
@@ -217,10 +233,10 @@ class Splatoon3InkAPI {
     
     // MARK: - Coop
     struct CoopScheduleNodes: Codable {
-        let nodes: [CoopSchedule]
+        let nodes: [CoopEvent]
     }
     
-    struct CoopSchedule: Codable, ScheduleDates {
+    struct CoopEvent: Codable, EventDates {
         var startTime: Date
         var endTime: Date
         let setting: CoopSetting
@@ -249,7 +265,7 @@ class Splatoon3InkAPI {
         let nodes: [FestSchedule]
     }
 
-    struct FestSchedule: Codable, ScheduleDates {
+    struct FestSchedule: Codable, EventDates {
         var startTime: Date
         var endTime: Date
     }
@@ -273,7 +289,7 @@ class Splatoon3InkAPI {
 }
 
 
-protocol ScheduleDates {
+protocol EventDates {
     var startTime: Date  { get }
     var endTime: Date { get }
 }
@@ -284,3 +300,9 @@ protocol MatchSetting {
     var vsStages: [Splatoon3InkAPI.VsStage]  { get }
     var vsRule: Splatoon3InkAPI.VsRule  { get }
 }
+
+protocol EventMatchSettings {
+    var matchSetting: [MatchSetting] { get }
+}
+
+typealias EventDetails = EventMatchSettings & EventDates

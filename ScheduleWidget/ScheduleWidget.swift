@@ -133,7 +133,7 @@ struct Provider: IntentTimelineProvider {
         return timeline
     }
     
-    func timelineForCoopTimeline(_ coopTimeline: Splatoon2.CoopTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
+    func timelineForCoopTimeline(_ coopTimeline: CoopTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
         if configuration.isDisplayNext, let firstEvent = coopTimeline.firstEvent, let secondEvent = coopTimeline.secondEvent {
             // only show next event
             let entry = GameModeEntry(date: Date(), events: .coopEvents(events: [secondEvent], timeframes: []), configuration: configuration)
@@ -220,7 +220,7 @@ struct GameModeEntry: TimelineEntry {
 
 enum GameModeEvents {
     case gameModeEvents(events: [Splatoon2.GameModeEvent])
-    case coopEvents(events: [Splatoon2.CoopEvent], timeframes: [EventTimeframe])
+    case coopEvents(events: [CoopEvent], timeframes: [EventTimeframe])
 }
 
 
@@ -270,7 +270,7 @@ struct ScheduleEntryView : View {
         return []
     }
 
-    var coopEvents: [Splatoon2.CoopEvent] {
+    var coopEvents: [CoopEvent] {
         switch entry.events {
         case .coopEvents(events: let events, timeframes: _):
             if displayNext, events.count > 1 { return Array(events.suffix(from: 1)) }
@@ -304,12 +304,12 @@ struct GameModeEntryView : View {
                     LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
                 case .systemExtraLarge:
                     LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
-//                case .accessoryCircular:
-//                    Text("")
-//                case .accessoryRectangular:
-//                    Text("")
-//                case .accessoryInline:
-//                    Text("")
+                case .accessoryCircular:
+                    Text("")
+                case .accessoryRectangular:
+                    Text("")
+                case .accessoryInline:
+                    Text("")
                 @unknown default:
                     Text("No event available").splat1Font(size: 20)
                 }
@@ -336,7 +336,7 @@ struct GameModeEntryView : View {
 
 
 struct CoopEntryView : View {
-    let events: [Splatoon2.CoopEvent]
+    let events: [CoopEvent]
     let eventTimeframes: [EventTimeframe]
     let date: Date
 
@@ -375,10 +375,10 @@ struct CoopEntryView : View {
         }
     }
 
-    var event: Splatoon2.CoopEvent? {
+    var event: CoopEvent? {
         return events.first
     }
-    var nextEvent: Splatoon2.CoopEvent? {
+    var nextEvent: CoopEvent? {
         if let currentEvent = self.event, let index = events.firstIndex(where: { $0 == currentEvent }), events.count > index+1 {
             return events[(index+1)]
         }

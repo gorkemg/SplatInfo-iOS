@@ -14,7 +14,7 @@ enum Game {
 
 enum GameTimelines {
     case splatoon2(timelines: Splatoon2.GameModeTimeline)
-//    case splatoon3(timelines: Splatoon3.GameModeTimeline)
+    case splatoon3(timelines: Splatoon3.GameModeTimeline)
 }
 
 
@@ -44,6 +44,41 @@ struct Splatoon3 {
                 return "league-logo"
             }
         }
+    }
+    
+    struct GameModeTimeline {
+        let type: GameModeType
+        let schedule: [GameModeEvent]
+
+        var upcomingEvents : [GameModeEvent] {
+            let filtered = upcomingEventsAfterDate(date: Date())
+            if filtered.count == 0 {
+                return schedule
+            }
+            return filtered
+        }
+        func upcomingEventsAfterDate(date: Date) -> [GameModeEvent] {
+            return schedule.filter({ $0.timeframe.state(date: date) != .over })
+        }
+        
+        static func empty(_ mode: GameModeType) -> GameModeTimeline {
+            return GameModeTimeline(type: mode, schedule: [])
+        }
+    }
+    
+    struct GameModeEvent {
+        let id: String
+        var stages: [Stage]
+        var rule: GameModeRule
+        let timeframe: EventTimeframe
+    }
+    
+    enum GameModeRule: String {
+        case turf = "TURF_WAR"  // Turf War
+        case area = "AREA"  // Zones
+        case loft = "LOFT"  // Tower
+        case goal = "GOAL"  // Rainmaker
+        case clam = "CLAM"  // Clam Blitz
     }
 }
 
@@ -108,42 +143,45 @@ struct Splatoon2 {
         let name: String
     }
 
-    struct Stage: Codable {
-        let id: String
-        let name: String
-        let imageUrl: String
-    }
-
-    struct CoopEvent: Codable, Equatable {
-        var id = UUID().uuidString
-        let timeframe: EventTimeframe
-        let weapons: [Weapon]
-        let stage: Stage
-        
-        var logoName : String {
-            return "mr-grizz-logo"
-        }
-        var modeName : String {
-            return "Salmon Run"
-        }
-        static func == (lhs: CoopEvent, rhs: CoopEvent) -> Bool {
-            lhs.id == rhs.id
-        }
-    }
-
-    struct CoopTimeline: Codable {
-        let detailedEvents: [CoopEvent]
-        let eventTimeframes: [EventTimeframe]
-        let date: Date
-
-        static func empty() -> CoopTimeline {
-            return CoopTimeline(detailedEvents: [], eventTimeframes: [], date: Date())
-        }
-    }
-
 }
 
+// MARK: - Coop
 
+struct CoopTimeline: Codable {
+    let detailedEvents: [CoopEvent]
+    let eventTimeframes: [EventTimeframe]
+
+    static func empty() -> CoopTimeline {
+        return CoopTimeline(detailedEvents: [], eventTimeframes: [] /*, date: Date() */ )
+    }
+}
+
+struct CoopEvent: Codable, Equatable {
+    var id = UUID().uuidString
+    let timeframe: EventTimeframe
+    let weapons: [Weapon]
+    let stage: Stage
+    
+    var logoName : String {
+        return "mr-grizz-logo"
+    }
+    var modeName : String {
+        return "Salmon Run"
+    }
+    static func == (lhs: CoopEvent, rhs: CoopEvent) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
+// MARK: - Stage
+
+struct Stage: Codable {
+    let id: String
+    let name: String
+    let imageUrl: URL?
+}
+
+// MARK: - Weapon
 
 enum Weapon: Codable {
     
@@ -180,16 +218,16 @@ enum Weapon: Codable {
 struct WeaponDetails: Codable {
     let id: String
     let name: String
-    let imageUrl: String
+    let imageUrl: URL?
 }
 
-extension Splatoon2.CoopTimeline {
+extension CoopTimeline {
     
-    var firstEvent: Splatoon2.CoopEvent? {
+    var firstEvent: CoopEvent? {
         return detailedEvents.first
     }
 
-    var secondEvent: Splatoon2.CoopEvent? {
+    var secondEvent: CoopEvent? {
         if detailedEvents.count > 1 {
             return detailedEvents[1]
         }
@@ -208,7 +246,7 @@ extension Splatoon2.CoopTimeline {
         return eventDates
     }
     
-    func upcomingEventsAfterDate(date: Date) -> [Splatoon2.CoopEvent] {
+    func upcomingEventsAfterDate(date: Date) -> [CoopEvent] {
         return detailedEvents.filter({ $0.timeframe.state(date: date) != .over })
     }
 
@@ -217,7 +255,7 @@ extension Splatoon2.CoopTimeline {
     }
 }
 
-extension Splatoon2.CoopEvent {
+extension CoopEvent {
     var weaponDetails : [WeaponDetails] {
         var weaponDetails : [WeaponDetails] = []
         for weapon in weapons {

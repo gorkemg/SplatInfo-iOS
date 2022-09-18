@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LargeCoopWidgetView : View {
-    let events: [Splatoon2.CoopEvent]
+    let events: [CoopEvent]
     var eventTimeframes: [EventTimeframe]?
     let date: Date
 

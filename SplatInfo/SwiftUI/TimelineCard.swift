@@ -11,7 +11,7 @@ struct TimelineCard: View {
     
     public enum TimelineType {
         case gameModeTimeline(timeline: Splatoon2.GameModeTimeline)
-        case coopTimeline(timeline: Splatoon2.CoopTimeline)
+        case coopTimeline(timeline: CoopTimeline)
         
         var modeName : String {
             switch self {

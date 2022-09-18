@@ -29,7 +29,7 @@ extension Date {
 }
 
 struct CoopEventView: View {
-    let event : Splatoon2.CoopEvent
+    let event : CoopEvent
     let style: Style
     let state: TimeframeActivityState
     var showTitle: Bool = true
@@ -54,7 +54,7 @@ struct CoopEventView: View {
 }
 
 struct CoopLargeEventView : View {
-    let event: Splatoon2.CoopEvent
+    let event: CoopEvent
     let state: TimeframeActivityState
     var showTitle: Bool = true
     var height: CGFloat? = nil
@@ -117,7 +117,7 @@ struct CoopLargeEventView : View {
 }
 
 struct CoopNarrowEventView : View {
-    let event: Splatoon2.CoopEvent
+    let event: CoopEvent
     let state: TimeframeActivityState
     var showTitle: Bool = true
     var height: CGFloat? = nil
@@ -174,7 +174,7 @@ struct CoopNarrowEventView : View {
 }
 
 struct CoopSideBySideEventView : View {
-    let event: Splatoon2.CoopEvent
+    let event: CoopEvent
     let state: TimeframeActivityState
     var showTitle: Bool = true
     var height: CGFloat? = nil
@@ -238,7 +238,7 @@ struct WeaponImage: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
         }else{
-            AsyncImage(url: URL(string: weapon.imageUrl)) { image in
+            AsyncImage(url: weapon.imageUrl) { image in
                 image.resizable()
                     .aspectRatio(contentMode: .fit)
             } placeholder: {
@@ -257,8 +257,7 @@ extension WeaponDetails {
 
     func cachedImage(directory: URL? = URL(fileURLWithPath: NSTemporaryDirectory())) -> UIImage? {
         let fileManager = FileManager.default
-        let imageURL = URL(string: imageUrl)
-        if let dir = directory, let url = imageURL {
+        if let dir = directory, let url = imageUrl {
             let fileURL = dir.appendingPathComponent(url.lastPathComponent)
             if fileManager.fileExists(atPath: fileURL.path) {
                 return UIImage(contentsOfFile: fileURL.path)
@@ -283,7 +282,7 @@ extension WeaponDetails {
 }
 
 struct CoopEventTitleView: View {
-    let event: Splatoon2.CoopEvent
+    let event: CoopEvent
     var body: some View {
         HStack(alignment: .center, spacing: 4.0) {
             Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0, y: 1)

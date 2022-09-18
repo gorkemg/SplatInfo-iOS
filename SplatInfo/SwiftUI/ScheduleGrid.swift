@@ -9,8 +9,10 @@ import SwiftUI
 
 struct ScheduleGrid: View {
     
-    let schedule: Splatoon2Schedule
+    let splatoon2Schedule: Splatoon2Schedule
     
+    @State private var selectedSchedules: Set<Game> = Set(arrayLiteral: .splatoon2,.splatoon3)
+        
     let columns = [
         GridItem(.adaptive(minimum: 300, maximum: .infinity))
     ]
@@ -19,17 +21,51 @@ struct ScheduleGrid: View {
         ZStack {
             Image("bg-squids").resizable(resizingMode: .tile).ignoresSafeArea()
             ScrollView(.vertical) {
-                VStack {
-                    Text("Splatoon 2")
+                
+                VStack(alignment: .leading, spacing: 20.0) {
+                    
+                    HStack(alignment: .center, spacing: 20.0) {
+
+                        Button {
+                            print("Splatoon 3 pressed")
+                            if selectedSchedules.contains(.splatoon3) {
+                                selectedSchedules.remove(.splatoon3)
+                            }else{
+                                selectedSchedules.insert(.splatoon3)
+                            }
+                        } label: {
+                            Text("Splatoon 3")
+                        }
+                        .padding(.vertical, 4.0)
+                        .padding(.horizontal, 12.0)
+                        .background( selectedSchedules.contains(.splatoon3) ? .blue : .clear)
+                        .cornerRadius(20)
                         .splat2Font(size: 30)
-                    LazyVGrid(columns: columns, spacing: 50) {
-                            TimelineCard(timeline: .gameModeTimeline(timeline: schedule.gameModes.regular))
-                            TimelineCard(timeline: .gameModeTimeline(timeline: schedule.gameModes.ranked))
-                            TimelineCard(timeline: .gameModeTimeline(timeline: schedule.gameModes.league))
-                            TimelineCard(timeline: .coopTimeline(timeline: schedule.coop))
+
+                        Button {
+                            print("Splatoon 2 pressed")
+                            if selectedSchedules.contains(.splatoon2) {
+                                selectedSchedules.remove(.splatoon2)
+                            }else{
+                                selectedSchedules.insert(.splatoon2)
+                            }
+                        } label: {
+                            Text("Splatoon 2")
+                        }
+                        .padding(.vertical, 4.0)
+                        .padding(.horizontal, 12.0)
+                        .background( selectedSchedules.contains(.splatoon2) ? .pink : .clear)
+                        .cornerRadius(20)
+                        .splat2Font(size: 30)
                     }
-                    .padding()
-                }
+                    
+                    LazyVGrid(columns: columns, spacing: 50) {
+                            TimelineCard(timeline: .gameModeTimeline(timeline: splatoon2Schedule.gameModes.regular))
+                            TimelineCard(timeline: .gameModeTimeline(timeline: splatoon2Schedule.gameModes.ranked))
+                            TimelineCard(timeline: .gameModeTimeline(timeline: splatoon2Schedule.gameModes.league))
+                            TimelineCard(timeline: .coopTimeline(timeline: splatoon2Schedule.coop))
+                    }
+                }.padding()
             }
         }
         .foregroundColor(.white)
@@ -37,7 +73,7 @@ struct ScheduleGrid: View {
 }
 
 struct CoopTimelineView: View {
-    let coopTimeline: Splatoon2.CoopTimeline
+    let coopTimeline: CoopTimeline
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16.0) {
@@ -82,7 +118,7 @@ struct CoopTimelineView_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            ScheduleGrid(schedule: exampleSchedule)
+            ScheduleGrid(splatoon2Schedule: exampleSchedule)
 //            CoopTimelineView(coopTimeline: Splatoon2Schedule.example.coop)
                 .environmentObject(imageQuality)
         }

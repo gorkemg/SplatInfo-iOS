@@ -17,7 +17,7 @@ struct SplatInfoApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ScheduleGrid(schedule: schedule)
+            ScheduleGrid(splatoon2Schedule: schedule)
                 .onAppear {
 
                     // test example

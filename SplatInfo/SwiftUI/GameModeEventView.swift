@@ -107,10 +107,10 @@ struct GameModeEventView: View {
 }
 
 extension Splatoon2.GameModeEvent {
-    var stageA : Splatoon2.Stage? {
+    var stageA : Stage? {
         return stages.first
     }
-    var stageB : Splatoon2.Stage? {
+    var stageB : Stage? {
         return stages.last
     }
 }

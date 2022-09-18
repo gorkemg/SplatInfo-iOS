@@ -24,7 +24,7 @@ class ImageQuality: ObservableObject {
 }
 
 struct StageImage: View {
-    let stage : Splatoon2.Stage
+    let stage : Stage
     var isNameVisible: Bool = true
     @EnvironmentObject var imageQuality: ImageQuality
 
@@ -32,13 +32,12 @@ struct StageImage: View {
     var height: CGFloat?
 
     var body: some View {
-//        GeometryReader { geometry in
             ZStack(alignment: .bottomTrailing) {
                 if let image = (imageQuality.thumbnail ? stage.thumbImage : stage.image) {
                     Image(uiImage: image).centerCropped()//.scaledToFill()
                         .frame(maxWidth: width, maxHeight: height, alignment: .center)
                 }else{
-                    AsyncImage(url: URL(string: stage.imageUrl)) { image in
+                    AsyncImage(url: stage.imageUrl) { image in
                         image.centerCropped()//.scaledToFill()
                             .frame(maxWidth: width, maxHeight: height, alignment: .center)
                     } placeholder: {
@@ -52,9 +51,7 @@ struct StageImage: View {
                 }
             }
             .cornerRadius(10.0)
-//        }
-        .shadow(color: .black, radius: 2, x: 0.0, y: 1.0)
-        
+            .shadow(color: .black, radius: 2, x: 0.0, y: 1.0)
     }
 }
 
