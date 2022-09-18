@@ -24,7 +24,7 @@ class ImageQuality: ObservableObject {
 }
 
 struct StageImage: View {
-    let stage : Stage
+    let stage : Splatoon2.Stage
     var isNameVisible: Bool = true
     @EnvironmentObject var imageQuality: ImageQuality
 

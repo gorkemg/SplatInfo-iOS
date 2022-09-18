@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct LargeGameModeWidgetView : View {
-    let event: GameModeEvent
-    var nextEvents: [GameModeEvent]
+    let event: Splatoon2.GameModeEvent
+    var nextEvents: [Splatoon2.GameModeEvent]
     let date: Date
         
     var body: some View {

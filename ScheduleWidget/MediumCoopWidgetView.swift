@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct MediumCoopWidgetView : View {
-    let event: CoopEvent
-    let nextEvent: CoopEvent?
+    let event: Splatoon2.CoopEvent
+    let nextEvent: Splatoon2.CoopEvent?
     let date: Date
 
     var state: TimeframeActivityState {

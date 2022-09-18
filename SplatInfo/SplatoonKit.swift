@@ -7,70 +7,143 @@
 
 import Foundation
 
-struct GameModeTimeline: Codable {
-    let modeType: GameModeType
-    let schedule: [GameModeEvent]
+enum Game {
+    case splatoon2
+    case splatoon3
+}
+
+enum GameTimelines {
+    case splatoon2(timelines: Splatoon2.GameModeTimeline)
+//    case splatoon3(timelines: Splatoon3.GameModeTimeline)
+}
+
+
+struct Splatoon3 {
     
-    var upcomingEvents : [GameModeEvent] {
-        let filtered = upcomingEventsAfterDate(date: Date())
-        if filtered.count == 0 {
-            return schedule
+    enum GameModeType: String, Codable {
+        case turfWar
+        case anarchyBattleOpen
+        case anarchyBattleSeries
+        case league
+        case x
+        case salmonRun
+
+        var logoName : String {
+            switch self {
+            case .turfWar:
+                return "regular-logo"
+            case .anarchyBattleOpen:
+                return "ranked-logo"
+            case .anarchyBattleSeries:
+                return "ranked-logo"
+            case .league:
+                return "league-logo"
+            case .x:
+                return "league-logo"
+            case .salmonRun:
+                return "league-logo"
+            }
         }
-        return filtered
-    }
-    func upcomingEventsAfterDate(date: Date) -> [GameModeEvent] {
-        return schedule.filter({ $0.timeframe.state(date: date) != .over })
-    }
-    
-    static func empty(_ mode: GameModeType) -> GameModeTimeline {
-        return GameModeTimeline(modeType: mode, schedule: [])
     }
 }
 
-struct GameMode: Codable {
-    let name: String
-    let type: GameModeType
-}
+struct Splatoon2 {
 
-enum GameModeType: String, Codable {
-    case league
-    case ranked
-    case regular
-
-    var logoName : String {
-        switch self {
-        case .regular:
-            return "regular-logo"
-        case .ranked:
-            return "ranked-logo"
-        case .league:
-            return "league-logo"
+    struct GameModeTimeline: Codable {
+        let modeType: GameModeType
+        let schedule: [GameModeEvent]
+        
+        var upcomingEvents : [GameModeEvent] {
+            let filtered = upcomingEventsAfterDate(date: Date())
+            if filtered.count == 0 {
+                return schedule
+            }
+            return filtered
         }
-    }    
-}
-
-struct GameModeEvent: Codable, Equatable {
-    let id: String
-    let mode: GameMode
-    let timeframe: EventTimeframe
-    let stages: [Stage]
-    let rule: GameModeRule
-    
-    static func == (lhs: GameModeEvent, rhs: GameModeEvent) -> Bool {
-        return lhs.id == rhs.id
+        func upcomingEventsAfterDate(date: Date) -> [GameModeEvent] {
+            return schedule.filter({ $0.timeframe.state(date: date) != .over })
+        }
+        
+        static func empty(_ mode: GameModeType) -> GameModeTimeline {
+            return GameModeTimeline(modeType: mode, schedule: [])
+        }
     }
+
+    struct GameMode: Codable {
+        let name: String
+        let type: GameModeType
+    }
+
+    enum GameModeType: String, Codable {
+        case league
+        case ranked
+        case regular
+
+        var logoName : String {
+            switch self {
+            case .regular:
+                return "regular-logo"
+            case .ranked:
+                return "ranked-logo"
+            case .league:
+                return "league-logo"
+            }
+        }
+    }
+
+    struct GameModeEvent: Codable, Equatable {
+        let id: String
+        let mode: GameMode
+        let timeframe: EventTimeframe
+        let stages: [Stage]
+        let rule: GameModeRule
+        
+        static func == (lhs: GameModeEvent, rhs: GameModeEvent) -> Bool {
+            return lhs.id == rhs.id
+        }
+    }
+
+    struct GameModeRule: Codable {
+        let key: String
+        let name: String
+    }
+
+    struct Stage: Codable {
+        let id: String
+        let name: String
+        let imageUrl: String
+    }
+
+    struct CoopEvent: Codable, Equatable {
+        var id = UUID().uuidString
+        let timeframe: EventTimeframe
+        let weapons: [Weapon]
+        let stage: Stage
+        
+        var logoName : String {
+            return "mr-grizz-logo"
+        }
+        var modeName : String {
+            return "Salmon Run"
+        }
+        static func == (lhs: CoopEvent, rhs: CoopEvent) -> Bool {
+            lhs.id == rhs.id
+        }
+    }
+
+    struct CoopTimeline: Codable {
+        let detailedEvents: [CoopEvent]
+        let eventTimeframes: [EventTimeframe]
+        let date: Date
+
+        static func empty() -> CoopTimeline {
+            return CoopTimeline(detailedEvents: [], eventTimeframes: [], date: Date())
+        }
+    }
+
 }
 
-struct GameModeRule: Codable {
-    let key: String
-    let name: String
-}
 
-struct Stage: Codable {
-    let id: String
-    let name: String
-    let imageUrl: String
-}
 
 enum Weapon: Codable {
     
@@ -110,40 +183,13 @@ struct WeaponDetails: Codable {
     let imageUrl: String
 }
 
-struct CoopTimeline: Codable {
-    let detailedEvents: [CoopEvent]
-    let eventTimeframes: [EventTimeframe]
-    let date: Date
-
-    static func empty() -> CoopTimeline {
-        return CoopTimeline(detailedEvents: [], eventTimeframes: [], date: Date())
-    }
-}
-
-struct CoopEvent: Codable, Equatable {
-    var id = UUID().uuidString
-    let timeframe: EventTimeframe
-    let weapons: [Weapon]
-    let stage: Stage
+extension Splatoon2.CoopTimeline {
     
-    var logoName : String {
-        return "mr-grizz-logo"
-    }
-    var modeName : String {
-        return "Salmon Run"
-    }
-    static func == (lhs: CoopEvent, rhs: CoopEvent) -> Bool {
-        lhs.id == rhs.id
-    }
-}
-
-extension CoopTimeline {
-    
-    var firstEvent: CoopEvent? {
+    var firstEvent: Splatoon2.CoopEvent? {
         return detailedEvents.first
     }
 
-    var secondEvent: CoopEvent? {
+    var secondEvent: Splatoon2.CoopEvent? {
         if detailedEvents.count > 1 {
             return detailedEvents[1]
         }
@@ -162,7 +208,7 @@ extension CoopTimeline {
         return eventDates
     }
     
-    func upcomingEventsAfterDate(date: Date) -> [CoopEvent] {
+    func upcomingEventsAfterDate(date: Date) -> [Splatoon2.CoopEvent] {
         return detailedEvents.filter({ $0.timeframe.state(date: date) != .over })
     }
 
@@ -171,7 +217,7 @@ extension CoopTimeline {
     }
 }
 
-extension CoopEvent {
+extension Splatoon2.CoopEvent {
     var weaponDetails : [WeaponDetails] {
         var weaponDetails : [WeaponDetails] = []
         for weapon in weapons {

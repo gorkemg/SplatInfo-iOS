@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GameModeEventView: View {
-    let event: GameModeEvent
+    let event: Splatoon2.GameModeEvent
     let style: Style
     var date: Date = Date()
     
@@ -106,17 +106,17 @@ struct GameModeEventView: View {
 
 }
 
-extension GameModeEvent {
-    var stageA : Stage? {
+extension Splatoon2.GameModeEvent {
+    var stageA : Splatoon2.Stage? {
         return stages.first
     }
-    var stageB : Stage? {
+    var stageB : Splatoon2.Stage? {
         return stages.last
     }
 }
 
 struct GameModeEventTitleView: View {
-    let event: GameModeEvent
+    let event: Splatoon2.GameModeEvent
     var body: some View {
         HStack(alignment: .center, spacing: 4.0) {
             Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)

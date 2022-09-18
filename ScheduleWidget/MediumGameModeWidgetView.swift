@@ -9,8 +9,8 @@ import SwiftUI
 
 struct MediumGameModeWidgetView : View {
     
-    let event: GameModeEvent
-    var nextEvent: GameModeEvent? = nil
+    let event: Splatoon2.GameModeEvent
+    var nextEvent: Splatoon2.GameModeEvent? = nil
     let date: Date
     
     var body: some View {

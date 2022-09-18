@@ -10,8 +10,8 @@ import SwiftUI
 struct TimelineCard: View {
     
     public enum TimelineType {
-        case gameModeTimeline(timeline: GameModeTimeline)
-        case coopTimeline(timeline: CoopTimeline)
+        case gameModeTimeline(timeline: Splatoon2.GameModeTimeline)
+        case coopTimeline(timeline: Splatoon2.CoopTimeline)
         
         var modeName : String {
             switch self {
@@ -64,7 +64,7 @@ struct TimelineCard: View {
         ZStack(alignment: .top) {
             timeline.color
             bgImage
-            VStack(alignment: .center, spacing: 16.0) {
+            VStack(alignment: .center, spacing: 8.0) {
 
                 TitleView(title: timeline.modeName, logoName: timeline.logo)
 
@@ -77,11 +77,10 @@ struct TimelineCard: View {
 
                 Spacer()
             }
-            .frame(minHeight: 0, maxHeight: .infinity, alignment: .top)
+            .frame(minHeight: 450, maxHeight: .infinity, alignment: .top)
             .padding()
         }
         .cornerRadius(30)
-        .foregroundColor(.white)
         .splat2Font(size: 12)
     }
         
@@ -113,16 +112,23 @@ extension Color {
 
 struct TimelineCard_Previews: PreviewProvider {
     
-    static let exampleSchedule = Schedule.example
+    static let exampleSchedule = Splatoon2Schedule.example
     
     static var previews: some View {
-        TimelineCard(timeline: .gameModeTimeline(timeline: exampleSchedule.gameModes.regular))
-            .previewLayout(.sizeThatFits)
+//        TimelineCard(timeline: .gameModeTimeline(timeline: exampleSchedule.gameModes.regular)).environmentObject(imageQuality)
+//            .previewLayout(.sizeThatFits)
 //        TimelineCard(timeline: .gameModeTimeline(timeline: exampleSchedule.gameModes.ranked))
 //            //.previewLayout(.sizeThatFits)
 //        TimelineCard(timeline: .gameModeTimeline(timeline: exampleSchedule.gameModes.league))
 //            //.previewLayout(.sizeThatFits)
-//        TimelineCard(timeline: .coopTimeline(timeline: exampleSchedule.coop))
-//            //.previewLayout(.sizeThatFits)
+        TimelineCard(timeline: .coopTimeline(timeline: exampleSchedule.coop))
+            .previewDevice("iPad Air (5th generation)")
+            .environmentObject(imageQuality)
+            .previewLayout(.device)
+    }
+    static var imageQuality : ImageQuality {
+        let quality = ImageQuality()
+        quality.thumbnail = false
+        return quality
     }
 }

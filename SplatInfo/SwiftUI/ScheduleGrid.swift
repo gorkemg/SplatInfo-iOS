@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ScheduleGrid: View {
     
-    let schedule: Schedule
+    let schedule: Splatoon2Schedule
     
     let columns = [
         GridItem(.adaptive(minimum: 300, maximum: .infinity))
@@ -19,20 +19,25 @@ struct ScheduleGrid: View {
         ZStack {
             Image("bg-squids").resizable(resizingMode: .tile).ignoresSafeArea()
             ScrollView(.vertical) {
-                LazyVGrid(columns: columns, spacing: 50) {
-                    TimelineCard(timeline: .gameModeTimeline(timeline: schedule.gameModes.regular))
-                    TimelineCard(timeline: .gameModeTimeline(timeline: schedule.gameModes.ranked))
-                    TimelineCard(timeline: .gameModeTimeline(timeline: schedule.gameModes.league))
-                    TimelineCard(timeline: .coopTimeline(timeline: schedule.coop))
+                VStack {
+                    Text("Splatoon 2")
+                        .splat2Font(size: 30)
+                    LazyVGrid(columns: columns, spacing: 50) {
+                            TimelineCard(timeline: .gameModeTimeline(timeline: schedule.gameModes.regular))
+                            TimelineCard(timeline: .gameModeTimeline(timeline: schedule.gameModes.ranked))
+                            TimelineCard(timeline: .gameModeTimeline(timeline: schedule.gameModes.league))
+                            TimelineCard(timeline: .coopTimeline(timeline: schedule.coop))
+                    }
+                    .padding()
                 }
-                .padding()
             }
         }
+        .foregroundColor(.white)
     }
 }
 
 struct CoopTimelineView: View {
-    let coopTimeline: CoopTimeline
+    let coopTimeline: Splatoon2.CoopTimeline
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16.0) {
@@ -41,9 +46,9 @@ struct CoopTimelineView: View {
                     ForEach(0..<coopTimeline.detailedEvents.count, id: \.self) { i in
                         let event = coopTimeline.detailedEvents[i]
                         let state = event.timeframe.state(date: Date())
-                        let style: CoopEventView.Style = i == 0 ? .large : .narrow
-                        let height: CGFloat? = nil // i == 0 ? 150.0 : 60.0
-                        CoopEventView(event: event, style: style, state: state, height: height)
+                        let style: CoopEventView.Style = i == 0 ? .large : .sideBySide
+                        let height: CGFloat? = nil //i == 0 ? 250.0 : nil
+                        CoopEventView(event: event, style: style, state: state, showTitle: i == 0, height: height)
                     }
                 }
             }
@@ -60,7 +65,7 @@ struct CoopTimelineView: View {
 }
 
 struct GameModeTimelineView: View {
-    let events : [GameModeEvent]
+    let events : [Splatoon2.GameModeEvent]
     
     var body: some View {
         if events.count > 0 {
@@ -71,14 +76,24 @@ struct GameModeTimelineView: View {
     }
 }
 
-struct ScheduleGrid_Previews: PreviewProvider {
-
-    static let exampleSchedule = Schedule.example
+struct CoopTimelineView_Previews: PreviewProvider {
+    
+    static let exampleSchedule = Splatoon2Schedule.example
     
     static var previews: some View {
         Group {
             ScheduleGrid(schedule: exampleSchedule)
-                .previewLayout(.sizeThatFits)
+//            CoopTimelineView(coopTimeline: Splatoon2Schedule.example.coop)
+                .environmentObject(imageQuality)
         }
+        .previewInterfaceOrientation(.landscapeRight)
+        .previewDevice("iPad Air (5th generation)")
+        .previewLayout(.device)
+    }
+    
+    static var imageQuality : ImageQuality {
+        let quality = ImageQuality()
+        quality.thumbnail = false
+        return quality
     }
 }

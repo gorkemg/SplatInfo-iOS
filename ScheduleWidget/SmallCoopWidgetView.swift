@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SmallCoopWidgetView : View {
-    let event: CoopEvent
+    let event: Splatoon2.CoopEvent
     let state: TimeframeActivityState
 
     var body: some View {

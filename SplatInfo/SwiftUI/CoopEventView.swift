@@ -29,7 +29,7 @@ extension Date {
 }
 
 struct CoopEventView: View {
-    let event : CoopEvent
+    let event : Splatoon2.CoopEvent
     let style: Style
     let state: TimeframeActivityState
     var showTitle: Bool = true
@@ -54,7 +54,7 @@ struct CoopEventView: View {
 }
 
 struct CoopLargeEventView : View {
-    let event: CoopEvent
+    let event: Splatoon2.CoopEvent
     let state: TimeframeActivityState
     var showTitle: Bool = true
     var height: CGFloat? = nil
@@ -117,7 +117,7 @@ struct CoopLargeEventView : View {
 }
 
 struct CoopNarrowEventView : View {
-    let event: CoopEvent
+    let event: Splatoon2.CoopEvent
     let state: TimeframeActivityState
     var showTitle: Bool = true
     var height: CGFloat? = nil
@@ -174,7 +174,7 @@ struct CoopNarrowEventView : View {
 }
 
 struct CoopSideBySideEventView : View {
-    let event: CoopEvent
+    let event: Splatoon2.CoopEvent
     let state: TimeframeActivityState
     var showTitle: Bool = true
     var height: CGFloat? = nil
@@ -283,7 +283,7 @@ extension WeaponDetails {
 }
 
 struct CoopEventTitleView: View {
-    let event: CoopEvent
+    let event: Splatoon2.CoopEvent
     var body: some View {
         HStack(alignment: .center, spacing: 4.0) {
             Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0, y: 1)
@@ -296,9 +296,8 @@ struct CoopEventView_Previews: PreviewProvider {
 
     static var previews: some View {
 
-        if let coopEvent = Schedule.example.coop.firstEvent {
+        if let coopEvent = Splatoon2Schedule.example.coop.firstEvent {
             CoopEventView(event: coopEvent, style: .narrow, state: .active)
-            Text("no event")
         }else{
             Text("no event")
         }

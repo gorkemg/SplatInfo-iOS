@@ -12,7 +12,7 @@ import WidgetKit
 struct SplatInfoApp: App {
     
     private let scheduleFetcher = ScheduleFetcher()
-    @State var schedule = Schedule.empty
+    @State var schedule = Splatoon2Schedule.empty
     let imageLoaderManager = ImageLoaderManager()
     
     var body: some Scene {

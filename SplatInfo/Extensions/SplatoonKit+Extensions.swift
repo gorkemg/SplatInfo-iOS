@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 
-extension Stage {
+extension Splatoon2.Stage {
     
     var image : UIImage? {
         return assetImage ?? cachedImage() ?? cachedImage(directory: FileManager.default.appGroupContainerURL)
@@ -47,7 +47,7 @@ extension Stage {
     }
 }
 
-extension GameModeType {
+extension Splatoon2.GameModeType {
 
     var color : Color {
         switch self {
@@ -61,7 +61,7 @@ extension GameModeType {
     }
 }
 
-extension CoopEvent {
+extension Splatoon2.CoopEvent {
 
     var color : Color {
         return Color.coopModeColor

@@ -12,10 +12,10 @@ import Intents
 struct Provider: IntentTimelineProvider {
     
     let scheduleFetcher = ScheduleFetcher()
-    static let schedule = Schedule.example
+    static let schedule = Splatoon2Schedule.example
     let imageLoaderManager = ImageLoaderManager()
 
-    static var regularEvents : [GameModeEvent] {
+    static var regularEvents : [Splatoon2.GameModeEvent] {
         return schedule.gameModes.regular.schedule
     }
 
@@ -52,7 +52,7 @@ struct Provider: IntentTimelineProvider {
                     completion(timeline)
                     return
                 }
-                let selectedTimeline : GameModeTimeline
+                let selectedTimeline : Splatoon2.GameModeTimeline
                 switch mode {
                     case .regular:
                         selectedTimeline = timelines.regular
@@ -111,7 +111,7 @@ struct Provider: IntentTimelineProvider {
         }
     }
     
-    func timelineForGameModeTimeline(_ modeTimeline: GameModeTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
+    func timelineForGameModeTimeline(_ modeTimeline: Splatoon2.GameModeTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
         var entries: [GameModeEntry] = []
         let now = Date()
         let startDates = modeTimeline.schedule.map({ $0.timeframe.startDate })
@@ -133,7 +133,7 @@ struct Provider: IntentTimelineProvider {
         return timeline
     }
     
-    func timelineForCoopTimeline(_ coopTimeline: CoopTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
+    func timelineForCoopTimeline(_ coopTimeline: Splatoon2.CoopTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
         if configuration.isDisplayNext, let firstEvent = coopTimeline.firstEvent, let secondEvent = coopTimeline.secondEvent {
             // only show next event
             let entry = GameModeEntry(date: Date(), events: .coopEvents(events: [secondEvent], timeframes: []), configuration: configuration)
@@ -219,15 +219,15 @@ struct GameModeEntry: TimelineEntry {
 }
 
 enum GameModeEvents {
-    case gameModeEvents(events: [GameModeEvent])
-    case coopEvents(events: [CoopEvent], timeframes: [EventTimeframe])
+    case gameModeEvents(events: [Splatoon2.GameModeEvent])
+    case coopEvents(events: [Splatoon2.CoopEvent], timeframes: [EventTimeframe])
 }
 
 
 struct ScheduleEntryView : View {
     var entry: Provider.Entry
     
-    var gameModeType : GameModeType {
+    var gameModeType : Splatoon2.GameModeType {
         switch entry.configuration.scheduleType {
         case .unknown, .salmonRun, .regular:
             return .regular
@@ -240,7 +240,7 @@ struct ScheduleEntryView : View {
     
     var body: some View {
         switch entry.events {
-        case .gameModeEvents(events: _):
+        case .gameModeEvents(_):
             GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date).environmentObject(imageQuality)
         case .coopEvents(events: _, timeframes: let timeframes):
             CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date).environmentObject(imageQuality)
@@ -259,7 +259,7 @@ struct ScheduleEntryView : View {
         return displayNext.boolValue
     }
 
-    var gameModeEvents: [GameModeEvent] {
+    var gameModeEvents: [Splatoon2.GameModeEvent] {
         switch entry.events {
         case .gameModeEvents(events: let events):
             if displayNext, events.count > 1 { return Array(events.suffix(from: 1)) }
@@ -270,7 +270,7 @@ struct ScheduleEntryView : View {
         return []
     }
 
-    var coopEvents: [CoopEvent] {
+    var coopEvents: [Splatoon2.CoopEvent] {
         switch entry.events {
         case .coopEvents(events: let events, timeframes: _):
             if displayNext, events.count > 1 { return Array(events.suffix(from: 1)) }
@@ -284,8 +284,8 @@ struct ScheduleEntryView : View {
 }
 
 struct GameModeEntryView : View {
-    let gameMode: GameModeType
-    let events: [GameModeEvent]
+    let gameMode: Splatoon2.GameModeType
+    let events: [Splatoon2.GameModeEvent]
     let date: Date
     
     @Environment(\.widgetFamily) private var widgetFamily
@@ -319,16 +319,16 @@ struct GameModeEntryView : View {
         }.foregroundColor(.white)
     }
     
-    var event: GameModeEvent? {
+    var event: Splatoon2.GameModeEvent? {
         return events.first
     }
-    var nextEvent: GameModeEvent? {
+    var nextEvent: Splatoon2.GameModeEvent? {
         if let currentEvent = self.event, let index = events.firstIndex(where: { $0 == currentEvent }), events.count > index+1 {
             return events[(index+1)]
         }
         return nil
     }
-    var nextEvents: [GameModeEvent] {
+    var nextEvents: [Splatoon2.GameModeEvent] {
         if events.count == 0 { return [] }
         return Array(events[1...])
     }
@@ -336,7 +336,7 @@ struct GameModeEntryView : View {
 
 
 struct CoopEntryView : View {
-    let events: [CoopEvent]
+    let events: [Splatoon2.CoopEvent]
     let eventTimeframes: [EventTimeframe]
     let date: Date
 
@@ -375,10 +375,10 @@ struct CoopEntryView : View {
         }
     }
 
-    var event: CoopEvent? {
+    var event: Splatoon2.CoopEvent? {
         return events.first
     }
-    var nextEvent: CoopEvent? {
+    var nextEvent: Splatoon2.CoopEvent? {
         if let currentEvent = self.event, let index = events.firstIndex(where: { $0 == currentEvent }), events.count > index+1 {
             return events[(index+1)]
         }
@@ -407,17 +407,17 @@ struct ScheduleWidget: Widget {
 
 struct Schedule_Previews: PreviewProvider {
     
-    static let schedule = Schedule.example
+    static let schedule = Splatoon2Schedule.example
     
-    static var regularEvents : [GameModeEvent] {
+    static var regularEvents : [Splatoon2.GameModeEvent] {
         return schedule.gameModes.regular.schedule
     }
 
-    static var rankedEvents : [GameModeEvent] {
+    static var rankedEvents : [Splatoon2.GameModeEvent] {
         return schedule.gameModes.ranked.schedule
     }
 
-    static var leagueEvents : [GameModeEvent] {
+    static var leagueEvents : [Splatoon2.GameModeEvent] {
         return schedule.gameModes.league.schedule
     }
 
