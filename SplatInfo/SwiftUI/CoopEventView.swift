@@ -83,9 +83,11 @@ struct CoopLargeEventView : View {
                                     .minimumScaleFactor(0.5)
                                 WeaponsList(weapons: event.weaponDetails)
                                     .frame(minHeight: 20, maxHeight: 30.0)
+                                    .padding(.vertical, 2.0)
+                                    .padding(.horizontal, 4.0)
+                                    .background(Color.white.opacity(0.5))
+                                    .clipShape(ContainerRelativeShape())
                                     .shadow(color: .black, radius: 2, x: 0, y: 1)
-                                    .padding(.horizontal, 8.0)
-                                    .background(Color.white.opacity(0.5).cornerRadius(8.0))
                             }
                         }
 
@@ -109,8 +111,8 @@ struct CoopLargeEventView : View {
 
                     }
                 }
-                .padding(8)
-                .cornerRadius(10)
+                .padding(10)
+                //.cornerRadius(10)
             }
         }
     }
@@ -127,7 +129,8 @@ struct CoopNarrowEventView : View {
         GeometryReader { geo in
             ZStack {
 
-                StageImage(stage: event.stage, height: height ?? geo.size.height)
+                StageImage(stage: event.stage, height: height ?? geo.size.height)//.opacity(0.1)
+                    .clipShape(ContainerRelativeShape())
                     .padding(0)
 
                 HStack(alignment: .top) {
@@ -145,9 +148,14 @@ struct CoopNarrowEventView : View {
 
                         WeaponsList(weapons: event.weaponDetails)
                             .frame(minHeight: 12, maxHeight: 24, alignment: .leading)
+                            .padding(.vertical, 2.0)
+                            .padding(.horizontal, 4.0)
+                            .background(Color.white.opacity(0.5))
+                            .clipShape(ContainerRelativeShape())
                             .shadow(color: .black, radius: 2, x: 0, y: 1)
-                            .padding(.horizontal, 8.0)
-                            .background(Color.white.opacity(0.5).cornerRadius(8.0))
+//                            .shadow(color: .black, radius: 2, x: 0, y: 1)
+//                            .padding(.horizontal, 8.0)
+//                            .background(Color.white.opacity(0.5).cornerRadius(8.0))
 
                     }
                     
@@ -166,10 +174,11 @@ struct CoopNarrowEventView : View {
                         }
                     }
                 }
-                .padding(4.0)
-                .cornerRadius(10)
+                .padding(.horizontal, 8.0).padding(.vertical, 4.0)
+                //.cornerRadius(10)
             }
-        }
+
+        }//.background(ContainerRelativeShape().fill(Color.yellow))
     }
 }
 
@@ -199,7 +208,10 @@ struct CoopSideBySideEventView : View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
                     .multilineTextAlignment(.trailing)
-                }.padding(2)
+                }
+                .padding(.horizontal, 4.0)
+                .padding(.vertical, 2.0)
+
             }
 
             VStack(alignment: .leading, spacing: 2.0) {
@@ -285,9 +297,16 @@ struct CoopEventTitleView: View {
     let event: CoopEvent
     var body: some View {
         HStack(alignment: .center, spacing: 4.0) {
-            Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0, y: 1)
+            CoopLogo(event: event)
             Text(event.modeName).splat2Font(size: 14).minimumScaleFactor(0.5).lineSpacing(0)
         }
+    }
+}
+
+struct CoopLogo: View {
+    let event: CoopEvent
+    var body: some View {
+        Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0, y: 1)
     }
 }
 
@@ -296,9 +315,15 @@ struct CoopEventView_Previews: PreviewProvider {
     static var previews: some View {
 
         if let coopEvent = Splatoon2Schedule.example.coop.firstEvent {
-            CoopEventView(event: coopEvent, style: .narrow, state: .active)
+            CoopEventView(event: coopEvent, style: .narrow, state: .active).environmentObject(imageQuality)
         }else{
             Text("no event")
         }
+    }
+    
+    static var imageQuality : ImageQuality {
+        let quality = ImageQuality()
+        quality.thumbnail = false
+        return quality
     }
 }

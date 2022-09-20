@@ -62,6 +62,8 @@ struct TimelineCard: View {
     
     var body: some View {
         ZStack(alignment: .top) {
+            ContainerRelativeShape()
+                            .inset(by: 4)
             timeline.color
             bgImage
             VStack(alignment: .center, spacing: 8.0) {
@@ -80,7 +82,7 @@ struct TimelineCard: View {
             .frame(minHeight: 450, maxHeight: .infinity, alignment: .top)
             .padding()
         }
-        .cornerRadius(30)
+        .clipShape(RoundedRectangle(cornerSize: CGSize(width: 30, height: 30)))
         .splat2Font(size: 12)
     }
         

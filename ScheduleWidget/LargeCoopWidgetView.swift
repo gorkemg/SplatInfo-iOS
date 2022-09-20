@@ -23,7 +23,7 @@ struct LargeCoopWidgetView : View {
             
             VStack(alignment: .leading, spacing: 2.0) {
 
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 8.0) {
 
                     ForEach(events.indices, id: \.self) { i in
                         let event = events[i]

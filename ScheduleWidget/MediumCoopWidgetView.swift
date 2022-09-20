@@ -22,8 +22,10 @@ struct MediumCoopWidgetView : View {
             Color.coopModeColor
 
             Image("bg-spots").resizable(resizingMode: .tile)
-                                    
-            VStack(alignment: .leading, spacing: 8.0) {
+                       
+            LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.05), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
+
+            VStack(alignment: .leading, spacing: 4.0) {
 
                 CoopEventView(event: event, style: .narrow, state: state, showTitle: true)
 
@@ -32,7 +34,8 @@ struct MediumCoopWidgetView : View {
                     CoopEventView(event: nextEvent, style: .sideBySide, state: state, showTitle: false)
                 }
                 
-            }.padding(.horizontal, 10.0).padding(.vertical, 4.0)
+            }
+            .padding(.horizontal, 4.0).padding(.vertical, 4.0)
 
         }.foregroundColor(.white)
     }

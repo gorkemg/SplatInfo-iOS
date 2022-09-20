@@ -47,10 +47,12 @@ struct StageImage: View {
 
                 if isNameVisible {
                     ImageOverlayText(text: stage.name)
-                        .padding(0)
+                        .padding(.horizontal, 4.0)
+                        .padding(.vertical, 2.0)
                 }
             }
-            .cornerRadius(10.0)
+            .cornerRadius(10)
+            .clipShape(ContainerRelativeShape())
             .shadow(color: .black, radius: 2, x: 0.0, y: 1.0)
     }
 }

@@ -1,15 +1,15 @@
 //
-//  Schedule.swift
-//  Schedule
+//  Splatoon2TimelineProvider.swift
+//  SplatInfoScheduleWidgetExtension
 //
-//  Created by Görkem Güclü on 23.10.20.
+//  Created by Görkem Güclü on 19.09.22.
 //
 
 import WidgetKit
 import SwiftUI
 import Intents
 
-struct Provider: IntentTimelineProvider {
+struct Splatoon2TimelineProvider: IntentTimelineProvider {
     
     let scheduleFetcher = ScheduleFetcher()
     static let schedule = Splatoon2Schedule.example
@@ -20,14 +20,14 @@ struct Provider: IntentTimelineProvider {
     }
 
     func placeholder(in context: Context) -> GameModeEntry {
-        GameModeEntry(date: Date(), events: .gameModeEvents(events: Provider.regularEvents), configuration: ConfigurationIntent())
+        GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.regularEvents), configuration: ConfigurationIntent())
     }
 
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (GameModeEntry) -> ()) {
         scheduleFetcher.useSharedFolderForCaching = true
         scheduleFetcher.fetchGameModeTimelines { (timelines, error) in
             guard let timelines = timelines else {
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Provider.regularEvents), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.regularEvents), configuration: configuration)
                 completion(entry)
                 return
             }
@@ -36,7 +36,7 @@ struct Provider: IntentTimelineProvider {
         }
     }
 
-    func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<GameModeEntry>) -> ()) {
         let mode = configuration.scheduleType
         scheduleFetcher.useSharedFolderForCaching = true
 
@@ -200,248 +200,5 @@ struct Provider: IntentTimelineProvider {
         }
         let timeline = Timeline(entries: entries, policy: updatePolicy)
         return timeline
-    }
-}
-
-extension ConfigurationIntent {
-    
-    var isDisplayNext: Bool {
-        guard let next = self.displayNext else { return false }
-        return next.boolValue
-    }
-    
-}
-
-struct GameModeEntry: TimelineEntry {
-    let date: Date
-    let events: GameModeEvents
-    let configuration: ConfigurationIntent
-}
-
-enum GameModeEvents {
-    case gameModeEvents(events: [Splatoon2.GameModeEvent])
-    case coopEvents(events: [CoopEvent], timeframes: [EventTimeframe])
-}
-
-
-struct ScheduleEntryView : View {
-    var entry: Provider.Entry
-    
-    var gameModeType : Splatoon2.GameModeType {
-        switch entry.configuration.scheduleType {
-        case .unknown, .salmonRun, .regular:
-            return .regular
-        case .ranked:
-            return .ranked
-        case .league:
-            return .league
-        }
-    }
-    
-    var body: some View {
-        switch entry.events {
-        case .gameModeEvents(_):
-            GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date).environmentObject(imageQuality)
-        case .coopEvents(events: _, timeframes: let timeframes):
-            CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date).environmentObject(imageQuality)
-        }
-    }
-    
-    var imageQuality : ImageQuality {
-        let quality = ImageQuality()
-        quality.thumbnail = true
-        return quality
-    }
-    
-    
-    var displayNext: Bool {
-        guard let displayNext = entry.configuration.displayNext else { return false }
-        return displayNext.boolValue
-    }
-
-    var gameModeEvents: [Splatoon2.GameModeEvent] {
-        switch entry.events {
-        case .gameModeEvents(events: let events):
-            if displayNext, events.count > 1 { return Array(events.suffix(from: 1)) }
-            return events
-        default:
-            break
-        }
-        return []
-    }
-
-    var coopEvents: [CoopEvent] {
-        switch entry.events {
-        case .coopEvents(events: let events, timeframes: _):
-            if displayNext, events.count > 1 { return Array(events.suffix(from: 1)) }
-            return events
-        default:
-            break
-        }
-        return []
-    }
-
-}
-
-struct GameModeEntryView : View {
-    let gameMode: Splatoon2.GameModeType
-    let events: [Splatoon2.GameModeEvent]
-    let date: Date
-    
-    @Environment(\.widgetFamily) private var widgetFamily
-    
-    var body: some View {
-        ZStack {
-            Image("bg-squids").resizable(resizingMode: .tile).ignoresSafeArea()
-            
-            if let event = event {
-                switch widgetFamily {
-                case .systemSmall:
-                    SmallGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
-                case .systemMedium:
-                    MediumGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
-                case .systemLarge:
-                    LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
-                case .systemExtraLarge:
-                    LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
-                case .accessoryCircular:
-                    Text("")
-                case .accessoryRectangular:
-                    Text("")
-                case .accessoryInline:
-                    Text("")
-                @unknown default:
-                    Text("No event available").splat1Font(size: 20)
-                }
-            }else{
-                Text("No event available").splat1Font(size: 20)
-            }
-        }.foregroundColor(.white)
-    }
-    
-    var event: Splatoon2.GameModeEvent? {
-        return events.first
-    }
-    var nextEvent: Splatoon2.GameModeEvent? {
-        if let currentEvent = self.event, let index = events.firstIndex(where: { $0 == currentEvent }), events.count > index+1 {
-            return events[(index+1)]
-        }
-        return nil
-    }
-    var nextEvents: [Splatoon2.GameModeEvent] {
-        if events.count == 0 { return [] }
-        return Array(events[1...])
-    }
-}
-
-
-struct CoopEntryView : View {
-    let events: [CoopEvent]
-    let eventTimeframes: [EventTimeframe]
-    let date: Date
-
-    @Environment(\.widgetFamily) private var widgetFamily
-
-    var body: some View {
-        switch widgetFamily {
-        case .systemSmall:
-            if let event = event {
-                SmallCoopWidgetView(event: event, state: event.timeframe.state(date: date))
-            }else{
-                Text("No event available")
-            }
-        case .systemMedium:
-            if let event = event {
-                MediumCoopWidgetView(event: event, nextEvent: nextEvent, date: date)
-            }else{
-                Text("No event available")
-            }
-        case .systemLarge:
-            LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date)
-        case .systemExtraLarge:
-            LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date)
-//        case .accessoryCircular:
-//            Text("")
-//        case .accessoryRectangular:
-//            Text("")
-//        case .accessoryInline:
-//            Text("")
-        @unknown default:
-            if let event = event {
-                SmallCoopWidgetView(event: event, state: event.timeframe.state(date: date))
-            }else{
-                Text("No event available")
-            }
-        }
-    }
-
-    var event: CoopEvent? {
-        return events.first
-    }
-    var nextEvent: CoopEvent? {
-        if let currentEvent = self.event, let index = events.firstIndex(where: { $0 == currentEvent }), events.count > index+1 {
-            return events[(index+1)]
-        }
-        return nil
-    }
-    
-    var otherTimeframes: [EventTimeframe] {
-        guard eventTimeframes.count > 2 else { return [] }
-        let timeframes = Array(eventTimeframes[2...])
-        return timeframes
-    }
-}
-
-@main
-struct ScheduleWidget: Widget {
-    let kind: String = "ScheduleWidget"
-
-    var body: some WidgetConfiguration {
-        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
-            ScheduleEntryView(entry: entry)
-        }
-        .configurationDisplayName("SplatInfo Widget")
-        .description("Displays Splatoon 2 schedules")
-    }
-}
-
-struct Schedule_Previews: PreviewProvider {
-    
-    static let schedule = Splatoon2Schedule.example
-    
-    static var regularEvents : [Splatoon2.GameModeEvent] {
-        return schedule.gameModes.regular.schedule
-    }
-
-    static var rankedEvents : [Splatoon2.GameModeEvent] {
-        return schedule.gameModes.ranked.schedule
-    }
-
-    static var leagueEvents : [Splatoon2.GameModeEvent] {
-        return schedule.gameModes.league.schedule
-    }
-
-    static var intent : ConfigurationIntent {
-        return ConfigurationIntent()
-    }
-
-    static var intentWithDisplayNext : ConfigurationIntent {
-        let intent = ConfigurationIntent()
-        intent.displayNext = true
-        return intent
-    }
-    
-
-    static var previews: some View {
-
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: ConfigurationIntent()))
-            .previewContext(WidgetPreviewContext(family: .systemMedium))
-
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: ConfigurationIntent()))
-            .previewContext(WidgetPreviewContext(family: .systemLarge))
-
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: ConfigurationIntent()))
-            .previewContext(WidgetPreviewContext(family: .systemExtraLarge))
-
     }
 }
