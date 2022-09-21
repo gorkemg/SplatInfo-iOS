@@ -16,12 +16,17 @@ struct CircularWidgetView: View {
     let imageName: String?
     
     var body: some View {
-        ProgressView(timerInterval: startDate...endDate, countsDown: true, label: {
+        
+        ZStack{
+            AccessoryWidgetBackground()
             
-        }, currentValueLabel: {
-            if let name = imageName {
-                Image(name).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
-            }
-        }).progressViewStyle(.circular)
+            ProgressView(timerInterval: startDate...endDate, countsDown: true, label: {
+                
+            }, currentValueLabel: {
+                if let name = imageName {
+                    Image(name).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
+                }
+            }).progressViewStyle(.circular)
+        }
     }
 }

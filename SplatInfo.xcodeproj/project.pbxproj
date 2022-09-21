@@ -25,6 +25,8 @@
 		DE41B9352541A11200AAD49A /* Splatoon1.otf in Resources */ = {isa = PBXBuildFile; fileRef = DE41B9342541A11200AAD49A /* Splatoon1.otf */; };
 		DE41B93A2541A11A00AAD49A /* Splatoon2.otf in Resources */ = {isa = PBXBuildFile; fileRef = DE41B9392541A11A00AAD49A /* Splatoon2.otf */; };
 		DE41B93F2541A8F400AAD49A /* ScaledFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B93E2541A8F400AAD49A /* ScaledFont.swift */; };
+		DE49D2FC28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE49D2FB28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift */; };
+		DE49D2FE28DAF076000FAB3D /* GameModeInlineWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE49D2FD28DAF076000FAB3D /* GameModeInlineWidgetView.swift */; };
 		DE50121425385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */; };
 		DE50121525385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */; };
 		DE50121625385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */; };
@@ -177,6 +179,8 @@
 		DE41B9342541A11200AAD49A /* Splatoon1.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Splatoon1.otf; sourceTree = "<group>"; };
 		DE41B9392541A11A00AAD49A /* Splatoon2.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Splatoon2.otf; sourceTree = "<group>"; };
 		DE41B93E2541A8F400AAD49A /* ScaledFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaledFont.swift; sourceTree = "<group>"; };
+		DE49D2FB28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModeRectangularWidgetView.swift; sourceTree = "<group>"; };
+		DE49D2FD28DAF076000FAB3D /* GameModeInlineWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModeInlineWidgetView.swift; sourceTree = "<group>"; };
 		DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splatoon2InkAPI.swift; sourceTree = "<group>"; };
 		DE50121A2539D22800A73F7A /* SplatoonKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatoonKit.swift; sourceTree = "<group>"; };
 		DE5012212539E24A00A73F7A /* ScheduleFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleFetcher.swift; sourceTree = "<group>"; };
@@ -382,6 +386,8 @@
 				DE68BECE28D9148F00700A80 /* CircularWidgetView.swift */,
 				DEE3AD0A28D9D26500A36D87 /* CoopRectangularWidgetView.swift */,
 				DEE3AD0C28D9D8DB00A36D87 /* CoopInlineWidgetView.swift */,
+				DE49D2FD28DAF076000FAB3D /* GameModeInlineWidgetView.swift */,
+				DE49D2FB28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift */,
 			);
 			path = ScheduleWidget;
 			sourceTree = "<group>";
@@ -667,8 +673,10 @@
 				DE68BEC928D8586700700A80 /* SplatInfoWidgetBundle.swift in Sources */,
 				DE68BECB28D859B500700A80 /* Splatoon3ScheduleWidget.swift in Sources */,
 				DE68BECF28D9148F00700A80 /* CircularWidgetView.swift in Sources */,
+				DE49D2FC28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift in Sources */,
 				DEE7C1B128D5FFD10024D6A9 /* Splatoon3InkAPI.swift in Sources */,
 				DE68BECD28D912CB00700A80 /* Splatoon2TimelineProvider.swift in Sources */,
+				DE49D2FE28DAF076000FAB3D /* GameModeInlineWidgetView.swift in Sources */,
 				DEAFEA5F25431D0A00FFA812 /* Constants.swift in Sources */,
 				DEE38187254E0226005D5062 /* SplatoonKit+Extensions.swift in Sources */,
 				DEAFEA5325431BFC00FFA812 /* ScaledFont.swift in Sources */,

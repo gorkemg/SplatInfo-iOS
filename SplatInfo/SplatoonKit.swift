@@ -124,6 +124,17 @@ struct Splatoon2 {
                 return "league-logo"
             }
         }
+
+        var logoNameSmall : String {
+            switch self {
+            case .regular:
+                return "regular-logo-small"
+            case .ranked:
+                return "ranked-logo-small"
+            case .league:
+                return "league-logo-small"
+            }
+        }
     }
 
     struct GameModeEvent: Codable, Equatable {

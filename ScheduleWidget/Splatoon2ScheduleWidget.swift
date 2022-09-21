@@ -47,9 +47,9 @@ struct ScheduleEntryView : View {
     var body: some View {
         switch entry.events {
         case .gameModeEvents(_):
-            GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date).environmentObject(imageQuality)
+            GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
         case .coopEvents(events: _, timeframes: let timeframes):
-            CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date).environmentObject(imageQuality)
+            CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
         }
     }
     
@@ -97,32 +97,40 @@ struct GameModeEntryView : View {
     @Environment(\.widgetFamily) private var widgetFamily
     
     var body: some View {
-        ZStack {
-            Image("bg-squids").resizable(resizingMode: .tile).ignoresSafeArea()
-            
-            if let event = event {
-                switch widgetFamily {
-                case .systemSmall:
-                    SmallGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
-                case .systemMedium:
-                    MediumGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
-                case .systemLarge:
-                    LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
-                case .systemExtraLarge:
-                    LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
-                case .accessoryCircular:
-                    Text("C")
-                case .accessoryRectangular:
-                    Text("R")
-                case .accessoryInline:
-                    Text("Inline")
-                @unknown default:
+        if let event = event {
+            switch widgetFamily {
+            case .systemSmall:
+                SmallGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
+            case .systemMedium:
+                MediumGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
+            case .systemLarge:
+                LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
+            case .systemExtraLarge:
+                LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
+            case .accessoryCircular:
+                if #available(iOSApplicationExtension 16.0, *) {
+                    CircularWidgetView(startDate: event.timeframe.startDate, endDate: event.timeframe.endDate, imageName: event.mode.name)
+                }else{
                     Text("No event available").splat1Font(size: 20)
                 }
-            }else{
+            case .accessoryRectangular:
+                if #available(iOSApplicationExtension 16.0, *) {
+                    GameModeRectangularWidgetView(event: event, date: date)
+                }else{
+                    Text("No event available").splat1Font(size: 20)
+                }
+            case .accessoryInline:
+                if #available(iOSApplicationExtension 16.0, *) {
+                    GameModeInlineWidgetView(event: event, date: date)
+                }else{
+                    Text("No event available").splat1Font(size: 20)
+                }
+            @unknown default:
                 Text("No event available").splat1Font(size: 20)
             }
-        }.foregroundColor(.white)
+        }else{
+            Text("No event available").splat1Font(size: 20)
+        }
     }
     
     var event: Splatoon2.GameModeEvent? {
@@ -297,14 +305,14 @@ struct Schedule_Previews: PreviewProvider {
 
     static var previews: some View {
 
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: ConfigurationIntent()))
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.gameModes.regular.schedule), configuration: ConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
 
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: ConfigurationIntent()))
-            .previewContext(WidgetPreviewContext(family: .systemLarge))
+//        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: ConfigurationIntent()))
+//            .previewContext(WidgetPreviewContext(family: .systemLarge))
 
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: ConfigurationIntent()))
-            .previewContext(WidgetPreviewContext(family: .systemExtraLarge))
+        //        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: ConfigurationIntent()))
+//            .previewContext(WidgetPreviewContext(family: .systemExtraLarge))
 
     }
 }
