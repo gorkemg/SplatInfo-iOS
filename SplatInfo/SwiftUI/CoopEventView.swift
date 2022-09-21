@@ -306,7 +306,21 @@ struct CoopEventTitleView: View {
 struct CoopLogo: View {
     let event: CoopEvent
     var body: some View {
-        Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0, y: 1)
+        logoImage.resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0, y: 1)
+    }
+    
+    var logoImage: Image {
+        if let uiImage = uiImage {
+            return Image(uiImage: uiImage)
+        }
+        return Image(event.logoNameSmall)
+    }
+        
+    var uiImage: UIImage? {
+        if let image = UIImage(named: event.logoName) {
+            return image
+        }
+        return UIImage(named: event.logoNameSmall)
     }
 }
 

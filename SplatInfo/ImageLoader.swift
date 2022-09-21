@@ -32,9 +32,11 @@ class ImageLoader: ObservableObject {
 
     func load() {
         if let image = cache?[url] {
+            print("ImageLoader: using Cache for \(url)")
             self.image = image
             return
         }else if let image = loadFromDisk(filename: url.lastPathComponent) {
+            print("ImageLoader: using diskCache for \(url)")
             self.image = image
             return
         }
@@ -42,6 +44,7 @@ class ImageLoader: ObservableObject {
     }
     
     func download() {
+        print("ImageLoader: Downloading image: \(url)")
         cancellable = URLSession.shared.dataTaskPublisher(for: url)
             .map { UIImage(data: $0.data) }
             .replaceError(with: nil)
@@ -168,6 +171,7 @@ class MultiImageLoader {
             let jpegURL = fileURL.deletingPathExtension().appendingPathExtension("jpeg")
             if fileManager.fileExists(atPath: fileURL.path) {
                 if self.useCachedImage {
+                    print("MultiImageLoader: usingCache for (\(url)")
                     self.finishedURLs.append(url)
                     counter += 1
                     if count == counter {
@@ -179,6 +183,7 @@ class MultiImageLoader {
                 
             }else if fileManager.fileExists(atPath: jpegURL.path) {
                 if self.useCachedImage {
+                    print("MultiImageLoader: usingCache for (\(url)")
                     self.finishedURLs.append(url)
                     counter += 1
                     if count == counter {
@@ -189,7 +194,7 @@ class MultiImageLoader {
                 try? fileManager.removeItem(at: fileURL)
             }
 
-            
+            print("MultiImageLoader: Downloading (\(url)")
             let task = URLSession.shared.downloadTask(with: url) { [weak self] location, response, error in
 
                 guard let self = self else { return }

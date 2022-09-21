@@ -30,7 +30,7 @@ struct CoopInlineWidgetView: View {
 //            AccessoryWidgetBackground()
 //            HStack(alignment: .center, spacing: 4.0) {
 //
-//                //Image(event.logoName)//.resizable().aspectRatio(contentMode: .fit).frame(width: 20)
+//                //Image(event.logoNameSmall)//.resizable().aspectRatio(contentMode: .fit).frame(width: 20)
 //
 //                Text(event.stage.name).splat2Font(size: 10).lineLimit(1)
 //

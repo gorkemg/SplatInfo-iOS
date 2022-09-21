@@ -66,7 +66,6 @@
 		DE9BAC8E2543284300F50AD2 /* schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50122C253A1B7500A73F7A /* schedules.json */; };
 		DE9BAC8F2543284300F50AD2 /* festivals.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50124B253A1BFF00A73F7A /* festivals.json */; };
 		DE9BAC902543284300F50AD2 /* timeline.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50123D253A1BC600A73F7A /* timeline.json */; };
-		DE9BAC9D25445F9200F50AD2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE2BD5FD2538489C006E5531 /* Assets.xcassets */; };
 		DE9DFA6E254AF6A700267508 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */; };
 		DE9DFA6F254AF6A700267508 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */; };
 		DEAE259C25541CDB00253E79 /* LargeGameModeWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAE259A25541CDB00253E79 /* LargeGameModeWidgetView.swift */; };
@@ -594,7 +593,6 @@
 				DEAFEA4425431BF400FFA812 /* Splatoon2.otf in Resources */,
 				DE9BAC902543284300F50AD2 /* timeline.json in Resources */,
 				DEE7C1AF28D5F0800024D6A9 /* gear.json in Resources */,
-				DE9BAC9D25445F9200F50AD2 /* Assets.xcassets in Resources */,
 				DE9BAC8D2543284300F50AD2 /* coop-schedules.json in Resources */,
 				DEAFEA0E2543121800FFA812 /* Assets.xcassets in Resources */,
 				DE9BAC8B2543284300F50AD2 /* merchandise.json in Resources */,

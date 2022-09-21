@@ -22,22 +22,20 @@ struct GameModeInlineWidgetView: View {
     var body: some View {
         
         ViewThatFits(in: .horizontal) {
-//            HStack(spacing: 2.0) {
-////                Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(height: 14)
-//                RelativeTimeframeView(timeframe: event.timeframe, state: state).minimumScaleFactor(0.5)
-//            }.widgetAccentable()
 
-            HStack {
-                Image(event.mode.type.logoNameSmall)//.resizable().aspectRatio(contentMode: .fit).frame(maxWidth: 14, maxHeight: 14)
+            HStack(spacing: 2.0) {
+                Image(event.mode.type.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(maxWidth: 14, maxHeight: 14)
                 Text(event.rule.name) + Text(" • ") + Text(event.timeframe.dateForState(state: state), style: .relative)
-            }.scaledSplat2Font(size: 10)
-                .minimumScaleFactor(0.5)
-            
-            Text("Das ist ein sehr langer Text, mal sehen wie viel ")
+            }
+            .scaledSplat2Font(size: 10)
+            .minimumScaleFactor(0.5)
 
-            Text("Das ist ein sehr langer Text")
-
-            Text("Das ist ein")
+            HStack(spacing: 2.0) {
+                Image(event.mode.type.logoNameSmall)//.resizable().aspectRatio(contentMode: .fit).frame(maxWidth: 14, maxHeight: 14)
+                Text(event.rule.name)
+            }
+            .scaledSplat2Font(size: 10)
+            .minimumScaleFactor(0.5)
 
         }.widgetAccentable()
 
@@ -48,7 +46,7 @@ struct GameModeInlineWidgetView: View {
 //            AccessoryWidgetBackground()
 //            HStack(alignment: .center, spacing: 4.0) {
 //
-//                //Image(event.logoName)//.resizable().aspectRatio(contentMode: .fit).frame(width: 20)
+//                //Image(event.logoNameSmall)//.resizable().aspectRatio(contentMode: .fit).frame(width: 20)
 //
 //                Text(event.stage.name).splat2Font(size: 10).lineLimit(1)
 //

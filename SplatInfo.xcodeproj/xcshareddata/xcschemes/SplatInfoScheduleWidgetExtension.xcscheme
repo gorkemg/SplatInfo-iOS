@@ -57,8 +57,18 @@
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "2">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.springboard">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "DEAFEA022543121500FFA812"
+            BuildableName = "SplatInfoScheduleWidgetExtension.appex"
+            BlueprintName = "SplatInfoScheduleWidgetExtension"
+            ReferencedContainer = "container:SplatInfo.xcodeproj">
+         </BuildableReference>
+      </RemoteRunnable>
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "DE2BD5F525384899006E5531"
@@ -66,7 +76,7 @@
             BlueprintName = "SplatInfo"
             ReferencedContainer = "container:SplatInfo.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "_XCWidgetKind"
@@ -91,17 +101,28 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES"
+      askForAppToLaunch = "Yes"
       launchAutomaticallySubstyle = "2">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <RemoteRunnable
+         runnableDebuggingMode = "2"
+         BundleIdentifier = "com.apple.springboard">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "DE2BD5F525384899006E5531"
-            BuildableName = "SplatInfo.app"
-            BlueprintName = "SplatInfo"
+            BlueprintIdentifier = "DEAFEA022543121500FFA812"
+            BuildableName = "SplatInfoScheduleWidgetExtension.appex"
+            BlueprintName = "SplatInfoScheduleWidgetExtension"
             ReferencedContainer = "container:SplatInfo.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </RemoteRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "DEAFEA022543121500FFA812"
+            BuildableName = "SplatInfoScheduleWidgetExtension.appex"
+            BlueprintName = "SplatInfoScheduleWidgetExtension"
+            ReferencedContainer = "container:SplatInfo.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

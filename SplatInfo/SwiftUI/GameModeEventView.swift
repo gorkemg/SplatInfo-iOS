@@ -119,8 +119,24 @@ struct GameModeEventTitleView: View {
     let event: Splatoon2.GameModeEvent
     var body: some View {
         HStack(alignment: .center, spacing: 4.0) {
-            Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
+            logoImage.resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
             Text(event.rule.name).splat2Font(size: 16).minimumScaleFactor(0.5)
         }
     }
+    
+    var logoImage: Image {
+        if let uiImage = uiImage {
+            return Image(uiImage: uiImage)
+        }
+        return Image(event.mode.type.logoNameSmall)
+    }
+    
+    
+    var uiImage: UIImage? {
+        if let image = UIImage(named: event.mode.type.logoName) {
+            return image
+        }
+        return UIImage(named: event.mode.type.logoNameSmall)
+    }
+    
 }

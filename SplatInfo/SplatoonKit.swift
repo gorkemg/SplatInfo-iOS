@@ -176,6 +176,9 @@ struct CoopEvent: Codable, Equatable {
     var logoName : String {
         return "mr-grizz-logo"
     }
+    var logoNameSmall : String {
+        return "mr-grizz-logo-small"
+    }
     var modeName : String {
         return "Salmon Run"
     }

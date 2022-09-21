@@ -9,6 +9,60 @@ import WidgetKit
 import SwiftUI
 import Intents
 
+@main
+struct SplatInfoWidgetBundle: WidgetBundle {
+    
+    // MARK: - View
+    @WidgetBundleBuilder
+    var body: some Widget {
+        Splatoon3ScheduleWidget()
+        Splatoon2ScheduleWidget()
+    }
+}
+
+struct Splatoon2ScheduleWidget: Widget {
+    let kind: String = "Splatoon2ScheduleWidget"
+
+    var supportedWidgetFamilies: [WidgetFamily] {
+        if #available(iOSApplicationExtension 16.0, *) {
+            return [.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryInline, .accessoryRectangular]
+        }else{
+            return [.systemSmall, .systemMedium, .systemLarge]
+        }
+    }
+    
+    var body: some WidgetConfiguration {
+        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Splatoon2TimelineProvider()) { entry in
+            ScheduleEntryView(entry: entry)
+        }
+        .supportedFamilies(supportedWidgetFamilies)
+        .configurationDisplayName("Splatoon 2")
+        .description("Splatoon 2 Schedules")
+    }
+}
+
+struct Splatoon3ScheduleWidget: Widget {
+    let kind: String = "Splatoon3ScheduleWidget"
+
+    var supportedWidgetFamilies: [WidgetFamily] {
+        if #available(iOSApplicationExtension 16.0, *) {
+            return [.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryInline, .accessoryRectangular]
+        }else{
+            return [.systemSmall, .systemMedium, .systemLarge]
+        }
+    }
+
+    var body: some WidgetConfiguration {
+        
+        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Splatoon2TimelineProvider()) { entry in
+            ScheduleEntryView(entry: entry)
+        }
+        .supportedFamilies(supportedWidgetFamilies)
+        .configurationDisplayName("Splatoon 3")
+        .description("Splatoon 3 Schedules")
+    }
+}
+
 extension ConfigurationIntent {
     
     var isDisplayNext: Bool {
@@ -109,7 +163,7 @@ struct GameModeEntryView : View {
                 LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
             case .accessoryCircular:
                 if #available(iOSApplicationExtension 16.0, *) {
-                    CircularWidgetView(startDate: event.timeframe.startDate, endDate: event.timeframe.endDate, imageName: event.mode.name)
+                    CircularWidgetView(startDate: event.timeframe.startDate, endDate: event.timeframe.endDate, imageName: event.mode.type.logoNameSmall)
                 }else{
                     Text("No event available").splat1Font(size: 20)
                 }
@@ -219,60 +273,6 @@ struct CoopEntryView : View {
         guard eventTimeframes.count > 2 else { return [] }
         let timeframes = Array(eventTimeframes[2...])
         return timeframes
-    }
-}
-
-@main
-struct SplatInfoWidgetBundle: WidgetBundle {
-    
-    // MARK: - View
-    @WidgetBundleBuilder
-    var body: some Widget {
-        Splatoon3ScheduleWidget()
-        Splatoon2ScheduleWidget()
-    }
-}
-
-struct Splatoon2ScheduleWidget: Widget {
-    let kind: String = "Splatoon2ScheduleWidget"
-
-    var supportedWidgetFamilies: [WidgetFamily] {
-        if #available(iOSApplicationExtension 16.0, *) {
-            return [.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryInline, .accessoryRectangular]
-        }else{
-            return [.systemSmall, .systemMedium, .systemLarge]
-        }
-    }
-    
-    var body: some WidgetConfiguration {
-        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Splatoon2TimelineProvider()) { entry in
-            ScheduleEntryView(entry: entry)
-        }
-        .supportedFamilies(supportedWidgetFamilies)
-        .configurationDisplayName("Splatoon 2")
-        .description("Splatoon 2 Schedules")
-    }
-}
-
-struct Splatoon3ScheduleWidget: Widget {
-    let kind: String = "Splatoon3ScheduleWidget"
-
-    var supportedWidgetFamilies: [WidgetFamily] {
-        if #available(iOSApplicationExtension 16.0, *) {
-            return [.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryInline, .accessoryRectangular]
-        }else{
-            return [.systemSmall, .systemMedium, .systemLarge]
-        }
-    }
-
-    var body: some WidgetConfiguration {
-        
-        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Splatoon2TimelineProvider()) { entry in
-            ScheduleEntryView(entry: entry)
-        }
-        .supportedFamilies(supportedWidgetFamilies)
-        .configurationDisplayName("Splatoon 3")
-        .description("Splatoon 3 Schedules")
     }
 }
 

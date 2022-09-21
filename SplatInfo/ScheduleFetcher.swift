@@ -176,16 +176,36 @@ extension Data {
     }
 }
 
+class TimelineCacheManager {
+    static let shared = TimelineCacheManager()
+    private init() {}
+
+    var gameModeCacheData: TimelineCache<GameModesTimelines>?
+    var coopCacheData: TimelineCache<CoopTimeline>?
+}
+
+struct TimelineCache<T: Codable>: Codable {
+    let timeline: T
+    let date: Date
+    
+    var isOutdated : Bool {
+        return self.date < Date().addingTimeInterval(-3600) // is stored date older than one hour ago
+    }
+}
+
+
 class ScheduleFetcher: ObservableObject {
     
     private let splat2API = Splatoon2InkAPI.shared()
     private let splat3API = Splatoon3InkAPI.shared()
+    private let timelineCache = TimelineCacheManager.shared
     var defaultCacheDirectory: String = NSTemporaryDirectory()
     var useSharedFolderForCaching: Bool = false
     
     @Published var schedule : Splatoon2Schedule = Splatoon2Schedule.empty
     
     private func loadCachedData<T>(filename: String, resultType: T.Type) -> TimelineCache<T>? where T:Codable {
+        print("ScheduleFetcher LoadCachedData \(self)")
         let filePath = cacheFileURL(filename: filename)
         let fileManager = FileManager.default
         guard let path = filePath, fileManager.fileExists(atPath: path.path) else { return nil }
@@ -195,21 +215,13 @@ class ScheduleFetcher: ObservableObject {
     }
     
     private func cacheData<T:Codable>(cacheData: TimelineCache<T>, filename: String) {
+        print("ScheduleFetcher CacheData \(self)")
         let filePath = cacheFileURL(filename: filename)
         guard let path = filePath, let data = try? cacheData.encoded() else { return }
         try? data.write(to: path)
         copyCacheFileToAppGroupDirectory(filename)
     }
     
-    struct TimelineCache<T: Codable>: Codable {
-        let timeline: T
-        let date: Date
-        
-        var isOutdated : Bool {
-            return self.date < Date().addingTimeInterval(-3600) // is stored date older than one hour ago
-        }
-    }
-
     private func cacheFileURL(filename: String) -> URL? {
         if useSharedFolderForCaching, let sharedContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) {
             return sharedContainerURL.appendingPathComponent(filename)
@@ -227,9 +239,16 @@ class ScheduleFetcher: ObservableObject {
     
     func fetchGameModeTimelines(completion: @escaping (_ timelines: GameModesTimelines?, _ error: Error?) -> Void) {
         
+        if let cachedTimeline = timelineCache.gameModeCacheData, !cachedTimeline.isOutdated {
+            print("Using cached Timeline")
+            completion(cachedTimeline.timeline, nil)
+            return
+        }
+        
         let filename = "schedules.json"
         if let cacheData = loadCachedData(filename: filename, resultType: GameModesTimelines.self), !cacheData.isOutdated {
             self.schedule.gameModes = cacheData.timeline
+            self.timelineCache.gameModeCacheData = cacheData
             completion(cacheData.timeline, nil)
             return
         }
@@ -254,19 +273,26 @@ class ScheduleFetcher: ObservableObject {
             completion(gameModesTimelines, nil)
         }
         
-        splat3API.requestSchedules { response, error in
-
-            guard let data = response?.data else { return }
-            print(data)
-            
-        }
+//        splat3API.requestSchedules { response, error in
+//
+//            guard let data = response?.data else { return }
+//            print(data)
+//
+//        }
     }
     
     func fetchCoopTimeline(completion: @escaping (_ timeline: CoopTimeline?, _ error: Error?) -> Void) {
 
+        if let cachedTimeline = timelineCache.coopCacheData, !cachedTimeline.isOutdated {
+            print("Using cached Timeline")
+            completion(cachedTimeline.timeline, nil)
+            return
+        }
+
         let filename = "coop-schedules.json"
         if let cacheData = loadCachedData(filename: filename, resultType: CoopTimeline.self), !cacheData.isOutdated {
             self.schedule.coop = cacheData.timeline
+            self.timelineCache.coopCacheData = cacheData
             completion(cacheData.timeline, nil)
             return
         }
