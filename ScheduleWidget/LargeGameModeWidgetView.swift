@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct LargeGameModeWidgetView : View {
-    let event: Splatoon2.GameModeEvent
-    var nextEvents: [Splatoon2.GameModeEvent]
+    let event: GameModeEvent
+    var nextEvents: [GameModeEvent]
     let date: Date
         
     var body: some View {
@@ -17,7 +17,7 @@ struct LargeGameModeWidgetView : View {
             
             ZStack(alignment: .topLeading) {
 
-                event.mode.type.color
+                //event.mode.color
 
                 Image("splatoon-card-bg").resizable(resizingMode: .tile)
 

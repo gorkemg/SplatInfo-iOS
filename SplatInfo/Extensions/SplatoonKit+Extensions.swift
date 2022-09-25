@@ -51,16 +51,59 @@ extension Splatoon2.GameModeType {
 
     var color : Color {
         switch self {
-        case .regular:
+        case .turfWar:
             return Color.regularModeColor
         case .ranked:
             return Color.rankedModeColor
         case .league:
             return Color.leagueModeColor
+        case .salmonRun:
+            return Color.coopModeColor
+        }
+    }
+    
+    var bgImage: Image {
+        switch self {
+        case .turfWar, .ranked, .league:
+            return Image("splatoon-card-bg").resizable(resizingMode: .tile)
+        case .salmonRun:
+            return Image("bg-spots").resizable(resizingMode: .tile)
         }
     }
 }
 
+extension Splatoon3.GameModeType {
+
+    var color : Color {
+        switch self {
+        case .splatfest:
+            return Color.regularModeColor
+        case .turfWar:
+            return Color.regularModeColor
+        case .anarchyBattleOpen:
+            return Color.rankedModeColor
+        case .anarchyBattleSeries:
+            return Color.rankedModeColor
+        case .league:
+            return Color.leagueModeColor
+        case .x:
+            return Color.rankedModeColor
+        case .salmonRun:
+            return Color.coopModeColor
+        }
+    }
+
+    var bgImage: Image {
+        switch self {
+        case .splatfest, .turfWar, .anarchyBattleOpen, .anarchyBattleSeries, .league, .x:
+            return Image("splatoon-card-bg").resizable(resizingMode: .tile)
+        case .salmonRun:
+            return Image("bg-spots").resizable(resizingMode: .tile)
+        }
+    }
+
+
+}
 extension CoopEvent {
 
     var color : Color {

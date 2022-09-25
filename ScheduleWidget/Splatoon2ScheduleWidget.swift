@@ -79,7 +79,7 @@ struct GameModeEntry: TimelineEntry {
 }
 
 enum GameModeEvents {
-    case gameModeEvents(events: [Splatoon2.GameModeEvent])
+    case gameModeEvents(events: [GameModeEvent])
     case coopEvents(events: [CoopEvent], timeframes: [EventTimeframe])
 }
 
@@ -87,14 +87,14 @@ enum GameModeEvents {
 struct ScheduleEntryView : View {
     var entry: Splatoon2TimelineProvider.Entry
     
-    var gameModeType : Splatoon2.GameModeType {
+    var gameModeType : GameModeType {
         switch entry.configuration.scheduleType {
         case .unknown, .salmonRun, .regular:
-            return .regular
+            return .splatoon2(type: .turfWar)
         case .ranked:
-            return .ranked
+            return .splatoon2(type: .ranked)
         case .league:
-            return .league
+            return .splatoon2(type: .league)
         }
     }
     
@@ -119,7 +119,7 @@ struct ScheduleEntryView : View {
         return displayNext.boolValue
     }
 
-    var gameModeEvents: [Splatoon2.GameModeEvent] {
+    var gameModeEvents: [GameModeEvent] {
         switch entry.events {
         case .gameModeEvents(events: let events):
             if displayNext, events.count > 1 { return Array(events.suffix(from: 1)) }
@@ -144,8 +144,8 @@ struct ScheduleEntryView : View {
 }
 
 struct GameModeEntryView : View {
-    let gameMode: Splatoon2.GameModeType
-    let events: [Splatoon2.GameModeEvent]
+    let gameMode: GameModeType
+    let events: [GameModeEvent]
     let date: Date
     
     @Environment(\.widgetFamily) private var widgetFamily
@@ -163,7 +163,7 @@ struct GameModeEntryView : View {
                 LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
             case .accessoryCircular:
                 if #available(iOSApplicationExtension 16.0, *) {
-                    CircularWidgetView(startDate: event.timeframe.startDate, endDate: event.timeframe.endDate, imageName: event.mode.type.logoNameSmall)
+                    CircularWidgetView(startDate: event.timeframe.startDate, endDate: event.timeframe.endDate, imageName: event.mode.logoNameSmall)
                 }else{
                     Text("No event available").splat1Font(size: 20)
                 }
@@ -187,16 +187,16 @@ struct GameModeEntryView : View {
         }
     }
     
-    var event: Splatoon2.GameModeEvent? {
+    var event: GameModeEvent? {
         return events.first
     }
-    var nextEvent: Splatoon2.GameModeEvent? {
+    var nextEvent: GameModeEvent? {
         if let currentEvent = self.event, let index = events.firstIndex(where: { $0 == currentEvent }), events.count > index+1 {
             return events[(index+1)]
         }
         return nil
     }
-    var nextEvents: [Splatoon2.GameModeEvent] {
+    var nextEvents: [GameModeEvent] {
         if events.count == 0 { return [] }
         return Array(events[1...])
     }
@@ -278,18 +278,18 @@ struct CoopEntryView : View {
 
 struct Schedule_Previews: PreviewProvider {
     
-    static let schedule = Splatoon2Schedule.example
+    static let schedule = Splatoon2.Schedule.example
     
-    static var regularEvents : [Splatoon2.GameModeEvent] {
-        return schedule.gameModes.regular.schedule
+    static var regularEvents : [GameModeEvent] {
+        return schedule.regular.events
     }
 
-    static var rankedEvents : [Splatoon2.GameModeEvent] {
-        return schedule.gameModes.ranked.schedule
+    static var rankedEvents : [GameModeEvent] {
+        return schedule.ranked.events
     }
 
-    static var leagueEvents : [Splatoon2.GameModeEvent] {
-        return schedule.gameModes.league.schedule
+    static var leagueEvents : [GameModeEvent] {
+        return schedule.league.events
     }
 
     static var intent : ConfigurationIntent {
@@ -305,7 +305,7 @@ struct Schedule_Previews: PreviewProvider {
 
     static var previews: some View {
 
-        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.gameModes.regular.schedule), configuration: ConfigurationIntent()))
+        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .gameModeEvents(events: regularEvents), configuration: ConfigurationIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
 
 //        ScheduleEntryView(entry: GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.detailedEvents, timeframes: schedule.coop.eventTimeframes), configuration: ConfigurationIntent()))

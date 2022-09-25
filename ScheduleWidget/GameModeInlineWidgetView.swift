@@ -11,7 +11,7 @@ import WidgetKit
 @available(iOSApplicationExtension 16.0, *)
 struct GameModeInlineWidgetView: View {
     
-    let event: Splatoon2.GameModeEvent
+    let event: GameModeEvent
     let date: Date
     
     var state: TimeframeActivityState {
@@ -24,14 +24,14 @@ struct GameModeInlineWidgetView: View {
         ViewThatFits(in: .horizontal) {
 
             HStack(spacing: 2.0) {
-                Image(event.mode.type.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(maxWidth: 14, maxHeight: 14)
+                Image(event.mode.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(maxWidth: 14, maxHeight: 14)
                 Text(event.rule.name) + Text(" • ") + Text(event.timeframe.dateForState(state: state), style: .relative)
             }
             .scaledSplat2Font(size: 10)
             .minimumScaleFactor(0.5)
 
             HStack(spacing: 2.0) {
-                Image(event.mode.type.logoNameSmall)//.resizable().aspectRatio(contentMode: .fit).frame(maxWidth: 14, maxHeight: 14)
+                Image(event.mode.logoNameSmall)//.resizable().aspectRatio(contentMode: .fit).frame(maxWidth: 14, maxHeight: 14)
                 Text(event.rule.name)
             }
             .scaledSplat2Font(size: 10)

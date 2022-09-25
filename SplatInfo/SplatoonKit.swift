@@ -7,177 +7,148 @@
 
 import Foundation
 
-enum Game {
+enum Game: Codable {
     case splatoon2
     case splatoon3
 }
 
 enum GameTimelines {
-    case splatoon2(timelines: Splatoon2.GameModeTimeline)
-    case splatoon3(timelines: Splatoon3.GameModeTimeline)
+    case splatoon2(schedule: Splatoon2.Schedule)
+    case splatoon3(schedule: Splatoon3.Schedule)
 }
 
+enum ScheduleEvents: Codable {
+    case regular(events: [GameModeEvent])
+    case coop(events: [CoopEvent], otherTimeframes: [EventTimeframe])
+}
 
-struct Splatoon3 {
-    
-    enum GameModeType: String, Codable {
-        case turfWar
-        case anarchyBattleOpen
-        case anarchyBattleSeries
-        case league
-        case x
-        case salmonRun
+enum GameModeType: Codable, Nameable, LogoNameable {
+    case splatoon2(type: Splatoon2.GameModeType)
+    case splatoon3(type: Splatoon3.GameModeType)
 
-        var logoName : String {
-            switch self {
-            case .turfWar:
-                return "regular-logo"
-            case .anarchyBattleOpen:
-                return "ranked-logo"
-            case .anarchyBattleSeries:
-                return "ranked-logo"
-            case .league:
-                return "league-logo"
-            case .x:
-                return "league-logo"
-            case .salmonRun:
-                return "league-logo"
-            }
+    var isTurfWar : Bool {
+        switch self {
+        case .splatoon2(let type):
+            return type == .turfWar
+        case .splatoon3(let type):
+            return type == .turfWar
+        }
+    }
+
+    var name: String {
+        switch self {
+        case .splatoon2(let type):
+            return type.name
+        case .splatoon3(let type):
+            return type.name
         }
     }
     
-    struct GameModeTimeline {
-        let type: GameModeType
-        let schedule: [GameModeEvent]
-
-        var upcomingEvents : [GameModeEvent] {
-            let filtered = upcomingEventsAfterDate(date: Date())
-            if filtered.count == 0 {
-                return schedule
-            }
-            return filtered
-        }
-        func upcomingEventsAfterDate(date: Date) -> [GameModeEvent] {
-            return schedule.filter({ $0.timeframe.state(date: date) != .over })
-        }
-        
-        static func empty(_ mode: GameModeType) -> GameModeTimeline {
-            return GameModeTimeline(type: mode, schedule: [])
+    var logoName: String {
+        switch self {
+        case .splatoon2(let type):
+            return type.logoName
+        case .splatoon3(let type):
+            return type.logoName
         }
     }
     
-    struct GameModeEvent {
-        let id: String
-        var stages: [Stage]
-        var rule: GameModeRule
-        let timeframe: EventTimeframe
-    }
-    
-    enum GameModeRule: String {
-        case turf = "TURF_WAR"  // Turf War
-        case area = "AREA"  // Zones
-        case loft = "LOFT"  // Tower
-        case goal = "GOAL"  // Rainmaker
-        case clam = "CLAM"  // Clam Blitz
+    var logoNameSmall: String {
+        switch self {
+        case .splatoon2(let type):
+            return type.logoNameSmall
+        case .splatoon3(let type):
+            return type.logoNameSmall
+        }
     }
 }
 
-struct Splatoon2 {
+protocol Event: Codable {
+    var timeframe: EventTimeframe { get }
+}
+struct GameModeEvent: Event, Identifiable, Equatable {
+    var id = UUID().uuidString
+    var mode: GameModeType
+    var stages: [Stage]
+    var rule: GameModeRule
+    let timeframe: EventTimeframe
+    
+    static func == (lhs: GameModeEvent, rhs: GameModeEvent) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
 
-    struct GameModeTimeline: Codable {
-        let modeType: GameModeType
-        let schedule: [GameModeEvent]
+enum GameModeRule: String, Codable, Nameable, LogoNameable {
+    var name: String {
+        switch self {
+        case .turfWar:
+            return "Turf War"
+        case .splatZones:
+            return "Splat Zones"
+        case .towerControl:
+            return "Tower Control"
+        case .rainmaker:
+            return "Rainmaker"
+        case .clamBlitz:
+            return "Clam Blitz"
+        }
+    }
+            
+    case turfWar = "TURF_WAR"  // Turf War
+    case splatZones = "AREA"   // Zones
+    case towerControl = "LOFT" // Tower
+    case rainmaker = "GOAL"    // Rainmaker
+    case clamBlitz = "CLAM"    // Clam Blitz
         
-        var upcomingEvents : [GameModeEvent] {
-            let filtered = upcomingEventsAfterDate(date: Date())
-            if filtered.count == 0 {
-                return schedule
-            }
-            return filtered
-        }
-        func upcomingEventsAfterDate(date: Date) -> [GameModeEvent] {
-            return schedule.filter({ $0.timeframe.state(date: date) != .over })
-        }
-        
-        static func empty(_ mode: GameModeType) -> GameModeTimeline {
-            return GameModeTimeline(modeType: mode, schedule: [])
-        }
-    }
-
-    struct GameMode: Codable {
-        let name: String
-        let type: GameModeType
-    }
-
-    enum GameModeType: String, Codable {
-        case league
-        case ranked
-        case regular
-
-        var logoName : String {
-            switch self {
-            case .regular:
-                return "regular-logo"
-            case .ranked:
-                return "ranked-logo"
-            case .league:
-                return "league-logo"
-            }
-        }
-
-        var logoNameSmall : String {
-            switch self {
-            case .regular:
-                return "regular-logo-small"
-            case .ranked:
-                return "ranked-logo-small"
-            case .league:
-                return "league-logo-small"
-            }
+    var logoName: String {
+        switch self {
+        case .turfWar:
+            return "rule-regular"
+        case .splatZones:
+            return "rule-area"
+        case .towerControl:
+            return "rule-yagura"
+        case .rainmaker:
+            return "rule-hoko"
+        case .clamBlitz:
+            return "rule-asari"
         }
     }
-
-    struct GameModeEvent: Codable, Equatable {
-        let id: String
-        let mode: GameMode
-        let timeframe: EventTimeframe
-        let stages: [Stage]
-        let rule: GameModeRule
-        
-        static func == (lhs: GameModeEvent, rhs: GameModeEvent) -> Bool {
-            return lhs.id == rhs.id
+    
+    var logoNameSmall: String {
+        switch self {
+        case .turfWar:
+            return "rule-regular"
+        case .splatZones:
+            return "rule-area"
+        case .towerControl:
+            return "rule-yagura"
+        case .rainmaker:
+            return "rule-hoko"
+        case .clamBlitz:
+            return "rule-asari"
         }
-    }
-
-    struct GameModeRule: Codable {
-        let key: String
-        let name: String
     }
 
 }
 
 // MARK: - Coop
-
 struct CoopTimeline: Codable {
-    let detailedEvents: [CoopEvent]
-    let eventTimeframes: [EventTimeframe]
-
-    static func empty() -> CoopTimeline {
-        return CoopTimeline(detailedEvents: [], eventTimeframes: [] /*, date: Date() */ )
-    }
+    var events: [CoopEvent]
+    var otherTimeframes: [EventTimeframe]
 }
 
-struct CoopEvent: Codable, Equatable {
+struct CoopEvent: Event {
     var id = UUID().uuidString
     let timeframe: EventTimeframe
     let weapons: [Weapon]
     let stage: Stage
     
     var logoName : String {
-        return "mr-grizz-logo"
+        return "mode-coop" // "mr-grizz-logo"
     }
     var logoNameSmall : String {
-        return "mr-grizz-logo-small"
+        return "mode-coop" // "mr-grizz-logo-small"
     }
     var modeName : String {
         return "Salmon Run"
@@ -235,24 +206,168 @@ struct WeaponDetails: Codable {
     let imageUrl: URL?
 }
 
-extension CoopTimeline {
+
+protocol GameSchedule: Codable {
+    var schedule: ScheduleEvents { get }
+}
+
+extension [GameModeEvent] {
     
+    var upcomingEvents : [GameModeEvent] {
+        return upcomingEventsAfterDate(date: Date())
+    }
+
+    func upcomingEventsAfterDate(date: Date) -> [GameModeEvent] {
+        return self.filter({ $0.timeframe.state(date: date) != .over })
+    }
+}
+
+protocol Nameable: Codable {
+    var name: String { get }
+}
+
+protocol LogoNameable: Codable {
+    var logoName: String { get }
+    var logoNameSmall: String { get }
+}
+
+// MARK: - Splatoon 3 specific
+
+struct Splatoon3: Codable {
+
+    enum SplatfestActivity: String {
+        case none
+        case upcoming
+        case active
+        case over
+    }
+        
+    struct Schedule: Codable {
+        let splatfest: GameTimeline
+        let regular: GameTimeline
+        let anarchyBattleOpen: GameTimeline
+        let anarchyBattleSeries: GameTimeline
+        let league: GameTimeline
+        let x: GameTimeline
+        let coop: CoopTimeline
+        
+        var splatfestActivity: SplatfestActivity {
+            guard !splatfest.events.isEmpty else {
+                return .none
+            }
+            
+            return .active
+        }
+
+    }
+    
+    enum GameModeType: String, Codable, Nameable, LogoNameable {
+        case splatfest
+        case turfWar
+        case anarchyBattleOpen
+        case anarchyBattleSeries
+        case league
+        case x
+        case salmonRun
+
+        var name: String {
+            switch self {
+            case .splatfest:
+                return "Splatfest"
+            case .turfWar:
+                return "Turf War"
+            case .league:
+                return "League Battle"
+            case .salmonRun:
+                return "Salmon Run"
+            case .anarchyBattleOpen:
+                return "Anarchy Battle Open"
+            case .anarchyBattleSeries:
+                return "Anarchy Battle Series"
+            case .x:
+                return "X Battle"
+            }
+        }
+
+        var logoName : String {
+            switch self {
+            case .splatfest:
+                return "mode-regular" //"regular-logo"
+            case .turfWar:
+                return "mode-regular" //"regular-logo"
+            case .anarchyBattleOpen:
+                return "mode-bankara" //"ranked-logo"
+            case .anarchyBattleSeries:
+                return "mode-bankara" //"ranked-logo"
+            case .league:
+                return "mode-league" //"league-logo"
+            case .x:
+                return "mode-x"
+            case .salmonRun:
+                return "mr-grizz-logo"
+//                return "mode-coop" //"mr-grizz-logo"
+            }
+        }
+
+        var logoNameSmall : String {
+            switch self {
+            case .splatfest:
+                return "mode-regular"
+            case .turfWar:
+                return "mode-regular" //"regular-logo-small"
+            case .anarchyBattleOpen:
+                return "mode-bankara" //"ranked-logo-small"
+            case .anarchyBattleSeries:
+                return "mode-bankara"
+            case .league:
+                return "mode-league" //"league-logo-small"
+            case .x:
+                return "mode-x"
+            case .salmonRun:
+                return "mr-grizz-logo-small"
+//                return "mode-coop" //"mr-grizz-logo-small"
+            }
+        }
+    }
+}
+
+// MARK: - Splatoon 2 specific
+
+struct GameModeTimeline: Codable {
+    let mode: GameModeType
+    let timeline: GameTimeline
+}
+
+struct GameTimeline: Codable {
+    let events: [GameModeEvent]
+}
+
+protocol UpcomingEvents {
+
+    associatedtype T
+    func upcomingEventsAfterDate(date: Date) -> [T]
+}
+
+extension GameTimeline: UpcomingEvents {
+    func upcomingEventsAfterDate(date: Date) -> [GameModeEvent] {
+        return self.events.filter({ $0.timeframe.state(date: date) != .over })
+    }
+}
+
+extension CoopTimeline: UpcomingEvents {
+        
     var firstEvent: CoopEvent? {
-        return detailedEvents.first
+        return self.events.first
     }
 
     var secondEvent: CoopEvent? {
-        if detailedEvents.count > 1 {
-            return detailedEvents[1]
-        }
-        return nil
+        return self.events.second
     }
-
     
     func eventChangingDates() -> [Date] {
         let now = Date()
-        let startDates = detailedEvents.map({ $0.timeframe.startDate })
-        let endDates = detailedEvents.map({ $0.timeframe.endDate })
+        let startDates = self.events.map({ $0.timeframe.startDate })
+        let endDates = self.events.map({ $0.timeframe.endDate })
         var eventDates = (startDates+endDates).sorted()
         if let firstDate = eventDates.first, now < firstDate {
             eventDates.insert(now, at: 0)
@@ -261,13 +376,121 @@ extension CoopTimeline {
     }
     
     func upcomingEventsAfterDate(date: Date) -> [CoopEvent] {
-        return detailedEvents.filter({ $0.timeframe.state(date: date) != .over })
-    }
-
-    func upcomingTimeframesAfterDate(date: Date) -> [EventTimeframe] {
-        return eventTimeframes.filter({ $0.state(date: date) != .over })
+        return self.events.filter({ $0.timeframe.state(date: date) != .over })
     }
 }
+
+
+struct Splatoon2: Codable {
+    
+    struct Schedule: Codable {
+        var regular: GameTimeline
+        var ranked: GameTimeline
+        var league: GameTimeline
+        var coop: CoopTimeline
+    }
+    
+    enum GameModeType: String, Codable, Nameable, LogoNameable {
+        case turfWar = "regular"
+        case ranked
+        case league
+        case salmonRun
+
+        var name: String {
+            switch self {
+            case .turfWar:
+                return "Turf War"
+            case .ranked:
+                return "Ranked Battle"
+            case .league:
+                return "League Battle"
+            case .salmonRun:
+                return "Salmon Run"
+            }
+        }
+        
+        var logoName : String {
+            switch self {
+            case .turfWar:
+                return "mode-regular" //"regular-logo"
+            case .ranked:
+                return "mode-bankara" //"ranked-logo"
+            case .league:
+                return "mode-league" //"league-logo"
+            case .salmonRun:
+                return "mr-grizz-logo"
+//                return "mode-coop" //"mr-grizz-logo"
+            }
+        }
+
+        var logoNameSmall : String {
+            switch self {
+            case .turfWar:
+                return "mode-regular" //"regular-logo-small"
+            case .ranked:
+                return "mode-bankara" //"ranked-logo-small"
+            case .league:
+                return "mode-league" //"league-logo-small"
+            case .salmonRun:
+                return "mr-grizz-logo-small"
+//                return "mode-coop" //"mr-grizz-logo-small"
+//            case .turfWar:
+//                return "regular-logo-small"
+//            case .ranked:
+//                return "ranked-logo-small"
+//            case .league:
+//                return "league-logo-small"
+//            case .salmonRun:
+//                return "mr-grizz-logo-small"
+            }
+        }
+    }
+}
+
+// MARK: - Extensions
+
+extension Array {
+    var second: Element? {
+        if self.count > 1 {
+            return self[1]
+        }
+        return nil
+    }
+}
+
+//extension [CoopEvent] {
+//
+//    var firstEvent: CoopEvent? {
+//        return self.first
+//    }
+//
+//    var secondEvent: CoopEvent? {
+//        return self.second
+//    }
+//
+//    func eventChangingDates() -> [Date] {
+//        let now = Date()
+//        let startDates = self.map({ $0.timeframe.startDate })
+//        let endDates = self.map({ $0.timeframe.endDate })
+//        var eventDates = (startDates+endDates).sorted()
+//        if let firstDate = eventDates.first, now < firstDate {
+//            eventDates.insert(now, at: 0)
+//        }
+//        return eventDates
+//    }
+//
+//    func upcomingEventsAfterDate(date: Date) -> [CoopEvent] {
+//        return self.filter({ $0.timeframe.state(date: date) != .over })
+//    }
+//}
+
+extension [EventTimeframe] {
+
+    func upcomingTimeframesAfterDate(date: Date) -> [EventTimeframe] {
+        return self.filter({ $0.state(date: date) != .over })
+    }
+}
+
 
 extension CoopEvent {
     var weaponDetails : [WeaponDetails] {
@@ -293,6 +516,8 @@ struct CoopRandomWeapon: Codable {
     let name: String
     let imageUrl: String
 }
+
+// MARK: - Gear
 
 struct CoopRewardGear: Codable {
     let startDate: Date

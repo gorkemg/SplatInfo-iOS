@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct GameModeEventView: View {
-    let event: Splatoon2.GameModeEvent
+    let mode: GameModeType
+    let event: GameModeEvent
     let style: Style
     var date: Date = Date()
     
@@ -23,7 +24,7 @@ struct GameModeEventView: View {
     }
     
     var isTurfWar : Bool {
-        return event.mode.type == .regular
+        return event.mode.isTurfWar
     }
     
     var body: some View {
@@ -47,7 +48,7 @@ struct GameModeEventView: View {
                             HStack(alignment: .center, spacing: 2.0) {
                                 if isTitleVisible {
                                     if isRuleLogoVisible {
-                                        Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0, y: 1)
+                                        Image(event.rule.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0, y: 1)
                                     }
                                     if isRuleNameVisible {
                                         Text(event.rule.name).splat2Font(size: 16).minimumScaleFactor(0.5)
@@ -67,8 +68,20 @@ struct GameModeEventView: View {
                     
                     HStack(alignment: .center) {
                         
-                        VStack(spacing: 0.0) {
-                            Text(event.rule.name).splat2Font(size: 14).minimumScaleFactor(0.5)
+                        VStack(alignment: .center, spacing: 1.0) {
+                            HStack(alignment: .center, spacing: 2.0){
+                                if isRuleLogoVisible {
+                                    Image(event.rule.logoNameSmall).resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 20)
+                                        .shadow(color: .black, radius: 1, x: 0, y: 1)
+                                }
+                                Text(event.rule.name).splat2Font(size: 14)
+                                    .lineLimit(2)
+                                    .lineSpacing(0.2)
+                                    .minimumScaleFactor(0.5)
+                                    .multilineTextAlignment(.center)
+                            }
                             TimeframeView(timeframe: event.timeframe, datesStyle: .never, fontSize: 10)
                                 .lineLimit(2).minimumScaleFactor(0.5).multilineTextAlignment(.center)
                         }.frame(minWidth: min(80,innerGeo.size.width/3), maxWidth: innerGeo.size.width/3)
@@ -106,7 +119,7 @@ struct GameModeEventView: View {
 
 }
 
-extension Splatoon2.GameModeEvent {
+extension GameModeEvent {
     var stageA : Stage? {
         return stages.first
     }
@@ -116,7 +129,7 @@ extension Splatoon2.GameModeEvent {
 }
 
 struct GameModeEventTitleView: View {
-    let event: Splatoon2.GameModeEvent
+    let event: GameModeEvent
     var body: some View {
         HStack(alignment: .center, spacing: 4.0) {
             logoImage.resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
@@ -128,15 +141,15 @@ struct GameModeEventTitleView: View {
         if let uiImage = uiImage {
             return Image(uiImage: uiImage)
         }
-        return Image(event.mode.type.logoNameSmall)
+        return Image(event.mode.logoNameSmall)
     }
     
     
     var uiImage: UIImage? {
-        if let image = UIImage(named: event.mode.type.logoName) {
+        if let image = UIImage(named: event.mode.logoName) {
             return image
         }
-        return UIImage(named: event.mode.type.logoNameSmall)
+        return UIImage(named: event.mode.logoNameSmall)
     }
     
 }

@@ -11,7 +11,7 @@ import WidgetKit
 @available(iOSApplicationExtension 16.0, *)
 struct GameModeRectangularWidgetView: View {
     
-    let event: Splatoon2.GameModeEvent
+    let event: GameModeEvent
     let date: Date
     
     var state: TimeframeActivityState {
@@ -30,7 +30,7 @@ struct GameModeRectangularWidgetView: View {
                     ProgressView(timerInterval: event.timeframe.startDate...event.timeframe.endDate, countsDown: true, label: {
                         
                         HStack(alignment: .center, spacing: 1.0) {
-                            Image(event.mode.type.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 16)
+                            Image(event.mode.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 16)
                             Text(event.rule.name).scaledSplat2Font(size: 14)
                                 .minimumScaleFactor(0.5)
                                 .lineSpacing(0.5)

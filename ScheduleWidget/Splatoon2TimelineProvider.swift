@@ -11,15 +11,20 @@ import Intents
 
 struct Splatoon2TimelineProvider: IntentTimelineProvider {
     
+    enum TimelineType {
+        case game(timeline: GameTimeline)
+        case coop(timeline: CoopTimeline)
+    }
+
     let scheduleFetcher = ScheduleFetcher()
-    static let schedule = Splatoon2Schedule.example
+    static let schedule = Splatoon2.Schedule.example
     let imageLoaderManager = ImageLoaderManager()
     
-    static var regularEvents : [Splatoon2.GameModeEvent] {
-        return schedule.gameModes.regular.schedule
+    static var regularEvents : [GameModeEvent] {
+        return schedule.regular.events
     }
     static var coopEvents : [CoopEvent] {
-        return schedule.coop.detailedEvents
+        return schedule.coop.events
     }
 
     func placeholder(in context: Context) -> GameModeEntry {
@@ -29,118 +34,171 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (GameModeEntry) -> ()) {
         print("Display Snapshot isPreview:\(context.isPreview)")
         scheduleFetcher.useSharedFolderForCaching = true
-        switch configuration.scheduleType {
-        case .regular, .ranked, .league:
-            scheduleFetcher.fetchGameModeTimelines { (timelines, error) in
-                guard let timelines = timelines else {
-                    let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.regularEvents), configuration: configuration)
-                    completion(entry)
-                    return
-                }
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: timelines.regular.schedule), configuration: configuration)
-                completion(entry)
-            }
-        case .salmonRun:
-            scheduleFetcher.fetchCoopTimeline { timeline, error in
-                guard let timeline = timeline else {
-                    let entry = GameModeEntry(date: Date(), events: .coopEvents(events: Splatoon2TimelineProvider.coopEvents, timeframes: []), configuration: configuration)
-                    completion(entry)
-                    return
-                }
-                let entry = GameModeEntry(date: Date(), events: .coopEvents(events: timeline.detailedEvents, timeframes: timeline.eventTimeframes), configuration: configuration)
-                completion(entry)
-            }
-        case .unknown:
-            break
-        }
-    }
 
+        scheduleFetcher.fetchSplatoon2Schedule(completion: { result in
+            switch result {
+            case .success(let schedule):
+                
+                switch configuration.scheduleType {
+                case .regular:
+                    let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.regular.events), configuration: configuration)
+                    completion(entry)
+                case .ranked:
+                    let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.ranked.events), configuration: configuration)
+                    completion(entry)
+                case .league:
+                    let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.league.events), configuration: configuration)
+                    completion(entry)
+                case .unknown:
+                    let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.regular.events), configuration: configuration)
+                    completion(entry)
+                    break
+                case .salmonRun:
+                    let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes), configuration: configuration)
+                    completion(entry)
+                    break
+                }
+            case .failure(_):
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.regularEvents), configuration: configuration)
+                completion(entry)
+                break
+            }
+        })
+    }
+    
     func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<GameModeEntry>) -> ()) {
         let mode = configuration.scheduleType
         scheduleFetcher.useSharedFolderForCaching = true
 
         print("TimelineProvider getTimeline \(self)")
 
-        // load data according to mode
-        switch mode {
-        case .regular, .ranked, .league:
-            
-            scheduleFetcher.fetchGameModeTimelines { (timelines, error) in
-                guard let timelines = timelines else {
-                    let entries: [GameModeEntry] = []
-                    let timeline = Timeline(entries: entries, policy: .atEnd)
-                    completion(timeline)
-                    return
-                }
+        scheduleFetcher.fetchSplatoon2Schedule { result in
+            switch result {
+            case .success(let schedule):
 
-                let selectedTimeline : Splatoon2.GameModeTimeline
+                let selectedTimeline: TimelineType
+                let urls: [URL]
                 switch mode {
-                    case .regular:
-                        selectedTimeline = timelines.regular
-                    case .ranked:
-                        selectedTimeline = timelines.ranked
-                    case .league:
-                        selectedTimeline = timelines.league
-                    default:
-                        let entries: [GameModeEntry] = []
-                        let timeline = Timeline(entries: entries, policy: .atEnd)
-                        completion(timeline)
-                        return
-                }
-                let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
-                let multiImageLoader = MultiImageLoader(urls: selectedTimeline.allImageURLs(), directory: destination)
-                imageLoaderManager.imageLoaders.append(multiImageLoader)
-                multiImageLoader.load {
-                    let timeline = timelineForGameModeTimeline(selectedTimeline, for: configuration)
-                    completion(timeline)
-                }
-                return
-            }
-            break
-            
-        case .salmonRun:
-            
-            scheduleFetcher.fetchCoopTimeline { (coopTimeline, error) in
-                guard let coopTimeline = coopTimeline else {
+                case .regular:
+                    urls = schedule.regular.allImageURLs()
+                    selectedTimeline = .game(timeline: schedule.regular)
+                case .ranked:
+                    urls = schedule.ranked.allImageURLs()
+                    selectedTimeline = .game(timeline: schedule.regular)
+                case .league:
+                    urls = schedule.league.allImageURLs()
+                    selectedTimeline = .game(timeline: schedule.regular)
+                case .salmonRun:
+                    urls = schedule.coop.allImageURLs()
+                    selectedTimeline = .coop(timeline: schedule.coop)
+                default:
                     let entries: [GameModeEntry] = []
                     let timeline = Timeline(entries: entries, policy: .atEnd)
                     completion(timeline)
                     return
                 }
-
                 let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
-                let multiImageLoader = MultiImageLoader(urls: coopTimeline.allStageImageURLs(), directory: destination)
-                multiImageLoader.storeAsJPEG = true
+                let multiImageLoader = MultiImageLoader(urls: urls, directory: destination)
                 imageLoaderManager.imageLoaders.append(multiImageLoader)
                 multiImageLoader.load {
-                    let multiImageLoader = MultiImageLoader(urls: coopTimeline.allWeaponImageURLs(), directory: destination)
-                    multiImageLoader.storeAsJPEG = false
-                    imageLoaderManager.imageLoaders.append(multiImageLoader)
-                    multiImageLoader.load {
-                        let timeline = timelineForCoopTimeline(coopTimeline, for: configuration)
+                    switch selectedTimeline {
+                    case .game(let timeline):
+                        let timeline = timelineForGameModeTimeline(timeline, for: configuration)
+                        completion(timeline)
+                    case .coop(let timeline):
+                        let timeline = timelineForCoopTimeline(timeline, for: configuration)
                         completion(timeline)
                     }
                 }
                 return
+
+            case .failure(_):
+                let entries: [GameModeEntry] = []
+                let timeline = Timeline(entries: entries, policy: .atEnd)
+                completion(timeline)
             }
-            break
-            
-        default:
-            let entries: [GameModeEntry] = []
-            let timeline = Timeline(entries: entries, policy: .after(Date().addingTimeInterval(60)))
-            completion(timeline)
-            break
         }
+
+        // load data according to mode
+//        switch mode {
+//        case .regular, .ranked, .league:
+//
+//            scheduleFetcher.fetchGameModeTimelines { (timelines, error) in
+//                guard let timelines = timelines else {
+//                    let entries: [GameModeEntry] = []
+//                    let timeline = Timeline(entries: entries, policy: .atEnd)
+//                    completion(timeline)
+//                    return
+//                }
+//
+//                let selectedTimeline : GameModeTimeline
+//                switch mode {
+//                    case .regular:
+//                        selectedTimeline = timelines.regular
+//                    case .ranked:
+//                        selectedTimeline = timelines.ranked
+//                    case .league:
+//                        selectedTimeline = timelines.league
+//                    default:
+//                        let entries: [GameModeEntry] = []
+//                        let timeline = Timeline(entries: entries, policy: .atEnd)
+//                        completion(timeline)
+//                        return
+//                }
+//                let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
+//                let multiImageLoader = MultiImageLoader(urls: selectedTimeline.allImageURLs(), directory: destination)
+//                imageLoaderManager.imageLoaders.append(multiImageLoader)
+//                multiImageLoader.load {
+//                    let timeline = timelineForGameModeTimeline(selectedTimeline, for: configuration)
+//                    completion(timeline)
+//                }
+//                return
+//            }
+//            break
+//
+//        case .salmonRun:
+//
+//            scheduleFetcher.fetchCoopTimeline { (coopTimeline, error) in
+//                guard let coopTimeline = coopTimeline else {
+//                    let entries: [GameModeEntry] = []
+//                    let timeline = Timeline(entries: entries, policy: .atEnd)
+//                    completion(timeline)
+//                    return
+//                }
+//
+//                let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
+//                let multiImageLoader = MultiImageLoader(urls: coopTimeline.allStageImageURLs(), directory: destination)
+//                multiImageLoader.storeAsJPEG = true
+//                imageLoaderManager.imageLoaders.append(multiImageLoader)
+//                multiImageLoader.load {
+//                    let multiImageLoader = MultiImageLoader(urls: coopTimeline.allWeaponImageURLs(), directory: destination)
+//                    multiImageLoader.storeAsJPEG = false
+//                    imageLoaderManager.imageLoaders.append(multiImageLoader)
+//                    multiImageLoader.load {
+//                        let timeline = timelineForCoopTimeline(coopTimeline, for: configuration)
+//                        completion(timeline)
+//                    }
+//                }
+//                return
+//            }
+//            break
+//
+//        default:
+//            let entries: [GameModeEntry] = []
+//            let timeline = Timeline(entries: entries, policy: .after(Date().addingTimeInterval(60)))
+//            completion(timeline)
+//            break
+//        }
     }
     
-    func timelineForGameModeTimeline(_ modeTimeline: Splatoon2.GameModeTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
+    func timelineForGameModeTimeline(_ modeTimeline: GameTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
         var entries: [GameModeEntry] = []
         let now = Date()
-        let startDates = modeTimeline.schedule.map({ $0.timeframe.startDate })
+        let startDates = modeTimeline.events.map({ $0.timeframe.startDate })
         print("StartDates: \(startDates)")
         let dates = ([now]+startDates).sorted()
         for date in dates {
-            let events = modeTimeline.upcomingEventsAfterDate(date: date)
+            let events = modeTimeline.events.upcomingEventsAfterDate(date: date)
             if events.count > 1 {
                 let entry = GameModeEntry(date: date, events: .gameModeEvents(events: events), configuration: configuration)
                 entries.append(entry)
@@ -156,7 +214,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
     }
     
     func timelineForCoopTimeline(_ coopTimeline: CoopTimeline, for configuration: ConfigurationIntent) -> Timeline<GameModeEntry> {
-        if configuration.isDisplayNext, let firstEvent = coopTimeline.firstEvent, let secondEvent = coopTimeline.secondEvent {
+        if configuration.isDisplayNext, let firstEvent = coopTimeline.events.first, let secondEvent = coopTimeline.events.second {
             // only show next event
             let entry = GameModeEntry(date: Date(), events: .coopEvents(events: [secondEvent], timeframes: []), configuration: configuration)
             let timeline = Timeline(entries: [entry], policy: .after(firstEvent.timeframe.endDate))
@@ -177,7 +235,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
         var dates: [Date] = []
         let now = Date()
         var updatePolicy: TimelineReloadPolicy = .atEnd
-        if let timeframe = coopTimeline.firstEvent?.timeframe {
+        if let timeframe = coopTimeline.events.first?.timeframe {
             if now < timeframe.startDate {
                 dates.append(now)
             }
@@ -193,7 +251,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
         print("Dates: \(dates)")
         for date in dates {
             let events = coopTimeline.upcomingEventsAfterDate(date: date)
-            let eventTimeframes = coopTimeline.upcomingTimeframesAfterDate(date: date)
+            let eventTimeframes = coopTimeline.otherTimeframes.upcomingTimeframesAfterDate(date: date)
 //            if events.count > 1 {
                 let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
                 entries.append(entry)
@@ -212,7 +270,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
                     print("\(event.mode.name) from \(event.timeframe.startDate) until \(event.timeframe.endDate)")
                 }
                 break
-            case .coopEvents(events: let events, timeframes: let timeframes):
+            case .coopEvents(events: let events, timeframes: _):
                 for event in events {
                     print("\(event.stage.name) from \(event.timeframe.startDate) until \(event.timeframe.endDate)")
                 }
@@ -222,5 +280,6 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
         }
         let timeline = Timeline(entries: entries, policy: updatePolicy)
         return timeline
+        
     }
 }

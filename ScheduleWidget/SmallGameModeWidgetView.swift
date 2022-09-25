@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct SmallGameModeWidgetView : View {
-    let event: Splatoon2.GameModeEvent
-    var nextEvent: Splatoon2.GameModeEvent? = nil
+    let event: GameModeEvent
+    var nextEvent: GameModeEvent? = nil
     let date: Date
 
     var body: some View {
         ZStack(alignment: .topLeading) {
 
-            event.mode.type.color
+            //event.mode.color
 
             Image("splatoon-card-bg").resizable(resizingMode: .tile)
 
@@ -39,18 +39,13 @@ struct SmallGameModeWidgetView : View {
                 
                 VStack(alignment: .leading, spacing: 0.0) {
                     GameModeEventTitleView(event: event)
-//
-//                    HStack {
-//                        Image(event.mode.type.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
-//                        Text(event.rule.name).splat2Font(size: 14).minimumScaleFactor(0.5)
-//                    }
                 }
                                 
                 Spacer()
                 
                 VStack(alignment: .leading, spacing: 0.0) {
                     if let next = nextEvent {
-                        Text(event.mode.type != .regular ? next.rule.name : "Changes")
+                        Text(!event.mode.isTurfWar ? next.rule.name : "Changes")
                             + next.timeframe.relativeTimeText(date: date)
                     }
                 }.splat2Font(size: 10).lineLimit(1).minimumScaleFactor(0.5)

@@ -114,7 +114,7 @@ class Splatoon3InkAPI {
         let xSchedules: XScheduleNodes
         let leagueSchedules: LeagueScheduleNodes
         let coopGroupingSchedule: CoopGroupingSchedule
-        let festSchedules: FestSchedulesNodes
+        let festSchedules: FestScheduleNodes
 //        let currentFest: String?
         let vsStages: StageNodes
     }
@@ -140,16 +140,21 @@ class Splatoon3InkAPI {
         let regularSchedules: CoopScheduleNodes
 //        let bigRunSchedules: [Schedule]
     }
+    /// Splatfest
+    struct FestScheduleNodes: Codable {
+        let nodes: [FestEvent]
+    }
 
     // MARK: - Regular
     
     struct RegularEvent: Codable, EventDetails {
         var startTime: Date
         var endTime: Date
-        let regularMatchSetting: MatchSettings
+        let regularMatchSetting: MatchSettings?
 
         var matchSetting: [MatchSetting] {
-            return [self.regularMatchSetting]
+            guard let setting = regularMatchSetting else { return [] }
+            return [setting]
         }
     }
     
@@ -165,10 +170,11 @@ class Splatoon3InkAPI {
     struct XEvent: Codable, EventDetails {
         var startTime: Date
         var endTime: Date
-        let xMatchSetting: MatchSettings
+        let xMatchSetting: MatchSettings?
 
         var matchSetting: [MatchSetting] {
-            return [self.xMatchSetting]
+            guard let setting = xMatchSetting else { return [] }
+            return [setting]
         }
     }
     
@@ -177,22 +183,35 @@ class Splatoon3InkAPI {
     struct LeagueEvent: Codable, EventDetails {
         var startTime: Date
         var endTime: Date
-        let leagueMatchSetting: MatchSettings
+        let leagueMatchSetting: MatchSettings?
 
         var matchSetting: [MatchSetting] {
-            return [self.leagueMatchSetting]
+            guard let setting = leagueMatchSetting else { return [] }
+            return [setting]
         }
     }
+    
+    // MARK: - Splatfest
+    struct FestEvent: Codable, EventDetails {
+        var startTime: Date
+        var endTime: Date
+        let festMatchSetting: MatchSettings?
+
+        var matchSetting: [MatchSetting] {
+            guard let setting = festMatchSetting else { return [] }
+            return [setting]
+        }
+    }
+
     
     // MARK: - Bankara
     struct BankaraEvent: Codable, EventDetails {
         var startTime: Date
         var endTime: Date
-        let bankaraMatchSettings: [ModeMatchSettings]
-//        let festMatchSettings: FestSchedulesNodes?
+        let bankaraMatchSettings: [ModeMatchSettings]?
 
         var matchSetting: [MatchSetting] {
-            return bankaraMatchSettings
+            return bankaraMatchSettings ?? []
         }
     }
 
@@ -261,15 +280,6 @@ class Splatoon3InkAPI {
         let image: ImageURL
     }
     
-    struct FestSchedulesNodes: Codable {
-        let nodes: [FestSchedule]
-    }
-
-    struct FestSchedule: Codable, EventDates {
-        var startTime: Date
-        var endTime: Date
-    }
-
     struct StageNodes: Codable {
         let nodes: [Stage]
     }
