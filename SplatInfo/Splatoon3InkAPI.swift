@@ -97,7 +97,7 @@ class Splatoon3InkAPI {
                 completion(nil, nil, InvalidAPIResponseError())
                 return
             }
-            print("response JSON: \(String(describing: responseJSON))")
+//            print("response JSON: \(String(describing: responseJSON))")
             
             completion(response, data, nil)
         }
@@ -115,8 +115,49 @@ class Splatoon3InkAPI {
         let leagueSchedules: LeagueScheduleNodes
         let coopGroupingSchedule: CoopGroupingSchedule
         let festSchedules: FestScheduleNodes
-//        let currentFest: String?
+        let currentFest: CurrentFest?
         let vsStages: StageNodes
+    }
+    
+    struct CurrentFest: Codable {
+        let id: String
+        let startTime: Date
+        let endTime: Date
+        let midtermTime: Date
+        let title: String
+        let teams: [Team]
+        let state: State
+        let tricolorStage: TricolorStage
+
+        struct Team: Codable {
+            let id: String
+            let role: Role
+            let color: RGBAColor
+            
+            enum Role: String, Codable {
+                case attack = "ATTACK"
+                case defense = "DEFENSE"
+            }
+            
+            struct RGBAColor: Codable {
+                let r: Float
+                let g: Float
+                let b: Float
+                let a: Float
+            }
+        }
+        
+        enum State: String, Codable {
+            case scheduled = "SCHEDULED"
+            case firstHalf = "FIRST_HALF"
+            case secondHalf = "SECOND_HALF"
+        }
+        
+        struct TricolorStage: Codable {
+            let id: String
+            let name: String
+            let image: ImageURL
+        }
     }
     
     /// Turf War
@@ -212,6 +253,13 @@ class Splatoon3InkAPI {
 
         var matchSetting: [MatchSetting] {
             return bankaraMatchSettings ?? []
+        }
+        
+        var openMatchSettings: [ModeMatchSettings] {
+            return bankaraMatchSettings?.filter({ $0.mode == .open }) ?? []
+        }
+        var challengeMatchSettings: [ModeMatchSettings] {
+            return bankaraMatchSettings?.filter({ $0.mode == .challenge }) ?? []
         }
     }
 

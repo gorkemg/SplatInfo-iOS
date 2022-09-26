@@ -65,16 +65,22 @@ struct ScheduleGrid: View {
                         VStack{
                             Text("Splatoon 3").splat2Font(size: 20)
                             LazyVGrid(columns: columns, spacing: 50) {
-                                if !splatoon3Schedule.splatfest.events.isEmpty {
-                                    Splatoon3TimelineCard(timeline: .game(mode: .splatfest, timeline: splatoon3Schedule.splatfest))
-                                }
-                                if !splatoon3Schedule.regular.events.isEmpty {
+                                if case .active(_) = splatoon3Schedule.splatfest.activity {
+                                    // Splatfest not currently active
+                                    if let fest = splatoon3Schedule.splatfest.fest {
+                                        Splatoon3TimelineCard(timeline: .game(mode: .splatfest(fest: fest), timeline: splatoon3Schedule.splatfest.timeline))
+                                    }else{
+                                        // Splatfest scheduled
+                                    }
+                                }else{
+                                    // Splatfest not currently active
+                                    
                                     Splatoon3TimelineCard(timeline: .game(mode: .turfWar, timeline: splatoon3Schedule.regular))
+                                    Splatoon3TimelineCard(timeline: .game(mode: .anarchyBattleOpen, timeline: splatoon3Schedule.anarchyBattleOpen))
+                                    Splatoon3TimelineCard(timeline: .game(mode: .anarchyBattleSeries, timeline: splatoon3Schedule.anarchyBattleSeries))
+                                    Splatoon3TimelineCard(timeline: .game(mode: .league, timeline: splatoon3Schedule.league))
+                                    Splatoon3TimelineCard(timeline: .game(mode: .x, timeline: splatoon3Schedule.x))
                                 }
-                                Splatoon3TimelineCard(timeline: .game(mode: .anarchyBattleOpen, timeline: splatoon3Schedule.anarchyBattleOpen))
-                                Splatoon3TimelineCard(timeline: .game(mode: .anarchyBattleSeries, timeline: splatoon3Schedule.anarchyBattleSeries))
-                                Splatoon3TimelineCard(timeline: .game(mode: .league, timeline: splatoon3Schedule.league))
-                                Splatoon3TimelineCard(timeline: .game(mode: .x, timeline: splatoon3Schedule.x))
                                 Splatoon3TimelineCard(timeline: .coop(timeline: splatoon3Schedule.coop))
                             }
                         }

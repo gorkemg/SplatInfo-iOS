@@ -22,7 +22,7 @@ enum ScheduleEvents: Codable {
     case coop(events: [CoopEvent], otherTimeframes: [EventTimeframe])
 }
 
-enum GameModeType: Codable, Nameable, LogoNameable {
+enum GameModeType: Codable, Equatable, Nameable, LogoNameable {
     case splatoon2(type: Splatoon2.GameModeType)
     case splatoon3(type: Splatoon3.GameModeType)
 
@@ -234,35 +234,82 @@ protocol LogoNameable: Codable {
 // MARK: - Splatoon 3 specific
 
 struct Splatoon3: Codable {
-
-    enum SplatfestActivity: String {
-        case none
-        case upcoming
-        case active
-        case over
-    }
         
     struct Schedule: Codable {
-        let splatfest: GameTimeline
         let regular: GameTimeline
         let anarchyBattleOpen: GameTimeline
         let anarchyBattleSeries: GameTimeline
         let league: GameTimeline
         let x: GameTimeline
         let coop: CoopTimeline
-        
-        var splatfestActivity: SplatfestActivity {
-            guard !splatfest.events.isEmpty else {
-                return .none
-            }
-            
-            return .active
-        }
+        let splatfest: Splatfest
 
+        struct Splatfest: Codable {
+            let timeline: GameTimeline
+            let fest: Fest?
+            
+            var activity: SplatfestActivity {
+                guard let fest = fest else {
+                    return .none
+                }
+                switch fest.state {
+                case .scheduled:
+                    return .upcoming
+                case .firstHalf:
+                    return .active(isFirstHalf: true)
+                case .secondHalf:
+                    return .active(isFirstHalf: false)
+                }
+            }
+
+            enum SplatfestActivity: Codable {
+                case none
+                case upcoming
+                case active(isFirstHalf: Bool)
+            }
+
+            struct Fest: Codable, Equatable {
+                static func == (lhs: Splatoon3.Schedule.Splatfest.Fest, rhs: Splatoon3.Schedule.Splatfest.Fest) -> Bool {
+                    return lhs.id == rhs.id
+                }
+                
+                let id: String
+                let timeframe: EventTimeframe
+                let midtermTime: Date
+                let title: String
+                let teams: [Team]
+                let state: State
+                let tricolorStage: Stage
+
+                struct Team: Codable {
+                    let id: String
+                    let role: Role
+                    let color: RGBAColor
+                    
+                    enum Role: String, Codable {
+                        case attack = "ATTACK"
+                        case defense = "DEFENSE"
+                    }
+                    
+                    struct RGBAColor: Codable {
+                        let r: Float
+                        let g: Float
+                        let b: Float
+                        let a: Float
+                    }
+                }
+                
+                enum State: String, Codable {
+                    case scheduled = "SCHEDULED"
+                    case firstHalf = "FIRST_HALF"
+                    case secondHalf = "SECOND_HALF"
+                }
+            }
+        }
     }
     
-    enum GameModeType: String, Codable, Nameable, LogoNameable {
-        case splatfest
+    enum GameModeType: Codable, Equatable, Nameable, LogoNameable {
+        case splatfest(fest: Splatoon3.Schedule.Splatfest.Fest)
         case turfWar
         case anarchyBattleOpen
         case anarchyBattleSeries
@@ -390,7 +437,7 @@ struct Splatoon2: Codable {
         var coop: CoopTimeline
     }
     
-    enum GameModeType: String, Codable, Nameable, LogoNameable {
+    enum GameModeType: String, Equatable, Codable, Nameable, LogoNameable {
         case turfWar = "regular"
         case ranked
         case league

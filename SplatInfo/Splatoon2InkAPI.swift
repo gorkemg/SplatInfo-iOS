@@ -134,7 +134,7 @@ class Splatoon2InkAPI {
                 completion(nil, nil, InvalidAPIResponseError())
                 return
             }
-            print("response JSON: \(String(describing: responseJSON))")
+//            print("response JSON: \(String(describing: responseJSON))")
             
             completion(response, data, nil)
         }

@@ -93,12 +93,19 @@ extension Splatoon3.GameModeType {
         }
     }
 
-    var bgImage: Image {
-        switch self {
-        case .splatfest, .turfWar, .anarchyBattleOpen, .anarchyBattleSeries, .league, .x:
-            return Image("splatoon-card-bg").resizable(resizingMode: .tile)
-        case .salmonRun:
-            return Image("bg-spots").resizable(resizingMode: .tile)
+    var bgImage: some View {
+        Group {
+            switch self {
+            case .splatfest(let fest):
+                ZStack {
+                    Image("splatoon-card-bg").resizable(resizingMode: .tile)
+                    LinearGradient(colors: [.red, .blue, .yellow], startPoint: .leading, endPoint: .trailing).opacity(0.5)
+                }
+            case .turfWar, .anarchyBattleOpen, .anarchyBattleSeries, .league, .x:
+                Image("splatoon-card-bg").resizable(resizingMode: .tile)
+            case .salmonRun:
+                Image("bg-spots").resizable(resizingMode: .tile)
+            }
         }
     }
 

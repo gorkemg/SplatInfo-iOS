@@ -10,44 +10,6 @@ import Combine
 
 private let splatnet2ImageHostUrl = "https://splatoon2.ink/assets/splatnet"
 
-//struct Schedule: Codable {
-//
-//    var timelines: [GameModeTimeline] = []
-//
-//    struct Splatoon2 {
-//
-//        var regular:
-//
-//
-//        static var empty : Schedule {
-//            return Schedule(timelines: [])
-//        }
-//
-//        static var example : Schedule {
-//            let schedulesPath = Bundle.main.path(forResource: "schedules", ofType: "json")
-//            guard let schedulesData = try? Data(contentsOf: URL(fileURLWithPath: schedulesPath!)) else { return Schedule.Splatoon2.empty }
-//            guard let scheduleResponse : Splatoon2InkAPI.SchedulesAPIResponse = Splatoon2InkAPI.shared().parseAPIResponse(data: schedulesData) else { return Schedule.Splatoon2.empty }
-//            let coopSchedulesPath = Bundle.main.path(forResource: "coop-schedules", ofType: "json")
-//            guard let coopSchedulesData = try? Data(contentsOf: URL(fileURLWithPath: coopSchedulesPath!)) else { return Schedule.Splatoon2.empty }
-//            guard let coopScheduleResponse : Splatoon2InkAPI.CoopSchedulesAPIResponse = Splatoon2InkAPI.shared().parseAPIResponse(data: coopSchedulesData) else { return Schedule.Splatoon2.empty }
-//            let regularTimelines: [GameModeTimeline] = scheduleResponse.gameModeEventTimelines
-//            let coopTimeline: GameModeTimeline = coopScheduleResponse.coopTimeline
-//            let timelines: [GameModeTimeline] = regularTimelines + [coopTimeline]
-//            let schedule = Schedule(timelines: timelines)
-//            return schedule
-//        }
-//
-//    }
-//
-//    func allImageURLs() -> [URL] {
-//        var imageURLs : [URL] = []
-//        for timeline in timelines {
-//            imageURLs.append(contentsOf: timeline.allImageURLs())
-//        }
-//        return imageURLs
-//    }
-//}
-
 extension GameTimeline: ImageURLs {
     
     func allImageURLs() -> [URL] {
@@ -64,21 +26,37 @@ extension Splatoon3.Schedule: ImageURLs {
     }
     
     static var empty : Splatoon3.Schedule {
-
-        return Splatoon3.Schedule(splatfest: .init(events: []),
-                                  regular: .init(events: []),
+        
+        return Splatoon3.Schedule(regular: .init(events: []),
                                   anarchyBattleOpen: .init(events: []),
                                   anarchyBattleSeries: .init(events: []),
                                   league: .init(events: []),
                                   x: .init(events: []),
-                                  coop: .init(events: [], otherTimeframes: []))
+                                  coop: .init(events: [], otherTimeframes: []),
+                                  splatfest: .init(timeline: .init(events: []), fest: nil))
     }
-
+    
     static var example : Splatoon3.Schedule {
         let schedulesPath = Bundle.main.path(forResource: "schedules", ofType: "json")
         guard let schedulesData = try? Data(contentsOf: URL(fileURLWithPath: schedulesPath!)) else { return Splatoon3.Schedule.empty }
         guard let scheduleResponse : Splatoon3InkAPI.SchedulesAPIResponse = Splatoon3InkAPI.shared().parseAPIResponse(data: schedulesData) else { return Splatoon3.Schedule.empty }
-        let schedule = Splatoon3.Schedule(splatfest: scheduleResponse.splatfestTimeline, regular: scheduleResponse.regularTimeline, anarchyBattleOpen: scheduleResponse.anarchyBattleOpenTimeline, anarchyBattleSeries: scheduleResponse.anarchyBattleSeriesTimeline, league: scheduleResponse.leageTimeline, x: scheduleResponse.xTimeline, coop: scheduleResponse.coopTimeline)
+        let schedule = scheduleResponse.schedule
+        return schedule
+    }
+    
+    static var splatfestFirstHalfExample : Splatoon3.Schedule {
+        let schedulesPath = Bundle.main.path(forResource: "schedules-20220924-210001", ofType: "json")
+        guard let schedulesData = try? Data(contentsOf: URL(fileURLWithPath: schedulesPath!)) else { return Splatoon3.Schedule.empty }
+        guard let scheduleResponse : Splatoon3InkAPI.SchedulesAPIResponse = Splatoon3InkAPI.shared().parseAPIResponse(data: schedulesData) else { return Splatoon3.Schedule.empty }
+        let schedule = scheduleResponse.schedule
+        return schedule
+    }
+    
+    static var splatfestSecondHalfExample : Splatoon3.Schedule {
+        let schedulesPath = Bundle.main.path(forResource: "schedules-20220925-160000", ofType: "json")
+        guard let schedulesData = try? Data(contentsOf: URL(fileURLWithPath: schedulesPath!)) else { return Splatoon3.Schedule.empty }
+        guard let scheduleResponse : Splatoon3InkAPI.SchedulesAPIResponse = Splatoon3InkAPI.shared().parseAPIResponse(data: schedulesData) else { return Splatoon3.Schedule.empty }
+        let schedule = scheduleResponse.schedule
         return schedule
     }
 }
@@ -111,39 +89,6 @@ extension Splatoon2.Schedule: ImageURLs {
 
 }
 
-//struct Splatoon2Schedule: Codable, ImageURLs {
-//
-//    var regular: [GameModeEvent]
-//    var ranked: [GameModeEvent]
-//    var league: [GameModeEvent]
-//    var coop: CoopTimeline
-//
-//    static var empty : Splatoon2Schedule {
-//        return Splatoon2Schedule(regular: [], ranked: [], league: [], coop: .init(events: [], otherTimeframes: []))
-//    }
-//
-//    static var example : Splatoon2Schedule {
-//        let schedulesPath = Bundle.main.path(forResource: "schedules", ofType: "json")
-//        guard let schedulesData = try? Data(contentsOf: URL(fileURLWithPath: schedulesPath!)) else { return Splatoon2Schedule.empty }
-//        guard let scheduleResponse : Splatoon2InkAPI.SchedulesAPIResponse = Splatoon2InkAPI.shared().parseAPIResponse(data: schedulesData) else { return Splatoon2Schedule.empty }
-//        let coopSchedulesPath = Bundle.main.path(forResource: "coop-schedules", ofType: "json")
-//        guard let coopSchedulesData = try? Data(contentsOf: URL(fileURLWithPath: coopSchedulesPath!)) else { return Splatoon2Schedule.empty }
-//        guard let coopScheduleResponse : Splatoon2InkAPI.CoopSchedulesAPIResponse = Splatoon2InkAPI.shared().parseAPIResponse(data: coopSchedulesData) else { return Splatoon2Schedule.empty }
-////        let schedule = Splatoon2Schedule(timelines: scheduleResponse.gameModeEventTimelines + [coopScheduleResponse.coopTimeline])
-//        let schedule = Splatoon2Schedule(regular: scheduleResponse.regularTimeline, ranked: scheduleResponse.rankedTimeline, league: scheduleResponse.leageTimeline, coop: coopScheduleResponse.coopTimeline)
-//        return schedule
-//    }
-//
-//    func allImageURLs() -> [URL] {
-//        var imageURLs : [URL] = []
-//        for timeline in [regular, ranked, league] {
-//            imageURLs.append(contentsOf: timeline.allImageURLs())
-//        }
-//        imageURLs.append(contentsOf: coop.allImageURLs())
-//        return imageURLs
-//    }
-//}
-
 extension GameSchedule {
 
     func allImageURLs() -> [URL] {
@@ -161,12 +106,6 @@ extension ScheduleEvents: ImageURLs {
         }
     }
 }
-
-//extension [GameModeEvent]: ImageURLs {
-//    func allImageURLs() -> [URL] {
-//        return self.compactMap({ $0.allImageURLs() }).flatMap({ $0 })
-//    }
-//}
 
 extension CoopTimeline: ImageURLs, WeaponImageURLs {
     func allImageURLs() -> [URL] {
@@ -213,116 +152,6 @@ protocol WeaponImageURLs {
     func allWeaponImageURLs() -> [URL]
 }
 
-//struct Splatoon3Schedule: Codable {
-//    var gameModes = GameModesTimelines.empty
-//    var coop = CoopTimeline.empty()
-//    
-//    static var empty : Splatoon2Schedule {
-//        return Splatoon2Schedule(gameModes: GameModesTimelines.empty, coop: CoopTimeline.empty())
-//    }
-//    
-//    static var example : Splatoon2Schedule {
-//        let schedulesPath = Bundle.main.path(forResource: "schedules", ofType: "json")
-//        guard let schedulesData = try? Data(contentsOf: URL(fileURLWithPath: schedulesPath!)) else { return Splatoon2Schedule.empty }
-//        guard let scheduleResponse : SchedulesAPIResponse = Splatoon2InkAPI.shared().parseAPIResponse(data: schedulesData) else { return Splatoon2Schedule.empty }
-//        let coopSchedulesPath = Bundle.main.path(forResource: "coop-schedules", ofType: "json")
-//        guard let coopSchedulesData = try? Data(contentsOf: URL(fileURLWithPath: coopSchedulesPath!)) else { return Splatoon2Schedule.empty }
-//        guard let coopScheduleResponse : CoopSchedulesAPIResponse = Splatoon2InkAPI.shared().parseAPIResponse(data: coopSchedulesData) else { return Splatoon2Schedule.empty }
-//        let schedule = Splatoon2Schedule(gameModes: scheduleResponse.gameModesTimelines, coop: coopScheduleResponse.coopTimeline)
-//        return schedule
-//    }
-//    
-//    func allImageURLs() -> [URL] {
-//        var imageURLs : [URL] = []
-//        let modes = [gameModes.turfWar, gameModes.ranked, gameModes.league]
-//        let stageImageURLs = modes.flatMap({ $0.allImageURLs() })
-//        imageURLs.append(contentsOf: stageImageURLs)
-//        
-////        let coopStageImageURLStrings = coop.detailedEvents.flatMap({ $0.stage.imageUrl })
-////        let coopWeaponImageURLStrings = coop.detailedEvents.flatMap({ $0.weapons.flatMap { (weapon) -> String in
-////            switch weapon {
-////            case .weapon(details: let details):
-////                return details.imageUrl
-////            case .coopSpecialWeapon(details: let details):
-////                return details.imageUrl
-////            }
-////        } })
-////        let coopImageURLs = [coopStageImageURLStrings,coopWeaponImageURLStrings].compactMap({ URL(string: String($0)) })
-//        let coopImageURLs = coop.allImageURLs()
-//        imageURLs.append(contentsOf: coopImageURLs)
-//        
-//        return imageURLs
-//    }
-//}
-
-//protocol Outdated {
-//
-//    var date : Date { get }
-//    var isOutdated : Bool { get }
-//}
-//
-//extension Outdated {
-//
-//    var isOutdated : Bool {
-//        return self.date < Date().addingTimeInterval(-3600) // is stored date older than one hour ago
-//    }
-//}
-
-//struct GameModesTimelines: Codable /*, Outdated */ {
-//    let regular: Splatoon2.GameModeTimeline
-//    let ranked: Splatoon2.GameModeTimeline
-//    let league: Splatoon2.GameModeTimeline
-////    let date: Date
-//
-//    static var empty : GameModesTimelines {
-//        return GameModesTimelines(regular: Splatoon2.GameModeTimeline.empty(.turfWar), ranked: Splatoon2.GameModeTimeline.empty(.ranked), league: Splatoon2.GameModeTimeline.empty(.league))
-//    }
-//}
-
-//extension Splatoon2.GameModeTimeline {
-//    func allImageURLs() -> [URL] {
-//        let stages = self.schedule.flatMap({ $0.stages })
-//        let imageURLs = stages.map({ $0.imageUrl })
-//        let stageImageURLs = imageURLs.compactMap({ $0 /*URL(string: $0) */ })
-//        return stageImageURLs
-//    }
-//}
-
-//extension CoopTimeline : Outdated {
-//    // make CoopTimeline extend Outdated protocol
-//}
-
-//extension CoopTimeline {
-//    func allImageURLs() -> [URL] {
-//        let coopStageImageURLStrings = allStageImageURLs()
-//        let coopWeaponImageURLStrings = allWeaponImageURLs()
-//        let imageURLs = coopStageImageURLStrings + coopWeaponImageURLStrings
-////        let imageURLs = combined.compactMap({ URL(string: $0) })
-//        return imageURLs
-//    }
-//
-//    func allStageImageURLs() -> [URL] {
-//        let coopStageImageURLStrings = self.detailedEvents.map({ $0.stage.imageUrl })
-//        return coopStageImageURLStrings.compactMap({ $0 /*URL(string: $0) */ })
-//    }
-//
-//    func allWeaponImageURLs() -> [URL] {
-//        let coopWeaponImageURLs = self.detailedEvents.map({ $0.weapons.map { (weapon) -> URL? in
-//            switch weapon {
-//            case .weapon(details: let details):
-//                return details.imageUrl
-//            case .coopSpecialWeapon(details: let details):
-//                return details.imageUrl
-//            }
-//        } }).flatMap({ $0 })
-//        return coopWeaponImageURLs.compactMap({ $0 })
-//    }
-//}
-
-//extension Encodable {
-//    func toJSONData() -> Data? { try? JSONEncoder().encode(self) }
-//}
-
 extension Encodable {
     func encoded() throws -> Data {
         return try JSONEncoder().encode(self)
@@ -365,7 +194,7 @@ class ScheduleFetcher: ObservableObject {
     @Published var splatoon3Schedule : Splatoon3.Schedule = Splatoon3.Schedule.empty
 
     private func loadCachedData<T>(filename: String, resultType: T.Type) -> TimelineCache<T>? where T:Codable {
-        print("ScheduleFetcher LoadCachedData \(self)")
+        print("ScheduleFetcher LoadCachedData \(T.self)")
         let filePath = cacheFileURL(filename: filename)
         let fileManager = FileManager.default
         guard let path = filePath, fileManager.fileExists(atPath: path.path) else { return nil }
@@ -375,7 +204,7 @@ class ScheduleFetcher: ObservableObject {
     }
     
     private func cacheData<T:Codable>(cacheData: TimelineCache<T>, filename: String) {
-        print("ScheduleFetcher CacheData \(self)")
+        print("ScheduleFetcher CacheData \(T.self)")
         let filePath = cacheFileURL(filename: filename)
         guard let path = filePath, let data = try? cacheData.encoded() else { return }
         try? data.write(to: path)
@@ -401,7 +230,7 @@ class ScheduleFetcher: ObservableObject {
         
         // load cache
         if let cachedTimeline = timelineCache.splatoon2, !cachedTimeline.isOutdated {
-            print("Using cached Timeline")
+            print("Splatoon2 using cached Timeline \(cachedTimeline.date) outdated:\(cachedTimeline.isOutdated)")
             self.splatoon2Schedule = cachedTimeline.schedule
             completion(.success(cachedTimeline.schedule))
             return
@@ -410,6 +239,7 @@ class ScheduleFetcher: ObservableObject {
         // load from disk
         let filename = "schedules.json"
         if let cacheData = loadCachedData(filename: filename, resultType: Splatoon2.Schedule.self), !cacheData.isOutdated {
+            print("Splatoon2 using disk Timeline \(cacheData.date) outdated:\(cacheData.isOutdated)")
             self.timelineCache.splatoon2 = cacheData
             self.splatoon2Schedule = cacheData.schedule
             completion(.success(cacheData.schedule))
@@ -440,7 +270,8 @@ class ScheduleFetcher: ObservableObject {
 
                         // save
                         self.splatoon2Schedule = schedule
-                        
+                        print("Splatoon2 new Schedule: \(schedule)")
+
                         // return
                         completion(.success(schedule))
                     case .failure(let error):
@@ -505,7 +336,7 @@ class ScheduleFetcher: ObservableObject {
         
         // load cache
         if let cachedTimeline = timelineCache.splatoon3, !cachedTimeline.isOutdated {
-            print("Using cached Timeline")
+            print("Splatoon3 using cached Timeline \(cachedTimeline.date) outdated:\(cachedTimeline.isOutdated)")
             self.splatoon3Schedule = cachedTimeline.schedule
             completion(.success(cachedTimeline.schedule))
             return
@@ -514,6 +345,7 @@ class ScheduleFetcher: ObservableObject {
         // load from disk
         let filename = "schedules.json"
         if let cacheData = loadCachedData(filename: filename, resultType: Splatoon3.Schedule.self), !cacheData.isOutdated {
+            print("Splatoon3 using disk Timeline \(cacheData.date) outdated:\(cacheData.isOutdated)")
             self.timelineCache.splatoon3 = cacheData
             self.splatoon3Schedule = cacheData.schedule
             completion(.success(cacheData.schedule))
@@ -531,7 +363,7 @@ class ScheduleFetcher: ObservableObject {
                 return
             }
             
-            let schedule = Splatoon3.Schedule(splatfest: response.splatfestTimeline, regular: response.regularTimeline, anarchyBattleOpen: response.anarchyBattleOpenTimeline, anarchyBattleSeries: response.anarchyBattleSeriesTimeline, league: response.leageTimeline, x: response.xTimeline, coop: response.coopTimeline)
+            let schedule = Splatoon3.Schedule(regular: response.regularTimeline, anarchyBattleOpen: response.anarchyBattleOpenTimeline, anarchyBattleSeries: response.anarchyBattleSeriesTimeline, league: response.leageTimeline, x: response.xTimeline, coop: response.coopTimeline, splatfest: .init(timeline: response.splatfestTimeline, fest: response.splatfest))
             self.splatoon3Schedule = schedule
             completion(.success(schedule))
         }
@@ -575,13 +407,13 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
     }
 
     var anarchyBattleOpenTimeline: GameTimeline {
-        let events = self.data.bankaraSchedules.nodes.filter({ ($0.bankaraMatchSettings ?? []).filter({ $0.mode == .open }).count > 0 }).flatMap({ $0.gameModeEvents(mode:.splatoon3(type: .anarchyBattleOpen)) })
-        return .init(events: events)
+        let events: [GameModeEvent] = self.data.bankaraSchedules.nodes.map({ $0.gameModeEvents }).flatMap({ $0 })
+        return .init(events: events.filter({ $0.mode == .splatoon3(type: .anarchyBattleOpen) }))
     }
 
     var anarchyBattleSeriesTimeline: GameTimeline {
-        let events = self.data.bankaraSchedules.nodes.filter({ ($0.bankaraMatchSettings ?? []).filter({ $0.mode == .challenge }).count > 0 }).flatMap({ $0.gameModeEvents(mode:.splatoon3(type: .anarchyBattleSeries)) })
-        return .init(events: events)
+        let events: [GameModeEvent] = self.data.bankaraSchedules.nodes.map({ $0.gameModeEvents }).flatMap({ $0 })
+        return .init(events: events.filter({ $0.mode == .splatoon3(type: .anarchyBattleSeries) }))
     }
 
     var leageTimeline: GameTimeline {
@@ -603,6 +435,11 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
         return .init(events: events)
     }
     
+    var splatfest: Splatoon3.Schedule.Splatfest.Fest? {
+        return self.data.currentFest?.splatoonKitSplatfest
+    }
+    
+    
     var coopEvents: [CoopEvent] {
         
         var events: [CoopEvent] = []
@@ -614,6 +451,58 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
         return events
     }
     
+}
+
+extension Splatoon3InkAPI.SchedulesAPIResponse {
+    
+    var schedule: Splatoon3.Schedule {
+        let schedule = Splatoon3.Schedule(regular: regularTimeline, anarchyBattleOpen: anarchyBattleOpenTimeline, anarchyBattleSeries: anarchyBattleSeriesTimeline, league: leageTimeline, x: xTimeline, coop: coopTimeline, splatfest: .init(timeline: splatfestTimeline, fest: splatfest))
+        return schedule
+    }
+}
+
+extension Splatoon3InkAPI.CurrentFest {
+    
+    var splatoonKitSplatfest: Splatoon3.Schedule.Splatfest.Fest {
+        let timeframe = EventTimeframe(startDate: self.startTime, endDate: self.endTime)
+        let teams = self.teams.map({ $0.splattonKitTeam })
+        return .init(id: self.id, timeframe: timeframe, midtermTime: self.midtermTime, title: self.title, teams: teams, state: self.state.splattonKitState, tricolorStage: Stage(id: self.tricolorStage.id, name: self.tricolorStage.name, imageUrl: self.tricolorStage.image.url))
+    }
+}
+
+extension Splatoon3InkAPI.CurrentFest.State {
+
+    var splattonKitState : Splatoon3.Schedule.Splatfest.Fest.State {
+        switch self {
+        case .scheduled:
+            return .scheduled
+        case .firstHalf:
+            return .firstHalf
+        case .secondHalf:
+            return .secondHalf
+        }
+    }
+}
+
+extension Splatoon3InkAPI.CurrentFest.Team {
+
+    var splattonKitTeam : Splatoon3.Schedule.Splatfest.Fest.Team {
+        return .init(id: self.id, role: self.role.splattonKitRole, color: self.color.splattonKitColor)
+    }
+}
+
+extension Splatoon3InkAPI.CurrentFest.Team.Role {
+
+    var splattonKitRole : Splatoon3.Schedule.Splatfest.Fest.Team.Role {
+        return .init(rawValue: self.rawValue) ?? .attack
+    }
+}
+
+extension Splatoon3InkAPI.CurrentFest.Team.RGBAColor {
+
+    var splattonKitColor : Splatoon3.Schedule.Splatfest.Fest.Team.RGBAColor {
+        return .init(r: r, g: g, b: b, a: a)
+    }
 }
 
 extension Splatoon3InkAPI.Weapon {
@@ -630,6 +519,22 @@ extension Decodable where Self: EventDetails {
         var events: [GameModeEvent] = []
         for setting in matchSetting {
             let event = GameModeEvent(id: UUID().uuidString, mode: mode, stages: setting.stages, rule: setting.rule, timeframe: EventTimeframe(startDate: self.startTime, endDate: self.endTime))
+            events.append(event)
+        }
+        return events
+    }
+}
+
+extension Splatoon3InkAPI.BankaraEvent {
+    
+    var gameModeEvents: [GameModeEvent] {
+        var events: [GameModeEvent] = []
+        for setting in self.bankaraMatchSettings ?? [] {
+            let event = GameModeEvent(id: UUID().uuidString, mode: .splatoon3(type: setting.mode == .open ? .anarchyBattleOpen : .anarchyBattleSeries), stages: setting.stages, rule: setting.rule, timeframe: EventTimeframe(startDate: self.startTime, endDate: self.endTime))
+            events.append(event)
+        }
+        for setting in self.challengeMatchSettings {
+            let event = GameModeEvent(id: UUID().uuidString, mode: .splatoon3(type: setting.mode == .open ? .anarchyBattleOpen : .anarchyBattleSeries), stages: setting.stages, rule: setting.rule, timeframe: EventTimeframe(startDate: self.startTime, endDate: self.endTime))
             events.append(event)
         }
         return events

@@ -86,7 +86,7 @@ struct CoopLargeEventView : View {
                                     .padding(.vertical, 2.0)
                                     .padding(.horizontal, 4.0)
 //                                    .background(Image("carbon_fibre").resizable(resizingMode: .tile))
-                                    .background(Color.black.opacity(0.5))
+                                    .background(Color.white.opacity(0.5))
                                     .cornerRadius(8.0)
                                     .clipShape(ContainerRelativeShape())
                                     .shadow(color: .black, radius: 2, x: 0, y: 1)
@@ -239,7 +239,7 @@ struct WeaponsList: View {
         HStack(alignment: .center, spacing: 2) {
             ForEach(weapons, id: \.id) { weapon in
                 WeaponImage(weapon: weapon)
-                    .shadow(color: .white, radius: 1.0, x: 0.0, y: 0.0)
+                    .shadow(color: .black, radius: 1.0, x: 0.0, y: 0.0)
             }
         }
     }

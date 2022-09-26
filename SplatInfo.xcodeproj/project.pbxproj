@@ -27,6 +27,10 @@
 		DE41B93F2541A8F400AAD49A /* ScaledFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B93E2541A8F400AAD49A /* ScaledFont.swift */; };
 		DE49D2FC28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE49D2FB28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift */; };
 		DE49D2FE28DAF076000FAB3D /* GameModeInlineWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE49D2FD28DAF076000FAB3D /* GameModeInlineWidgetView.swift */; };
+		DE49D30028E17C6A000FAB3D /* schedules-20220925-160000.json in Resources */ = {isa = PBXBuildFile; fileRef = DE49D2FF28E17C6A000FAB3D /* schedules-20220925-160000.json */; };
+		DE49D30128E17C70000FAB3D /* schedules-20220925-160000.json in Resources */ = {isa = PBXBuildFile; fileRef = DE49D2FF28E17C6A000FAB3D /* schedules-20220925-160000.json */; };
+		DE49D30328E17CD1000FAB3D /* schedules-20220924-210001.json in Resources */ = {isa = PBXBuildFile; fileRef = DE49D30228E17CD1000FAB3D /* schedules-20220924-210001.json */; };
+		DE49D30428E17CD1000FAB3D /* schedules-20220924-210001.json in Resources */ = {isa = PBXBuildFile; fileRef = DE49D30228E17CD1000FAB3D /* schedules-20220924-210001.json */; };
 		DE50121425385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */; };
 		DE50121525385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */; };
 		DE50121625385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */; };
@@ -180,6 +184,8 @@
 		DE41B93E2541A8F400AAD49A /* ScaledFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaledFont.swift; sourceTree = "<group>"; };
 		DE49D2FB28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModeRectangularWidgetView.swift; sourceTree = "<group>"; };
 		DE49D2FD28DAF076000FAB3D /* GameModeInlineWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModeInlineWidgetView.swift; sourceTree = "<group>"; };
+		DE49D2FF28E17C6A000FAB3D /* schedules-20220925-160000.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "schedules-20220925-160000.json"; sourceTree = "<group>"; };
+		DE49D30228E17CD1000FAB3D /* schedules-20220924-210001.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "schedules-20220924-210001.json"; sourceTree = "<group>"; };
 		DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splatoon2InkAPI.swift; sourceTree = "<group>"; };
 		DE50121A2539D22800A73F7A /* SplatoonKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatoonKit.swift; sourceTree = "<group>"; };
 		DE5012212539E24A00A73F7A /* ScheduleFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleFetcher.swift; sourceTree = "<group>"; };
@@ -409,6 +415,8 @@
 			children = (
 				DEE7C1A828D5F0670024D6A9 /* gear.json */,
 				DEE7C1A628D5F0630024D6A9 /* splat3schedules.json */,
+				DE49D30228E17CD1000FAB3D /* schedules-20220924-210001.json */,
+				DE49D2FF28E17C6A000FAB3D /* schedules-20220925-160000.json */,
 			);
 			path = Splatoon3;
 			sourceTree = "<group>";
@@ -544,6 +552,7 @@
 				DE50122D253A1B7500A73F7A /* schedules.json in Resources */,
 				DE501245253A1BE200A73F7A /* merchandise.json in Resources */,
 				DEE7C1A928D5F0670024D6A9 /* gear.json in Resources */,
+				DE49D30328E17CD1000FAB3D /* schedules-20220924-210001.json in Resources */,
 				DE501237253A1BA300A73F7A /* coop-schedules.json in Resources */,
 				DE50124C253A1BFF00A73F7A /* festivals.json in Resources */,
 				DE2BD6012538489C006E5531 /* Preview Assets.xcassets in Resources */,
@@ -551,6 +560,7 @@
 				DE501256253A1C2400A73F7A /* na-5060-rankings.json in Resources */,
 				DE50123E253A1BC600A73F7A /* timeline.json in Resources */,
 				DEE7C1A728D5F0630024D6A9 /* splat3schedules.json in Resources */,
+				DE49D30028E17C6A000FAB3D /* schedules-20220925-160000.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,9 +600,11 @@
 			files = (
 				DE9BAC8C2543284300F50AD2 /* na-5060-rankings.json in Resources */,
 				DEAFEA4525431BF400FFA812 /* Splatoon1.otf in Resources */,
+				DE49D30428E17CD1000FAB3D /* schedules-20220924-210001.json in Resources */,
 				DEAFEA4425431BF400FFA812 /* Splatoon2.otf in Resources */,
 				DE9BAC902543284300F50AD2 /* timeline.json in Resources */,
 				DEE7C1AF28D5F0800024D6A9 /* gear.json in Resources */,
+				DE49D30128E17C70000FAB3D /* schedules-20220925-160000.json in Resources */,
 				DE9BAC8D2543284300F50AD2 /* coop-schedules.json in Resources */,
 				DEAFEA0E2543121800FFA812 /* Assets.xcassets in Resources */,
 				DE9BAC8B2543284300F50AD2 /* merchandise.json in Resources */,
