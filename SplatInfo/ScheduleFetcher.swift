@@ -194,7 +194,7 @@ class ScheduleFetcher: ObservableObject {
     @Published var splatoon3Schedule : Splatoon3.Schedule = Splatoon3.Schedule.empty
 
     private func loadCachedData<T>(filename: String, resultType: T.Type) -> TimelineCache<T>? where T:Codable {
-        print("ScheduleFetcher LoadCachedData \(T.self)")
+        //print("ScheduleFetcher LoadCachedData \(T.self)")
         let filePath = cacheFileURL(filename: filename)
         let fileManager = FileManager.default
         guard let path = filePath, fileManager.fileExists(atPath: path.path) else { return nil }
@@ -204,7 +204,7 @@ class ScheduleFetcher: ObservableObject {
     }
     
     private func cacheData<T:Codable>(cacheData: TimelineCache<T>, filename: String) {
-        print("ScheduleFetcher CacheData \(T.self)")
+        //print("ScheduleFetcher CacheData \(T.self)")
         let filePath = cacheFileURL(filename: filename)
         guard let path = filePath, let data = try? cacheData.encoded() else { return }
         try? data.write(to: path)
@@ -220,7 +220,7 @@ class ScheduleFetcher: ObservableObject {
     
     private func copyCacheFileToAppGroupDirectory(_ filename: String) {
         let sharedContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName)
-        NSLog("sharedContainerURL = \(String(describing: sharedContainerURL))")
+        //NSLog("sharedContainerURL = \(String(describing: sharedContainerURL))")
         guard let sourceURL = cacheFileURL(filename: filename) else { return }
         guard let destinationURL = sharedContainerURL?.appendingPathComponent(filename) else { return }
         try? FileManager().copyItem(at: sourceURL, to: destinationURL)
@@ -230,7 +230,7 @@ class ScheduleFetcher: ObservableObject {
         
         // load cache
         if let cachedTimeline = timelineCache.splatoon2, !cachedTimeline.isOutdated {
-            print("Splatoon2 using cached Timeline \(cachedTimeline.date) outdated:\(cachedTimeline.isOutdated)")
+            //print("Splatoon2 using cached Timeline \(cachedTimeline.date) outdated:\(cachedTimeline.isOutdated)")
             self.splatoon2Schedule = cachedTimeline.schedule
             completion(.success(cachedTimeline.schedule))
             return
@@ -239,7 +239,7 @@ class ScheduleFetcher: ObservableObject {
         // load from disk
         let filename = "schedules.json"
         if let cacheData = loadCachedData(filename: filename, resultType: Splatoon2.Schedule.self), !cacheData.isOutdated {
-            print("Splatoon2 using disk Timeline \(cacheData.date) outdated:\(cacheData.isOutdated)")
+            //print("Splatoon2 using disk Timeline \(cacheData.date) outdated:\(cacheData.isOutdated)")
             self.timelineCache.splatoon2 = cacheData
             self.splatoon2Schedule = cacheData.schedule
             completion(.success(cacheData.schedule))
@@ -270,7 +270,7 @@ class ScheduleFetcher: ObservableObject {
 
                         // save
                         self.splatoon2Schedule = schedule
-                        print("Splatoon2 new Schedule: \(schedule)")
+                        //print("Splatoon2 new Schedule: \(schedule)")
 
                         // return
                         completion(.success(schedule))
@@ -336,7 +336,7 @@ class ScheduleFetcher: ObservableObject {
         
         // load cache
         if let cachedTimeline = timelineCache.splatoon3, !cachedTimeline.isOutdated {
-            print("Splatoon3 using cached Timeline \(cachedTimeline.date) outdated:\(cachedTimeline.isOutdated)")
+//            print("Splatoon3 using cached Timeline \(cachedTimeline.date) outdated:\(cachedTimeline.isOutdated)")
             self.splatoon3Schedule = cachedTimeline.schedule
             completion(.success(cachedTimeline.schedule))
             return
@@ -345,7 +345,7 @@ class ScheduleFetcher: ObservableObject {
         // load from disk
         let filename = "schedules.json"
         if let cacheData = loadCachedData(filename: filename, resultType: Splatoon3.Schedule.self), !cacheData.isOutdated {
-            print("Splatoon3 using disk Timeline \(cacheData.date) outdated:\(cacheData.isOutdated)")
+//            print("Splatoon3 using disk Timeline \(cacheData.date) outdated:\(cacheData.isOutdated)")
             self.timelineCache.splatoon3 = cacheData
             self.splatoon3Schedule = cacheData.schedule
             completion(.success(cacheData.schedule))
@@ -630,7 +630,6 @@ extension Splatoon2InkAPI.ModeAPIResponse {
 extension Splatoon2InkAPI.GameModeAPIResponse {
     
     var mode : Splatoon2.GameModeType {
-        print("GameModeType: \(self.key)")
         switch self.key {
         case .regular:
             return .turfWar
@@ -647,7 +646,6 @@ extension Splatoon2InkAPI.GameModeAPIResponse {
 extension Splatoon2InkAPI.RuleAPIResponse {
     
     var gameModeRule: GameModeRule {
-        print("GameModeRule: \(self.key)")
         switch self.key {
         case .turfWar:
             return .turfWar

@@ -47,6 +47,28 @@ extension Stage {
     }
 }
 
+extension GameModeType {
+    
+    var color : Color {
+        switch self {
+        case .splatoon2(let type):
+            return type.color
+        case .splatoon3(let type):
+            return type.color
+        }
+    }
+    var bgImage: some View {
+        Group {
+            switch self {
+            case .splatoon2(let type):
+                type.bgImage
+            case .splatoon3(let type):
+                type.bgImage
+            }
+        }
+    }
+}
+
 extension Splatoon2.GameModeType {
 
     var color : Color {
@@ -62,12 +84,14 @@ extension Splatoon2.GameModeType {
         }
     }
     
-    var bgImage: Image {
-        switch self {
-        case .turfWar, .ranked, .league:
-            return Image("splatoon-card-bg").resizable(resizingMode: .tile)
-        case .salmonRun:
-            return Image("bg-spots").resizable(resizingMode: .tile)
+    var bgImage: some View {
+        Group {
+            switch self {
+            case .turfWar, .ranked, .league:
+                return Image("splatoon-card-bg").resizable(resizingMode: .tile)
+            case .salmonRun:
+                return Image("bg-spots").resizable(resizingMode: .tile)
+            }
         }
     }
 }
@@ -76,7 +100,7 @@ extension Splatoon3.GameModeType {
 
     var color : Color {
         switch self {
-        case .splatfest:
+        case .splatfest(let fest):
             return Color.regularModeColor
         case .turfWar:
             return Color.regularModeColor
@@ -87,7 +111,7 @@ extension Splatoon3.GameModeType {
         case .league:
             return Color.leagueModeColor
         case .x:
-            return Color.rankedModeColor
+            return Color.xModeColor
         case .salmonRun:
             return Color.coopModeColor
         }

@@ -107,11 +107,11 @@ struct ScheduleEntryView : View {
         }
     }
     
-    var imageQuality : ImageQuality {
+    var imageQuality : ImageQuality = {
         let quality = ImageQuality()
         quality.thumbnail = true
         return quality
-    }
+    }()
     
     
     var displayNext: Bool {

@@ -28,9 +28,9 @@
 		DE49D2FC28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE49D2FB28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift */; };
 		DE49D2FE28DAF076000FAB3D /* GameModeInlineWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE49D2FD28DAF076000FAB3D /* GameModeInlineWidgetView.swift */; };
 		DE49D30028E17C6A000FAB3D /* schedules-20220925-160000.json in Resources */ = {isa = PBXBuildFile; fileRef = DE49D2FF28E17C6A000FAB3D /* schedules-20220925-160000.json */; };
-		DE49D30128E17C70000FAB3D /* schedules-20220925-160000.json in Resources */ = {isa = PBXBuildFile; fileRef = DE49D2FF28E17C6A000FAB3D /* schedules-20220925-160000.json */; };
 		DE49D30328E17CD1000FAB3D /* schedules-20220924-210001.json in Resources */ = {isa = PBXBuildFile; fileRef = DE49D30228E17CD1000FAB3D /* schedules-20220924-210001.json */; };
-		DE49D30428E17CD1000FAB3D /* schedules-20220924-210001.json in Resources */ = {isa = PBXBuildFile; fileRef = DE49D30228E17CD1000FAB3D /* schedules-20220924-210001.json */; };
+		DE49D30528E1CE3F000FAB3D /* schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50122C253A1B7500A73F7A /* schedules.json */; };
+		DE49D30628E1CE3F000FAB3D /* coop-schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501236253A1BA300A73F7A /* coop-schedules.json */; };
 		DE50121425385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */; };
 		DE50121525385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */; };
 		DE50121625385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */; };
@@ -64,12 +64,6 @@
 		DE68BECF28D9148F00700A80 /* CircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECE28D9148F00700A80 /* CircularWidgetView.swift */; };
 		DE72E3A12587B69E00CA0BCD /* LargeCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A02587B69E00CA0BCD /* LargeCoopWidgetView.swift */; };
 		DE72E3A72587B99100CA0BCD /* MediumCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */; };
-		DE9BAC8B2543284300F50AD2 /* merchandise.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501244253A1BE200A73F7A /* merchandise.json */; };
-		DE9BAC8C2543284300F50AD2 /* na-5060-rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501255253A1C2400A73F7A /* na-5060-rankings.json */; };
-		DE9BAC8D2543284300F50AD2 /* coop-schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501236253A1BA300A73F7A /* coop-schedules.json */; };
-		DE9BAC8E2543284300F50AD2 /* schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50122C253A1B7500A73F7A /* schedules.json */; };
-		DE9BAC8F2543284300F50AD2 /* festivals.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50124B253A1BFF00A73F7A /* festivals.json */; };
-		DE9BAC902543284300F50AD2 /* timeline.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50123D253A1BC600A73F7A /* timeline.json */; };
 		DE9DFA6E254AF6A700267508 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */; };
 		DE9DFA6F254AF6A700267508 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */; };
 		DEAE259C25541CDB00253E79 /* LargeGameModeWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAE259A25541CDB00253E79 /* LargeGameModeWidgetView.swift */; };
@@ -109,10 +103,8 @@
 		DEE7C1A928D5F0670024D6A9 /* gear.json in Resources */ = {isa = PBXBuildFile; fileRef = DEE7C1A828D5F0670024D6A9 /* gear.json */; };
 		DEE7C1AA28D5F07B0024D6A9 /* splat3schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DEE7C1A628D5F0630024D6A9 /* splat3schedules.json */; };
 		DEE7C1AB28D5F07C0024D6A9 /* splat3schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DEE7C1A628D5F0630024D6A9 /* splat3schedules.json */; };
-		DEE7C1AC28D5F07C0024D6A9 /* splat3schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DEE7C1A628D5F0630024D6A9 /* splat3schedules.json */; };
 		DEE7C1AD28D5F0800024D6A9 /* gear.json in Resources */ = {isa = PBXBuildFile; fileRef = DEE7C1A828D5F0670024D6A9 /* gear.json */; };
 		DEE7C1AE28D5F0800024D6A9 /* gear.json in Resources */ = {isa = PBXBuildFile; fileRef = DEE7C1A828D5F0670024D6A9 /* gear.json */; };
-		DEE7C1AF28D5F0800024D6A9 /* gear.json in Resources */ = {isa = PBXBuildFile; fileRef = DEE7C1A828D5F0670024D6A9 /* gear.json */; };
 		DEE7C1B128D5FFD10024D6A9 /* Splatoon3InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE7C1A328D5EF4F0024D6A9 /* Splatoon3InkAPI.swift */; };
 		DEE7C1B228D5FFD10024D6A9 /* Splatoon3InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE7C1A328D5EF4F0024D6A9 /* Splatoon3InkAPI.swift */; };
 		DEE7C1B328D5FFD20024D6A9 /* Splatoon3InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE7C1A328D5EF4F0024D6A9 /* Splatoon3InkAPI.swift */; };
@@ -598,19 +590,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE9BAC8C2543284300F50AD2 /* na-5060-rankings.json in Resources */,
 				DEAFEA4525431BF400FFA812 /* Splatoon1.otf in Resources */,
-				DE49D30428E17CD1000FAB3D /* schedules-20220924-210001.json in Resources */,
 				DEAFEA4425431BF400FFA812 /* Splatoon2.otf in Resources */,
-				DE9BAC902543284300F50AD2 /* timeline.json in Resources */,
-				DEE7C1AF28D5F0800024D6A9 /* gear.json in Resources */,
-				DE49D30128E17C70000FAB3D /* schedules-20220925-160000.json in Resources */,
-				DE9BAC8D2543284300F50AD2 /* coop-schedules.json in Resources */,
+				DE49D30528E1CE3F000FAB3D /* schedules.json in Resources */,
 				DEAFEA0E2543121800FFA812 /* Assets.xcassets in Resources */,
-				DE9BAC8B2543284300F50AD2 /* merchandise.json in Resources */,
-				DE9BAC8E2543284300F50AD2 /* schedules.json in Resources */,
-				DE9BAC8F2543284300F50AD2 /* festivals.json in Resources */,
-				DEE7C1AC28D5F07C0024D6A9 /* splat3schedules.json in Resources */,
+				DE49D30628E1CE3F000FAB3D /* coop-schedules.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

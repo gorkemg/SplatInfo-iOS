@@ -17,22 +17,30 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
     }
 
     let scheduleFetcher = ScheduleFetcher()
-    static let schedule = Splatoon2.Schedule.example
     let imageLoaderManager = ImageLoaderManager()
     
-    static var regularEvents : [GameModeEvent] {
-        return schedule.regular.events
+    static var exampleSchedule: Splatoon2.Schedule {
+        return Splatoon2.Schedule.empty
     }
-    static var coopEvents : [CoopEvent] {
-        return schedule.coop.events
+    
+    static var exampleRegularEvents : [GameModeEvent] {
+        return Splatoon2TimelineProvider.exampleSchedule.regular.events
+    }
+    static var exampleCoopEvents : [CoopEvent] {
+        return Splatoon2TimelineProvider.exampleSchedule.coop.events
     }
 
     func placeholder(in context: Context) -> GameModeEntry {
-        GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.regularEvents), configuration: ConfigurationIntent())
+        return GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.exampleRegularEvents), configuration: ConfigurationIntent())
     }
 
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (GameModeEntry) -> ()) {
-        print("Display Snapshot isPreview:\(context.isPreview)")
+        //print("Display Snapshot isPreview:\(context.isPreview)")
+        if context.isPreview {
+            let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.exampleRegularEvents), configuration: ConfigurationIntent())
+            completion(entry)
+            return
+        }
         scheduleFetcher.useSharedFolderForCaching = true
 
         scheduleFetcher.fetchSplatoon2Schedule(completion: { result in
@@ -59,7 +67,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
                     break
                 }
             case .failure(_):
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.regularEvents), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.exampleRegularEvents), configuration: configuration)
                 completion(entry)
                 break
             }
@@ -70,7 +78,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
         let mode = configuration.scheduleType
         scheduleFetcher.useSharedFolderForCaching = true
 
-        print("TimelineProvider getTimeline \(self)")
+        //print("TimelineProvider getTimeline \(self)")
 
         scheduleFetcher.fetchSplatoon2Schedule { result in
             switch result {
@@ -84,10 +92,10 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
                     selectedTimeline = .game(timeline: schedule.regular)
                 case .ranked:
                     urls = schedule.ranked.allImageURLs()
-                    selectedTimeline = .game(timeline: schedule.regular)
+                    selectedTimeline = .game(timeline: schedule.ranked)
                 case .league:
                     urls = schedule.league.allImageURLs()
-                    selectedTimeline = .game(timeline: schedule.regular)
+                    selectedTimeline = .game(timeline: schedule.league)
                 case .salmonRun:
                     urls = schedule.coop.allImageURLs()
                     selectedTimeline = .coop(timeline: schedule.coop)

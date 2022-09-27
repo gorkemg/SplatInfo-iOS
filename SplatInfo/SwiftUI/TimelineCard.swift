@@ -177,6 +177,9 @@ extension Color {
     static var leagueModeColor: Color {
         return Color("LeagueModeColor")
     }
+    static var xModeColor: Color {
+        return Color("XModeColor")
+    }
     static var coopModeColor: Color {
         return Color("CoopModeColor")
     }
