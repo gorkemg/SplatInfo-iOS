@@ -6,13 +6,13 @@
 	<array>
 		<dict>
 			<key>INEnumDisplayName</key>
-			<string>ScheduleType</string>
+			<string>Splatoon 2 Battle Modes</string>
 			<key>INEnumDisplayNameID</key>
 			<string>Q6YhPY</string>
 			<key>INEnumGeneratesHeader</key>
 			<true/>
 			<key>INEnumName</key>
-			<string>Enum</string>
+			<string>Splatoon2_ScheduleType</string>
 			<key>INEnumType</key>
 			<string>Regular</string>
 			<key>INEnumValues</key>
@@ -27,7 +27,7 @@
 				</dict>
 				<dict>
 					<key>INEnumValueDisplayName</key>
-					<string>Regular</string>
+					<string>Turf War</string>
 					<key>INEnumValueDisplayNameID</key>
 					<string>dzyX3D</string>
 					<key>INEnumValueIndex</key>
@@ -67,34 +67,173 @@
 				</dict>
 			</array>
 		</dict>
+		<dict>
+			<key>INEnumDisplayName</key>
+			<string>Splatoon 3 Battle Modes</string>
+			<key>INEnumDisplayNameID</key>
+			<string>m3B4WR</string>
+			<key>INEnumGeneratesHeader</key>
+			<true/>
+			<key>INEnumName</key>
+			<string>Splatoon3_ScheduleType</string>
+			<key>INEnumType</key>
+			<string>Regular</string>
+			<key>INEnumValues</key>
+			<array>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>unknown</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>pFUbFQ</string>
+					<key>INEnumValueName</key>
+					<string>unknown</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Turf War</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>EAbwdK</string>
+					<key>INEnumValueIndex</key>
+					<integer>1</integer>
+					<key>INEnumValueName</key>
+					<string>turfWar</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Anarchy Battle Open</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>q24E3Z</string>
+					<key>INEnumValueIndex</key>
+					<integer>2</integer>
+					<key>INEnumValueName</key>
+					<string>anarchyOpen</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Anarchy Battle Series</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>ViECBT</string>
+					<key>INEnumValueIndex</key>
+					<integer>3</integer>
+					<key>INEnumValueName</key>
+					<string>anarchySeries</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>League Battle</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>aP2fhO</string>
+					<key>INEnumValueIndex</key>
+					<integer>4</integer>
+					<key>INEnumValueName</key>
+					<string>league</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>X Battle</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>ewJbCV</string>
+					<key>INEnumValueIndex</key>
+					<integer>5</integer>
+					<key>INEnumValueName</key>
+					<string>x</string>
+				</dict>
+				<dict>
+					<key>INEnumValueDisplayName</key>
+					<string>Salmon Run</string>
+					<key>INEnumValueDisplayNameID</key>
+					<string>xUplrA</string>
+					<key>INEnumValueIndex</key>
+					<integer>6</integer>
+					<key>INEnumValueName</key>
+					<string>salmonRun</string>
+				</dict>
+			</array>
+		</dict>
 	</array>
 	<key>INIntentDefinitionModelVersion</key>
 	<string>1.2</string>
 	<key>INIntentDefinitionNamespace</key>
 	<string>88xZPY</string>
 	<key>INIntentDefinitionSystemVersion</key>
-	<string>19H2</string>
+	<string>21G83</string>
 	<key>INIntentDefinitionToolsBuildVersion</key>
-	<string>12A7209</string>
+	<string>14A400</string>
 	<key>INIntentDefinitionToolsVersion</key>
-	<string>12.0</string>
+	<string>14.0.1</string>
 	<key>INIntents</key>
 	<array>
 		<dict>
 			<key>INIntentCategory</key>
 			<string>information</string>
+			<key>INIntentConfigurable</key>
+			<true/>
+			<key>INIntentDefaultImageName</key>
+			<string>regular-logo</string>
 			<key>INIntentDescription</key>
 			<string>Select between Regular, Ranked, League and Salmon Run</string>
 			<key>INIntentDescriptionID</key>
 			<string>tVvJ9c</string>
 			<key>INIntentEligibleForWidgets</key>
 			<true/>
-			<key>INIntentIneligibleForSuggestions</key>
-			<true/>
 			<key>INIntentLastParameterTag</key>
 			<integer>4</integer>
+			<key>INIntentManagedParameterCombinations</key>
+			<dict>
+				<key>scheduleType</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Turf War</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>kHRnQJ</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+				<key>scheduleType,displayNext</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Select a game mode</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>bDmWvh</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+			</dict>
 			<key>INIntentName</key>
-			<string>Configuration</string>
+			<string>Splatoon2_Schedule</string>
+			<key>INIntentParameterCombinations</key>
+			<dict>
+				<key>scheduleType</key>
+				<dict>
+					<key>INIntentParameterCombinationIsPrimary</key>
+					<true/>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>Open Schedule</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>ynIB1Z</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<false/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Turf War</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>IaVtY6</string>
+				</dict>
+				<key>scheduleType,displayNext</key>
+				<dict>
+					<key>INIntentParameterCombinationIsLinked</key>
+					<true/>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Select a game mode</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>7k1oym</string>
+				</dict>
+			</dict>
 			<key>INIntentParameters</key>
 			<array>
 				<dict>
@@ -109,7 +248,7 @@
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>1</integer>
 					<key>INIntentParameterEnumType</key>
-					<string>Enum</string>
+					<string>Splatoon2_ScheduleType</string>
 					<key>INIntentParameterEnumTypeNamespace</key>
 					<string>88xZPY</string>
 					<key>INIntentParameterMetadata</key>
@@ -165,7 +304,7 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Display Next (Small only)</string>
+					<string>Display next arenas? (Small Widgets only)</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>Dqibrj</string>
 					<key>INIntentParameterDisplayPriority</key>
@@ -173,11 +312,11 @@
 					<key>INIntentParameterMetadata</key>
 					<dict>
 						<key>INIntentParameterMetadataFalseDisplayName</key>
-						<string>No</string>
+						<string>Current</string>
 						<key>INIntentParameterMetadataFalseDisplayNameID</key>
 						<string>zeVvNr</string>
 						<key>INIntentParameterMetadataTrueDisplayName</key>
-						<string>Yes</string>
+						<string>Next</string>
 						<key>INIntentParameterMetadataTrueDisplayNameID</key>
 						<string>m2bauJ</string>
 					</dict>
@@ -195,7 +334,7 @@
 							<key>INIntentParameterPromptDialogCustom</key>
 							<true/>
 							<key>INIntentParameterPromptDialogFormatString</key>
-							<string>Display current or next event</string>
+							<string>Display current or next stages</string>
 							<key>INIntentParameterPromptDialogFormatStringID</key>
 							<string>ZdgYM1</string>
 							<key>INIntentParameterPromptDialogType</key>
@@ -240,13 +379,13 @@
 				<array>
 					<dict>
 						<key>INIntentResponseParameterDisplayName</key>
-						<string>Schedule Type</string>
+						<string>Mode</string>
 						<key>INIntentResponseParameterDisplayNameID</key>
 						<string>ISv9Fb</string>
 						<key>INIntentResponseParameterDisplayPriority</key>
 						<integer>1</integer>
 						<key>INIntentResponseParameterEnumType</key>
-						<string>Enum</string>
+						<string>Splatoon2_ScheduleType</string>
 						<key>INIntentResponseParameterEnumTypeNamespace</key>
 						<string>88xZPY</string>
 						<key>INIntentResponseParameterName</key>
@@ -258,7 +397,7 @@
 					</dict>
 					<dict>
 						<key>INIntentResponseParameterDisplayName</key>
-						<string>Display Next</string>
+						<string>Stage Rotation</string>
 						<key>INIntentResponseParameterDisplayNameID</key>
 						<string>LC2ezt</string>
 						<key>INIntentResponseParameterDisplayPriority</key>
@@ -266,11 +405,11 @@
 						<key>INIntentResponseParameterMetadata</key>
 						<dict>
 							<key>INIntentResponseParameterMetadataFalseDisplayName</key>
-							<string>no</string>
+							<string>Current</string>
 							<key>INIntentResponseParameterMetadataFalseDisplayNameID</key>
 							<string>Q164Zg</string>
 							<key>INIntentResponseParameterMetadataTrueDisplayName</key>
-							<string>yes</string>
+							<string>Next</string>
 							<key>INIntentResponseParameterMetadataTrueDisplayNameID</key>
 							<string>jFFL00</string>
 						</dict>
@@ -287,6 +426,266 @@
 			<string>Schedule Type</string>
 			<key>INIntentTitleID</key>
 			<string>gpCwrM</string>
+			<key>INIntentType</key>
+			<string>Custom</string>
+			<key>INIntentVerb</key>
+			<string>View</string>
+		</dict>
+		<dict>
+			<key>INIntentCategory</key>
+			<string>information</string>
+			<key>INIntentConfigurable</key>
+			<true/>
+			<key>INIntentDefaultImageName</key>
+			<string>regular-logo</string>
+			<key>INIntentDescription</key>
+			<string>Select a mode</string>
+			<key>INIntentDescriptionID</key>
+			<string>Kx9kvJ</string>
+			<key>INIntentEligibleForWidgets</key>
+			<true/>
+			<key>INIntentLastParameterTag</key>
+			<integer>5</integer>
+			<key>INIntentManagedParameterCombinations</key>
+			<dict>
+				<key>scheduleType</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+				<key>scheduleType,displayNext</key>
+				<dict>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Select a game mode</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>Orzh5G</string>
+					<key>INIntentParameterCombinationUpdatesLinked</key>
+					<true/>
+				</dict>
+			</dict>
+			<key>INIntentName</key>
+			<string>Splatoon3_Schedule</string>
+			<key>INIntentParameterCombinations</key>
+			<dict>
+				<key>scheduleType</key>
+				<dict>
+					<key>INIntentParameterCombinationSubtitle</key>
+					<string>Open Schedule</string>
+					<key>INIntentParameterCombinationSubtitleID</key>
+					<string>RSfAHX</string>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<false/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Turf War</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>J4s855</string>
+				</dict>
+				<key>scheduleType,displayNext</key>
+				<dict>
+					<key>INIntentParameterCombinationIsLinked</key>
+					<true/>
+					<key>INIntentParameterCombinationSupportsBackgroundExecution</key>
+					<true/>
+					<key>INIntentParameterCombinationTitle</key>
+					<string>Select a game mode</string>
+					<key>INIntentParameterCombinationTitleID</key>
+					<string>OKQw6J</string>
+				</dict>
+			</dict>
+			<key>INIntentParameters</key>
+			<array>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterCustomDisambiguation</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Game Mode</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>aO79AW</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>1</integer>
+					<key>INIntentParameterEnumType</key>
+					<string>Splatoon3_ScheduleType</string>
+					<key>INIntentParameterEnumTypeNamespace</key>
+					<string>88xZPY</string>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataDefaultValue</key>
+						<string>turfWar</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>scheduleType</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>There are ${count} options matching ‘${scheduleType}’.</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>CoHLiW</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>DisambiguationIntroduction</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>Just to confirm, you wanted ‘${scheduleType}’?</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>M3iWqE</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Confirmation</string>
+						</dict>
+					</array>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>3</integer>
+					<key>INIntentParameterType</key>
+					<string>Integer</string>
+				</dict>
+				<dict>
+					<key>INIntentParameterConfigurable</key>
+					<true/>
+					<key>INIntentParameterDisplayName</key>
+					<string>Stage Rotation (Small Widgets only)</string>
+					<key>INIntentParameterDisplayNameID</key>
+					<string>I8Du8Y</string>
+					<key>INIntentParameterDisplayPriority</key>
+					<integer>2</integer>
+					<key>INIntentParameterMetadata</key>
+					<dict>
+						<key>INIntentParameterMetadataFalseDisplayName</key>
+						<string>Current</string>
+						<key>INIntentParameterMetadataFalseDisplayNameID</key>
+						<string>vFmZim</string>
+						<key>INIntentParameterMetadataTrueDisplayName</key>
+						<string>Next</string>
+						<key>INIntentParameterMetadataTrueDisplayNameID</key>
+						<string>l7fuM2</string>
+					</dict>
+					<key>INIntentParameterName</key>
+					<string>displayNext</string>
+					<key>INIntentParameterPromptDialogs</key>
+					<array>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Configuration</string>
+						</dict>
+						<dict>
+							<key>INIntentParameterPromptDialogCustom</key>
+							<true/>
+							<key>INIntentParameterPromptDialogFormatString</key>
+							<string>Display current or next stages</string>
+							<key>INIntentParameterPromptDialogFormatStringID</key>
+							<string>CrzLuT</string>
+							<key>INIntentParameterPromptDialogType</key>
+							<string>Primary</string>
+						</dict>
+					</array>
+					<key>INIntentParameterRelationship</key>
+					<dict>
+						<key>INIntentParameterRelationshipParentName</key>
+						<string>scheduleType</string>
+						<key>INIntentParameterRelationshipPredicateName</key>
+						<string>HasAnyValue</string>
+					</dict>
+					<key>INIntentParameterSupportsResolution</key>
+					<true/>
+					<key>INIntentParameterTag</key>
+					<integer>5</integer>
+					<key>INIntentParameterType</key>
+					<string>Boolean</string>
+				</dict>
+			</array>
+			<key>INIntentResponse</key>
+			<dict>
+				<key>INIntentResponseCodes</key>
+				<array>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>success</string>
+						<key>INIntentResponseCodeSuccess</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>INIntentResponseCodeName</key>
+						<string>failure</string>
+					</dict>
+				</array>
+				<key>INIntentResponseLastParameterTag</key>
+				<integer>4</integer>
+				<key>INIntentResponseParameters</key>
+				<array>
+					<dict>
+						<key>INIntentResponseParameterDisplayName</key>
+						<string>Mode</string>
+						<key>INIntentResponseParameterDisplayNameID</key>
+						<string>oqudti</string>
+						<key>INIntentResponseParameterDisplayPriority</key>
+						<integer>1</integer>
+						<key>INIntentResponseParameterEnumType</key>
+						<string>Splatoon3_ScheduleType</string>
+						<key>INIntentResponseParameterEnumTypeNamespace</key>
+						<string>88xZPY</string>
+						<key>INIntentResponseParameterName</key>
+						<string>scheduleType</string>
+						<key>INIntentResponseParameterTag</key>
+						<integer>2</integer>
+						<key>INIntentResponseParameterType</key>
+						<string>Integer</string>
+					</dict>
+					<dict>
+						<key>INIntentResponseParameterDisplayName</key>
+						<string>Stage Rotation</string>
+						<key>INIntentResponseParameterDisplayNameID</key>
+						<string>WsU314</string>
+						<key>INIntentResponseParameterDisplayPriority</key>
+						<integer>2</integer>
+						<key>INIntentResponseParameterMetadata</key>
+						<dict>
+							<key>INIntentResponseParameterMetadataFalseDisplayName</key>
+							<string>Current</string>
+							<key>INIntentResponseParameterMetadataFalseDisplayNameID</key>
+							<string>tyH3DC</string>
+							<key>INIntentResponseParameterMetadataTrueDisplayName</key>
+							<string>Next</string>
+							<key>INIntentResponseParameterMetadataTrueDisplayNameID</key>
+							<string>tqEXH0</string>
+						</dict>
+						<key>INIntentResponseParameterName</key>
+						<string>displayNext</string>
+						<key>INIntentResponseParameterTag</key>
+						<integer>4</integer>
+						<key>INIntentResponseParameterType</key>
+						<string>Boolean</string>
+					</dict>
+				</array>
+			</dict>
+			<key>INIntentTitle</key>
+			<string>Splatoon 3 Schedule</string>
+			<key>INIntentTitleID</key>
+			<string>JQrmRG</string>
 			<key>INIntentType</key>
 			<string>Custom</string>
 			<key>INIntentVerb</key>

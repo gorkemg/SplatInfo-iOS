@@ -133,6 +133,16 @@ struct GameModeEventTitleView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 4.0) {
             logoImage.resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
+            if case .splatoon3(let type) = event.mode {
+                switch type {
+                case .anarchyBattleOpen:
+                    Splatoon3TagView(text: "Open")
+                case .anarchyBattleSeries:
+                    Splatoon3TagView(text: "Series")
+                default:
+                    Group{}
+                }
+            }
             Text(event.rule.name).splat2Font(size: 16).minimumScaleFactor(0.5)
         }
     }
@@ -151,5 +161,18 @@ struct GameModeEventTitleView: View {
         }
         return UIImage(named: event.mode.logoNameSmall)
     }
-    
+}
+
+struct Splatoon3TagView: View {
+    let text: String
+    var body: some View {
+        Text(text)
+            .splat2Font(size: 12)
+            .minimumScaleFactor(0.5)
+            .padding(.vertical, 0)
+            .padding(.horizontal, 1.0)
+            .background(Color.purple)
+            .cornerRadius(4.0)
+            .shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
+    }
 }

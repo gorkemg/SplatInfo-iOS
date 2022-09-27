@@ -20,9 +20,7 @@ struct MediumGameModeWidgetView : View {
             ZStack(alignment: .topLeading) {
 
                 event.mode.color
-
                 event.mode.bgImage
-//                Image("splatoon-card-bg").resizable(resizingMode: .tile)
 
                 VStack {
                     GeometryReader { innerGeo in

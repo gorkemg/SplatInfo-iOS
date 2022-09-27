@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -24,7 +26,9 @@
 	<true/>
 	<key>NSUserActivityTypes</key>
 	<array>
-		<string>ConfigurationIntent</string>
+		<string>Splatoon2ConfigurationIntent</string>
+		<string>Splatoon2_ScheduleIntent</string>
+		<string>Splatoon3_ScheduleIntent</string>
 	</array>
 	<key>UIAppFonts</key>
 	<array>
@@ -57,6 +61,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <key>CADisableMinimumFrameDurationOnPhone</key><true/>
 </dict>
 </plist>

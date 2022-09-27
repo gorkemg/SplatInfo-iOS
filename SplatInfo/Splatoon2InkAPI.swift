@@ -128,7 +128,7 @@ class Splatoon2InkAPI {
                 return
             }
 
-            guard let responseJSON = try? JSONSerialization.jsonObject(with: data, options: []) else {
+            guard (try? JSONSerialization.jsonObject(with: data, options: [])) != nil else {
                 let string = String(data: data, encoding: .utf8)
                 print("Failed JSON String: \(String(describing: string))")
                 completion(nil, nil, InvalidAPIResponseError())

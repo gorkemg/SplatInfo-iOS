@@ -1,5 +1,5 @@
 //
-//  Splatoon2TimelineProvider.swift
+//  Splatoon3TimelineProvider.swift
 //  SplatInfoScheduleWidgetExtension
 //
 //  Created by Görkem Güclü on 19.09.22.
@@ -9,7 +9,7 @@ import WidgetKit
 import SwiftUI
 import Intents
 
-struct Splatoon2TimelineProvider: IntentTimelineProvider {
+struct Splatoon3TimelineProvider: IntentTimelineProvider {
     
     enum TimelineType {
         case game(timeline: GameTimeline)
@@ -19,88 +19,90 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
     let scheduleFetcher = ScheduleFetcher()
     let imageLoaderManager = ImageLoaderManager()
     
-    static var exampleSchedule: Splatoon2.Schedule {
-        return Splatoon2.Schedule.empty
+    static var exampleSchedule: Splatoon3.Schedule {
+        return Splatoon3.Schedule.empty
     }
     
     static var exampleRegularEvents : [GameModeEvent] {
-        return Splatoon2TimelineProvider.exampleSchedule.regular.events
+        return Splatoon3TimelineProvider.exampleSchedule.regular.events
     }
     static var exampleCoopEvents : [CoopEvent] {
-        return Splatoon2TimelineProvider.exampleSchedule.coop.events
+        return Splatoon3TimelineProvider.exampleSchedule.coop.events
     }
 
     func placeholder(in context: Context) -> GameModeEntry {
-        return GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.exampleRegularEvents), configuration: Splatoon2_ScheduleIntent())
+        return GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3TimelineProvider.exampleRegularEvents), configuration: Splatoon3_ScheduleIntent())
     }
 
-    func getSnapshot(for configuration: Splatoon2_ScheduleIntent, in context: Context, completion: @escaping (GameModeEntry) -> ()) {
+    func getSnapshot(for configuration: Splatoon3_ScheduleIntent, in context: Context, completion: @escaping (GameModeEntry) -> ()) {
         if context.isPreview {
-            let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.exampleRegularEvents), configuration: Splatoon2_ScheduleIntent())
+            let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3TimelineProvider.exampleRegularEvents), configuration: Splatoon3_ScheduleIntent())
             completion(entry)
             return
         }
         scheduleFetcher.useSharedFolderForCaching = true
 
-        scheduleFetcher.fetchSplatoon2Schedule(completion: { result in
+        scheduleFetcher.fetchSplatoon3Schedule(completion: { result in
             switch result {
             case .success(let schedule):
                 
                 switch configuration.scheduleType {
-                case .regular:
+                case .turfWar, .unknown:
                     let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.regular.events), configuration: configuration)
                     completion(entry)
-                case .ranked:
-                    let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.ranked.events), configuration: configuration)
+                case .anarchyOpen:
+                    let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.anarchyBattleOpen.events), configuration: configuration)
+                    completion(entry)
+                case .anarchySeries:
+                    let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.anarchyBattleSeries.events), configuration: configuration)
                     completion(entry)
                 case .league:
                     let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.league.events), configuration: configuration)
                     completion(entry)
-                case .unknown:
-                    let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.regular.events), configuration: configuration)
+                case .x:
+                    let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.x.events), configuration: configuration)
                     completion(entry)
-                    break
                 case .salmonRun:
                     let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes), configuration: configuration)
                     completion(entry)
-                    break
                 }
             case .failure(_):
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.exampleRegularEvents), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3TimelineProvider.exampleRegularEvents), configuration: configuration)
                 completion(entry)
                 break
             }
         })
     }
     
-    func getTimeline(for configuration: Splatoon2_ScheduleIntent, in context: Context, completion: @escaping (Timeline<GameModeEntry>) -> ()) {
+    func getTimeline(for configuration: Splatoon3_ScheduleIntent, in context: Context, completion: @escaping (Timeline<GameModeEntry>) -> ()) {
         let mode = configuration.scheduleType
         scheduleFetcher.useSharedFolderForCaching = true
 
-        scheduleFetcher.fetchSplatoon2Schedule { result in
+        scheduleFetcher.fetchSplatoon3Schedule { result in
             switch result {
             case .success(let schedule):
 
                 let selectedTimeline: TimelineType
                 let urls: [URL]
                 switch mode {
-                case .regular:
+                case .turfWar, .unknown:
                     urls = schedule.regular.allImageURLs()
                     selectedTimeline = .game(timeline: schedule.regular)
-                case .ranked:
-                    urls = schedule.ranked.allImageURLs()
-                    selectedTimeline = .game(timeline: schedule.ranked)
+                case .anarchyOpen:
+                    urls = schedule.anarchyBattleOpen.allImageURLs()
+                    selectedTimeline = .game(timeline: schedule.anarchyBattleOpen)
+                case .anarchySeries:
+                    urls = schedule.anarchyBattleSeries.allImageURLs()
+                    selectedTimeline = .game(timeline: schedule.anarchyBattleSeries)
                 case .league:
                     urls = schedule.league.allImageURLs()
                     selectedTimeline = .game(timeline: schedule.league)
+                case .x:
+                    urls = schedule.x.allImageURLs()
+                    selectedTimeline = .game(timeline: schedule.x)
                 case .salmonRun:
                     urls = schedule.coop.allImageURLs()
                     selectedTimeline = .coop(timeline: schedule.coop)
-                default:
-                    let entries: [GameModeEntry] = []
-                    let timeline = Timeline(entries: entries, policy: .atEnd)
-                    completion(timeline)
-                    return
                 }
                 let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
                 let multiImageLoader = MultiImageLoader(urls: urls, directory: destination)
@@ -125,7 +127,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
         }
     }
     
-    func timelineForGameModeTimeline(_ modeTimeline: GameTimeline, for configuration: Splatoon2_ScheduleIntent) -> Timeline<GameModeEntry> {
+    func timelineForGameModeTimeline(_ modeTimeline: GameTimeline, for configuration: Splatoon3_ScheduleIntent) -> Timeline<GameModeEntry> {
         var entries: [GameModeEntry] = []
         let now = Date()
         let startDates = modeTimeline.events.map({ $0.timeframe.startDate })
@@ -147,7 +149,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
         return timeline
     }
     
-    func timelineForCoopTimeline(_ coopTimeline: CoopTimeline, for configuration: Splatoon2_ScheduleIntent) -> Timeline<GameModeEntry> {
+    func timelineForCoopTimeline(_ coopTimeline: CoopTimeline, for configuration: Splatoon3_ScheduleIntent) -> Timeline<GameModeEntry> {
         if configuration.isDisplayNext, let firstEvent = coopTimeline.events.first, let secondEvent = coopTimeline.events.second {
             // only show next event
             let entry = GameModeEntry(date: Date(), events: .coopEvents(events: [secondEvent], timeframes: []), configuration: configuration)
@@ -214,13 +216,14 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
         }
         let timeline = Timeline(entries: entries, policy: updatePolicy)
         return timeline
+        
     }
     
     
     struct GameModeEntry: TimelineEntry {
         let date: Date
         let events: GameModeEvents
-        let configuration: Splatoon2_ScheduleIntent
+        let configuration: Splatoon3_ScheduleIntent
     }
 
     enum GameModeEvents {
@@ -230,16 +233,22 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
 
 
     struct ScheduleEntryView : View {
-        var entry: Splatoon2TimelineProvider.Entry
+        var entry: Splatoon3TimelineProvider.Entry
         
         var gameModeType : GameModeType {
             switch entry.configuration.scheduleType {
-            case .unknown, .salmonRun, .regular:
-                return .splatoon2(type: .turfWar)
-            case .ranked:
-                return .splatoon2(type: .ranked)
+            case .unknown, .turfWar:
+                return .splatoon3(type: .turfWar)
+            case .anarchyOpen:
+                return .splatoon3(type: .anarchyBattleOpen)
+            case .anarchySeries:
+                return .splatoon3(type: .anarchyBattleSeries)
             case .league:
-                return .splatoon2(type: .league)
+                return .splatoon3(type: .league)
+            case .x:
+                return .splatoon3(type: .x)
+            case .salmonRun:
+                return .splatoon3(type: .salmonRun)
             }
         }
         
@@ -291,7 +300,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
     }
 }
 
-extension Splatoon2_ScheduleIntent {
+extension Splatoon3_ScheduleIntent {
     
     var isDisplayNext: Bool {
         guard let next = self.displayNext else { return false }

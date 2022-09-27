@@ -100,7 +100,7 @@ extension Splatoon3.GameModeType {
 
     var color : Color {
         switch self {
-        case .splatfest(let fest):
+        case .splatfest(_):
             return Color.regularModeColor
         case .turfWar:
             return Color.regularModeColor
@@ -120,7 +120,7 @@ extension Splatoon3.GameModeType {
     var bgImage: some View {
         Group {
             switch self {
-            case .splatfest(let fest):
+            case .splatfest(_):
                 ZStack {
                     Image("splatoon-card-bg").resizable(resizingMode: .tile)
                     LinearGradient(colors: [.red, .blue, .yellow], startPoint: .leading, endPoint: .trailing).opacity(0.5)
