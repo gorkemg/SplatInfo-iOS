@@ -29,18 +29,23 @@ struct MediumGameModeWidgetView : View {
                             
                             HStack {
                                 if let stage = event.stageA {
-                                    StageImage(stage: stage, height: innerGeo.size.height)
+                                    PillStageImage(stage: stage, height: innerGeo.size.height)
                                 }
                                 if let stage = event.stageB {
-                                    StageImage(stage: stage, height: innerGeo.size.height)
+                                    PillStageImage(stage: stage, height: innerGeo.size.height)
                                 }
                             }
                             
                             HStack(alignment: .top) {
-                                GameModeEventTitleView(event: event)
+                                GameModeEventTitleView(event: event, gameLogoPosition: .trailing)
                                 Spacer()
-                                RelativeTimeframeView(timeframe: event.timeframe, state: event.timeframe.state(date: date))
-                                    .splat2Font(size: 12).lineLimit(1).minimumScaleFactor(0.5).multilineTextAlignment(.trailing)
+                                HStack{
+                                    let state = event.timeframe.state(date: date)
+                                    RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                                        .splat2Font(size: 12).lineLimit(1).minimumScaleFactor(0.5).multilineTextAlignment(.trailing)
+                                    ColoredActivityTextView(state: state)
+                                        .splat2Font(size: 12)
+                                }
                             }.padding(.horizontal, 2)
 
                         }
@@ -58,11 +63,11 @@ struct MediumGameModeWidgetView : View {
                                 }.frame(width: innerGeo.size.width/3)
 
                                 if let stage = nextEvent.stageA {
-                                    StageImage(stage: stage, height: innerGeo.size.height)
+                                    PillStageImage(stage: stage, height: innerGeo.size.height)
                                 }
 
                                 if let stage = nextEvent.stageB {
-                                    StageImage(stage: stage, height: innerGeo.size.height)
+                                    PillStageImage(stage: stage, height: innerGeo.size.height)
                                 }
                             }
                             

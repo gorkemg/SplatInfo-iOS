@@ -37,10 +37,10 @@ struct GameModeEventView: View {
                         
                         HStack {
                             if let stage = event.stageA {
-                                StageImage(stage: stage, height: innerGeo.size.height)
+                                PillStageImage(stage: stage, height: innerGeo.size.height)
                             }
                             if let stage = event.stageB {
-                                StageImage(stage: stage, height: innerGeo.size.height)
+                                PillStageImage(stage: stage, height: innerGeo.size.height)
                             }
                         }
                         
@@ -87,11 +87,11 @@ struct GameModeEventView: View {
                         }.frame(minWidth: min(80,innerGeo.size.width/3), maxWidth: innerGeo.size.width/3)
 
                         if let stage = event.stageA {
-                            StageImage(stage: stage, height: innerGeo.size.height)
+                            PillStageImage(stage: stage, height: innerGeo.size.height)
                         }
 
                         if let stage = event.stageB {
-                            StageImage(stage: stage, height: innerGeo.size.height)
+                            PillStageImage(stage: stage, height: innerGeo.size.height)
                         }
                     }
                     
@@ -102,16 +102,16 @@ struct GameModeEventView: View {
                     LazyVGrid(columns: [GridItem(.flexible()),GridItem(.flexible())]) {
                         Group {
                             if let stage = event.stageA {
-                                StageImage(stage: stage)
+                                PillStageImage(stage: stage)
                             }
                         }
                         Group {
                             if let stage = event.stageB {
-                                StageImage(stage: stage)
+                                PillStageImage(stage: stage)
                             }
                         }
                     }
-                }.background(Color.blue)
+                }
                 
             }
         }
@@ -126,12 +126,38 @@ extension GameModeEvent {
     var stageB : Stage? {
         return stages.last
     }
+    
+    var gameLogo: Image {
+        switch self.mode {
+        case .splatoon2(_):
+            return Image("Splatoon2_number_icon")
+        case .splatoon3(_):
+            return Image("Splatoon3_number_icon")
+        }
+    }
 }
 
 struct GameModeEventTitleView: View {
     let event: GameModeEvent
+    var gameLogoPosition: GameLogoPosition = .hidden
+    
+    enum GameLogoPosition {
+        case hidden
+        case leading
+        case trailing
+    }
+    
+    var gameLogo: some View {
+        event.gameLogo.resizable().aspectRatio(contentMode: .fit)
+            .frame(maxWidth: 20, maxHeight: 18).shadow(color: .black, radius: 1.0)
+    }
+    
+    
     var body: some View {
         HStack(alignment: .center, spacing: 4.0) {
+            if gameLogoPosition == .leading {
+                gameLogo
+            }
             logoImage.resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
             if case .splatoon3(let type) = event.mode {
                 switch type {
@@ -143,7 +169,12 @@ struct GameModeEventTitleView: View {
                     Group{}
                 }
             }
-            Text(event.rule.name).splat2Font(size: 16).minimumScaleFactor(0.5)
+            Text(event.rule.name).splat2Font(size: 16)
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
+            if gameLogoPosition == .trailing {
+                gameLogo
+            }
         }
     }
     
@@ -165,13 +196,14 @@ struct GameModeEventTitleView: View {
 
 struct Splatoon3TagView: View {
     let text: String
+    var backgroundColor: Color = .rankedModeColor
     var body: some View {
         Text(text)
-            .splat2Font(size: 12)
+            .splat2Font(size: 10)
             .minimumScaleFactor(0.5)
             .padding(.vertical, 0)
             .padding(.horizontal, 1.0)
-            .background(Color.purple)
+            .background(backgroundColor)
             .cornerRadius(4.0)
             .shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
     }

@@ -189,7 +189,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
             let events = coopTimeline.upcomingEventsAfterDate(date: date)
             let eventTimeframes = coopTimeline.otherTimeframes.upcomingTimeframesAfterDate(date: date)
 //            if events.count > 1 {
-                let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
+            let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
                 entries.append(entry)
 //            }
         }
@@ -256,9 +256,9 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
             Group {
                 switch entry.events {
                 case .gameModeEvents(_):
-                    GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
+                    GameModeEntryView(gameMode: gameModeType, events: gameModeEvents.upcomingEvents, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
                 case .coopEvents(events: _, timeframes: let timeframes):
-                    CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
+                    CoopEntryView(events: coopEvents.upcomingEvents, eventTimeframes: timeframes, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
                 }
             }
         }

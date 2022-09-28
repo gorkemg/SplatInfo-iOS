@@ -29,6 +29,21 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
     static var exampleCoopEvents : [CoopEvent] {
         return Splatoon2TimelineProvider.exampleSchedule.coop.events
     }
+    
+
+    // MARK: -
+
+    func downloadImages(urls: [URL], asJPEG: Bool = true, completion: @escaping ()->Void) {
+        let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
+        let multiImageLoader = MultiImageLoader(urls: urls, directory: destination)
+        multiImageLoader.storeAsJPEG = asJPEG
+        imageLoaderManager.imageLoaders.append(multiImageLoader)
+        multiImageLoader.load {
+            completion()
+        }
+    }
+    
+    // MARK: -
 
     func placeholder(in context: Context) -> GameModeEntry {
         return GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.exampleRegularEvents), configuration: Splatoon2_ScheduleIntent())
@@ -102,17 +117,16 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
                     completion(timeline)
                     return
                 }
-                let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
-                let multiImageLoader = MultiImageLoader(urls: urls, directory: destination)
-                imageLoaderManager.imageLoaders.append(multiImageLoader)
-                multiImageLoader.load {
+                downloadImages(urls: urls, asJPEG: true) {
                     switch selectedTimeline {
                     case .game(let timeline):
                         let timeline = timelineForGameModeTimeline(timeline, for: configuration)
                         completion(timeline)
                     case .coop(let timeline):
-                        let timeline = timelineForCoopTimeline(timeline, for: configuration)
-                        completion(timeline)
+                        downloadImages(urls: schedule.coop.allWeaponImageURLs(), asJPEG: false) {
+                            let timeline = timelineForCoopTimeline(timeline, for: configuration)
+                            completion(timeline)
+                        }
                     }
                 }
                 return

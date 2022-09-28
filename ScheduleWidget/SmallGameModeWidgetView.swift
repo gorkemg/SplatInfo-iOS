@@ -13,43 +13,46 @@ struct SmallGameModeWidgetView : View {
     let date: Date
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
-
-            //event.mode.color
-
-            Image("splatoon-card-bg").resizable(resizingMode: .tile)
-
-            GeometryReader { geometry in
-                VStack(spacing: 0.0) {
-                    ForEach(event.stages, id: \.id) { stage in
-                        if let image = stage.thumbImage {
-                            Image(uiImage: image)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: geometry.size.width, height: geometry.size.height/2)
-                                .clipped()
-                        }
-                    }
-                }.cornerRadius(10.0)
-            }
+        ZStack(alignment: .topTrailing){
             
-            LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.05), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
+            ZStack(alignment: .topLeading) {
 
-            VStack(alignment: .leading, spacing: 0.0) {
-                
-                VStack(alignment: .leading, spacing: 0.0) {
-                    GameModeEventTitleView(event: event)
+                //event.mode.color
+
+                Image("splatoon-card-bg").resizable(resizingMode: .tile)
+
+                GeometryReader { geometry in
+                    VStack(spacing: 0.0) {
+                        VStack(spacing: 0) {
+                            if let stage = event.stageA {
+                                StageImage(stage: stage, namePosition: .bottom, height: geometry.size.height)
+                            }
+                            if let stage = event.stageB {
+                                StageImage(stage: stage, namePosition: .top, height: geometry.size.height)
+                            }
+                        }
+                    }.cornerRadius(10.0)
                 }
-                                
-                Spacer()
                 
+                LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.05), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
+
                 VStack(alignment: .leading, spacing: 0.0) {
-                    if let next = nextEvent {
-                        Text(!event.mode.isTurfWar ? next.rule.name : "Changes")
-                            + next.timeframe.relativeTimeText(date: date)
+                    
+                    VStack(alignment: .leading, spacing: 0.0) {
+                        GameModeEventTitleView(event: event, gameLogoPosition: .trailing)
                     }
-                }.splat2Font(size: 10).lineLimit(1).minimumScaleFactor(0.5)
-            }.padding(.horizontal, 10.0).padding(.vertical, 8.0)
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .leading, spacing: 0.0) {
+                        if let next = nextEvent {
+                            Text(!event.mode.isTurfWar ? next.rule.name : "Changes")
+                                + next.timeframe.relativeTimeText(date: date)
+                        }
+                    }.splat2Font(size: 10).lineLimit(1).minimumScaleFactor(0.5)
+                }.padding(.horizontal, 10.0).padding(.vertical, 8.0)
+            }
+
         }
     }
 }

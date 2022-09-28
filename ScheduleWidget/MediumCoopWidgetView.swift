@@ -25,7 +25,7 @@ struct MediumCoopWidgetView : View {
                        
             LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.05), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
 
-            VStack(alignment: .leading, spacing: 4.0) {
+            VStack(alignment: .leading, spacing: 8.0) {
 
                 CoopEventView(event: event, style: .narrow, state: state, showTitle: true)
 
@@ -35,7 +35,8 @@ struct MediumCoopWidgetView : View {
                 }
                 
             }
-            .padding(.horizontal, 4.0).padding(.vertical, 4.0)
+//            .padding(.horizontal, 4.0).padding(.vertical, 4.0)
+            .padding(.horizontal, 8.0).padding(.vertical, 8.0)
 
         }.foregroundColor(.white)
     }

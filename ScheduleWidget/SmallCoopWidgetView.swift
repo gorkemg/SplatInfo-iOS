@@ -33,7 +33,7 @@ struct SmallCoopWidgetView : View {
             VStack(alignment: .leading, spacing: 0.0) {
                 
                 VStack(alignment: .leading, spacing: 0.0) {
-                    CoopEventTitleView(event: event)
+                    CoopEventTitleView(event: event, gameLogoPosition: .trailing)
                     Text(event.stage.name).splat2Font(size: 10)
                 }
 
@@ -41,7 +41,9 @@ struct SmallCoopWidgetView : View {
                 
                 VStack(alignment: .leading, spacing: 2.0) {
                     HStack {
-                        ColoredActivityTextView(state: state)
+                        if event.game == .splatoon2 {
+                            ColoredActivityTextView(state: state)
+                        }
                         RelativeTimeframeView(timeframe: event.timeframe, state: state)
                     }.splat2Font(size: 12)
                     
@@ -78,11 +80,11 @@ extension TimeframeActivityState {
     var color : Color {
         switch self {
         case .active:
-            return Color.coopModeColor
+            return Color.orange
         case .soon:
             return Color.black
         case .over:
-            return Color.gray.opacity(0.4)
+            return Color.black
         }
     }
     

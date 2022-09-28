@@ -304,7 +304,7 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Display next arenas? (Small Widgets only)</string>
+					<string>Display Upcoming Stages?</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>Dqibrj</string>
 					<key>INIntentParameterDisplayPriority</key>
@@ -334,7 +334,7 @@
 							<key>INIntentParameterPromptDialogCustom</key>
 							<true/>
 							<key>INIntentParameterPromptDialogFormatString</key>
-							<string>Display current or next stages</string>
+							<string>Display upcoming stages?</string>
 							<key>INIntentParameterPromptDialogFormatStringID</key>
 							<string>ZdgYM1</string>
 							<key>INIntentParameterPromptDialogType</key>
@@ -439,7 +439,7 @@
 			<key>INIntentDefaultImageName</key>
 			<string>regular-logo</string>
 			<key>INIntentDescription</key>
-			<string>Select a mode</string>
+			<string>Select a game mode</string>
 			<key>INIntentDescriptionID</key>
 			<string>Kx9kvJ</string>
 			<key>INIntentEligibleForWidgets</key>
@@ -566,7 +566,7 @@
 					<key>INIntentParameterConfigurable</key>
 					<true/>
 					<key>INIntentParameterDisplayName</key>
-					<string>Stage Rotation (Small Widgets only)</string>
+					<string>Display Upcoming Stages?</string>
 					<key>INIntentParameterDisplayNameID</key>
 					<string>I8Du8Y</string>
 					<key>INIntentParameterDisplayPriority</key>
@@ -596,7 +596,7 @@
 							<key>INIntentParameterPromptDialogCustom</key>
 							<true/>
 							<key>INIntentParameterPromptDialogFormatString</key>
-							<string>Display current or next stages</string>
+							<string>Display upcoming stages?</string>
 							<key>INIntentParameterPromptDialogFormatStringID</key>
 							<string>CrzLuT</string>
 							<key>INIntentParameterPromptDialogType</key>

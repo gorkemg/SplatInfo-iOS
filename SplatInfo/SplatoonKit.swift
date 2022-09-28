@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Game: Codable {
+enum Game: Codable, Hashable {
     case splatoon2
     case splatoon3
 }
@@ -134,12 +134,14 @@ enum GameModeRule: String, Codable, Nameable, LogoNameable {
 
 // MARK: - Coop
 struct CoopTimeline: Codable {
+    let game: Game
     var events: [CoopEvent]
     var otherTimeframes: [EventTimeframe]
 }
 
-struct CoopEvent: Event {
+struct CoopEvent: Hashable, Event {
     var id = UUID().uuidString
+    let game: Game
     let timeframe: EventTimeframe
     let weapons: [Weapon]
     let stage: Stage
@@ -160,7 +162,7 @@ struct CoopEvent: Event {
 
 // MARK: - Stage
 
-struct Stage: Codable {
+struct Stage: Codable, Hashable {
     let id: String
     let name: String
     let imageUrl: URL?
@@ -168,7 +170,7 @@ struct Stage: Codable {
 
 // MARK: - Weapon
 
-enum Weapon: Codable {
+enum Weapon: Codable, Hashable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: WeaponCodingKeys.self)
@@ -200,7 +202,7 @@ enum Weapon: Codable {
     case coopSpecialWeapon(details: WeaponDetails)
 }
 
-struct WeaponDetails: Codable {
+struct WeaponDetails: Codable, Hashable {
     let id: String
     let name: String
     let imageUrl: URL?
@@ -218,6 +220,17 @@ extension [GameModeEvent] {
     }
 
     func upcomingEventsAfterDate(date: Date) -> [GameModeEvent] {
+        return self.filter({ $0.timeframe.state(date: date) != .over })
+    }
+}
+
+extension [CoopEvent] {
+    
+    var upcomingEvents : [CoopEvent] {
+        return upcomingEventsAfterDate(date: Date())
+    }
+
+    func upcomingEventsAfterDate(date: Date) -> [CoopEvent] {
         return self.filter({ $0.timeframe.state(date: date) != .over })
     }
 }
@@ -393,9 +406,14 @@ protocol UpcomingEvents {
 
     associatedtype T
     func upcomingEventsAfterDate(date: Date) -> [T]
+    var upcomingEvents: [T] { get }
 }
 
 extension GameTimeline: UpcomingEvents {
+    var upcomingEvents: [GameModeEvent] {
+        return self.upcomingEventsAfterDate(date: Date())
+    }
+    
     func upcomingEventsAfterDate(date: Date) -> [GameModeEvent] {
         return self.events.filter({ $0.timeframe.state(date: date) != .over })
     }
@@ -421,7 +439,11 @@ extension CoopTimeline: UpcomingEvents {
         }
         return eventDates
     }
-    
+
+    var upcomingEvents: [CoopEvent] {
+        return self.upcomingEventsAfterDate(date: Date())
+    }
+
     func upcomingEventsAfterDate(date: Date) -> [CoopEvent] {
         return self.events.filter({ $0.timeframe.state(date: date) != .over })
     }

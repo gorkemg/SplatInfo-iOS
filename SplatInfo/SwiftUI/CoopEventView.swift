@@ -64,17 +64,16 @@ struct CoopLargeEventView : View {
         GeometryReader { geo in
             ZStack {
 
-                StageImage(stage: event.stage, height: height ?? geo.size.height)
+                PillStageImage(stage: event.stage, height: height ?? geo.size.height)
 
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
                         HStack(alignment: .center) {
                             if showTitle {
-                                CoopEventTitleView(event: event)
+                                CoopEventTitleView(event: event, gameLogoPosition: .trailing)
                             }
-                            ColoredActivityTextView(state: state).splat2Font(size: 12)
                         }
-                        Spacer()
+                        Spacer(minLength: 2.0)
                         VStack(alignment: .leading) {
                             VStack(alignment: .center, spacing: 0.0) {
                                 Text("Available Weapons")
@@ -85,7 +84,6 @@ struct CoopLargeEventView : View {
                                     .frame(minHeight: 20, maxHeight: 30.0)
                                     .padding(.vertical, 2.0)
                                     .padding(.horizontal, 4.0)
-//                                    .background(Image("carbon_fibre").resizable(resizingMode: .tile))
                                     .background(Color.white.opacity(0.5))
                                     .cornerRadius(8.0)
                                     .clipShape(ContainerRelativeShape())
@@ -98,23 +96,23 @@ struct CoopLargeEventView : View {
                     Spacer()
                     
                     VStack(alignment: .trailing) {
-                        VStack(alignment: .trailing) {
-                            HStack(alignment: .center, spacing: 2.0) {
+                        HStack(alignment: .center, spacing: 4.0) {
 
-                                RelativeTimeframeView(timeframe: event.timeframe, state: state)
-                                    .splat2Font(size: 14)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.5)
-                                .multilineTextAlignment(.trailing)
+                            RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                                .splat2Font(size: 14)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                            .multilineTextAlignment(.trailing)
+
+                            if event.game == .splatoon2 {
+                                ColoredActivityTextView(state: state).splat2Font(size: 12)
                             }
-                            
-                            ActivityTimeFrameView(timeframe: event.timeframe, state: state, fontSize: 12).lineLimit(1).minimumScaleFactor(0.5)
                         }
-
+                        
+                        ActivityTimeFrameView(timeframe: event.timeframe, state: state, fontSize: 12).lineLimit(1).minimumScaleFactor(0.5)
                     }
                 }
-                .padding(10)
-                //.cornerRadius(10)
+                .padding(8.0)
             }
         }
     }
@@ -131,9 +129,7 @@ struct CoopNarrowEventView : View {
         GeometryReader { geo in
             ZStack {
 
-                StageImage(stage: event.stage, height: height ?? geo.size.height)//.opacity(0.1)
-                    .clipShape(ContainerRelativeShape())
-                    .padding(0)
+                PillStageImage(stage: event.stage, height: height ?? geo.size.height)//.opacity(0.1)
 
                 HStack(alignment: .top) {
                     
@@ -141,9 +137,8 @@ struct CoopNarrowEventView : View {
 
                         HStack(alignment: .center) {
                             if showTitle {
-                                CoopEventTitleView(event: event)
+                                CoopEventTitleView(event: event, gameLogoPosition: .trailing)
                             }
-                            ColoredActivityTextView(state: state).splat2Font(size: 10)
                         }
 
                         Spacer()
@@ -156,32 +151,29 @@ struct CoopNarrowEventView : View {
                             .cornerRadius(4.0)
                             .clipShape(ContainerRelativeShape())
                             .shadow(color: .black, radius: 2, x: 0, y: 1)
-//                            .shadow(color: .black, radius: 2, x: 0, y: 1)
-//                            .padding(.horizontal, 8.0)
-//                            .background(Color.white.opacity(0.5).cornerRadius(8.0))
 
                     }
                     
                     Spacer()
                     
                     VStack(alignment: .trailing) {
-                        VStack(alignment: .trailing) {
-                            HStack(alignment: .center, spacing: 2.0) {
-
-                                RelativeTimeframeView(timeframe: event.timeframe, state: state)
-                                    .splat2Font(size: 14)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.5)
+                        HStack(alignment: .center, spacing: 4.0) {
+                            
+                            RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                                .splat2Font(size: 14)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
                                 .multilineTextAlignment(.trailing)
+                            
+                            if event.game == .splatoon2 {
+                                ColoredActivityTextView(state: state).splat2Font(size: 10)
                             }
                         }
                     }
                 }
                 .padding(.horizontal, 8.0).padding(.vertical, 4.0)
-                //.cornerRadius(10)
             }
-
-        }//.background(ContainerRelativeShape().fill(Color.yellow))
+        }
     }
 }
 
@@ -196,7 +188,7 @@ struct CoopSideBySideEventView : View {
         HStack(alignment: .top, spacing: 8.0) {
             
             ZStack(alignment: .topLeading) {
-                StageImage(stage: event.stage, height: height)
+                PillStageImage(stage: event.stage, height: height)
 
                 HStack(alignment: .center, spacing: 2) {
                     VStack(alignment: .leading) {
@@ -268,7 +260,7 @@ struct WeaponImage: View {
 extension WeaponDetails {
     
     var image : UIImage? {
-        return assetImage ?? cachedImage() ?? cachedImage(directory: FileManager.default.appGroupContainerURL)
+        return assetImage ?? assetThumbImage ?? cachedImage() ?? cachedImage(directory: FileManager.default.appGroupContainerURL)
     }
 
     func cachedImage(directory: URL? = URL(fileURLWithPath: NSTemporaryDirectory())) -> UIImage? {
@@ -299,18 +291,43 @@ extension WeaponDetails {
 
 struct CoopEventTitleView: View {
     let event: CoopEvent
+    var gameLogoPosition: GameLogoPosition = .hidden
+
+    enum GameLogoPosition {
+        case hidden
+        case leading
+        case trailing
+    }
+
+    var gameLogo: some View {
+        event.gameLogo.resizable().aspectRatio(contentMode: .fit)
+            .frame(maxWidth: 20, maxHeight: 18).shadow(color: .black, radius: 1.0)
+    }
+
     var body: some View {
         HStack(alignment: .center, spacing: 4.0) {
+            if gameLogoPosition == .leading {
+                gameLogo
+            }
             CoopLogo(event: event)
-            Text(event.modeName).splat2Font(size: 14).minimumScaleFactor(0.5).lineSpacing(0)
+            Text(event.modeName).splat2Font(size: 14)
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
+                .lineSpacing(0)
+            if gameLogoPosition == .trailing {
+                gameLogo
+            }
         }
     }
 }
 
 struct CoopLogo: View {
     let event: CoopEvent
+    
     var body: some View {
-        logoImage.resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0, y: 1)
+        HStack {
+            logoImage.resizable().aspectRatio(contentMode: .fit).frame(width: 20).shadow(color: .black, radius: 1, x: 0, y: 1)
+        }
     }
     
     var logoImage: Image {
@@ -325,6 +342,18 @@ struct CoopLogo: View {
             return image
         }
         return UIImage(named: event.logoNameSmall)
+    }
+}
+
+extension CoopEvent {
+    
+    var gameLogo: Image {
+        switch self.game {
+        case .splatoon2:
+            return Image("Splatoon2_number_icon")
+        case .splatoon3:
+            return Image("Splatoon3_number_icon")
+        }
     }
 }
 
