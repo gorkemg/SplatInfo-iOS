@@ -8,7 +8,7 @@
 import SwiftUI
 import WidgetKit
 
-@available(iOSApplicationExtension 16.0, *)
+@available(iOSApplicationExtension 16.0, macCatalystApplicationExtension 16.0, macCatalyst 16.0, macOS 13.0, *)
 struct CoopRectangularWidgetView: View {
     
     let event: CoopEvent
@@ -21,7 +21,9 @@ struct CoopRectangularWidgetView: View {
     
     var body: some View {
         ZStack{
+            #if TARGET_OS_MACCATALYST
             AccessoryWidgetBackground()
+            #endif
             
             HStack(alignment: .center, spacing: 4.0) {
                                 
@@ -48,6 +50,8 @@ struct CoopRectangularWidgetView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        #if TARGET_OS_MACCATALYST
         .widgetAccentable()
+        #endif
     }
 }

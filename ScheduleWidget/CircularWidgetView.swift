@@ -18,6 +18,7 @@ struct CircularWidgetView: View {
     var body: some View {
         
         ZStack{
+            #if TARGET_OS_MACCATALYST
             AccessoryWidgetBackground()
             
             ProgressView(timerInterval: startDate...endDate, countsDown: true, label: {
@@ -27,6 +28,7 @@ struct CircularWidgetView: View {
                     Image(name).resizable().aspectRatio(contentMode: .fit).frame(width: 20)
                 }
             }).progressViewStyle(.circular)
+            #endif
         }
     }
 }

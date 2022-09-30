@@ -20,7 +20,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
     let imageLoaderManager = ImageLoaderManager()
     
     static var exampleSchedule: Splatoon3.Schedule {
-        return Splatoon3.Schedule.empty
+        return Splatoon3.Schedule.example
     }
     
     static var exampleRegularEvents : [GameModeEvent] {
@@ -221,7 +221,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
     
     
     struct GameModeEntry: TimelineEntry {
-        let date: Date
+        let date: Date                                  // widget update date
         let events: GameModeEvents
         let configuration: Splatoon3_ScheduleIntent
     }
@@ -256,9 +256,9 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
             Group {
                 switch entry.events {
                 case .gameModeEvents(_):
-                    GameModeEntryView(gameMode: gameModeType, events: gameModeEvents.upcomingEvents, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
+                    GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
                 case .coopEvents(events: _, timeframes: let timeframes):
-                    CoopEntryView(events: coopEvents.upcomingEvents, eventTimeframes: timeframes, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
+                    CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
                 }
             }
         }

@@ -80,7 +80,7 @@ extension TimeframeActivityState {
     var color : Color {
         switch self {
         case .active:
-            return Color.orange
+            return Color.green
         case .soon:
             return Color.black
         case .over:

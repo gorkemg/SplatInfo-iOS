@@ -38,6 +38,7 @@ struct GameModeEntryView : View {
                 LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
             case .systemExtraLarge:
                 LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
+            #if TARGET_OS_MACCATALYST
             case .accessoryCircular:
                 if #available(iOSApplicationExtension 16.0, *) {
                     CircularWidgetView(startDate: event.timeframe.startDate, endDate: event.timeframe.endDate, imageName: event.mode.logoNameSmall)
@@ -56,6 +57,7 @@ struct GameModeEntryView : View {
                 }else{
                     Text("No event available").splat1Font(size: 20)
                 }
+            #endif
             @unknown default:
                 Text("No event available").splat1Font(size: 20)
             }
@@ -105,6 +107,7 @@ struct CoopEntryView : View {
             LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date)
         case .systemExtraLarge:
             LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date)
+        #if TARGET_OS_MACCATALYST
         case .accessoryCircular:
             if #available(iOSApplicationExtension 16.0, *) {
                 if let startDate = event?.timeframe.startDate, let endDate = event?.timeframe.endDate {
@@ -127,6 +130,7 @@ struct CoopEntryView : View {
                     CoopInlineWidgetView(event: event, date: date)
                 }
             }
+        #endif
         @unknown default:
             if let event = event {
                 SmallCoopWidgetView(event: event, state: event.timeframe.state(date: date))

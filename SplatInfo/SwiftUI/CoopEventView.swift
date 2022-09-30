@@ -165,7 +165,7 @@ struct CoopNarrowEventView : View {
                                 .minimumScaleFactor(0.5)
                                 .multilineTextAlignment(.trailing)
                             
-                            if event.game == .splatoon2 {
+                            if state != .active {
                                 ColoredActivityTextView(state: state).splat2Font(size: 10)
                             }
                         }

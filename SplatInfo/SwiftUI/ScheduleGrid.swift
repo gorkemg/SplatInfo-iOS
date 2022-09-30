@@ -139,7 +139,8 @@ struct GameModeTimelineView: View {
     var body: some View {
         if events.count > 0 {
             ForEach(0..<events.count, id: \.self) { i in
-                GameModeEventView(mode: mode, event: events[i], style: i == 0 ? .large : .medium)
+                let event = events[i]
+                GameModeEventView(event: event, style: i == 0 ? .large : .threeColumns, isRuleLogoVisible: !event.mode.isTurfWar)
             }
         }
     }

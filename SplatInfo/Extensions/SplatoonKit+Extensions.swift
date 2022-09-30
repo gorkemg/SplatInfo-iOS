@@ -151,7 +151,7 @@ extension EventTimeframe {
     func relativeTimeText(state: TimeframeActivityState) -> Text {
         switch state {
         case .active:
-            return Text(" since ") + Text(startDate, style: .relative)
+            return Text(endDate, style: .relative) + Text(" left")
         case .soon:
             return Text(" in ") + Text(startDate, style: .relative)
         case .over:

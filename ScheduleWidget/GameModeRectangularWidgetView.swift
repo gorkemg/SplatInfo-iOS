@@ -20,6 +20,7 @@ struct GameModeRectangularWidgetView: View {
     
     
     var body: some View {
+        #if TARGET_OS_MACCATALYST
         ZStack{
             AccessoryWidgetBackground()
             
@@ -83,5 +84,6 @@ struct GameModeRectangularWidgetView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .widgetAccentable()
+        #endif
     }
 }

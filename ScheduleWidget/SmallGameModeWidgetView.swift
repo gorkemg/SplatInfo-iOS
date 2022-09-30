@@ -39,7 +39,7 @@ struct SmallGameModeWidgetView : View {
                 VStack(alignment: .leading, spacing: 0.0) {
                     
                     VStack(alignment: .leading, spacing: 0.0) {
-                        GameModeEventTitleView(event: event, gameLogoPosition: .trailing)
+                        GameModeEventTitleView(event: event, gameLogoPosition: .trailing, isRuleLogoVisible: !event.mode.isTurfWar)
                     }
                     
                     Spacer()

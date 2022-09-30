@@ -35,7 +35,6 @@ struct MediumCoopWidgetView : View {
                 }
                 
             }
-//            .padding(.horizontal, 4.0).padding(.vertical, 4.0)
             .padding(.horizontal, 8.0).padding(.vertical, 8.0)
 
         }.foregroundColor(.white)

@@ -20,11 +20,13 @@ struct CoopInlineWidgetView: View {
     
     
     var body: some View {
-        
-        RelativeTimeframeView(timeframe: event.timeframe, state: state)
+
+        Text("Test")
+
+        //RelativeTimeframeView(timeframe: event.timeframe, state: state)
         
         //Text(event.timeframe.dateForState(state: state), style: .relative)//.splat2Font(size: 10)
-        //+ Text(event.stage.name)
+        //Text(event.stage.name)
 
 //        ZStack{
 //            AccessoryWidgetBackground()

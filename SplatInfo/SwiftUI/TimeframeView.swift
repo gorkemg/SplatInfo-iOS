@@ -58,14 +58,22 @@ struct RelativeTimeframeView : View {
     let state: TimeframeActivityState
             
     var body: some View {
-        Text(timeframe.dateForState(state: state), style: .relative)
+        //Text(timeframe.dateForState(state: state), style: .relative)
+        timeframe.relativeTimeText(state: state)
     }
 }
 
 extension EventTimeframe {
     
     func dateForState(state: TimeframeActivityState) -> Date {
-        return state == .active ? endDate : startDate
+        switch state {
+        case .active:
+            return endDate
+        case .soon:
+            return startDate
+        case .over:
+            return endDate
+        }
     }
 }
 
@@ -103,7 +111,7 @@ extension TimeframeActivityState {
     var activityText: String {
         switch self {
         case .active:
-            return "Open!"
+            return "Now!"
         case .soon:
             return "Soon!"
         case .over:

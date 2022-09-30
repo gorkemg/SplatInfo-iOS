@@ -8,18 +8,19 @@
 import SwiftUI
 
 struct GameModeEventView: View {
-    let mode: GameModeType
     let event: GameModeEvent
     let style: Style
     var date: Date = Date()
     
     var isTitleVisible: Bool = true
+    var isModeLogoVisible: Bool = true
+    var isModeTypeVisible: Bool = true
     var isRuleLogoVisible: Bool = true
     var isRuleNameVisible: Bool = true
 
     enum Style {
         case large
-        case medium
+        case threeColumns
         case narrow
     }
     
@@ -31,71 +32,68 @@ struct GameModeEventView: View {
         VStack {
             switch style {
             case .large:
-                GeometryReader { innerGeo in
+                ZStack(alignment: .topLeading) {
                     
-                    ZStack(alignment: .topLeading) {
-                        
-                        HStack {
-                            if let stage = event.stageA {
-                                PillStageImage(stage: stage, height: innerGeo.size.height)
-                            }
-                            if let stage = event.stageB {
-                                PillStageImage(stage: stage, height: innerGeo.size.height)
+                    HStack {
+                        if let stage = event.stageA {
+                            PillStageImage(stage: stage) //, height: innerGeo.size.height)
+                        }
+                        if let stage = event.stageB {
+                            PillStageImage(stage: stage) //, height: innerGeo.size.height)
+                        }
+                    }
+                    
+                    HStack(alignment: .top) {
+                        HStack(alignment: .center, spacing: 2.0) {
+
+                            if isTitleVisible {
+                                GameModeEventTitleView(event: event, gameLogoPosition: .trailing, isTitleVisible: isTitleVisible, isModeLogoVisible: isModeLogoVisible, isModeTypeVisible: isModeTypeVisible, isRuleLogoVisible: isRuleLogoVisible, isRuleNameVisible: isRuleNameVisible)
                             }
                         }
-                        
-                        HStack(alignment: .center) {
-                            HStack(alignment: .center, spacing: 2.0) {
-                                if isTitleVisible {
-                                    if isRuleLogoVisible {
-                                        Image(event.rule.logoName).resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0, y: 1)
-                                    }
-                                    if isRuleNameVisible {
-                                        Text(event.rule.name).splat2Font(size: 16).minimumScaleFactor(0.5)
-                                    }
-                                }
-                            }
-                            Spacer()
-                            RelativeTimeframeView(timeframe: event.timeframe, state: event.timeframe.state(date: date))
+                        Spacer()
+                        HStack(alignment: .center, spacing: 4.0) {
+                            let state = event.timeframe.state(date: date)
+                            RelativeTimeframeView(timeframe: event.timeframe, state: state)
                                 .splat2Font(size: 12).lineLimit(1).minimumScaleFactor(0.5).multilineTextAlignment(.trailing)
-                        }.padding(.horizontal, 2)
+                            if state != .active {
+                                ColoredActivityTextView(state: state)
+                                    .splat2Font(size: 12)
+                            }
+                        }
+                    }.padding(.horizontal, 6).padding(.vertical, 4.0)
 
-                    }
-                }.frame(minHeight: 100, idealHeight: 120)
+                }
 
-            case .medium:
+            case .threeColumns:
                 GeometryReader { innerGeo in
                     
                     HStack(alignment: .center) {
                         
-                        VStack(alignment: .center, spacing: 1.0) {
+                        VStack(alignment: .center, spacing: 0.5) {
                             HStack(alignment: .center, spacing: 2.0){
                                 if isRuleLogoVisible {
-                                    Image(event.rule.logoNameSmall).resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 20)
-                                        .shadow(color: .black, radius: 1, x: 0, y: 1)
+                                    Image(event.rule.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(width: 16).shadow(color: .black, radius: 1, x: 0, y: 1)
                                 }
-                                Text(event.rule.name).splat2Font(size: 14)
-                                    .lineLimit(2)
+                                Text(event.rule.name).splat2Font(size: 16)
+                                    .lineLimit(1)
                                     .lineSpacing(0.2)
-                                    .minimumScaleFactor(0.5)
+                                    .minimumScaleFactor(0.6)
                                     .multilineTextAlignment(.center)
                             }
-                            TimeframeView(timeframe: event.timeframe, datesStyle: .never, fontSize: 10)
-                                .lineLimit(2).minimumScaleFactor(0.5).multilineTextAlignment(.center)
+                            TimeframeView(timeframe: event.timeframe, datesStyle: .never, fontSize: 12)
+                                .lineLimit(2).minimumScaleFactor(0.4).multilineTextAlignment(.center)
                         }.frame(minWidth: min(80,innerGeo.size.width/3), maxWidth: innerGeo.size.width/3)
 
                         if let stage = event.stageA {
-                            PillStageImage(stage: stage, height: innerGeo.size.height)
+                            PillStageImage(stage: stage) //, height: innerGeo.size.height)
                         }
 
                         if let stage = event.stageB {
-                            PillStageImage(stage: stage, height: innerGeo.size.height)
+                            PillStageImage(stage: stage) //, height: innerGeo.size.height)
                         }
                     }
                     
-                }.frame(minHeight: 50, idealHeight: 60)
+                }.frame(minHeight: 40, idealHeight: 50, maxHeight: 60)
 
             case .narrow:
                 GeometryReader { innerGeo in
@@ -140,7 +138,18 @@ extension GameModeEvent {
 struct GameModeEventTitleView: View {
     let event: GameModeEvent
     var gameLogoPosition: GameLogoPosition = .hidden
+
+    enum Style {
+        case oneLine
+        case twoLines
+    }
     
+    var isTitleVisible: Bool = true
+    var isModeLogoVisible: Bool = true
+    var isModeTypeVisible: Bool = true
+    var isRuleLogoVisible: Bool = true
+    var isRuleNameVisible: Bool = true
+
     enum GameLogoPosition {
         case hidden
         case leading
@@ -154,12 +163,30 @@ struct GameModeEventTitleView: View {
     
     
     var body: some View {
-        HStack(alignment: .center, spacing: 4.0) {
-            if gameLogoPosition == .leading {
-                gameLogo
+        VStack(alignment: .leading, spacing: 0.0){
+            HStack(alignment: .center, spacing: 4.0) {
+                if gameLogoPosition == .leading {
+                    gameLogo
+                }
+                VStack(alignment: .center, spacing: 0.0){
+                    if isModeLogoVisible {
+                        modeLogoImage.resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
+                    }
+                }
+                if isRuleLogoVisible {
+                    Image(event.rule.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0, y: 1)
+                }
+                if isRuleNameVisible {
+                    Text(event.rule.name).splat2Font(size: 14)
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(1)
+                }
+                if gameLogoPosition == .trailing {
+                    gameLogo
+                }
             }
-            logoImage.resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
-            if case .splatoon3(let type) = event.mode {
+            
+            if isModeTypeVisible, case .splatoon3(let type) = event.mode {
                 switch type {
                 case .anarchyBattleOpen:
                     Splatoon3TagView(text: "Open")
@@ -169,16 +196,11 @@ struct GameModeEventTitleView: View {
                     Group{}
                 }
             }
-            Text(event.rule.name).splat2Font(size: 16)
-                .minimumScaleFactor(0.5)
-                .lineLimit(1)
-            if gameLogoPosition == .trailing {
-                gameLogo
-            }
+
         }
     }
     
-    var logoImage: Image {
+    var modeLogoImage: Image {
         if let uiImage = uiImage {
             return Image(uiImage: uiImage)
         }
