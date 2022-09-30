@@ -187,14 +187,13 @@ class ScheduleFetcher: ObservableObject {
     private let splat2API = Splatoon2InkAPI.shared()
     private let splat3API = Splatoon3InkAPI.shared()
     private let timelineCache = TimelineCacheManager.shared
-    var defaultCacheDirectory: String = NSTemporaryDirectory()
-    var useSharedFolderForCaching: Bool = false
+    static var defaultCacheDirectory: String = NSTemporaryDirectory()
+    static var useSharedFolderForCaching: Bool = false
     
     @Published var splatoon2Schedule : Splatoon2.Schedule = Splatoon2.Schedule.example
     @Published var splatoon3Schedule : Splatoon3.Schedule = Splatoon3.Schedule.example
 
-    private func loadCachedData<T>(filename: String, resultType: T.Type) -> TimelineCache<T>? where T:Codable {
-        //print("ScheduleFetcher LoadCachedData \(T.self)")
+    private static func loadCachedData<T>(filename: String, resultType: T.Type) -> TimelineCache<T>? where T:Codable {
         let filePath = cacheFileURL(filename: filename)
         let fileManager = FileManager.default
         guard let path = filePath, fileManager.fileExists(atPath: path.path) else { return nil }
@@ -203,27 +202,40 @@ class ScheduleFetcher: ObservableObject {
         return cache
     }
     
-    private func cacheData<T:Codable>(cacheData: TimelineCache<T>, filename: String) {
-        //print("ScheduleFetcher CacheData \(T.self)")
+    private static func cacheData<T:Codable>(cacheData: TimelineCache<T>, filename: String) {
         let filePath = cacheFileURL(filename: filename)
         guard let path = filePath, let data = try? cacheData.encoded() else { return }
         try? data.write(to: path)
         copyCacheFileToAppGroupDirectory(filename)
     }
     
-    private func cacheFileURL(filename: String) -> URL? {
+    private static func cacheFileURL(filename: String) -> URL? {
         if useSharedFolderForCaching, let sharedContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) {
             return sharedContainerURL.appendingPathComponent(filename)
         }
         return NSURL(fileURLWithPath: defaultCacheDirectory).appendingPathComponent(filename)
     }
     
-    private func copyCacheFileToAppGroupDirectory(_ filename: String) {
+    private static func copyCacheFileToAppGroupDirectory(_ filename: String) {
         let sharedContainerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName)
         //NSLog("sharedContainerURL = \(String(describing: sharedContainerURL))")
         guard let sourceURL = cacheFileURL(filename: filename) else { return }
         guard let destinationURL = sharedContainerURL?.appendingPathComponent(filename) else { return }
         try? FileManager().copyItem(at: sourceURL, to: destinationURL)
+    }
+    
+    
+    // MARK: - Fetch
+    private static let splat2CachedScheduleFilename = "splat2-schedules.json"
+    private static let splat3CachedScheduleFilename = "splat3-schedules.json"
+
+    // MARK: - Splatoon 2
+    
+    static func loadCachedSplatoon2Schedule() -> TimelineCache<Splatoon2.Schedule>? {
+        guard let cacheData = Self.loadCachedData(filename: Self.splat2CachedScheduleFilename, resultType: Splatoon2.Schedule.self), !cacheData.isOutdated else {
+            return nil
+        }
+        return cacheData
     }
     
     func fetchSplatoon2Schedule(completion: @escaping (Result<Splatoon2.Schedule, Error>) -> Void) {
@@ -237,12 +249,10 @@ class ScheduleFetcher: ObservableObject {
         }
         
         // load from disk
-        let filename = "schedules.json"
-        if let cacheData = loadCachedData(filename: filename, resultType: Splatoon2.Schedule.self), !cacheData.isOutdated {
-            //print("Splatoon2 using disk Timeline \(cacheData.date) outdated:\(cacheData.isOutdated)")
-            self.timelineCache.splatoon2 = cacheData
-            self.splatoon2Schedule = cacheData.schedule
-            completion(.success(cacheData.schedule))
+        if let cachedSchedule = Self.loadCachedSplatoon2Schedule() {
+            self.timelineCache.splatoon2 = cachedSchedule
+            self.splatoon2Schedule = cachedSchedule.schedule
+            completion(.success(cachedSchedule.schedule))
             return
         }
 
@@ -266,7 +276,7 @@ class ScheduleFetcher: ObservableObject {
                         self.timelineCache.splatoon2 = cacheData
 
                         // store on disk
-                        self.cacheData(cacheData: cacheData, filename: filename)
+                        Self.cacheData(cacheData: cacheData, filename: ScheduleFetcher.splat2CachedScheduleFilename)
 
                         // save
                         self.splatoon2Schedule = schedule
@@ -331,6 +341,12 @@ class ScheduleFetcher: ObservableObject {
     }
     
     // MARK: - Splatoon 3
+    static func loadCachedSplatoon3Schedule() -> TimelineCache<Splatoon3.Schedule>? {
+        guard let cacheData = loadCachedData(filename: Self.splat3CachedScheduleFilename, resultType: Splatoon3.Schedule.self), !cacheData.isOutdated else {
+            return nil
+        }
+        return cacheData
+    }
     
     func fetchSplatoon3Schedule(completion: @escaping (Result<Splatoon3.Schedule, Error>) -> Void) {
         
@@ -343,12 +359,10 @@ class ScheduleFetcher: ObservableObject {
         }
         
         // load from disk
-        let filename = "schedules.json"
-        if let cacheData = loadCachedData(filename: filename, resultType: Splatoon3.Schedule.self), !cacheData.isOutdated {
-//            print("Splatoon3 using disk Timeline \(cacheData.date) outdated:\(cacheData.isOutdated)")
-            self.timelineCache.splatoon3 = cacheData
-            self.splatoon3Schedule = cacheData.schedule
-            completion(.success(cacheData.schedule))
+        if let cachedSchedule = Self.loadCachedSplatoon3Schedule() {
+            self.timelineCache.splatoon3 = cachedSchedule
+            self.splatoon3Schedule = cachedSchedule.schedule
+            completion(.success(cachedSchedule.schedule))
             return
         }
         
@@ -364,7 +378,17 @@ class ScheduleFetcher: ObservableObject {
             }
             
             let schedule = Splatoon3.Schedule(regular: response.regularTimeline, anarchyBattleOpen: response.anarchyBattleOpenTimeline, anarchyBattleSeries: response.anarchyBattleSeriesTimeline, league: response.leageTimeline, x: response.xTimeline, coop: response.coopTimeline, splatfest: .init(timeline: response.splatfestTimeline, fest: response.splatfest))
+            let cacheData = TimelineCache(schedule: schedule, date: Date())
+
+            // store in cache
+            self.timelineCache.splatoon3 = cacheData
+
+            // store on disk
+            Self.cacheData(cacheData: cacheData, filename: ScheduleFetcher.splat3CachedScheduleFilename)
+
+            // save
             self.splatoon3Schedule = schedule
+
             completion(.success(schedule))
         }
 

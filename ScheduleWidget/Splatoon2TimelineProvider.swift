@@ -20,7 +20,9 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
     let imageLoaderManager = ImageLoaderManager()
     
     static var exampleSchedule: Splatoon2.Schedule {
-        return Splatoon2.Schedule.empty
+        // if available, use cached schedule
+        guard let cache = ScheduleFetcher.loadCachedSplatoon2Schedule() else { return Splatoon2.Schedule.empty }
+        return cache.schedule
     }
     
     static var exampleRegularEvents : [GameModeEvent] {
@@ -55,7 +57,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
             completion(entry)
             return
         }
-        scheduleFetcher.useSharedFolderForCaching = true
+        ScheduleFetcher.useSharedFolderForCaching = true
 
         scheduleFetcher.fetchSplatoon2Schedule(completion: { result in
             switch result {
@@ -90,7 +92,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
     
     func getTimeline(for configuration: Splatoon2_ScheduleIntent, in context: Context, completion: @escaping (Timeline<GameModeEntry>) -> ()) {
         let mode = configuration.scheduleType
-        scheduleFetcher.useSharedFolderForCaching = true
+        ScheduleFetcher.useSharedFolderForCaching = true
 
         scheduleFetcher.fetchSplatoon2Schedule { result in
             switch result {
