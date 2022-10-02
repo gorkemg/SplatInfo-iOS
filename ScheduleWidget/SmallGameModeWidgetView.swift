@@ -17,9 +17,8 @@ struct SmallGameModeWidgetView : View {
             
             ZStack(alignment: .topLeading) {
 
-                //event.mode.color
-
-                Image("splatoon-card-bg").resizable(resizingMode: .tile)
+                event.mode.color
+                event.mode.bgImage
 
                 GeometryReader { geometry in
                     VStack(spacing: 0.0) {
@@ -34,8 +33,6 @@ struct SmallGameModeWidgetView : View {
                     }.cornerRadius(10.0)
                 }
                 
-                LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.05), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
-
                 VStack(alignment: .leading, spacing: 0.0) {
                     
                     VStack(alignment: .leading, spacing: 0.0) {

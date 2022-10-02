@@ -104,7 +104,8 @@ struct CoopLargeEventView : View {
                             .multilineTextAlignment(.trailing)
 
                             if event.game == .splatoon2 {
-                                ColoredActivityTextView(state: state).splat2Font(size: 12)
+                                ColoredActivityTextView(state: state)
+                                    .splat2Font(size: 12)
                             }
                         }
                         
@@ -164,7 +165,8 @@ struct CoopNarrowEventView : View {
                                 .multilineTextAlignment(.trailing)
                             
                             if state != .active {
-                                ColoredActivityTextView(state: state).splat2Font(size: 10)
+                                ColoredActivityTextView(state: state)
+                                    .splat2Font(size: 10)
                             }
                         }
                         ActivityTimeFrameView(timeframe: event.timeframe, state: state)

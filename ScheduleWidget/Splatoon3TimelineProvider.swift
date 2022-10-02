@@ -138,12 +138,14 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
         for date in dates {
             let events = modeTimeline.events.upcomingEventsAfterDate(date: date)
             if !events.isEmpty {
-                let entry = GameModeEntry(date: date.addingTimeInterval(1), events: .gameModeEvents(events: events), configuration: configuration)
+                let entry = GameModeEntry(date: date, events: .gameModeEvents(events: events), configuration: configuration)
                 entries.append(entry)
             }
         }
         var updatePolicy: TimelineReloadPolicy = .atEnd
-        if let date = startDates.suffix(2).first, date > Date() {
+        
+        // The large widget displays 4 events, so the next update date has to be when only 4 events remain
+        if let date = startDates.suffix(4).first, date > Date() {
             print("Refresh at: \(date)")
             updatePolicy = .after(date)
         }
@@ -191,7 +193,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
             let events = coopTimeline.upcomingEventsAfterDate(date: date)
             let eventTimeframes = coopTimeline.otherTimeframes.upcomingTimeframesAfterDate(date: date)
 //            if events.count > 1 {
-            let entry = GameModeEntry(date: date.addingTimeInterval(1), events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
+            let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
                 entries.append(entry)
 //            }
         }

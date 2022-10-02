@@ -63,7 +63,7 @@ struct ScheduleGrid: View {
                     if selectedSchedules.contains(.splatoon3) {
                         
                         VStack{
-                            Text("Splatoon 3").splat2Font(size: 20)
+                            Image("Splatoon3_number_icon")
                             LazyVGrid(columns: columns, spacing: 50) {
                                 if case .active(_) = splatoon3Schedule.splatfest.activity {
                                     // Splatfest not currently active
@@ -88,7 +88,7 @@ struct ScheduleGrid: View {
 
                     if selectedSchedules.contains(.splatoon2) {
                         VStack{
-                            Text("Splatoon 2").splat2Font(size: 20)
+                            Image("Splatoon2_number_icon")
                             LazyVGrid(columns: columns, spacing: 50) {
                                 Splatoon2TimelineCard(timeline: .game(mode: .turfWar, timeline: splatoon2Schedule.regular))
                                 Splatoon2TimelineCard(timeline: .game(mode: .ranked, timeline: splatoon2Schedule.ranked))

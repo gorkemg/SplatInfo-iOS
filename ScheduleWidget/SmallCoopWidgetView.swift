@@ -71,6 +71,7 @@ struct ColoredActivityTextView: View {
     var body: some View {
         HStack {
             Text(state.activityText)
+                .shadow(color: .black, radius: 1.0, x: 0.0, y: 1.0)
         }.padding(.horizontal, 4.0).background(state.color).cornerRadius(5.0)
     }
 }
