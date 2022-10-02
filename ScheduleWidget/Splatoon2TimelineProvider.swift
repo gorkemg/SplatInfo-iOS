@@ -25,7 +25,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
         return cache.schedule
     }
     
-    static var exampleRegularEvents : [GameModeEvent] {
+    static var exampleGameEvents : [GameModeEvent] {
         return Splatoon2TimelineProvider.exampleSchedule.regular.events
     }
     static var exampleCoopEvents : [CoopEvent] {
@@ -48,12 +48,12 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
     // MARK: -
 
     func placeholder(in context: Context) -> GameModeEntry {
-        return GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.exampleRegularEvents), configuration: Splatoon2_ScheduleIntent())
+        return GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.exampleGameEvents), configuration: Splatoon2_ScheduleIntent())
     }
 
     func getSnapshot(for configuration: Splatoon2_ScheduleIntent, in context: Context, completion: @escaping (GameModeEntry) -> ()) {
         if context.isPreview {
-            let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.exampleRegularEvents), configuration: Splatoon2_ScheduleIntent())
+            let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.exampleGameEvents), configuration: Splatoon2_ScheduleIntent())
             completion(entry)
             return
         }
@@ -83,7 +83,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
                     break
                 }
             case .failure(_):
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.exampleRegularEvents), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2TimelineProvider.exampleGameEvents), configuration: configuration)
                 completion(entry)
                 break
             }

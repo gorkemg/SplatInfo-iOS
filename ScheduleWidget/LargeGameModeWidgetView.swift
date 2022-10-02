@@ -10,7 +10,7 @@ import SwiftUI
 struct LargeGameModeWidgetView : View {
     let event: GameModeEvent
     var nextEvents: [GameModeEvent]
-    let date: Date
+    let date: Date                      // widget update date
         
     var body: some View {
         GeometryReader { geometry in
@@ -22,11 +22,11 @@ struct LargeGameModeWidgetView : View {
 
                 VStack {
 
-                    GameModeEventView(event: event, style: .large, isRuleLogoVisible: !event.mode.isTurfWar)
+                    GameModeEventView(event: event, style: .large, date: date, isRuleLogoVisible: !event.mode.isTurfWar)
                     
                     ForEach(nextEvents.indices, id: \.self) { i in
                         let nextEvent = nextEvents[i]
-                        GameModeEventView(event: nextEvent, style: .threeColumns)
+                        GameModeEventView(event: nextEvent, style: .threeColumns, date: date)
                     }
                     
                 }.padding(8)

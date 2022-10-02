@@ -84,10 +84,9 @@ struct CoopLargeEventView : View {
                                     .frame(minHeight: 20, maxHeight: 30.0)
                                     .padding(.vertical, 2.0)
                                     .padding(.horizontal, 4.0)
-                                    .background(Color.white.opacity(0.5))
+                                    .background(.ultraThinMaterial.opacity(0.9))
                                     .cornerRadius(8.0)
                                     .clipShape(ContainerRelativeShape())
-                                    .shadow(color: .black, radius: 2, x: 0, y: 1)
                             }
                         }
 
@@ -147,10 +146,9 @@ struct CoopNarrowEventView : View {
                             .frame(minHeight: 12, maxHeight: 24, alignment: .leading)
                             .padding(.vertical, 2.0)
                             .padding(.horizontal, 4.0)
-                            .background(Color.white.opacity(0.5))
+                            .background(.ultraThinMaterial.opacity(0.9))
                             .cornerRadius(4.0)
                             .clipShape(ContainerRelativeShape())
-                            .shadow(color: .black, radius: 2, x: 0, y: 1)
 
                     }
                     
@@ -169,6 +167,8 @@ struct CoopNarrowEventView : View {
                                 ColoredActivityTextView(state: state).splat2Font(size: 10)
                             }
                         }
+                        ActivityTimeFrameView(timeframe: event.timeframe, state: state)
+                            .lineLimit(1).minimumScaleFactor(0.5)
                     }
                 }
                 .padding(.horizontal, 8.0).padding(.vertical, 4.0)
@@ -214,9 +214,8 @@ struct CoopSideBySideEventView : View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
                 HStack(alignment: .center, spacing: 4.0) {
-                    WeaponsList(weapons: event.weaponDetails)
-                        .shadow(color: .black, radius: 2, x: 0, y: 1)
-                        .frame(minHeight: 12, maxHeight: 24, alignment: .leading)
+                    WeaponsList(weapons: event.weaponDetails, spacing: 4.0)
+                        .frame(minHeight: 16, maxHeight: 24, alignment: .leading)
                     Spacer()
                 }
             }
@@ -226,9 +225,10 @@ struct CoopSideBySideEventView : View {
 
 struct WeaponsList: View {
     let weapons: [WeaponDetails]
+    var spacing: CGFloat? = 2.0
     
     var body: some View {
-        HStack(alignment: .center, spacing: 2) {
+        HStack(alignment: .center, spacing: spacing) {
             ForEach(weapons, id: \.id) { weapon in
                 WeaponImage(weapon: weapon)
                     .shadow(color: .black, radius: 1.0, x: 0.0, y: 0.0)

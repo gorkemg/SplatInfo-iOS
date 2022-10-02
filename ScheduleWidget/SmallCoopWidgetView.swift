@@ -52,9 +52,9 @@ struct SmallCoopWidgetView : View {
                         Group {
                             WeaponsList(weapons: event.weaponDetails)
                                 .frame(maxHeight: 24.0)
-                                .shadow(color: .black, radius: 2, x: 0, y: 1)
                                 .padding(.horizontal, 8.0)
-                                .background(Color.white.opacity(0.5).cornerRadius(8.0))
+                                .background(.ultraThinMaterial.opacity(0.9))
+                                .cornerRadius(8.0)
                         }
                         
                         Spacer()

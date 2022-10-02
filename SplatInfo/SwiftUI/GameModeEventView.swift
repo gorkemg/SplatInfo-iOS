@@ -10,7 +10,7 @@ import SwiftUI
 struct GameModeEventView: View {
     let event: GameModeEvent
     let style: Style
-    var date: Date = Date()
+    var date: Date
     
     var isTitleVisible: Bool = true
     var isModeLogoVisible: Bool = true

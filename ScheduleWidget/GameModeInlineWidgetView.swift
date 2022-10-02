@@ -21,7 +21,6 @@ struct GameModeInlineWidgetView: View {
     
     var body: some View {
         
-        #if TARGET_OS_MACCATALYST
         ViewThatFits(in: .horizontal) {
 
             HStack(spacing: 2.0) {
@@ -39,9 +38,6 @@ struct GameModeInlineWidgetView: View {
             .minimumScaleFactor(0.5)
 
         }.widgetAccentable()
-        #else
-        Text("Not supported")
-        #endif
 
         //Text(event.timeframe.dateForState(state: state), style: .relative)//.splat2Font(size: 10)
         //+ Text(event.stage.name)

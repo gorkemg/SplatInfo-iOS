@@ -24,10 +24,10 @@ struct MediumGameModeWidgetView : View {
 
                 VStack(spacing: 8.0) {
                     
-                    GameModeEventView(event: event, style: .large, isRuleLogoVisible: !event.mode.isTurfWar)
+                    GameModeEventView(event: event, style: .large, date: date, isRuleLogoVisible: !event.mode.isTurfWar)
                     
                     if let nextEvent = nextEvent {
-                        GameModeEventView(event: nextEvent, style: .threeColumns)
+                        GameModeEventView(event: nextEvent, style: .threeColumns, date: date)
                     }
                     
                 }.padding(8)

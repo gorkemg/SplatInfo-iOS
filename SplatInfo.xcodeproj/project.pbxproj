@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE0111BF28E86DDF001849CC /* CoopCircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0111BE28E86DDF001849CC /* CoopCircularWidgetView.swift */; };
 		DE0EF5B4258632380088BF45 /* MediumGameModeWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0EF5B3258632380088BF45 /* MediumGameModeWidgetView.swift */; };
 		DE2BD5FA25384899006E5531 /* SplatInfoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2BD5F925384899006E5531 /* SplatInfoApp.swift */; };
 		DE2BD5FC25384899006E5531 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2BD5FB25384899006E5531 /* ContentView.swift */; };
@@ -61,7 +62,7 @@
 		DE68BEC928D8586700700A80 /* Splatoon2ScheduleWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BEC828D8586700700A80 /* Splatoon2ScheduleWidget.swift */; };
 		DE68BECB28D859B500700A80 /* Splatoon3ScheduleWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECA28D859B500700A80 /* Splatoon3ScheduleWidget.swift */; };
 		DE68BECD28D912CB00700A80 /* Splatoon2TimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECC28D912CB00700A80 /* Splatoon2TimelineProvider.swift */; };
-		DE68BECF28D9148F00700A80 /* CircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECE28D9148F00700A80 /* CircularWidgetView.swift */; };
+		DE68BECF28D9148F00700A80 /* IconCircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECE28D9148F00700A80 /* IconCircularWidgetView.swift */; };
 		DE72E3A12587B69E00CA0BCD /* LargeCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A02587B69E00CA0BCD /* LargeCoopWidgetView.swift */; };
 		DE72E3A72587B99100CA0BCD /* MediumCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */; };
 		DE9DFA6E254AF6A700267508 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */; };
@@ -156,6 +157,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DE0111BE28E86DDF001849CC /* CoopCircularWidgetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoopCircularWidgetView.swift; sourceTree = "<group>"; };
 		DE04A0E625653E9600AC7CD1 /* ScheduleWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ScheduleWidgetExtension.entitlements; sourceTree = "<group>"; };
 		DE0EF5B3258632380088BF45 /* MediumGameModeWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediumGameModeWidgetView.swift; sourceTree = "<group>"; };
 		DE2BD5F625384899006E5531 /* SplatInfo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SplatInfo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -197,7 +199,7 @@
 		DE68BEC828D8586700700A80 /* Splatoon2ScheduleWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splatoon2ScheduleWidget.swift; sourceTree = "<group>"; };
 		DE68BECA28D859B500700A80 /* Splatoon3ScheduleWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splatoon3ScheduleWidget.swift; sourceTree = "<group>"; };
 		DE68BECC28D912CB00700A80 /* Splatoon2TimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splatoon2TimelineProvider.swift; sourceTree = "<group>"; };
-		DE68BECE28D9148F00700A80 /* CircularWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularWidgetView.swift; sourceTree = "<group>"; };
+		DE68BECE28D9148F00700A80 /* IconCircularWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCircularWidgetView.swift; sourceTree = "<group>"; };
 		DE72E3A02587B69E00CA0BCD /* LargeCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeCoopWidgetView.swift; sourceTree = "<group>"; };
 		DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediumCoopWidgetView.swift; sourceTree = "<group>"; };
 		DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extensions.swift"; sourceTree = "<group>"; };
@@ -391,7 +393,8 @@
 				DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */,
 				DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */,
 				DE72E3A02587B69E00CA0BCD /* LargeCoopWidgetView.swift */,
-				DE68BECE28D9148F00700A80 /* CircularWidgetView.swift */,
+				DE68BECE28D9148F00700A80 /* IconCircularWidgetView.swift */,
+				DE0111BE28E86DDF001849CC /* CoopCircularWidgetView.swift */,
 				DEE3AD0A28D9D26500A36D87 /* CoopRectangularWidgetView.swift */,
 				DEE3AD0C28D9D8DB00A36D87 /* CoopInlineWidgetView.swift */,
 				DE49D2FD28DAF076000FAB3D /* GameModeInlineWidgetView.swift */,
@@ -682,7 +685,7 @@
 				DEAFEA102543121800FFA812 /* Schedule.intentdefinition in Sources */,
 				DE68BEC928D8586700700A80 /* Splatoon2ScheduleWidget.swift in Sources */,
 				DE68BECB28D859B500700A80 /* Splatoon3ScheduleWidget.swift in Sources */,
-				DE68BECF28D9148F00700A80 /* CircularWidgetView.swift in Sources */,
+				DE68BECF28D9148F00700A80 /* IconCircularWidgetView.swift in Sources */,
 				DE49D2FC28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift in Sources */,
 				DEE7C1B128D5FFD10024D6A9 /* Splatoon3InkAPI.swift in Sources */,
 				DE68BECD28D912CB00700A80 /* Splatoon2TimelineProvider.swift in Sources */,
@@ -702,6 +705,7 @@
 				DEAFEA5125431BFC00FFA812 /* TimelineCard.swift in Sources */,
 				DEAFEA5225431BFC00FFA812 /* TitleView.swift in Sources */,
 				DEAFEA5025431BFC00FFA812 /* CoopEventView.swift in Sources */,
+				DE0111BF28E86DDF001849CC /* CoopCircularWidgetView.swift in Sources */,
 				DEE38192254E0300005D5062 /* SmallGameModeWidgetView.swift in Sources */,
 				DEF7CEFD28E2E2E6009281E8 /* Splatoon3TimelineProvider.swift in Sources */,
 				DE0EF5B4258632380088BF45 /* MediumGameModeWidgetView.swift in Sources */,

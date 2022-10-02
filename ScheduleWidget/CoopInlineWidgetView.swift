@@ -21,28 +21,22 @@ struct CoopInlineWidgetView: View {
     
     var body: some View {
 
-        Text("Test")
+        ViewThatFits {
 
-        //RelativeTimeframeView(timeframe: event.timeframe, state: state)
-        
-        //Text(event.timeframe.dateForState(state: state), style: .relative)//.splat2Font(size: 10)
-        //Text(event.stage.name)
+            HStack{
+                Image(event.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(width: 12, height: 12)
+                Text(event.stage.name)
+                RelativeTimeframeView(timeframe: event.timeframe, state: state)
+            }
 
-//        ZStack{
-//            AccessoryWidgetBackground()
-//            HStack(alignment: .center, spacing: 4.0) {
-//
-//                //Image(event.logoNameSmall)//.resizable().aspectRatio(contentMode: .fit).frame(width: 20)
-//
-//                Text(event.stage.name).splat2Font(size: 10).lineLimit(1)
-//
-////                ColoredActivityTextView(state: state).splat2Font(size: 8.0)
-////                RelativeTimeframeView(timeframe: event.timeframe, state: state)
-////                    .splat2Font(size: 10)
-////                    .lineLimit(1)
-////                    .minimumScaleFactor(0.5)
-//
-//            }.padding(2.0).widgetAccentable()
-//        }
+            HStack{
+                Text(event.stage.name)
+                RelativeTimeframeView(timeframe: event.timeframe, state: state)
+            }
+
+            HStack{
+                RelativeTimeframeView(timeframe: event.timeframe, state: state)
+            }
+        }
     }
 }

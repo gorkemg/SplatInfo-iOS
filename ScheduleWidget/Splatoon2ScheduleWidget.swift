@@ -12,11 +12,7 @@ struct Splatoon2ScheduleWidget: Widget {
 
     var supportedWidgetFamilies: [WidgetFamily] {
         if #available(iOSApplicationExtension 16.0, *) {
-            #if TARGET_OS_MACCATALYST
             return [.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryInline, .accessoryRectangular]
-            #else
-            return [.systemSmall, .systemMedium, .systemLarge]
-            #endif
         }else{
             return [.systemSmall, .systemMedium, .systemLarge]
         }

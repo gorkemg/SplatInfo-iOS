@@ -520,10 +520,20 @@ struct Splatoon2: Codable {
 
 extension Array {
     var second: Element? {
-        if self.count > 1 {
-            return self[1]
-        }
-        return nil
+        return self[safe: 1]
+    }
+    var third: Element? {
+        return self[safe: 2]
+    }
+    var fourth: Element? {
+        return self[safe: 3]
+    }
+}
+
+extension Collection {
+    /// Returns the element at the specified index if it is within bounds, otherwise nil.
+    subscript (safe index: Index) -> Element? {
+        return index >= startIndex && index < endIndex ? self[index] : nil
     }
 }
 

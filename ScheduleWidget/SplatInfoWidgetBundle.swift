@@ -23,7 +23,7 @@ struct SplatInfoWidgetBundle: WidgetBundle {
 struct GameModeEntryView : View {
     let gameMode: GameModeType
     let events: [GameModeEvent]
-    let date: Date
+    let date: Date                  // Widget update date
     
     @Environment(\.widgetFamily) private var widgetFamily
     
@@ -38,10 +38,9 @@ struct GameModeEntryView : View {
                 LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
             case .systemExtraLarge:
                 LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
-            #if TARGET_OS_MACCATALYST
             case .accessoryCircular:
                 if #available(iOSApplicationExtension 16.0, *) {
-                    CircularWidgetView(startDate: event.timeframe.startDate, endDate: event.timeframe.endDate, imageName: event.mode.logoNameSmall)
+                    IconCircularWidgetView(startDate: event.timeframe.startDate, endDate: event.timeframe.endDate, imageName: event.rule.logoNameSmall)
                 }else{
                     Text("No event available").splat1Font(size: 20)
                 }
@@ -57,7 +56,6 @@ struct GameModeEntryView : View {
                 }else{
                     Text("No event available").splat1Font(size: 20)
                 }
-            #endif
             @unknown default:
                 Text("No event available").splat1Font(size: 20)
             }
@@ -107,11 +105,10 @@ struct CoopEntryView : View {
             LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date)
         case .systemExtraLarge:
             LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date)
-        #if TARGET_OS_MACCATALYST
         case .accessoryCircular:
             if #available(iOSApplicationExtension 16.0, *) {
-                if let startDate = event?.timeframe.startDate, let endDate = event?.timeframe.endDate {
-                    CircularWidgetView(startDate: startDate, endDate: endDate, imageName: event?.logoName)
+                if let event = event {
+                    CoopCircularWidgetView(event: event)
                 } else {
                     Image(systemName: "trash")
                      }
@@ -130,7 +127,6 @@ struct CoopEntryView : View {
                     CoopInlineWidgetView(event: event, date: date)
                 }
             }
-        #endif
         @unknown default:
             if let event = event {
                 SmallCoopWidgetView(event: event, state: event.timeframe.state(date: date))

@@ -25,7 +25,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
         return cache.schedule
     }
     
-    static var exampleRegularEvents : [GameModeEvent] {
+    static var exampleGameEvents : [GameModeEvent] {
         return Splatoon3TimelineProvider.exampleSchedule.regular.events
     }
     static var exampleCoopEvents : [CoopEvent] {
@@ -33,12 +33,12 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
     }
 
     func placeholder(in context: Context) -> GameModeEntry {
-        return GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3TimelineProvider.exampleRegularEvents), configuration: Splatoon3_ScheduleIntent())
+        return GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3TimelineProvider.exampleGameEvents), configuration: Splatoon3_ScheduleIntent())
     }
 
     func getSnapshot(for configuration: Splatoon3_ScheduleIntent, in context: Context, completion: @escaping (GameModeEntry) -> ()) {
         if context.isPreview {
-            let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3TimelineProvider.exampleRegularEvents), configuration: Splatoon3_ScheduleIntent())
+            let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3TimelineProvider.exampleGameEvents), configuration: Splatoon3_ScheduleIntent())
             completion(entry)
             return
         }
@@ -69,7 +69,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
                     completion(entry)
                 }
             case .failure(_):
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3TimelineProvider.exampleRegularEvents), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3TimelineProvider.exampleGameEvents), configuration: configuration)
                 completion(entry)
                 break
             }
@@ -137,8 +137,8 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
         let dates = ([now]+startDates).sorted()
         for date in dates {
             let events = modeTimeline.events.upcomingEventsAfterDate(date: date)
-            if events.count > 1 {
-                let entry = GameModeEntry(date: date, events: .gameModeEvents(events: events), configuration: configuration)
+            if !events.isEmpty {
+                let entry = GameModeEntry(date: date.addingTimeInterval(1), events: .gameModeEvents(events: events), configuration: configuration)
                 entries.append(entry)
             }
         }
@@ -191,7 +191,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
             let events = coopTimeline.upcomingEventsAfterDate(date: date)
             let eventTimeframes = coopTimeline.otherTimeframes.upcomingTimeframesAfterDate(date: date)
 //            if events.count > 1 {
-            let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
+            let entry = GameModeEntry(date: date.addingTimeInterval(1), events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
                 entries.append(entry)
 //            }
         }
