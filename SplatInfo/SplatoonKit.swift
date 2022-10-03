@@ -321,9 +321,18 @@ struct Splatoon3: Codable {
         }
     }
     
-    enum TimelineType {
+    enum TimelineType: Codable, Hashable {
         case game(mode: Splatoon3.GameModeType, timeline: GameTimeline)
         case coop(timeline: CoopTimeline)
+        
+        var modeType: Splatoon3.GameModeType {
+            switch self {
+            case .game(let mode, _):
+                return mode
+            case .coop(_):
+                return Splatoon3.GameModeType.salmonRun
+            }
+        }
     }
 
     enum GameModeType: Codable, Equatable, Hashable, Nameable, LogoNameable {

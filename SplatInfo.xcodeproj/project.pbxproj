@@ -134,6 +134,7 @@
 		DEB230D428E9D0AF00B7FE8C /* SplatInfo+ProjectCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF7CF0328E434DD009281E8 /* SplatInfo+ProjectCommon.swift */; };
 		DEB230D528E9D0E600B7FE8C /* Splatoon1.otf in Resources */ = {isa = PBXBuildFile; fileRef = DE41B9342541A11200AAD49A /* Splatoon1.otf */; };
 		DEB230D628E9D0E900B7FE8C /* Splatoon2.otf in Resources */ = {isa = PBXBuildFile; fileRef = DE41B9392541A11A00AAD49A /* Splatoon2.otf */; };
+		DEB230D928EB2C5300B7FE8C /* WatchSchedule Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = DE0111F228E9ADF0001849CC /* WatchSchedule Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DEE3817F254E016E005D5062 /* SmallCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */; };
 		DEE38180254E016F005D5062 /* SmallCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */; };
 		DEE38186254E0226005D5062 /* SplatoonKit+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE38185254E0226005D5062 /* SplatoonKit+Extensions.swift */; };
@@ -197,6 +198,13 @@
 			remoteGlobalIDString = DEAFEA022543121500FFA812;
 			remoteInfo = ScheduleExtension;
 		};
+		DEB230DA28EB2C5300B7FE8C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DE2BD5EE25384899006E5531 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DE0111F128E9ADF0001849CC;
+			remoteInfo = "WatchSchedule Watch App";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -209,6 +217,17 @@
 				DEAFEA142543121800FFA812 /* SplatInfoScheduleWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DEB230DC28EB2C5300B7FE8C /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				DEB230D928EB2C5300B7FE8C /* WatchSchedule Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -621,11 +640,13 @@
 				DE2BD5F325384899006E5531 /* Frameworks */,
 				DE2BD5F425384899006E5531 /* Resources */,
 				DEAFEA152543121800FFA812 /* Embed Foundation Extensions */,
+				DEB230DC28EB2C5300B7FE8C /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				DEAFEA132543121800FFA812 /* PBXTargetDependency */,
+				DEB230DB28EB2C5300B7FE8C /* PBXTargetDependency */,
 			);
 			name = SplatInfo;
 			productName = SplatInfo;
@@ -1024,6 +1045,11 @@
 			target = DEAFEA022543121500FFA812 /* SplatInfoScheduleWidgetExtension */;
 			targetProxy = DEAFEA122543121800FFA812 /* PBXContainerItemProxy */;
 		};
+		DEB230DB28EB2C5300B7FE8C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DE0111F128E9ADF0001849CC /* WatchSchedule Watch App */;
+			targetProxy = DEB230DA28EB2C5300B7FE8C /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -1042,21 +1068,21 @@
 				INFOPLIST_FILE = "WatchSchedule-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = WatchSchedule;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.ggg-apps.SplatInfo";
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = .watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ggg-apps.SplatInfo.watchkitapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 9.1;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Debug;
 		};
@@ -1075,21 +1101,21 @@
 				INFOPLIST_FILE = "WatchSchedule-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = WatchSchedule;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.ggg-apps.SplatInfo";
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = .watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ggg-apps.SplatInfo.watchkitapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 9.1;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
 			};
 			name = Release;
 		};

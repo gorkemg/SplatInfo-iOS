@@ -10,6 +10,7 @@ import SwiftUI
 struct GameModeEventView: View {
     let event: GameModeEvent
     var nextEvent: GameModeEvent? = nil
+    var showTimeframe: Bool = false
     let style: Style
     var date: Date
     
@@ -147,6 +148,9 @@ struct GameModeEventView: View {
                                 if let next = nextEvent {
                                     Text(!event.mode.isTurfWar ? next.rule.name : "Changes")
                                         + next.timeframe.relativeTimeText(date: date)
+                                }
+                                if showTimeframe {
+                                    RelativeTimeframeView(timeframe: event.timeframe, state: event.timeframe.state(date: date))
                                 }
                             }.splat2Font(size: 10).lineLimit(1).minimumScaleFactor(0.5)
                         }.padding(.horizontal, 10.0).padding(.vertical, 8.0)

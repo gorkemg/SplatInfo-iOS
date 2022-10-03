@@ -17,10 +17,10 @@ struct WatchScheduleView: View {
         NavigationView {
             GeometryReader { geo in
                 VStack(alignment: .center, spacing: 4.0){
-                    NavigationLink(destination: Splatoon3TimelinesView(splatoon3Schedule: $scheduleFetcher.splatoon3Schedule)) {
+                    NavigationLink(destination: Splatoon3TimelinesView(schedule: $scheduleFetcher.splatoon3Schedule)) {
                         Image("Splatoon3_number_icon").frame(height: geo.size.height/2)
                     }
-                    NavigationLink(destination: Splatoon2TimelinesView(splatoon2Schedule: $scheduleFetcher.splatoon2Schedule)) {
+                    NavigationLink(destination: Splatoon2TimelinesView(schedule: $scheduleFetcher.splatoon2Schedule)) {
                         Image("Splatoon2_number_icon").frame(height: geo.size.height/2)
                     }
                 }
@@ -55,27 +55,6 @@ struct WatchScheduleView: View {
                 }
             }
         }
-        
-    }
-        
-    var grid: some View {
-        Grid {
-            GridRow {
-                Text("Top Leading")
-                    .background(.red)
-
-                Text("Top Trailing")
-                    .background(.orange)
-            }
-
-            GridRow {
-                Text("Bottom Leading")
-                    .background(.green)
-
-                Text("Bottom Trailing")
-                    .background(.blue)
-            }
-        }
     }
     
     func downloadImages(urls: [URL], asJPEG: Bool = true, completion: @escaping ()->Void) {
@@ -90,97 +69,71 @@ struct WatchScheduleView: View {
 }
 
 
-//struct TimelinesView: View {
-//    
-//    enum ScheduleType {
-//        case splatoon2(schedule: Splatoon2.Schedule)
-//        case splatoon3(schedule: Splatoon3.Schedule)
-//    }
-//    
-//    @Binding var scheduleType: ScheduleType
-//    @State private var selectedPage: GameModeType = .splatoon3(type: .turfWar)
-//
-//    var modes: [TimelineType] {
-//        let turfWar = Splatoon2.TimelineType.game(mode: .turfWar, timeline: splatoon2Schedule.regular)
-//        let ranked = Splatoon2.TimelineType.game(mode: .ranked, timeline: splatoon2Schedule.ranked)
-//        let league = Splatoon2.TimelineType.game(mode: .league, timeline: splatoon2Schedule.league)
-//        let salmonRun = Splatoon2.TimelineType.coop(timeline: splatoon2Schedule.coop)
-//       return [turfWar,ranked,league,salmonRun]
-//    }
-//        
-//    var body: some View {
-//        
-//        ZStack(alignment: .bottom){
-//            TabView(selection: $selectedPage) {
-//                ForEach(modes, id:\.self) { mode in
-//                    switch mode {
-//                    case .game(_, let timeline):
-//                        GameSmallTimelineView(timeline: timeline).tag(mode.modeType)
-//                    case .coop(let timeline):
-//                        CoopSmallTimelineView(timeline: timeline).tag(mode.modeType)
-//                    }
-//                }
-//            }
-//            .tabViewStyle(.page(indexDisplayMode: .never))
-//            
-//            VStack(alignment: .center){
-//                Spacer()
-//                HStack(alignment: .bottom, spacing: 1.0) {
-//                    ForEach(0..<modes.count, id: \.self) { index in
-//                        let mode = modes[index]
-//                        Button {
-//                            withAnimation {
-//                                selectedPage = mode.modeType
-//                            }
-//                        } label: {
-//                            if mode.modeType == selectedPage {
-//                                Image(mode.modeType.logoNameSmall)
-//                                    .resizable().aspectRatio(contentMode: .fit).frame(width: 24)
-//                                    .scaleEffect(1.2)
-//                            }else{
-//                                Image(mode.modeType.logoNameSmall)
-//                                    .resizable().aspectRatio(contentMode: .fit).frame(width: 24)
-//                                    .saturation(0.0).opacity(0.8).scaleEffect(0.8)
-//
-//                            }
-//                        }
-//                        .buttonStyle(PlainButtonStyle())
-//                        .padding(2.0)
-//                    }
-//                }.onChange(of: selectedPage) { value in
-//                    print("text: \(value)")
-//                }
-//            }
-//            .edgesIgnoringSafeArea(.vertical)
-//
-//        }
-//        .background(Color.yellow)
-//        .environmentObject(imageQuality)
-//    }
-//    
-//    var imageQuality : ImageQuality = {
-//        let quality = ImageQuality()
-//        quality.thumbnail = true
-//        return quality
-//    }()
-//}
-
 struct Splatoon3TimelinesView: View {
     
-    @Binding var splatoon3Schedule: Splatoon3.Schedule
-    @State private var selectedPage = 0
+    @Binding var schedule: Splatoon3.Schedule
+    @State private var selectedPage: Splatoon3.GameModeType = .turfWar
+
+    var timelineTypes: [Splatoon3.TimelineType] {
+        let turfWar = Splatoon3.TimelineType.game(mode: .turfWar, timeline: schedule.regular)
+        let aOpen = Splatoon3.TimelineType.game(mode: .anarchyBattleOpen, timeline: schedule.anarchyBattleOpen)
+        let aSeries = Splatoon3.TimelineType.game(mode: .anarchyBattleSeries, timeline: schedule.anarchyBattleSeries)
+//        let league = Splatoon3.TimelineType.game(mode: .league, timeline: schedule.league)
+//        let x = Splatoon3.TimelineType.game(mode: .x, timeline: schedule.x)
+        let salmonRun = Splatoon3.TimelineType.coop(timeline: schedule.coop)
+        return [turfWar,aOpen,aSeries,/*league,x,*/salmonRun]
+    }
     
     var body: some View {
-        
-        TabView(selection: $selectedPage) {
-            GameSmallTimelineView(timeline: splatoon3Schedule.regular)
-            GameSmallTimelineView(timeline: splatoon3Schedule.anarchyBattleOpen)
-            GameSmallTimelineView(timeline: splatoon3Schedule.anarchyBattleSeries)
-            GameSmallTimelineView(timeline: splatoon3Schedule.league)
-            GameSmallTimelineView(timeline: splatoon3Schedule.x)
-            CoopSmallTimelineView(timeline: splatoon3Schedule.coop)
+                
+        ZStack(alignment: .bottom){
+            TabView(selection: $selectedPage) {
+                ForEach(timelineTypes, id:\.self) { timelineType in
+                    switch timelineType {
+                    case .game(_, let timeline):
+                        GameSmallTimelineView(timeline: timeline).tag(timelineType.modeType)
+                    case .coop(let timeline):
+                        CoopSmallTimelineView(timeline: timeline).tag(timelineType.modeType)
+                    }
+                }
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            
+            VStack(alignment: .center){
+                Spacer()
+                HStack(alignment: .bottom, spacing: 1.0) {
+                    ForEach(0..<timelineTypes.count, id: \.self) { index in
+                        let timelineType = timelineTypes[index]
+                        Button {
+                            withAnimation {
+                                selectedPage = timelineType.modeType
+                            }
+                        } label: {
+                            if timelineType.modeType == selectedPage {
+                                VStack(alignment: .center) {
+                                    if timelineType.modeType == .anarchyBattleOpen {
+                                        Splatoon3TagView(text: "Open")
+                                    }else if timelineType.modeType == .anarchyBattleSeries {
+                                        Splatoon3TagView(text: "Series")
+                                    }else{
+                                        Image(timelineType.modeType.logoNameSmall)
+                                            .resizable().aspectRatio(contentMode: .fit).frame(width: 24)
+                                            .scaleEffect(1.2)
+                                    }
+                                }
+                            }else{
+                                Image(timelineType.modeType.logoNameSmall)
+                                    .resizable().aspectRatio(contentMode: .fit).frame(width: 24)
+                                    .saturation(0.0).opacity(0.8).scaleEffect(0.8)
+
+                            }
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                }
+            }
+            .edgesIgnoringSafeArea(.vertical)
         }
-        .tabViewStyle(.page(indexDisplayMode: .never))
         .environmentObject(imageQuality)
     }
     
@@ -193,17 +146,17 @@ struct Splatoon3TimelinesView: View {
 
 struct Splatoon2TimelinesView: View {
     
-    @Binding var splatoon2Schedule: Splatoon2.Schedule
+    @Binding var schedule: Splatoon2.Schedule
     @State private var selectedPage: Splatoon2.GameModeType = .turfWar
 
     var modes: [Splatoon2.TimelineType] {
-        let turfWar = Splatoon2.TimelineType.game(mode: .turfWar, timeline: splatoon2Schedule.regular)
-        let ranked = Splatoon2.TimelineType.game(mode: .ranked, timeline: splatoon2Schedule.ranked)
-        let league = Splatoon2.TimelineType.game(mode: .league, timeline: splatoon2Schedule.league)
-        let salmonRun = Splatoon2.TimelineType.coop(timeline: splatoon2Schedule.coop)
+        let turfWar = Splatoon2.TimelineType.game(mode: .turfWar, timeline: schedule.regular)
+        let ranked = Splatoon2.TimelineType.game(mode: .ranked, timeline: schedule.ranked)
+        let league = Splatoon2.TimelineType.game(mode: .league, timeline: schedule.league)
+        let salmonRun = Splatoon2.TimelineType.coop(timeline: schedule.coop)
        return [turfWar,ranked,league,salmonRun]
     }
-        
+
     var body: some View {
         
         ZStack(alignment: .bottom){
@@ -241,16 +194,11 @@ struct Splatoon2TimelinesView: View {
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
-                        .padding(2.0)
                     }
-                }.onChange(of: selectedPage) { value in
-                    print("text: \(value)")
                 }
             }
             .edgesIgnoringSafeArea(.vertical)
-
         }
-        .background(Color.yellow)
         .environmentObject(imageQuality)
     }
     
@@ -284,7 +232,7 @@ struct GameSmallTimelineView: View {
             GeometryReader { geo in
                 List(events) { event in
 
-                    GameModeEventView(event: event, nextEvent: nextEvent(for: event), style: .topBottom, date: Date())
+                    GameModeEventView(event: event, /*nextEvent: nextEvent(for: event),*/ showTimeframe: true, style: .topBottom, date: Date())
                         .frame(width: geo.size.width, height: geo.size.height)
                         .listRowInsets(EdgeInsets())
                         .cornerRadius(20)
@@ -334,7 +282,7 @@ struct ContentView_Previews: PreviewProvider {
 
     static var previews: some View {
         WatchScheduleView()
-        Splatoon2TimelinesView(splatoon2Schedule: $exampleSchedule2)
-        Splatoon3TimelinesView(splatoon3Schedule: $exampleSchedule3)
+        Splatoon2TimelinesView(schedule: $exampleSchedule2)
+        Splatoon3TimelinesView(schedule: $exampleSchedule3)
     }
 }

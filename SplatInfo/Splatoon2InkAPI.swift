@@ -235,7 +235,7 @@ class Splatoon2InkAPI {
     }
 
     struct ModeAPIResponse: Codable {
-        let id : Int
+        let id : Int64
         let stageA: StageAPIResponse
         let stageB: StageAPIResponse
         let startTime: Date
