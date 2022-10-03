@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import ImageIO
 
 class ImageLoader: ObservableObject {
     @Published var image: UIImage?

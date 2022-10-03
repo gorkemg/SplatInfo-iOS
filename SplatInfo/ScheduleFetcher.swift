@@ -68,8 +68,8 @@ extension Splatoon2.Schedule: ImageURLs {
     }
     
     static var example : Splatoon2.Schedule {
-        let schedulesPath = Bundle.main.path(forResource: "schedules", ofType: "json")
-        guard let schedulesData = try? Data(contentsOf: URL(fileURLWithPath: schedulesPath!)) else { return Splatoon2.Schedule.empty }
+        guard let schedulesPath = Bundle.main.path(forResource: "schedules", ofType: "json") else { return Splatoon2.Schedule.empty }
+        guard let schedulesData = try? Data(contentsOf: URL(fileURLWithPath: schedulesPath)) else { return Splatoon2.Schedule.empty }
         guard let scheduleResponse : Splatoon2InkAPI.SchedulesAPIResponse = Splatoon2InkAPI.shared().parseAPIResponse(data: schedulesData) else { return Splatoon2.Schedule.empty }
         let coopSchedulesPath = Bundle.main.path(forResource: "coop-schedules", ofType: "json")
         guard let coopSchedulesData = try? Data(contentsOf: URL(fileURLWithPath: coopSchedulesPath!)) else { return Splatoon2.Schedule.empty }

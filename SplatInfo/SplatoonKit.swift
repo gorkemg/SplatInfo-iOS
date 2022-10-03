@@ -22,7 +22,7 @@ enum ScheduleEvents: Codable {
     case coop(events: [CoopEvent], otherTimeframes: [EventTimeframe])
 }
 
-enum GameModeType: Codable, Equatable, Nameable, LogoNameable {
+enum GameModeType: Codable, Equatable, Hashable, Nameable, LogoNameable {
     case splatoon2(type: Splatoon2.GameModeType)
     case splatoon3(type: Splatoon3.GameModeType)
 
@@ -66,7 +66,7 @@ enum GameModeType: Codable, Equatable, Nameable, LogoNameable {
 protocol Event: Codable {
     var timeframe: EventTimeframe { get }
 }
-struct GameModeEvent: Event, Identifiable, Equatable {
+struct GameModeEvent: Event, Identifiable, Equatable, Hashable {
     var id = UUID().uuidString
     var mode: GameModeType
     var stages: [Stage]
@@ -78,7 +78,7 @@ struct GameModeEvent: Event, Identifiable, Equatable {
     }
 }
 
-enum GameModeRule: String, Codable, Nameable, LogoNameable {
+enum GameModeRule: String, Codable, Hashable, Nameable, LogoNameable {
     var name: String {
         switch self {
         case .turfWar:
@@ -133,13 +133,13 @@ enum GameModeRule: String, Codable, Nameable, LogoNameable {
 }
 
 // MARK: - Coop
-struct CoopTimeline: Codable {
+struct CoopTimeline: Codable, Hashable, Equatable {
     let game: Game
     var events: [CoopEvent]
     var otherTimeframes: [EventTimeframe]
 }
 
-struct CoopEvent: Hashable, Event {
+struct CoopEvent: Hashable, Identifiable, Event {
     var id = UUID().uuidString
     let game: Game
     let timeframe: EventTimeframe
@@ -281,7 +281,7 @@ struct Splatoon3: Codable {
                 case active(isFirstHalf: Bool)
             }
 
-            struct Fest: Codable, Equatable {
+            struct Fest: Codable, Hashable, Equatable {
                 static func == (lhs: Splatoon3.Schedule.Splatfest.Fest, rhs: Splatoon3.Schedule.Splatfest.Fest) -> Bool {
                     return lhs.id == rhs.id
                 }
@@ -294,17 +294,17 @@ struct Splatoon3: Codable {
                 let state: State
                 let tricolorStage: Stage
 
-                struct Team: Codable {
+                struct Team: Codable, Hashable {
                     let id: String
                     let role: Role
                     let color: RGBAColor
                     
-                    enum Role: String, Codable {
+                    enum Role: String, Hashable, Codable {
                         case attack = "ATTACK"
                         case defense = "DEFENSE"
                     }
                     
-                    struct RGBAColor: Codable {
+                    struct RGBAColor: Codable, Hashable {
                         let r: Float
                         let g: Float
                         let b: Float
@@ -312,7 +312,7 @@ struct Splatoon3: Codable {
                     }
                 }
                 
-                enum State: String, Codable {
+                enum State: String, Hashable, Codable {
                     case scheduled = "SCHEDULED"
                     case firstHalf = "FIRST_HALF"
                     case secondHalf = "SECOND_HALF"
@@ -321,7 +321,12 @@ struct Splatoon3: Codable {
         }
     }
     
-    enum GameModeType: Codable, Equatable, Nameable, LogoNameable {
+    enum TimelineType {
+        case game(mode: Splatoon3.GameModeType, timeline: GameTimeline)
+        case coop(timeline: CoopTimeline)
+    }
+
+    enum GameModeType: Codable, Equatable, Hashable, Nameable, LogoNameable {
         case splatfest(fest: Splatoon3.Schedule.Splatfest.Fest)
         case turfWar
         case anarchyBattleOpen
@@ -398,7 +403,7 @@ struct GameModeTimeline: Codable {
     let timeline: GameTimeline
 }
 
-struct GameTimeline: Codable {
+struct GameTimeline: Codable, Hashable, Equatable {
     let events: [GameModeEvent]
 }
 
@@ -449,9 +454,43 @@ extension CoopTimeline: UpcomingEvents {
     }
 }
 
+enum TimelineType: Codable, Hashable, Equatable {
+    case game(mode: GameModeType, timeline: GameTimeline)
+    case coop(game: Game, timeline: CoopTimeline)
+    
+    var modeType: GameModeType {
+        switch self {
+        case .game(let mode, _):
+            return mode
+        case .coop(let game, _):
+            switch game {
+            case .splatoon2:
+                return .splatoon2(type: .salmonRun)
+            case .splatoon3:
+                return .splatoon3(type: .salmonRun)
+            }
+        }
+    }
+    
+}
 
 struct Splatoon2: Codable {
     
+    enum TimelineType: Codable, Hashable, Equatable {
+        case game(mode: Splatoon2.GameModeType, timeline: GameTimeline)
+        case coop(timeline: CoopTimeline)
+        
+        var modeType: Splatoon2.GameModeType {
+            switch self {
+            case .game(let mode, _):
+                return mode
+            case .coop(_):
+                return Splatoon2.GameModeType.salmonRun
+            }
+        }
+        
+    }
+
     struct Schedule: Codable {
         var regular: GameTimeline
         var ranked: GameTimeline
@@ -459,7 +498,7 @@ struct Splatoon2: Codable {
         var coop: CoopTimeline
     }
     
-    enum GameModeType: String, Equatable, Codable, Nameable, LogoNameable {
+    enum GameModeType: String, Hashable, Equatable, Codable, Nameable, LogoNameable {
         case turfWar = "regular"
         case ranked
         case league
@@ -675,3 +714,4 @@ extension TimeframeActivity {
     }
 
 }
+

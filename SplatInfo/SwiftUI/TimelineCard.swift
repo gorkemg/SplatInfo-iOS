@@ -63,13 +63,8 @@ extension GameModeTimeline {
 }
 
 struct Splatoon2TimelineCard: View {
-
-    enum TimelineType {
-        case game(mode: Splatoon2.GameModeType, timeline: GameTimeline)
-        case coop(timeline: CoopTimeline)
-    }
     
-    let timeline : TimelineType
+    let timeline : Splatoon2.TimelineType
 
     var body: some View {
 
@@ -116,12 +111,7 @@ struct Splatoon2TimelineCard: View {
 
 struct Splatoon3TimelineCard: View {
 
-    enum TimelineType {
-        case game(mode: Splatoon3.GameModeType, timeline: GameTimeline)
-        case coop(timeline: CoopTimeline)
-    }
-
-    let timeline : TimelineType
+    let timeline : Splatoon3.TimelineType
 
     var body: some View {
 
@@ -163,25 +153,6 @@ struct Splatoon3TimelineCard: View {
         }
         .clipShape(RoundedRectangle(cornerSize: CGSize(width: 30, height: 30)))
         .splat2Font(size: 12)
-    }
-}
-
-extension Color {
-    
-    static var regularModeColor: Color {
-        return Color("RegularModeColor")
-    }
-    static var rankedModeColor: Color {
-        return Color("RankedModeColor")
-    }
-    static var leagueModeColor: Color {
-        return Color("LeagueModeColor")
-    }
-    static var xModeColor: Color {
-        return Color("XModeColor")
-    }
-    static var coopModeColor: Color {
-        return Color("CoopModeColor")
     }
 }
 

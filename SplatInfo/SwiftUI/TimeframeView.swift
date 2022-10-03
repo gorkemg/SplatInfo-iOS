@@ -118,4 +118,25 @@ extension TimeframeActivityState {
             return "Ended!"
         }
     }
+    
+    var color : Color {
+        switch self {
+        case .active:
+            return Color.green
+        case .soon:
+            return Color.black
+        case .over:
+            return Color.black
+        }
+    }
+}
+
+struct ColoredActivityTextView: View {
+    let state: TimeframeActivityState
+    var body: some View {
+        HStack {
+            Text(state.activityText)
+                .shadow(color: .black, radius: 1.0, x: 0.0, y: 1.0)
+        }.padding(.horizontal, 4.0).background(state.color).cornerRadius(5.0)
+    }
 }

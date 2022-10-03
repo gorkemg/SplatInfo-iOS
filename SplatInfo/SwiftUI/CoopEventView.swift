@@ -38,6 +38,7 @@ struct CoopEventView: View {
     enum Style {
         case large
         case sideBySide
+        case topBottom
         case narrow
     }
                 
@@ -47,6 +48,8 @@ struct CoopEventView: View {
             CoopLargeEventView(event: event, state: state, showTitle: showTitle, height: height)
         case .sideBySide:
             CoopSideBySideEventView(event: event, state: state, showTitle: showTitle, height: height)
+        case .topBottom:
+            CoopTopBottomEventView(event: event, state: state)
         case .narrow:
             CoopNarrowEventView(event: event, state: state, showTitle: showTitle, height: height)
         }
@@ -84,7 +87,11 @@ struct CoopLargeEventView : View {
                                     .frame(minHeight: 20, maxHeight: 30.0)
                                     .padding(.vertical, 2.0)
                                     .padding(.horizontal, 4.0)
+                                #if !os(watchOS)
                                     .background(.ultraThinMaterial.opacity(0.9))
+                                #else
+                                    .background(Color.white.opacity(0.5))
+                                #endif
                                     .cornerRadius(8.0)
                                     .clipShape(ContainerRelativeShape())
                             }
@@ -147,7 +154,11 @@ struct CoopNarrowEventView : View {
                             .frame(minHeight: 12, maxHeight: 24, alignment: .leading)
                             .padding(.vertical, 2.0)
                             .padding(.horizontal, 4.0)
+                        #if !os(watchOS)
                             .background(.ultraThinMaterial.opacity(0.9))
+                        #else
+                            .background(Color.white.opacity(0.5))
+                        #endif
                             .cornerRadius(4.0)
                             .clipShape(ContainerRelativeShape())
 
@@ -176,6 +187,70 @@ struct CoopNarrowEventView : View {
                 .padding(.horizontal, 8.0).padding(.vertical, 4.0)
             }
         }
+    }
+}
+
+struct CoopTopBottomEventView : View {
+    let event: CoopEvent
+    let state: TimeframeActivityState
+    
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+
+            Color.coopModeColor
+
+            Image("bg-spots").resizable(resizingMode: .tile)
+
+            PillStageImage(stage: event.stage, namePosition: .hidden)
+
+//            GeometryReader { geometry in
+//                VStack(spacing: 0.0) {
+//                    if let image = event.stage.image {
+//                        Image(uiImage: image)
+//                            .resizable()
+//                            .aspectRatio(contentMode: .fill)
+//                            .frame(width: geometry.size.width, height: geometry.size.height)
+//                            .clipped()
+//                    }
+//                }.cornerRadius(10.0)
+//            }
+                        
+            VStack(alignment: .leading, spacing: 0.0) {
+                
+                VStack(alignment: .leading, spacing: 0.0) {
+                    CoopEventTitleView(event: event, gameLogoPosition: .trailing)
+                    Text(event.stage.name).splat2Font(size: 10)
+                }
+
+                Spacer()
+                
+                VStack(alignment: .leading, spacing: 2.0) {
+                    HStack {
+                        if event.game == .splatoon2 {
+                            ColoredActivityTextView(state: state)
+                        }
+                        RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                    }.splat2Font(size: 12)
+                    
+                    ActivityTimeFrameView(timeframe: event.timeframe, state: state).lineLimit(1).minimumScaleFactor(0.5)
+                    HStack(spacing: 4.0) {
+                        Group {
+                            WeaponsList(weapons: event.weaponDetails)
+                                .frame(maxHeight: 24.0)
+                                .padding(.horizontal, 8.0)
+                            #if !os(watchOS)
+                                .background(.ultraThinMaterial.opacity(0.9))
+                            #else
+                                .background(Color.white.opacity(0.5))
+                            #endif
+                                .cornerRadius(8.0)
+                        }
+                        
+                        Spacer()
+                    }
+                }.lineSpacing(0)
+            }.padding(.horizontal, 10.0).padding(.vertical, 4.0)
+        }.foregroundColor(.white)
     }
 }
 

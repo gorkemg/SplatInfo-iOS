@@ -166,3 +166,23 @@ extension Sequence where Iterator.Element: Hashable {
         return filter { seen.insert($0).inserted }
     }
 }
+
+extension Color {
+    
+    static var regularModeColor: Color {
+        return Color("RegularModeColor")
+    }
+    static var rankedModeColor: Color {
+        return Color("RankedModeColor")
+    }
+    static var leagueModeColor: Color {
+        return Color("LeagueModeColor")
+    }
+    static var xModeColor: Color {
+        return Color("XModeColor")
+    }
+    static var coopModeColor: Color {
+        return Color("CoopModeColor")
+    }
+}
+
