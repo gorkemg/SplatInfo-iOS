@@ -141,25 +141,35 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
         }
     }
     
+    @available(iOSApplicationExtension 16.0, *)
+    func recommendations() -> [IntentRecommendation<Splatoon2_ScheduleIntent>] {
+        return []
+    }
+
     func timelineForGameModeTimeline(_ modeTimeline: GameTimeline, for configuration: Splatoon2_ScheduleIntent) -> Timeline<GameModeEntry> {
-        var entries: [GameModeEntry] = []
         let now = Date()
-        let startDates = modeTimeline.events.map({ $0.timeframe.startDate })
-        print("StartDates: \(startDates)")
-        let dates = ([now]+startDates).sorted()
-        for date in dates {
-            let events = modeTimeline.events.upcomingEventsAfterDate(date: date)
-            if events.count > 1 {
-                let entry = GameModeEntry(date: date, events: .gameModeEvents(events: events), configuration: configuration)
-                entries.append(entry)
-            }
+        var entries: [GameModeEntry] = []
+//        let startDates = modeTimeline.events.map({ $0.timeframe.startDate })
+//        print("StartDates: \(startDates)")
+//        let dates = ([now]+startDates).sorted()
+//        for date in dates {
+//            let events = modeTimeline.events.upcomingEventsAfterDate(date: date)
+//            if events.count > 1 {
+//                let entry = GameModeEntry(date: date, events: .gameModeEvents(events: events), configuration: configuration)
+//                entries.append(entry)
+//            }
+//        }
+//        var updatePolicy: TimelineReloadPolicy = .atEnd
+//        if let date = startDates.suffix(2).first, date > Date() {
+//            print("Refresh at: \(date)")
+//            updatePolicy = .after(date)
+//        }
+        let eventTimelineResult = modeTimeline.eventTimeline(startDate: now)
+        for gameEvent in eventTimelineResult.events {
+            let entry = GameModeEntry(date: gameEvent.date, events: .gameModeEvents(events: gameEvent.events), configuration: configuration)
+            entries.append(entry)
         }
-        var updatePolicy: TimelineReloadPolicy = .atEnd
-        if let date = startDates.suffix(2).first, date > Date() {
-            print("Refresh at: \(date)")
-            updatePolicy = .after(date)
-        }
-        let timeline = Timeline(entries: entries, policy: updatePolicy)
+        let timeline = Timeline(entries: entries, policy: eventTimelineResult.updatePolicy)
         return timeline
     }
     
@@ -182,53 +192,61 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
         // 2: Event 1 Start Date
         // Refresh happens at Event 1 End Date
         // When the widget refreshes at the end of Event 1, the new coopTimeline will have 2 new events
-        var dates: [Date] = []
         let now = Date()
-        var updatePolicy: TimelineReloadPolicy = .atEnd
-        if let timeframe = coopTimeline.events.first?.timeframe {
-            if now < timeframe.startDate {
-                dates.append(now)
-            }
-            dates.append(timeframe.startDate)
-            dates.append(timeframe.endDate)
-            updatePolicy = .after(timeframe.endDate)
-        }else{
-            dates.append(now)
-        }
+        let eventTimelineResult = coopTimeline.eventTimeline(startDate: now, numberOfRemainingEventsBeforeUpdate: 2)
+
+//        var dates: [Date] = []
+//        var updatePolicy: TimelineReloadPolicy = .atEnd
+//        if let timeframe = coopTimeline.events.first?.timeframe {
+//            if now < timeframe.startDate {
+//                dates.append(now)
+//            }
+//            dates.append(timeframe.startDate)
+//            dates.append(timeframe.endDate)
+//            updatePolicy = .after(timeframe.endDate)
+//        }else{
+//            dates.append(now)
+//        }
 
         
         //let dates = coopTimeline.eventChangingDates()
-        print("Dates: \(dates)")
-        for date in dates {
-            let events = coopTimeline.upcomingEventsAfterDate(date: date)
-            let eventTimeframes = coopTimeline.otherTimeframes.upcomingTimeframesAfterDate(date: date)
-//            if events.count > 1 {
-                let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
-                entries.append(entry)
-//            }
-        }
+//        print("Dates: \(dates)")
+//        for date in dates {
+//            let events = coopTimeline.upcomingEventsAfterDate(date: date)
+//            let eventTimeframes = coopTimeline.otherTimeframes.upcomingTimeframesAfterDate(date: date)
+////            if events.count > 1 {
+//                let entry = GameModeEntry(date: date, events: .coopEvents(events: events, timeframes: eventTimeframes), configuration: configuration)
+//                entries.append(entry)
+////            }
+//        }
+        
 //        if let date = dates.suffix(2).first, date > Date() {
 //            print("Refresh at: \(date)")
 //            updatePolicy = .after(date)
 //        }
-        for entry in entries {
-            print("#########")
-            print("Date: \(entry.date)")
-            switch entry.events {
-            case .gameModeEvents(events: let events):
-                for event in events {
-                    print("\(event.mode.name) from \(event.timeframe.startDate) until \(event.timeframe.endDate)")
-                }
-                break
-            case .coopEvents(events: let events, timeframes: _):
-                for event in events {
-                    print("\(event.stage.name) from \(event.timeframe.startDate) until \(event.timeframe.endDate)")
-                }
-                break
-            }
-            print("#########")
+//        for entry in entries {
+//            print("#########")
+//            print("Date: \(entry.date)")
+//            switch entry.events {
+//            case .gameModeEvents(events: let events):
+//                for event in events {
+//                    print("\(event.mode.name) from \(event.timeframe.startDate) until \(event.timeframe.endDate)")
+//                }
+//                break
+//            case .coopEvents(events: let events, timeframes: _):
+//                for event in events {
+//                    print("\(event.stage.name) from \(event.timeframe.startDate) until \(event.timeframe.endDate)")
+//                }
+//                break
+//            }
+//            print("#########")
+//        }
+        for gameEvent in eventTimelineResult.events {
+            let entry = GameModeEntry(date: gameEvent.date, events: .coopEvents(events: gameEvent.events, timeframes: []), configuration: configuration)
+            entries.append(entry)
         }
-        let timeline = Timeline(entries: entries, policy: updatePolicy)
+
+        let timeline = Timeline(entries: entries, policy: eventTimelineResult.updatePolicy)
         return timeline
     }
     

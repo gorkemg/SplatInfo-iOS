@@ -11,11 +11,15 @@ import SwiftUI
 struct Splatoon2ScheduleWidget: Widget {
 
     var supportedWidgetFamilies: [WidgetFamily] {
+        #if os(watchOS)
+        return [.accessoryCircular, .accessoryInline, .accessoryRectangular, .accessoryCorner]
+        #else
         if #available(iOSApplicationExtension 16.0, *) {
             return [.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryInline, .accessoryRectangular]
         }else{
             return [.systemSmall, .systemMedium, .systemLarge]
         }
+        #endif
     }
     
     var body: some WidgetConfiguration {
@@ -45,10 +49,12 @@ struct Previews_Splatoon2ScheduleWidget_Previews: PreviewProvider {
 
     static var previews: some View {
 
+        #if !os(watchOS)
         Splatoon2TimelineProvider.ScheduleEntryView(entry: Splatoon2TimelineProvider.GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.ranked.events), configuration: Splatoon2_ScheduleIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
 
         Splatoon2TimelineProvider.ScheduleEntryView(entry: Splatoon2TimelineProvider.GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: []), configuration: Splatoon2_ScheduleIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
+        #endif
     }
 }

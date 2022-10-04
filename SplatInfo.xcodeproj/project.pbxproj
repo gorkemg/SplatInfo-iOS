@@ -105,6 +105,40 @@
 		DE68BECF28D9148F00700A80 /* IconCircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECE28D9148F00700A80 /* IconCircularWidgetView.swift */; };
 		DE72E3A12587B69E00CA0BCD /* LargeCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A02587B69E00CA0BCD /* LargeCoopWidgetView.swift */; };
 		DE72E3A72587B99100CA0BCD /* MediumCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */; };
+		DE74F62E28EB36E0008B3C67 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEAFEA052543121500FFA812 /* WidgetKit.framework */; };
+		DE74F62F28EB36E0008B3C67 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEAFEA072543121500FFA812 /* SwiftUI.framework */; };
+		DE74F63228EB36E0008B3C67 /* WatchScheduleWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE74F63128EB36E0008B3C67 /* WatchScheduleWidgets.swift */; };
+		DE74F63528EB36E1008B3C67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE74F63428EB36E1008B3C67 /* Assets.xcassets */; };
+		DE74F63728EB36E1008B3C67 /* WatchScheduleWidgets.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = DE74F63328EB36E0008B3C67 /* WatchScheduleWidgets.intentdefinition */; };
+		DE74F63828EB36E1008B3C67 /* WatchScheduleWidgets.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = DE74F63328EB36E0008B3C67 /* WatchScheduleWidgets.intentdefinition */; };
+		DE74F63B28EB36E1008B3C67 /* WatchScheduleWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = DE74F62D28EB36E0008B3C67 /* WatchScheduleWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DE74F64128EB3CA4008B3C67 /* SplatInfo+ProjectCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF7CF0328E434DD009281E8 /* SplatInfo+ProjectCommon.swift */; };
+		DE74F64228EB3CF5008B3C67 /* SplatoonKit+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE38185254E0226005D5062 /* SplatoonKit+Extensions.swift */; };
+		DE74F64328EB3CF5008B3C67 /* Splatoon2.otf in Resources */ = {isa = PBXBuildFile; fileRef = DE41B9392541A11A00AAD49A /* Splatoon2.otf */; };
+		DE74F64428EB3CF5008B3C67 /* Splatoon2InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121325385E0D00A73F7A /* Splatoon2InkAPI.swift */; };
+		DE74F64528EB3CF5008B3C67 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAFEA5D25431D0A00FFA812 /* Constants.swift */; };
+		DE74F64628EB3CF5008B3C67 /* SplatoonKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE50121A2539D22800A73F7A /* SplatoonKit.swift */; };
+		DE74F64728EB3CF5008B3C67 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */; };
+		DE74F64828EB3CF5008B3C67 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B8FF25417C8A00AAD49A /* ImageLoader.swift */; };
+		DE74F64928EB3CF5008B3C67 /* Splatoon3InkAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE7C1A328D5EF4F0024D6A9 /* Splatoon3InkAPI.swift */; };
+		DE74F64A28EB3CF5008B3C67 /* Splatoon1.otf in Resources */ = {isa = PBXBuildFile; fileRef = DE41B9342541A11200AAD49A /* Splatoon1.otf */; };
+		DE74F64B28EB3CF5008B3C67 /* ScheduleFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5012212539E24A00A73F7A /* ScheduleFetcher.swift */; };
+		DE74F64F28EB3F46008B3C67 /* PillStageImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B90D25419B4500AAD49A /* PillStageImage.swift */; };
+		DE74F65028EB3F61008B3C67 /* ScaledFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B93E2541A8F400AAD49A /* ScaledFont.swift */; };
+		DE74F65128EB3F61008B3C67 /* CoopEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B92125419C2B00AAD49A /* CoopEventView.swift */; };
+		DE74F65228EB3F61008B3C67 /* GameModeEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B91225419B8200AAD49A /* GameModeEventView.swift */; };
+		DE74F65328EB3F61008B3C67 /* TimeframeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B91C25419BDA00AAD49A /* TimeframeView.swift */; };
+		DE74F65428EB3F61008B3C67 /* TimelineCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B92625419C5600AAD49A /* TimelineCard.swift */; };
+		DE74F65528EB3F61008B3C67 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B91725419BC400AAD49A /* TitleView.swift */; };
+		DE74F65628EB3F61008B3C67 /* ScheduleGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B92B25419C7D00AAD49A /* ScheduleGrid.swift */; };
+		DE74F66528EB4510008B3C67 /* IconCircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECE28D9148F00700A80 /* IconCircularWidgetView.swift */; };
+		DE74F66628EB4526008B3C67 /* CoopCircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0111BE28E86DDF001849CC /* CoopCircularWidgetView.swift */; };
+		DE74F66728EB4532008B3C67 /* CoopRectangularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3AD0A28D9D26500A36D87 /* CoopRectangularWidgetView.swift */; };
+		DE74F66828EB4547008B3C67 /* CoopInlineWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3AD0C28D9D8DB00A36D87 /* CoopInlineWidgetView.swift */; };
+		DE74F66928EB4549008B3C67 /* GameModeInlineWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE49D2FD28DAF076000FAB3D /* GameModeInlineWidgetView.swift */; };
+		DE74F66A28EB4559008B3C67 /* GameModeRectangularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE49D2FB28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift */; };
+		DE787FB328EC35FA00661090 /* SplatInfo+WidgetsCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE787FB228EC35FA00661090 /* SplatInfo+WidgetsCommon.swift */; };
+		DE787FB428EC35FA00661090 /* SplatInfo+WidgetsCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE787FB228EC35FA00661090 /* SplatInfo+WidgetsCommon.swift */; };
 		DE9DFA6E254AF6A700267508 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */; };
 		DE9DFA6F254AF6A700267508 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */; };
 		DEAE259C25541CDB00253E79 /* LargeGameModeWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAE259A25541CDB00253E79 /* LargeGameModeWidgetView.swift */; };
@@ -191,6 +225,13 @@
 			remoteGlobalIDString = DE2BD5F525384899006E5531;
 			remoteInfo = SplatInfo;
 		};
+		DE74F63928EB36E1008B3C67 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DE2BD5EE25384899006E5531 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DE74F62C28EB36E0008B3C67;
+			remoteInfo = WatchScheduleWidgetsExtension;
+		};
 		DEAFEA122543121800FFA812 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DE2BD5EE25384899006E5531 /* Project object */;
@@ -208,6 +249,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		DE74F63F28EB36E1008B3C67 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				DE74F63B28EB36E1008B3C67 /* WatchScheduleWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DEAFEA152543121800FFA812 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -287,6 +339,12 @@
 		DE68BECE28D9148F00700A80 /* IconCircularWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCircularWidgetView.swift; sourceTree = "<group>"; };
 		DE72E3A02587B69E00CA0BCD /* LargeCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeCoopWidgetView.swift; sourceTree = "<group>"; };
 		DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediumCoopWidgetView.swift; sourceTree = "<group>"; };
+		DE74F62D28EB36E0008B3C67 /* WatchScheduleWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WatchScheduleWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE74F63128EB36E0008B3C67 /* WatchScheduleWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchScheduleWidgets.swift; sourceTree = "<group>"; };
+		DE74F63328EB36E0008B3C67 /* WatchScheduleWidgets.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = WatchScheduleWidgets.intentdefinition; sourceTree = "<group>"; };
+		DE74F63428EB36E1008B3C67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DE74F63628EB36E1008B3C67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DE787FB228EC35FA00661090 /* SplatInfo+WidgetsCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SplatInfo+WidgetsCommon.swift"; sourceTree = "<group>"; };
 		DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extensions.swift"; sourceTree = "<group>"; };
 		DEAE259A25541CDB00253E79 /* LargeGameModeWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeGameModeWidgetView.swift; sourceTree = "<group>"; };
 		DEAFEA032543121500FFA812 /* SplatInfoScheduleWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SplatInfoScheduleWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -354,6 +412,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DE74F62A28EB36E0008B3C67 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE74F62F28EB36E0008B3C67 /* SwiftUI.framework in Frameworks */,
+				DE74F62E28EB36E0008B3C67 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DEAFEA002543121500FFA812 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -413,6 +480,7 @@
 				DE0111F328E9ADF0001849CC /* WatchSchedule Watch App */,
 				DE01120428E9ADF1001849CC /* WatchSchedule Watch AppTests */,
 				DE01120E28E9ADF1001849CC /* WatchSchedule Watch AppUITests */,
+				DE74F63028EB36E0008B3C67 /* WatchScheduleWidgets */,
 				DEAFEA042543121500FFA812 /* Frameworks */,
 				DE2BD5F725384899006E5531 /* Products */,
 			);
@@ -428,6 +496,7 @@
 				DE0111F228E9ADF0001849CC /* WatchSchedule Watch App.app */,
 				DE01120128E9ADF1001849CC /* WatchSchedule Watch AppTests.xctest */,
 				DE01120B28E9ADF1001849CC /* WatchSchedule Watch AppUITests.xctest */,
+				DE74F62D28EB36E0008B3C67 /* WatchScheduleWidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -450,6 +519,7 @@
 				DE2BD6022538489C006E5531 /* Info.plist */,
 				DE2BD5FF2538489C006E5531 /* Preview Content */,
 				DEF7CF0328E434DD009281E8 /* SplatInfo+ProjectCommon.swift */,
+				DE787FB228EC35FA00661090 /* SplatInfo+WidgetsCommon.swift */,
 			);
 			path = SplatInfo;
 			sourceTree = "<group>";
@@ -504,6 +574,17 @@
 				DE41B9392541A11A00AAD49A /* Splatoon2.otf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		DE74F63028EB36E0008B3C67 /* WatchScheduleWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				DE74F63128EB36E0008B3C67 /* WatchScheduleWidgets.swift */,
+				DE74F63328EB36E0008B3C67 /* WatchScheduleWidgets.intentdefinition */,
+				DE74F63428EB36E1008B3C67 /* Assets.xcassets */,
+				DE74F63628EB36E1008B3C67 /* Info.plist */,
+			);
+			path = WatchScheduleWidgets;
 			sourceTree = "<group>";
 		};
 		DE9DFA68254AF67600267508 /* Extensions */ = {
@@ -586,10 +667,12 @@
 				DE0111EE28E9ADF0001849CC /* Sources */,
 				DE0111EF28E9ADF0001849CC /* Frameworks */,
 				DE0111F028E9ADF0001849CC /* Resources */,
+				DE74F63F28EB36E1008B3C67 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				DE74F63A28EB36E1008B3C67 /* PBXTargetDependency */,
 			);
 			name = "WatchSchedule Watch App";
 			productName = "WatchSchedule Watch App";
@@ -689,6 +772,23 @@
 			productReference = DE2BD6122538489D006E5531 /* SplatInfoUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		DE74F62C28EB36E0008B3C67 /* WatchScheduleWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DE74F63C28EB36E1008B3C67 /* Build configuration list for PBXNativeTarget "WatchScheduleWidgetsExtension" */;
+			buildPhases = (
+				DE74F62928EB36E0008B3C67 /* Sources */,
+				DE74F62A28EB36E0008B3C67 /* Frameworks */,
+				DE74F62B28EB36E0008B3C67 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = WatchScheduleWidgetsExtension;
+			productName = WatchScheduleWidgetsExtension;
+			productReference = DE74F62D28EB36E0008B3C67 /* WatchScheduleWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		DEAFEA022543121500FFA812 /* SplatInfoScheduleWidgetExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DEAFEA182543121800FFA812 /* Build configuration list for PBXNativeTarget "SplatInfoScheduleWidgetExtension" */;
@@ -737,6 +837,9 @@
 						CreatedOnToolsVersion = 12.0;
 						TestTargetID = DE2BD5F525384899006E5531;
 					};
+					DE74F62C28EB36E0008B3C67 = {
+						CreatedOnToolsVersion = 14.1;
+					};
 					DEAFEA022543121500FFA812 = {
 						CreatedOnToolsVersion = 12.0;
 					};
@@ -762,6 +865,7 @@
 				DE0111F128E9ADF0001849CC /* WatchSchedule Watch App */,
 				DE01120028E9ADF1001849CC /* WatchSchedule Watch AppTests */,
 				DE01120A28E9ADF1001849CC /* WatchSchedule Watch AppUITests */,
+				DE74F62C28EB36E0008B3C67 /* WatchScheduleWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -849,6 +953,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DE74F62B28EB36E0008B3C67 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE74F64A28EB3CF5008B3C67 /* Splatoon1.otf in Resources */,
+				DE74F64328EB3CF5008B3C67 /* Splatoon2.otf in Resources */,
+				DE74F63528EB36E1008B3C67 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DEAFEA012543121500FFA812 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -885,6 +999,7 @@
 				DE01122F28E9AFD0001849CC /* SplatoonKit+Extensions.swift in Sources */,
 				DE01122328E9AFCA001849CC /* Constants.swift in Sources */,
 				DE01123328E9B143001849CC /* TimeframeView.swift in Sources */,
+				DE74F63828EB36E1008B3C67 /* WatchScheduleWidgets.intentdefinition in Sources */,
 				DE01122528E9AFCA001849CC /* Splatoon3InkAPI.swift in Sources */,
 				DE01122E28E9AFD0001849CC /* FileManager+Extensions.swift in Sources */,
 				DEB230D428E9D0AF00B7FE8C /* SplatInfo+ProjectCommon.swift in Sources */,
@@ -975,6 +1090,39 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DE74F62928EB36E0008B3C67 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE74F66528EB4510008B3C67 /* IconCircularWidgetView.swift in Sources */,
+				DE74F65228EB3F61008B3C67 /* GameModeEventView.swift in Sources */,
+				DE74F66828EB4547008B3C67 /* CoopInlineWidgetView.swift in Sources */,
+				DE74F65028EB3F61008B3C67 /* ScaledFont.swift in Sources */,
+				DE74F63228EB36E0008B3C67 /* WatchScheduleWidgets.swift in Sources */,
+				DE74F64228EB3CF5008B3C67 /* SplatoonKit+Extensions.swift in Sources */,
+				DE74F64B28EB3CF5008B3C67 /* ScheduleFetcher.swift in Sources */,
+				DE74F64828EB3CF5008B3C67 /* ImageLoader.swift in Sources */,
+				DE74F65328EB3F61008B3C67 /* TimeframeView.swift in Sources */,
+				DE74F64428EB3CF5008B3C67 /* Splatoon2InkAPI.swift in Sources */,
+				DE74F64F28EB3F46008B3C67 /* PillStageImage.swift in Sources */,
+				DE74F66A28EB4559008B3C67 /* GameModeRectangularWidgetView.swift in Sources */,
+				DE74F65628EB3F61008B3C67 /* ScheduleGrid.swift in Sources */,
+				DE74F64628EB3CF5008B3C67 /* SplatoonKit.swift in Sources */,
+				DE74F64528EB3CF5008B3C67 /* Constants.swift in Sources */,
+				DE74F66928EB4549008B3C67 /* GameModeInlineWidgetView.swift in Sources */,
+				DE74F63728EB36E1008B3C67 /* WatchScheduleWidgets.intentdefinition in Sources */,
+				DE74F64128EB3CA4008B3C67 /* SplatInfo+ProjectCommon.swift in Sources */,
+				DE74F66628EB4526008B3C67 /* CoopCircularWidgetView.swift in Sources */,
+				DE74F65428EB3F61008B3C67 /* TimelineCard.swift in Sources */,
+				DE74F64728EB3CF5008B3C67 /* FileManager+Extensions.swift in Sources */,
+				DE74F64928EB3CF5008B3C67 /* Splatoon3InkAPI.swift in Sources */,
+				DE74F65528EB3F61008B3C67 /* TitleView.swift in Sources */,
+				DE787FB428EC35FA00661090 /* SplatInfo+WidgetsCommon.swift in Sources */,
+				DE74F66728EB4532008B3C67 /* CoopRectangularWidgetView.swift in Sources */,
+				DE74F65128EB3F61008B3C67 /* CoopEventView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DEAFE9FF2543121500FFA812 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1010,6 +1158,7 @@
 				DEAFEA5025431BFC00FFA812 /* CoopEventView.swift in Sources */,
 				DE0111BF28E86DDF001849CC /* CoopCircularWidgetView.swift in Sources */,
 				DEE38192254E0300005D5062 /* SmallGameModeWidgetView.swift in Sources */,
+				DE787FB328EC35FA00661090 /* SplatInfo+WidgetsCommon.swift in Sources */,
 				DEF7CEFD28E2E2E6009281E8 /* Splatoon3TimelineProvider.swift in Sources */,
 				DE0EF5B4258632380088BF45 /* MediumGameModeWidgetView.swift in Sources */,
 				DE72E3A72587B99100CA0BCD /* MediumCoopWidgetView.swift in Sources */,
@@ -1040,6 +1189,11 @@
 			target = DE2BD5F525384899006E5531 /* SplatInfo */;
 			targetProxy = DE2BD6132538489D006E5531 /* PBXContainerItemProxy */;
 		};
+		DE74F63A28EB36E1008B3C67 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DE74F62C28EB36E0008B3C67 /* WatchScheduleWidgetsExtension */;
+			targetProxy = DE74F63928EB36E1008B3C67 /* PBXContainerItemProxy */;
+		};
 		DEAFEA132543121800FFA812 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DEAFEA022543121500FFA812 /* SplatInfoScheduleWidgetExtension */;
@@ -1056,6 +1210,7 @@
 		DE01121428E9ADF1001849CC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1089,6 +1244,7 @@
 		DE01121528E9ADF1001849CC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1457,6 +1613,68 @@
 			};
 			name = Release;
 		};
+		DE74F63D28EB36E1008B3C67 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2FLHWYJQPA;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WatchScheduleWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchScheduleWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ggg-apps.SplatInfo.watchkitapp.WatchScheduleWidgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Debug;
+		};
+		DE74F63E28EB36E1008B3C67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2FLHWYJQPA;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WatchScheduleWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = WatchScheduleWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ggg-apps.SplatInfo.watchkitapp.WatchScheduleWidgets";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Release;
+		};
 		DEAFEA162543121800FFA812 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1569,6 +1787,15 @@
 			buildConfigurations = (
 				DE2BD6222538489D006E5531 /* Debug */,
 				DE2BD6232538489D006E5531 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DE74F63C28EB36E1008B3C67 /* Build configuration list for PBXNativeTarget "WatchScheduleWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE74F63D28EB36E1008B3C67 /* Debug */,
+				DE74F63E28EB36E1008B3C67 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

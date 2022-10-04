@@ -11,11 +11,15 @@ import WidgetKit
 struct Splatoon3ScheduleWidget: Widget {
 
     var supportedWidgetFamilies: [WidgetFamily] {
+        #if os(watchOS)
+        return [.accessoryCircular, .accessoryInline, .accessoryRectangular, .accessoryCorner]
+        #else
         if #available(iOSApplicationExtension 16.0, *) {
             return [.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryInline, .accessoryRectangular]
         }else{
             return [.systemSmall, .systemMedium, .systemLarge]
         }
+        #endif
     }
 
     var body: some WidgetConfiguration {
@@ -47,10 +51,12 @@ struct Previews_Splatoon3ScheduleWidget_Previews: PreviewProvider {
 
     static var previews: some View {
 
+#if !os(watchOS)
         Splatoon3TimelineProvider.ScheduleEntryView(entry: Splatoon3TimelineProvider.GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.anarchyBattleSeries.events), configuration: Splatoon3_ScheduleIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
 
         Splatoon3TimelineProvider.ScheduleEntryView(entry: Splatoon3TimelineProvider.GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: []), configuration: Splatoon3_ScheduleIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
+#endif
     }
 }

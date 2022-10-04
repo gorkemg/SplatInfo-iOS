@@ -10,7 +10,7 @@ import SwiftUI
 import Intents
 
 struct Splatoon3TimelineProvider: IntentTimelineProvider {
-    
+        
     enum TimelineType {
         case game(timeline: GameTimeline)
         case coop(timeline: CoopTimeline)
@@ -128,7 +128,12 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
             }
         }
     }
-    
+ 
+    @available(iOSApplicationExtension 16.0, *)
+    func recommendations() -> [IntentRecommendation<Splatoon3_ScheduleIntent>] {
+        return []
+    }
+
     func timelineForGameModeTimeline(_ modeTimeline: GameTimeline, for configuration: Splatoon3_ScheduleIntent) -> Timeline<GameModeEntry> {
         var entries: [GameModeEntry] = []
         let now = Date()

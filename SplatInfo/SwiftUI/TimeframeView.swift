@@ -58,7 +58,6 @@ struct RelativeTimeframeView : View {
     let state: TimeframeActivityState
             
     var body: some View {
-        //Text(timeframe.dateForState(state: state), style: .relative)
         timeframe.relativeTimeText(state: state)
     }
 }
