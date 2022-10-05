@@ -327,7 +327,9 @@ struct WeaponImage: View {
                 image.resizable()
                     .aspectRatio(contentMode: .fit)
             } placeholder: {
+                #if !os(watchOS)
                 ProgressView()
+                #endif
             }
         }
     }
@@ -411,7 +413,7 @@ struct CoopLogo: View {
         if let uiImage = uiImage {
             return Image(uiImage: uiImage)
         }
-        return Image(event.logoNameSmall)
+        return Image(event.logoName)
     }
         
     var uiImage: UIImage? {

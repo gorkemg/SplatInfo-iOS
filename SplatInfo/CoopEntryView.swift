@@ -1,0 +1,76 @@
+//
+//  CoopEntryView.swift
+//  SplatInfo
+//
+//  Created by Görkem Güclü on 04.10.22.
+//
+
+import Foundation
+import SwiftUI
+import WidgetKit
+
+struct CoopEntryView : View {
+    let events: [CoopEvent]
+    let eventTimeframes: [EventTimeframe]
+    let date: Date
+
+    @Environment(\.widgetFamily) private var widgetFamily
+
+    var body: some View {
+        if let event = event {
+            switch widgetFamily {
+            case .systemSmall:
+                SmallCoopWidgetView(event: event, state: event.timeframe.state(date: date))
+            case .systemMedium:
+                MediumCoopWidgetView(event: event, nextEvent: nextEvent, date: date)
+            case .systemLarge:
+                LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date)
+            case .systemExtraLarge:
+                LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date)
+            case .accessoryCircular:
+                if #available(iOSApplicationExtension 16.0, *) {
+                    #if os(watchOS)
+                    CoopCircularWidgetView(event: event, displayStyle: .icon)
+                    #else
+                    CoopCircularWidgetView(event: event, displayStyle: .weapons)
+                    #endif
+                }
+            case .accessoryRectangular:
+                if #available(iOSApplicationExtension 16.0, *) {
+                    CoopRectangularWidgetView(event: event, date: date)
+                }
+            case .accessoryInline:
+                if #available(iOSApplicationExtension 16.0, *) {
+                    CoopInlineWidgetView(event: event, date: date)
+                }
+            #if os(watchOS)
+            case .accessoryCorner:
+                Image(event.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 50)
+                    .widgetLabel {
+                        ProgressView(timerInterval: event.timeframe.startDate...event.timeframe.endDate)
+                    }
+            #endif
+            @unknown default:
+                SmallCoopWidgetView(event: event, state: event.timeframe.state(date: date))
+            }
+        }else{
+            Text("No event available")
+        }
+    }
+
+    var event: CoopEvent? {
+        return events.first
+    }
+    var nextEvent: CoopEvent? {
+        if let currentEvent = self.event, let index = events.firstIndex(where: { $0 == currentEvent }), events.count > index+1 {
+            return events[(index+1)]
+        }
+        return nil
+    }
+    
+    var otherTimeframes: [EventTimeframe] {
+        guard eventTimeframes.count > 2 else { return [] }
+        let timeframes = Array(eventTimeframes[2...])
+        return timeframes
+    }
+}

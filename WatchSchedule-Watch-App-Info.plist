@@ -4,8 +4,8 @@
 <dict>
 	<key>NSUserActivityTypes</key>
 	<array>
-		<string>Splatoon2_ScheduleIntent</string>
-		<string>Splatoon3_ScheduleIntent</string>
+		<string>Splatoon2_WatchScheduleIntent</string>
+		<string>Splatoon3_WatchScheduleIntent</string>
 	</array>
 	<key>UIAppFonts</key>
 	<array>

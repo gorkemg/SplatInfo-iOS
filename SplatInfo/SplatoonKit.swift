@@ -118,15 +118,15 @@ enum GameModeRule: String, Codable, Hashable, Nameable, LogoNameable {
     var logoNameSmall: String {
         switch self {
         case .turfWar:
-            return "rule-regular"
+            return "rule-regular-small"
         case .splatZones:
-            return "rule-area"
+            return "rule-area-small"
         case .towerControl:
-            return "rule-yagura"
+            return "rule-yagura-small"
         case .rainmaker:
-            return "rule-hoko"
+            return "rule-hoko-small"
         case .clamBlitz:
-            return "rule-asari"
+            return "rule-asari-small"
         }
     }
 
@@ -150,7 +150,7 @@ struct CoopEvent: Hashable, Identifiable, Event {
         return "mode-coop" // "mr-grizz-logo"
     }
     var logoNameSmall : String {
-        return "mode-coop" // "mr-grizz-logo-small"
+        return "mode-coop-small" // "mr-grizz-logo-small"
     }
     var modeName : String {
         return "Salmon Run"

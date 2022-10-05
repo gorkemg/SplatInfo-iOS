@@ -30,11 +30,11 @@ struct GameModeRectangularWidgetView: View {
                                 
                 VStack(alignment: .center, spacing: 1.0){
                     
-                    ProgressView(timerInterval: event.timeframe.startDate...event.timeframe.endDate, countsDown: true, label: {
+                    ProgressView(timerInterval: event.timeframe.startDate...event.timeframe.endDate, countsDown: false, label: {
                         
                         HStack(alignment: .center, spacing: 1.0) {
                             if !event.mode.isTurfWar {
-                                Image(event.mode.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 16)
+                                Image(event.mode.logoName).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 24)
                             }
                             if case let .splatoon3(type) = event.mode {
                                 if case .anarchyBattleOpen = type {
@@ -43,7 +43,7 @@ struct GameModeRectangularWidgetView: View {
                                     Splatoon3TagView(text: "Series")
                                 }
                             }
-                            Image(event.rule.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 16)
+                            Image(event.rule.logoName).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 20)
                             Spacer()
                         }
 
@@ -53,6 +53,7 @@ struct GameModeRectangularWidgetView: View {
                             .multilineTextAlignment(.center)
                             .minimumScaleFactor(0.5)
                     }
+                    .tint(event.mode.color)
                     
                 }
                 .frame(minWidth: 0, maxWidth: .infinity)

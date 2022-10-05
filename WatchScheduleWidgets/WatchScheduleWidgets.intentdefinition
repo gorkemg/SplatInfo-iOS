@@ -12,7 +12,7 @@
 			<key>INEnumGeneratesHeader</key>
 			<true/>
 			<key>INEnumName</key>
-			<string>Splatoon2_ScheduleType</string>
+			<string>Splatoon2_WatchScheduleType</string>
 			<key>INEnumType</key>
 			<string>Regular</string>
 			<key>INEnumValues</key>
@@ -75,7 +75,7 @@
 			<key>INEnumGeneratesHeader</key>
 			<true/>
 			<key>INEnumName</key>
-			<string>Splatoon3_ScheduleType</string>
+			<string>Splatoon3_WatchScheduleType</string>
 			<key>INEnumType</key>
 			<string>Regular</string>
 			<key>INEnumValues</key>
@@ -177,7 +177,7 @@
 			<key>INIntentEligibleForWidgets</key>
 			<true/>
 			<key>INIntentLastParameterTag</key>
-			<integer>4</integer>
+			<integer>5</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
 				<key>scheduleType</key>
@@ -204,7 +204,7 @@
 				</dict>
 			</dict>
 			<key>INIntentName</key>
-			<string>Splatoon2_Schedule</string>
+			<string>Splatoon2_WatchSchedule</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
 				<key>scheduleType</key>
@@ -247,6 +247,10 @@
 					<string>zuc98K</string>
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>1</integer>
+					<key>INIntentParameterEnumType</key>
+					<string>Splatoon2_WatchScheduleType</string>
+					<key>INIntentParameterEnumTypeNamespace</key>
+					<string>88xZPY</string>
 					<key>INIntentParameterMetadata</key>
 					<dict>
 						<key>INIntentParameterMetadataDefaultValue</key>
@@ -296,9 +300,9 @@
 					<key>INIntentParameterSupportsResolution</key>
 					<true/>
 					<key>INIntentParameterTag</key>
-					<integer>2</integer>
+					<integer>5</integer>
 					<key>INIntentParameterType</key>
-					<string>String</string>
+					<string>Integer</string>
 				</dict>
 				<dict>
 					<key>INIntentParameterConfigurable</key>
@@ -372,7 +376,7 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>6</integer>
+				<integer>7</integer>
 				<key>INIntentResponseOutput</key>
 				<string>scheduleType</string>
 				<key>INIntentResponseParameters</key>
@@ -385,13 +389,13 @@
 						<key>INIntentResponseParameterDisplayPriority</key>
 						<integer>1</integer>
 						<key>INIntentResponseParameterEnumType</key>
-						<string>Splatoon2_ScheduleType</string>
+						<string>Splatoon2_WatchScheduleType</string>
 						<key>INIntentResponseParameterEnumTypeNamespace</key>
 						<string>88xZPY</string>
 						<key>INIntentResponseParameterName</key>
 						<string>scheduleType</string>
 						<key>INIntentResponseParameterTag</key>
-						<integer>4</integer>
+						<integer>7</integer>
 						<key>INIntentResponseParameterType</key>
 						<string>Integer</string>
 					</dict>
@@ -445,7 +449,7 @@
 			<key>INIntentEligibleForWidgets</key>
 			<true/>
 			<key>INIntentLastParameterTag</key>
-			<integer>5</integer>
+			<integer>6</integer>
 			<key>INIntentManagedParameterCombinations</key>
 			<dict>
 				<key>scheduleType</key>
@@ -468,7 +472,7 @@
 				</dict>
 			</dict>
 			<key>INIntentName</key>
-			<string>Splatoon3_Schedule</string>
+			<string>Splatoon3_WatchSchedule</string>
 			<key>INIntentParameterCombinations</key>
 			<dict>
 				<key>scheduleType</key>
@@ -509,6 +513,10 @@
 					<string>oPcJPd</string>
 					<key>INIntentParameterDisplayPriority</key>
 					<integer>1</integer>
+					<key>INIntentParameterEnumType</key>
+					<string>Splatoon3_WatchScheduleType</string>
+					<key>INIntentParameterEnumTypeNamespace</key>
+					<string>88xZPY</string>
 					<key>INIntentParameterMetadata</key>
 					<dict>
 						<key>INIntentParameterMetadataDefaultValue</key>
@@ -558,9 +566,9 @@
 					<key>INIntentParameterSupportsResolution</key>
 					<true/>
 					<key>INIntentParameterTag</key>
-					<integer>3</integer>
+					<integer>6</integer>
 					<key>INIntentParameterType</key>
-					<string>String</string>
+					<string>Integer</string>
 				</dict>
 				<dict>
 					<key>INIntentParameterConfigurable</key>
@@ -634,7 +642,9 @@
 					</dict>
 				</array>
 				<key>INIntentResponseLastParameterTag</key>
-				<integer>4</integer>
+				<integer>5</integer>
+				<key>INIntentResponseOutput</key>
+				<string>scheduleType</string>
 				<key>INIntentResponseParameters</key>
 				<array>
 					<dict>
@@ -645,13 +655,13 @@
 						<key>INIntentResponseParameterDisplayPriority</key>
 						<integer>1</integer>
 						<key>INIntentResponseParameterEnumType</key>
-						<string>Splatoon3_ScheduleType</string>
+						<string>Splatoon3_WatchScheduleType</string>
 						<key>INIntentResponseParameterEnumTypeNamespace</key>
 						<string>88xZPY</string>
 						<key>INIntentResponseParameterName</key>
 						<string>scheduleType</string>
 						<key>INIntentResponseParameterTag</key>
-						<integer>2</integer>
+						<integer>5</integer>
 						<key>INIntentResponseParameterType</key>
 						<string>Integer</string>
 					</dict>

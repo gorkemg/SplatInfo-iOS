@@ -13,7 +13,8 @@ struct CoopRectangularWidgetView: View {
     
     let event: CoopEvent
     let date: Date
-    
+    var isBackgroundBlurred: Bool = false
+
     var state: TimeframeActivityState {
         return event.timeframe.state(date: date)
     }
@@ -21,7 +22,26 @@ struct CoopRectangularWidgetView: View {
     
     var body: some View {
         ZStack{
-            AccessoryWidgetBackground()
+            if isBackgroundBlurred {
+                AccessoryWidgetBackground()
+            }
+
+//            ProgressView(timerInterval: event.timeframe.startDate...event.timeframe.endDate, countsDown: true, label: {
+//                
+//                HStack(alignment: .center){
+//                    CoopLogo(event: event).frame(height: 16.0)
+//                    Text(event.stage.name).scaledSplat2Font(size: 9.0).lineLimit(1)
+//                }.foregroundColor(.primary)
+//
+//            }) {
+//                HStack{
+//                    ColoredActivityTextView(state: state).splat2Font(size: 8.0)
+//                    RelativeTimeframeView(timeframe: event.timeframe, state: state)
+//                        .scaledSplat2Font(size: 12.0)
+//                        .multilineTextAlignment(.leading)
+//                        .minimumScaleFactor(0.5)
+//                }
+//            }
             
             HStack(alignment: .center, spacing: 4.0) {
                                 

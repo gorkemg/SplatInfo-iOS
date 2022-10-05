@@ -15,6 +15,7 @@ struct IconCircularWidgetView: View {
     let endDate: Date
     let imageName: String?
     var isBackgroundBlurred: Bool = true
+    var progressTintColor: Color? = nil
     
     var body: some View {
         
@@ -23,13 +24,15 @@ struct IconCircularWidgetView: View {
                 AccessoryWidgetBackground()
             }
             
-            ProgressView(timerInterval: startDate...endDate, countsDown: true, label: {
+            ProgressView(timerInterval: startDate...endDate, countsDown: false, label: {
 
             }, currentValueLabel: {
                 if let name = imageName {
                     Image(name).resizable().aspectRatio(contentMode: .fit).frame(width: 30)
                 }
-            }).progressViewStyle(.circular)
+            })
+            .progressViewStyle(.circular)
+            .tint(progressTintColor)
         }
     }
 }

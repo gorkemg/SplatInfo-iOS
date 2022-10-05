@@ -8,6 +8,10 @@
 import Foundation
 import WidgetKit
 
+let kindWatchSplatoon2ScheduleWidgets: String = "WatchSplatoon2ScheduleWidgets"
+let kindWatchSplatoon3ScheduleWidgets: String = "WatchSplatoon3ScheduleWidgets"
+
+
 extension GameTimeline {
     
     struct GameTimelineEvent {

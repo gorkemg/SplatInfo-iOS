@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE00595628ECD5D400D01E3A /* SplatInfo+WidgetsCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE787FB228EC35FA00661090 /* SplatInfo+WidgetsCommon.swift */; };
 		DE0111BF28E86DDF001849CC /* CoopCircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0111BE28E86DDF001849CC /* CoopCircularWidgetView.swift */; };
 		DE0111F528E9ADF0001849CC /* WatchScheduleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0111F428E9ADF0001849CC /* WatchScheduleApp.swift */; };
 		DE0111F728E9ADF0001849CC /* WatchScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0111F628E9ADF0001849CC /* WatchScheduleView.swift */; };
@@ -107,7 +108,7 @@
 		DE72E3A72587B99100CA0BCD /* MediumCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */; };
 		DE74F62E28EB36E0008B3C67 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEAFEA052543121500FFA812 /* WidgetKit.framework */; };
 		DE74F62F28EB36E0008B3C67 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEAFEA072543121500FFA812 /* SwiftUI.framework */; };
-		DE74F63228EB36E0008B3C67 /* WatchScheduleWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE74F63128EB36E0008B3C67 /* WatchScheduleWidgets.swift */; };
+		DE74F63228EB36E0008B3C67 /* WatchSplatoon2ScheduleWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE74F63128EB36E0008B3C67 /* WatchSplatoon2ScheduleWidgets.swift */; };
 		DE74F63528EB36E1008B3C67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE74F63428EB36E1008B3C67 /* Assets.xcassets */; };
 		DE74F63728EB36E1008B3C67 /* WatchScheduleWidgets.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = DE74F63328EB36E0008B3C67 /* WatchScheduleWidgets.intentdefinition */; };
 		DE74F63828EB36E1008B3C67 /* WatchScheduleWidgets.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = DE74F63328EB36E0008B3C67 /* WatchScheduleWidgets.intentdefinition */; };
@@ -131,12 +132,6 @@
 		DE74F65428EB3F61008B3C67 /* TimelineCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B92625419C5600AAD49A /* TimelineCard.swift */; };
 		DE74F65528EB3F61008B3C67 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B91725419BC400AAD49A /* TitleView.swift */; };
 		DE74F65628EB3F61008B3C67 /* ScheduleGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B92B25419C7D00AAD49A /* ScheduleGrid.swift */; };
-		DE74F66528EB4510008B3C67 /* IconCircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECE28D9148F00700A80 /* IconCircularWidgetView.swift */; };
-		DE74F66628EB4526008B3C67 /* CoopCircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0111BE28E86DDF001849CC /* CoopCircularWidgetView.swift */; };
-		DE74F66728EB4532008B3C67 /* CoopRectangularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3AD0A28D9D26500A36D87 /* CoopRectangularWidgetView.swift */; };
-		DE74F66828EB4547008B3C67 /* CoopInlineWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3AD0C28D9D8DB00A36D87 /* CoopInlineWidgetView.swift */; };
-		DE74F66928EB4549008B3C67 /* GameModeInlineWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE49D2FD28DAF076000FAB3D /* GameModeInlineWidgetView.swift */; };
-		DE74F66A28EB4559008B3C67 /* GameModeRectangularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE49D2FB28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift */; };
 		DE787FB328EC35FA00661090 /* SplatInfo+WidgetsCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE787FB228EC35FA00661090 /* SplatInfo+WidgetsCommon.swift */; };
 		DE787FB428EC35FA00661090 /* SplatInfo+WidgetsCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE787FB228EC35FA00661090 /* SplatInfo+WidgetsCommon.swift */; };
 		DE9DFA6E254AF6A700267508 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */; };
@@ -168,7 +163,28 @@
 		DEB230D428E9D0AF00B7FE8C /* SplatInfo+ProjectCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF7CF0328E434DD009281E8 /* SplatInfo+ProjectCommon.swift */; };
 		DEB230D528E9D0E600B7FE8C /* Splatoon1.otf in Resources */ = {isa = PBXBuildFile; fileRef = DE41B9342541A11200AAD49A /* Splatoon1.otf */; };
 		DEB230D628E9D0E900B7FE8C /* Splatoon2.otf in Resources */ = {isa = PBXBuildFile; fileRef = DE41B9392541A11A00AAD49A /* Splatoon2.otf */; };
-		DEB230D928EB2C5300B7FE8C /* WatchSchedule Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = DE0111F228E9ADF0001849CC /* WatchSchedule Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DEB230D928EB2C5300B7FE8C /* WatchSchedule Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = DE0111F228E9ADF0001849CC /* WatchSchedule Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DEC8A66B28EC7B060063D3BD /* splat3schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DEE7C1A628D5F0630024D6A9 /* splat3schedules.json */; };
+		DEC8A66C28EC7B060063D3BD /* schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE50122C253A1B7500A73F7A /* schedules.json */; };
+		DEC8A66D28EC7B060063D3BD /* coop-schedules.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501236253A1BA300A73F7A /* coop-schedules.json */; };
+		DEC8A67028EC7F930063D3BD /* GameModeEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC8A66E28EC7F930063D3BD /* GameModeEntryView.swift */; };
+		DEC8A67228EC7F930063D3BD /* GameModeEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC8A66E28EC7F930063D3BD /* GameModeEntryView.swift */; };
+		DEC8A67728EC801B0063D3BD /* CoopEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC8A67528EC801B0063D3BD /* CoopEntryView.swift */; };
+		DEC8A67928EC801B0063D3BD /* CoopEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEC8A67528EC801B0063D3BD /* CoopEntryView.swift */; };
+		DEC8A67E28EC82030063D3BD /* SmallGameModeWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE38190254E0300005D5062 /* SmallGameModeWidgetView.swift */; };
+		DEC8A67F28EC82030063D3BD /* SmallCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */; };
+		DEC8A68028EC82030063D3BD /* MediumGameModeWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0EF5B3258632380088BF45 /* MediumGameModeWidgetView.swift */; };
+		DEC8A68128EC82030063D3BD /* GameModeInlineWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE49D2FD28DAF076000FAB3D /* GameModeInlineWidgetView.swift */; };
+		DEC8A68228EC82030063D3BD /* CoopInlineWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3AD0C28D9D8DB00A36D87 /* CoopInlineWidgetView.swift */; };
+		DEC8A68328EC82030063D3BD /* LargeGameModeWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAE259A25541CDB00253E79 /* LargeGameModeWidgetView.swift */; };
+		DEC8A68428EC82030063D3BD /* MediumCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */; };
+		DEC8A68528EC82030063D3BD /* CoopRectangularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3AD0A28D9D26500A36D87 /* CoopRectangularWidgetView.swift */; };
+		DEC8A68628EC82030063D3BD /* GameModeRectangularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE49D2FB28D9FB01000FAB3D /* GameModeRectangularWidgetView.swift */; };
+		DEC8A68728EC82030063D3BD /* IconCircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECE28D9148F00700A80 /* IconCircularWidgetView.swift */; };
+		DEC8A68828EC82030063D3BD /* LargeCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A02587B69E00CA0BCD /* LargeCoopWidgetView.swift */; };
+		DEC8A68928EC82030063D3BD /* CoopCircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0111BE28E86DDF001849CC /* CoopCircularWidgetView.swift */; };
+		DEC8A68A28EC82BC0063D3BD /* SmallCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */; };
+		DEC8A68B28EC82C50063D3BD /* MediumCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */; };
 		DEE3817F254E016E005D5062 /* SmallCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */; };
 		DEE38180254E016F005D5062 /* SmallCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */; };
 		DEE38186254E0226005D5062 /* SplatoonKit+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE38185254E0226005D5062 /* SplatoonKit+Extensions.swift */; };
@@ -285,6 +301,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DE00595728ED646200D01E3A /* WatchSchedule Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "WatchSchedule Watch App.entitlements"; sourceTree = "<group>"; };
+		DE00595828ED647100D01E3A /* WatchScheduleWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WatchScheduleWidgetsExtension.entitlements; sourceTree = "<group>"; };
 		DE0111BE28E86DDF001849CC /* CoopCircularWidgetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoopCircularWidgetView.swift; sourceTree = "<group>"; };
 		DE0111F228E9ADF0001849CC /* WatchSchedule Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WatchSchedule Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE0111F428E9ADF0001849CC /* WatchScheduleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchScheduleApp.swift; sourceTree = "<group>"; };
@@ -340,7 +358,7 @@
 		DE72E3A02587B69E00CA0BCD /* LargeCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeCoopWidgetView.swift; sourceTree = "<group>"; };
 		DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediumCoopWidgetView.swift; sourceTree = "<group>"; };
 		DE74F62D28EB36E0008B3C67 /* WatchScheduleWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WatchScheduleWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		DE74F63128EB36E0008B3C67 /* WatchScheduleWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchScheduleWidgets.swift; sourceTree = "<group>"; };
+		DE74F63128EB36E0008B3C67 /* WatchSplatoon2ScheduleWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSplatoon2ScheduleWidgets.swift; sourceTree = "<group>"; };
 		DE74F63328EB36E0008B3C67 /* WatchScheduleWidgets.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = WatchScheduleWidgets.intentdefinition; sourceTree = "<group>"; };
 		DE74F63428EB36E1008B3C67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE74F63628EB36E1008B3C67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -357,6 +375,8 @@
 		DEAFEA2D2543136200FFA812 /* SplatInfo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SplatInfo.entitlements; sourceTree = "<group>"; };
 		DEAFEA5D25431D0A00FFA812 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		DEB230D728E9D2C500B7FE8C /* WatchSchedule-Watch-App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "WatchSchedule-Watch-App-Info.plist"; sourceTree = SOURCE_ROOT; };
+		DEC8A66E28EC7F930063D3BD /* GameModeEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModeEntryView.swift; sourceTree = "<group>"; };
+		DEC8A67528EC801B0063D3BD /* CoopEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopEntryView.swift; sourceTree = "<group>"; };
 		DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallCoopWidgetView.swift; sourceTree = "<group>"; };
 		DEE38185254E0226005D5062 /* SplatoonKit+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SplatoonKit+Extensions.swift"; sourceTree = "<group>"; };
 		DEE38190254E0300005D5062 /* SmallGameModeWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallGameModeWidgetView.swift; sourceTree = "<group>"; };
@@ -436,6 +456,7 @@
 		DE0111F328E9ADF0001849CC /* WatchSchedule Watch App */ = {
 			isa = PBXGroup;
 			children = (
+				DE00595728ED646200D01E3A /* WatchSchedule Watch App.entitlements */,
 				DEB230D728E9D2C500B7FE8C /* WatchSchedule-Watch-App-Info.plist */,
 				DE0111F428E9ADF0001849CC /* WatchScheduleApp.swift */,
 				DE0111F628E9ADF0001849CC /* WatchScheduleView.swift */,
@@ -473,6 +494,7 @@
 		DE2BD5ED25384899006E5531 = {
 			isa = PBXGroup;
 			children = (
+				DE00595828ED647100D01E3A /* WatchScheduleWidgetsExtension.entitlements */,
 				DE2BD5F825384899006E5531 /* SplatInfo */,
 				DE2BD60A2538489D006E5531 /* SplatInfoTests */,
 				DE2BD6152538489D006E5531 /* SplatInfoUITests */,
@@ -520,6 +542,8 @@
 				DE2BD5FF2538489C006E5531 /* Preview Content */,
 				DEF7CF0328E434DD009281E8 /* SplatInfo+ProjectCommon.swift */,
 				DE787FB228EC35FA00661090 /* SplatInfo+WidgetsCommon.swift */,
+				DEC8A66E28EC7F930063D3BD /* GameModeEntryView.swift */,
+				DEC8A67528EC801B0063D3BD /* CoopEntryView.swift */,
 			);
 			path = SplatInfo;
 			sourceTree = "<group>";
@@ -579,7 +603,7 @@
 		DE74F63028EB36E0008B3C67 /* WatchScheduleWidgets */ = {
 			isa = PBXGroup;
 			children = (
-				DE74F63128EB36E0008B3C67 /* WatchScheduleWidgets.swift */,
+				DE74F63128EB36E0008B3C67 /* WatchSplatoon2ScheduleWidgets.swift */,
 				DE74F63328EB36E0008B3C67 /* WatchScheduleWidgets.intentdefinition */,
 				DE74F63428EB36E1008B3C67 /* Assets.xcassets */,
 				DE74F63628EB36E1008B3C67 /* Info.plist */,
@@ -960,6 +984,9 @@
 				DE74F64A28EB3CF5008B3C67 /* Splatoon1.otf in Resources */,
 				DE74F64328EB3CF5008B3C67 /* Splatoon2.otf in Resources */,
 				DE74F63528EB36E1008B3C67 /* Assets.xcassets in Resources */,
+				DEC8A66D28EC7B060063D3BD /* coop-schedules.json in Resources */,
+				DEC8A66C28EC7B060063D3BD /* schedules.json in Resources */,
+				DEC8A66B28EC7B060063D3BD /* splat3schedules.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -987,6 +1014,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE01122428E9AFCA001849CC /* Splatoon2InkAPI.swift in Sources */,
+				DE00595628ECD5D400D01E3A /* SplatInfo+WidgetsCommon.swift in Sources */,
+				DEC8A68B28EC82C50063D3BD /* MediumCoopWidgetView.swift in Sources */,
 				DE01123428E9B143001849CC /* PillStageImage.swift in Sources */,
 				DE01121F28E9AFC4001849CC /* SplatoonKit.swift in Sources */,
 				DE01123128E9B143001849CC /* GameModeEventView.swift in Sources */,
@@ -1000,6 +1029,7 @@
 				DE01122328E9AFCA001849CC /* Constants.swift in Sources */,
 				DE01123328E9B143001849CC /* TimeframeView.swift in Sources */,
 				DE74F63828EB36E1008B3C67 /* WatchScheduleWidgets.intentdefinition in Sources */,
+				DEC8A68A28EC82BC0063D3BD /* SmallCoopWidgetView.swift in Sources */,
 				DE01122528E9AFCA001849CC /* Splatoon3InkAPI.swift in Sources */,
 				DE01122E28E9AFD0001849CC /* FileManager+Extensions.swift in Sources */,
 				DEB230D428E9D0AF00B7FE8C /* SplatInfo+ProjectCommon.swift in Sources */,
@@ -1094,31 +1124,39 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DE74F66528EB4510008B3C67 /* IconCircularWidgetView.swift in Sources */,
 				DE74F65228EB3F61008B3C67 /* GameModeEventView.swift in Sources */,
-				DE74F66828EB4547008B3C67 /* CoopInlineWidgetView.swift in Sources */,
+				DEC8A68428EC82030063D3BD /* MediumCoopWidgetView.swift in Sources */,
 				DE74F65028EB3F61008B3C67 /* ScaledFont.swift in Sources */,
-				DE74F63228EB36E0008B3C67 /* WatchScheduleWidgets.swift in Sources */,
+				DEC8A68128EC82030063D3BD /* GameModeInlineWidgetView.swift in Sources */,
+				DE74F63228EB36E0008B3C67 /* WatchSplatoon2ScheduleWidgets.swift in Sources */,
 				DE74F64228EB3CF5008B3C67 /* SplatoonKit+Extensions.swift in Sources */,
+				DEC8A68828EC82030063D3BD /* LargeCoopWidgetView.swift in Sources */,
 				DE74F64B28EB3CF5008B3C67 /* ScheduleFetcher.swift in Sources */,
+				DEC8A67F28EC82030063D3BD /* SmallCoopWidgetView.swift in Sources */,
 				DE74F64828EB3CF5008B3C67 /* ImageLoader.swift in Sources */,
 				DE74F65328EB3F61008B3C67 /* TimeframeView.swift in Sources */,
+				DEC8A68628EC82030063D3BD /* GameModeRectangularWidgetView.swift in Sources */,
 				DE74F64428EB3CF5008B3C67 /* Splatoon2InkAPI.swift in Sources */,
+				DEC8A67928EC801B0063D3BD /* CoopEntryView.swift in Sources */,
 				DE74F64F28EB3F46008B3C67 /* PillStageImage.swift in Sources */,
-				DE74F66A28EB4559008B3C67 /* GameModeRectangularWidgetView.swift in Sources */,
 				DE74F65628EB3F61008B3C67 /* ScheduleGrid.swift in Sources */,
 				DE74F64628EB3CF5008B3C67 /* SplatoonKit.swift in Sources */,
 				DE74F64528EB3CF5008B3C67 /* Constants.swift in Sources */,
-				DE74F66928EB4549008B3C67 /* GameModeInlineWidgetView.swift in Sources */,
 				DE74F63728EB36E1008B3C67 /* WatchScheduleWidgets.intentdefinition in Sources */,
 				DE74F64128EB3CA4008B3C67 /* SplatInfo+ProjectCommon.swift in Sources */,
-				DE74F66628EB4526008B3C67 /* CoopCircularWidgetView.swift in Sources */,
 				DE74F65428EB3F61008B3C67 /* TimelineCard.swift in Sources */,
+				DEC8A68728EC82030063D3BD /* IconCircularWidgetView.swift in Sources */,
+				DEC8A67228EC7F930063D3BD /* GameModeEntryView.swift in Sources */,
+				DEC8A68028EC82030063D3BD /* MediumGameModeWidgetView.swift in Sources */,
+				DEC8A68928EC82030063D3BD /* CoopCircularWidgetView.swift in Sources */,
 				DE74F64728EB3CF5008B3C67 /* FileManager+Extensions.swift in Sources */,
+				DEC8A68228EC82030063D3BD /* CoopInlineWidgetView.swift in Sources */,
+				DEC8A67E28EC82030063D3BD /* SmallGameModeWidgetView.swift in Sources */,
 				DE74F64928EB3CF5008B3C67 /* Splatoon3InkAPI.swift in Sources */,
 				DE74F65528EB3F61008B3C67 /* TitleView.swift in Sources */,
+				DEC8A68328EC82030063D3BD /* LargeGameModeWidgetView.swift in Sources */,
 				DE787FB428EC35FA00661090 /* SplatInfo+WidgetsCommon.swift in Sources */,
-				DE74F66728EB4532008B3C67 /* CoopRectangularWidgetView.swift in Sources */,
+				DEC8A68528EC82030063D3BD /* CoopRectangularWidgetView.swift in Sources */,
 				DE74F65128EB3F61008B3C67 /* CoopEventView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1151,6 +1189,7 @@
 				DEAFEA4325431BF400FFA812 /* ImageLoader.swift in Sources */,
 				DEAFEA4D25431BFC00FFA812 /* GameModeEventView.swift in Sources */,
 				DEF7CF0528E434DD009281E8 /* SplatInfo+ProjectCommon.swift in Sources */,
+				DEC8A67028EC7F930063D3BD /* GameModeEntryView.swift in Sources */,
 				DEAE259C25541CDB00253E79 /* LargeGameModeWidgetView.swift in Sources */,
 				DEAFEA3E25431BE800FFA812 /* ScheduleFetcher.swift in Sources */,
 				DEAFEA5125431BFC00FFA812 /* TimelineCard.swift in Sources */,
@@ -1160,6 +1199,7 @@
 				DEE38192254E0300005D5062 /* SmallGameModeWidgetView.swift in Sources */,
 				DE787FB328EC35FA00661090 /* SplatInfo+WidgetsCommon.swift in Sources */,
 				DEF7CEFD28E2E2E6009281E8 /* Splatoon3TimelineProvider.swift in Sources */,
+				DEC8A67728EC801B0063D3BD /* CoopEntryView.swift in Sources */,
 				DE0EF5B4258632380088BF45 /* MediumGameModeWidgetView.swift in Sources */,
 				DE72E3A72587B99100CA0BCD /* MediumCoopWidgetView.swift in Sources */,
 				DE9DFA6F254AF6A700267508 /* FileManager+Extensions.swift in Sources */,
@@ -1201,6 +1241,7 @@
 		};
 		DEB230DB28EB2C5300B7FE8C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = DE0111F128E9ADF0001849CC /* WatchSchedule Watch App */;
 			targetProxy = DEB230DA28EB2C5300B7FE8C /* PBXContainerItemProxy */;
 		};
@@ -1214,6 +1255,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "WatchSchedule Watch App/WatchSchedule Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WatchSchedule Watch App/Preview Content\"";
@@ -1221,7 +1263,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WatchSchedule-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = WatchSchedule;
+				INFOPLIST_KEY_CFBundleDisplayName = SplatBuddy;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.ggg-apps.SplatInfo";
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
@@ -1248,6 +1290,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = "WatchSchedule Watch App/WatchSchedule Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WatchSchedule Watch App/Preview Content\"";
@@ -1255,7 +1298,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "WatchSchedule-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = WatchSchedule;
+				INFOPLIST_KEY_CFBundleDisplayName = SplatBuddy;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.ggg-apps.SplatInfo";
 				INFOPLIST_KEY_WKRunsIndependentlyOfCompanionApp = YES;
@@ -1619,12 +1662,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = WatchScheduleWidgetsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2FLHWYJQPA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WatchScheduleWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = WatchScheduleWidgets;
+				INFOPLIST_KEY_CFBundleDisplayName = "SplatBuddy Widgets";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1650,12 +1694,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = WatchScheduleWidgetsExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2FLHWYJQPA;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WatchScheduleWidgets/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = WatchScheduleWidgets;
+				INFOPLIST_KEY_CFBundleDisplayName = "SplatBuddy Widgets";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

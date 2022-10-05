@@ -24,15 +24,15 @@ struct GameModeInlineWidgetView: View {
         ViewThatFits(in: .horizontal) {
 
             HStack(spacing: 2.0) {
-                Image(event.mode.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(maxWidth: 14, maxHeight: 14)
+                //Image(event.rule.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(maxWidth: 14, maxHeight: 14)
                 Text(event.rule.name) + Text(" • ") + Text(event.timeframe.dateForState(state: state), style: .relative).monospacedDigit()
             }
             .scaledSplat2Font(size: 10)
             .minimumScaleFactor(0.5)
 
             HStack(spacing: 2.0) {
-                Image(event.mode.logoNameSmall)//.resizable().aspectRatio(contentMode: .fit).frame(maxWidth: 14, maxHeight: 14)
-                Text(event.rule.name)
+                //Image(event.rule.logoNameSmall)//.resizable().aspectRatio(contentMode: .fit).frame(maxWidth: 14, maxHeight: 14)
+                Text(event.timeframe.dateForState(state: state), style: .relative).monospacedDigit()
             }
             .scaledSplat2Font(size: 10)
             .minimumScaleFactor(0.5)

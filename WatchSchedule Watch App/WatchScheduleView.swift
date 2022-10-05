@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct WatchScheduleView: View {
     
@@ -34,6 +35,7 @@ struct WatchScheduleView: View {
                 case .success(let success):
                     downloadImages(urls: success.allImageURLs(), asJPEG: true) {
                         print("Splatoon2 Images downloaded")
+                        WidgetCenter.shared.reloadTimelines(ofKind: kindWatchSplatoon2ScheduleWidgets)
                     }
                     break
                 case .failure(let error):
@@ -48,6 +50,7 @@ struct WatchScheduleView: View {
                         print("Splatoon 3 Images downloaded")
                         downloadImages(urls: success.coop.allWeaponImageURLs(), asJPEG: false) {
                             print("Weapons downloaded")
+                            WidgetCenter.shared.reloadTimelines(ofKind: kindWatchSplatoon3ScheduleWidgets)
                         }
                     }
                 case .failure(let error):
