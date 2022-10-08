@@ -13,6 +13,7 @@ struct GameModeEntryView : View {
     let gameMode: GameModeType
     let events: [GameModeEvent]
     let date: Date                  // Widget update date
+    var isPreview: Bool = false
     
     @Environment(\.widgetFamily) private var widgetFamily
     
@@ -29,7 +30,7 @@ struct GameModeEntryView : View {
                 LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
             case .accessoryCircular:
                 if #available(iOSApplicationExtension 16.0, *) {
-                    IconCircularWidgetView(startDate: event.timeframe.startDate, endDate: event.timeframe.endDate, imageName: event.rule.logoName, progressTintColor: event.mode.color)
+                    IconCircularWidgetView(startDate: event.timeframe.startDate, endDate: event.timeframe.endDate, imageName: isPreview ? event.mode.logoName : event.rule.logoName, progressTintColor: event.mode.color)
                 }else{
                     Text("No event available").splat1Font(size: 20)
                 }
@@ -47,10 +48,12 @@ struct GameModeEntryView : View {
                 }
             #if os(watchOS)
             case .accessoryCorner:
-                Image(event.rule.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 50)
+                Image(event.rule.logoName).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 50)
+                    .unredacted()
                     .widgetLabel {
-                    ProgressView(timerInterval: event.timeframe.startDate...event.timeframe.endDate)
-                }
+                        ProgressView(timerInterval: event.timeframe.startDate...event.timeframe.endDate)
+                            .tint(event.mode.color)
+                    }
             #endif
             @unknown default:
                 Text("No event available").splat1Font(size: 20)

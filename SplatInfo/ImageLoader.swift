@@ -149,10 +149,15 @@ class MultiImageLoader {
     let urls : [URL]
     @Published var finishedURLs : [URL] = []
     let directory: URL
-    var resizeSize: CGSize? = nil
+    var resizeOption: ResizeOption? = nil
     var storeAsJPEG = true
     var useCachedImage = true
-    
+
+    enum ResizeOption {
+        case resizeToSize(_ size: CGSize)
+        case resizeToWidth(_ width: CGFloat)
+        case resizeToHeight(_ height: CGFloat)
+    }
 
     var downloadTasks: [URLSessionDownloadTask] = []
     
@@ -172,7 +177,7 @@ class MultiImageLoader {
             let jpegURL = fileURL.deletingPathExtension().appendingPathExtension("jpeg")
             if fileManager.fileExists(atPath: fileURL.path) {
                 if self.useCachedImage {
-//                    print("MultiImageLoader: usingCache for (\(url)")
+                    print("MultiImageLoader: using Cache for (\(url)")
                     self.finishedURLs.append(url)
                     counter += 1
                     if count == counter {
@@ -184,7 +189,7 @@ class MultiImageLoader {
                 
             }else if fileManager.fileExists(atPath: jpegURL.path) {
                 if self.useCachedImage {
-//                    print("MultiImageLoader: usingCache for (\(url)")
+                    print("MultiImageLoader: using Cache for (\(url)")
                     self.finishedURLs.append(url)
                     counter += 1
                     if count == counter {
@@ -195,7 +200,7 @@ class MultiImageLoader {
                 try? fileManager.removeItem(at: fileURL)
             }
 
-//            print("MultiImageLoader: Downloading (\(url)")
+            print("MultiImageLoader: Downloading (\(url)")
             let task = URLSession.shared.downloadTask(with: url) { [weak self] location, response, error in
 
                 guard let self = self else { return }
@@ -208,16 +213,14 @@ class MultiImageLoader {
 
                 do {
                     if self.storeAsJPEG {
-                        if let size = self.resizeSize {
-                            let image = self.downsample(imageAt: tempLocation, to: size, scale: 1.0)
+                        if let sizeOption = self.resizeOption, let image = self.downsample(imageAt: tempLocation, with: sizeOption, scale: 1.0) {
                             let data = image.jpegData(compressionQuality: 0.8)
                             try data?.write(to: jpegURL)
                         } else if let image = UIImage(contentsOfFile: tempLocation.path), let data = image.jpegData(compressionQuality: 0.8) {
                             try data.write(to: jpegURL)
                         }
                     }else{
-                        if let size = self.resizeSize {
-                            let image = self.downsample(imageAt: tempLocation, to: size, scale: 1.0)
+                        if let sizeOption = self.resizeOption, let image = self.downsample(imageAt: tempLocation, with: sizeOption, scale: 1.0) {
                             let data = image.pngData()
                             try data?.write(to: fileURL)
                         }else{
@@ -237,11 +240,32 @@ class MultiImageLoader {
             task.resume()
         }
     }
+
+    func downsample(imageAt imageURL: URL, with resizeOption: ResizeOption, scale: CGFloat) -> UIImage? {
+        switch resizeOption {
+        case .resizeToSize(let size):
+            return downsample(imageAt: imageURL, to: size, scale: scale)
+        case .resizeToWidth(let width):
+            // get image size and calculate height
+            guard let imageSize = imageDimenssions(url: imageURL), imageSize.width > 0, imageSize.height > 0 else { return nil }
+            // ex.: 800x450 to width 100 => 450/800 * 100 = 56,25
+            let height = imageSize.height/imageSize.width * width
+            return downsample(imageAt: imageURL, to: CGSize(width: width, height: height), scale: scale)
+            
+        case .resizeToHeight(let height):
+            // get image size and calculate width
+            guard let imageSize = imageDimenssions(url: imageURL), imageSize.width > 0, imageSize.height > 0 else { return nil }
+            // ex.: 800x450 to height 200 => 800/450 * 200 = 355,555555556
+            let width = imageSize.width/imageSize.height * height
+            return downsample(imageAt: imageURL, to: CGSize(width: width, height: height), scale: scale)
+        }
+    }
+    
     
     // Downsampling large images for display at smaller size
-    func downsample(imageAt imageURL: URL, to pointSize: CGSize, scale: CGFloat) -> UIImage {
+    func downsample(imageAt imageURL: URL, to pointSize: CGSize, scale: CGFloat) -> UIImage? {
         let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
-        let imageSource = CGImageSourceCreateWithURL(imageURL as CFURL, imageSourceOptions)!
+        guard let imageSource = CGImageSourceCreateWithURL(imageURL as CFURL, imageSourceOptions) else { return nil }
         let maxDimensionInPixels = max(pointSize.width, pointSize.height) * scale
         let downsampleOptions =
             [kCGImageSourceCreateThumbnailFromImageAlways: true,
@@ -249,11 +273,17 @@ class MultiImageLoader {
             // Should include kCGImageSourceCreateThumbnailWithTransform: true in the options dictionary. Otherwise, the image result will appear rotated when an image is taken from camera in the portrait orientation.
             kCGImageSourceCreateThumbnailWithTransform: true,
             kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels] as CFDictionary
-        let downsampledImage =
-            CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions)!
+        guard let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions) else { return nil }
         return UIImage(cgImage: downsampledImage)
     }
 
+    func imageDimenssions(url: URL) -> CGSize? {
+        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+        guard let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as Dictionary? else { return nil }
+        let pixelWidth = imageProperties[kCGImagePropertyPixelWidth] as! CGFloat
+        let pixelHeight = imageProperties[kCGImagePropertyPixelHeight] as! CGFloat
+        return CGSize(width: pixelWidth, height: pixelHeight)
+    }
 }
 
 class ImageLoaderManager {

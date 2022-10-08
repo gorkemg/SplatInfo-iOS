@@ -14,7 +14,7 @@ struct GameModeRectangularWidgetView: View {
     let event: GameModeEvent
     let date: Date
     var isBackgroundBlurred: Bool = false
-
+    
     var state: TimeframeActivityState {
         return event.timeframe.state(date: date)
     }
@@ -32,7 +32,7 @@ struct GameModeRectangularWidgetView: View {
                     
                     ProgressView(timerInterval: event.timeframe.startDate...event.timeframe.endDate, countsDown: false, label: {
                         
-                        HStack(alignment: .center, spacing: 1.0) {
+                        HStack(alignment: .center, spacing: 2.0) {
                             if !event.mode.isTurfWar {
                                 Image(event.mode.logoName).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 24)
                             }

@@ -265,14 +265,28 @@ struct GameModeEventTitleView: View {
 struct Splatoon3TagView: View {
     let text: String
     var backgroundColor: Color = .rankedModeColor
+    
+#if os(watchOS)
+    @Environment(\.widgetRenderingMode) var widgetRenderingMode
+#endif
+
     var body: some View {
         Text(text)
             .splat2Font(size: 10)
             .minimumScaleFactor(0.5)
-            .padding(.vertical, 0)
-            .padding(.horizontal, 1.0)
+            .padding(.vertical, 1.0)
+            .padding(.horizontal, 2.0)
+#if os(watchOS)
+            .background(widgetRenderingMode != .accented ? backgroundColor : .clear)
+#else
             .background(backgroundColor)
+#endif
             .cornerRadius(4.0)
-            .shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
+#if os(watchOS)
+            .if(widgetRenderingMode != .accented, transform: { view in
+                view
+                    .shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
+            })
+#endif
     }
 }

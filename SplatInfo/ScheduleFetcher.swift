@@ -19,10 +19,12 @@ extension GameTimeline: ImageURLs {
 
 extension Splatoon3.Schedule: ImageURLs {
     
+    /// Returns all image urls for all stages
+    /// - Returns: urls of all stages
     func allImageURLs() -> [URL] {
         let timelines = [regular, anarchyBattleOpen, anarchyBattleSeries, league, x]
         let timelineURLs = timelines.compactMap({ $0.allImageURLs() }).flatMap({ $0 })
-        return timelineURLs + coop.allImageURLs()
+        return (timelineURLs + coop.allImageURLs()).unique()
     }
     
     static var empty : Splatoon3.Schedule {
@@ -84,7 +86,7 @@ extension Splatoon2.Schedule: ImageURLs {
             imageURLs.append(contentsOf: timeline.allImageURLs())
         }
         imageURLs.append(contentsOf: coop.allImageURLs())
-        return imageURLs
+        return imageURLs.unique()
     }
 
 }
@@ -92,7 +94,7 @@ extension Splatoon2.Schedule: ImageURLs {
 extension GameSchedule {
 
     func allImageURLs() -> [URL] {
-        return self.schedule.allImageURLs()
+        return self.schedule.allImageURLs().unique()
     }
 }
 
@@ -100,20 +102,20 @@ extension ScheduleEvents: ImageURLs {
     func allImageURLs() -> [URL] {
         switch self {
         case .regular(let events):
-            return events.compactMap({ $0.allImageURLs() }).flatMap({ $0 })
+            return events.compactMap({ $0.allImageURLs() }).flatMap({ $0 }).unique()
         case .coop(let events, _):
-            return events.compactMap({ $0.allImageURLs() }).flatMap({ $0 })
+            return events.compactMap({ $0.allImageURLs() }).flatMap({ $0 }).unique()
         }
     }
 }
 
 extension CoopTimeline: ImageURLs, WeaponImageURLs {
     func allImageURLs() -> [URL] {
-        return self.events.compactMap({ $0.allImageURLs() }).flatMap({ $0 })
+        return self.events.compactMap({ $0.allImageURLs() }).flatMap({ $0 }).unique()
     }
     
     func allWeaponImageURLs() -> [URL] {
-        return self.events.compactMap({ $0.allWeaponImageURLs() }).flatMap({ $0 })
+        return self.events.compactMap({ $0.allWeaponImageURLs() }).flatMap({ $0 }).unique()
     }
 }
 
@@ -122,7 +124,7 @@ extension GameModeEvent: ImageURLs {
     func allImageURLs() -> [URL] {
         let imageURLs = self.stages.map({ $0.imageUrl })
         let stageImageURLs = imageURLs.compactMap({ $0 })
-        return stageImageURLs
+        return stageImageURLs.unique()
     }
 }
 
@@ -133,14 +135,14 @@ extension CoopEvent: ImageURLs, WeaponImageURLs {
         if let imageUrl = self.stage.imageUrl {
             imageURLs.append(imageUrl)
         }
-        return imageURLs
+        return imageURLs.unique()
     }
     
     func allWeaponImageURLs() -> [URL] {
         let coopWeaponImageURLs = self.weaponDetails.compactMap { details in
             return details.imageUrl
         }
-        return coopWeaponImageURLs.compactMap({ $0 })
+        return coopWeaponImageURLs.compactMap({ $0 }).unique()
     }
 }
 

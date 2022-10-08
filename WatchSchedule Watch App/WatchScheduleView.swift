@@ -11,7 +11,9 @@ import WidgetKit
 struct WatchScheduleView: View {
     
     @ObservedObject private var scheduleFetcher = ScheduleFetcher()
-    let imageLoaderManager = ImageLoaderManager()
+    private let imageLoaderManager = ImageLoaderManager()
+    private let screenWidth = WKInterfaceDevice.current().screenBounds.width * WKInterfaceDevice.current().screenScale
+    private let screenScale = WKInterfaceDevice.current().screenScale
 
     var body: some View {
         
@@ -29,13 +31,19 @@ struct WatchScheduleView: View {
         }
         .onAppear {
             print("Appeared")
+            print("Device Screen size: \(WKInterfaceDevice.current().screenBounds) @ \(screenScale)")
+            ScheduleFetcher.useSharedFolderForCaching = true
+
             scheduleFetcher.fetchSplatoon2Schedule { result in
 
                 switch result {
                 case .success(let success):
-                    downloadImages(urls: success.allImageURLs(), asJPEG: true) {
+                    downloadImages(urls: success.allImageURLs(), asJPEG: true, resizeOption: .resizeToWidth(screenWidth)) {
                         print("Splatoon2 Images downloaded")
-                        WidgetCenter.shared.reloadTimelines(ofKind: kindWatchSplatoon2ScheduleWidgets)
+                        downloadImages(urls: success.coop.allWeaponImageURLs(), asJPEG: false, resizeOption: .resizeToWidth(64.0)) {
+                            print("Weapons downloaded")
+                            WidgetCenter.shared.reloadTimelines(ofKind: kindWatchSplatoon2ScheduleWidgets)
+                        }
                     }
                     break
                 case .failure(let error):
@@ -46,9 +54,9 @@ struct WatchScheduleView: View {
 
                 switch result {
                 case .success(let success):
-                    downloadImages(urls: success.coop.allImageURLs(), asJPEG: true) {
+                    downloadImages(urls: success.allImageURLs(), asJPEG: true, resizeOption: .resizeToWidth(screenWidth)) {
                         print("Splatoon 3 Images downloaded")
-                        downloadImages(urls: success.coop.allWeaponImageURLs(), asJPEG: false) {
+                        downloadImages(urls: success.coop.allWeaponImageURLs(), asJPEG: false, resizeOption: .resizeToWidth(64.0)) {
                             print("Weapons downloaded")
                             WidgetCenter.shared.reloadTimelines(ofKind: kindWatchSplatoon3ScheduleWidgets)
                         }
@@ -60,10 +68,11 @@ struct WatchScheduleView: View {
         }
     }
     
-    func downloadImages(urls: [URL], asJPEG: Bool = true, completion: @escaping ()->Void) {
+    func downloadImages(urls: [URL], asJPEG: Bool = true, resizeOption: MultiImageLoader.ResizeOption? = nil, completion: @escaping ()->Void) {
         let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
         let multiImageLoader = MultiImageLoader(urls: urls, directory: destination)
         multiImageLoader.storeAsJPEG = asJPEG
+        multiImageLoader.resizeOption = resizeOption
         imageLoaderManager.imageLoaders.append(multiImageLoader)
         multiImageLoader.load {
             completion()
@@ -135,9 +144,10 @@ struct Splatoon3TimelinesView: View {
                     }
                 }
             }
-            .edgesIgnoringSafeArea(.vertical)
+            .edgesIgnoringSafeArea(.all)
         }
         .environmentObject(imageQuality)
+        .navigationTitle("Splatoon 3")
     }
     
     var imageQuality : ImageQuality = {
@@ -200,9 +210,10 @@ struct Splatoon2TimelinesView: View {
                     }
                 }
             }
-            .edgesIgnoringSafeArea(.vertical)
+            .edgesIgnoringSafeArea(.all)
         }
         .environmentObject(imageQuality)
+        .navigationTitle("Splatoon 2")
     }
     
     var imageQuality : ImageQuality = {
@@ -285,7 +296,10 @@ struct ContentView_Previews: PreviewProvider {
 
     static var previews: some View {
         WatchScheduleView()
+            .previewDisplayName("Start")
         Splatoon2TimelinesView(schedule: $exampleSchedule2)
+            .previewDisplayName("Splatton 2")
         Splatoon3TimelinesView(schedule: $exampleSchedule3)
+            .previewDisplayName("Splatoon 3")
     }
 }

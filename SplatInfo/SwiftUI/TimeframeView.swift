@@ -132,10 +132,27 @@ extension TimeframeActivityState {
 
 struct ColoredActivityTextView: View {
     let state: TimeframeActivityState
+
+#if os(watchOS)
+    @Environment(\.widgetRenderingMode) var widgetRenderingMode
+#endif
+
     var body: some View {
         HStack {
             Text(state.activityText)
-                .shadow(color: .black, radius: 1.0, x: 0.0, y: 1.0)
-        }.padding(.horizontal, 4.0).background(state.color).cornerRadius(5.0)
+                #if os(watchOS)
+                .if(widgetRenderingMode != .accented, transform: { view in
+                    view
+                        .shadow(color: .black, radius: 1.0, x: 0.0, y: 1.0)
+                })
+                #endif
+        }
+        .padding(.horizontal, 4.0)
+        #if os(watchOS)
+        .if(widgetRenderingMode != .accented, transform: { view in
+            view
+                .background(state.color).cornerRadius(5.0)
+        })
+        #endif
     }
 }

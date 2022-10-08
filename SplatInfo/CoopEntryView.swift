@@ -30,9 +30,9 @@ struct CoopEntryView : View {
             case .accessoryCircular:
                 if #available(iOSApplicationExtension 16.0, *) {
                     #if os(watchOS)
-                    CoopCircularWidgetView(event: event, displayStyle: .icon)
+                    CoopCircularWidgetView(event: event, date: date, displayStyle: .icon)
                     #else
-                    CoopCircularWidgetView(event: event, displayStyle: .weapons)
+                    CoopCircularWidgetView(event: event, date: date, displayStyle: .weapons)
                     #endif
                 }
             case .accessoryRectangular:
@@ -45,9 +45,11 @@ struct CoopEntryView : View {
                 }
             #if os(watchOS)
             case .accessoryCorner:
-                Image(event.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 50)
+                Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 50)
+                    .unredacted()
                     .widgetLabel {
                         ProgressView(timerInterval: event.timeframe.startDate...event.timeframe.endDate)
+                            .tint(event.color)
                     }
             #endif
             @unknown default:

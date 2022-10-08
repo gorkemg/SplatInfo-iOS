@@ -35,29 +35,30 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
     // MARK: -
 
     func placeholder(in context: Context) -> GameModeEntry {
-        return GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3_WatchTimelineProvider.exampleGameEvents), configuration: Splatoon3_WatchScheduleIntent())
+        print("Placeholder Context: \(context)")
+        return GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3_WatchTimelineProvider.exampleGameEvents), configuration: Splatoon3_WatchScheduleIntent(), isPreview: true)
     }
 
     func getSnapshot(for configuration: Splatoon3_WatchScheduleIntent, in context: Context, completion: @escaping (GameModeEntry) -> ()) {
         if context.isPreview {
             switch configuration.scheduleType {
             case .turfWar, .unknown:
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.regular.events), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.regular.events), configuration: configuration, isPreview: true)
                 completion(entry)
             case .anarchyOpen:
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.anarchyBattleOpen.events), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.anarchyBattleOpen.events), configuration: configuration, isPreview: true)
                 completion(entry)
             case .anarchySeries:
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.anarchyBattleSeries.events), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.anarchyBattleSeries.events), configuration: configuration, isPreview: true)
                 completion(entry)
             case .league:
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.league.events), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.league.events), configuration: configuration, isPreview: true)
                 completion(entry)
             case .x:
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.x.events), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.x.events), configuration: configuration, isPreview: true)
                 completion(entry)
             case .salmonRun:
-                let entry = GameModeEntry(date: Date(), events: .coopEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.coop.events, timeframes: Splatoon3_WatchTimelineProvider.exampleSchedule.coop.otherTimeframes), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .coopEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.coop.events, timeframes: Splatoon3_WatchTimelineProvider.exampleSchedule.coop.otherTimeframes), configuration: configuration, isPreview: true)
                 completion(entry)
             }
             return
@@ -85,7 +86,7 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
                     let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.x.events), configuration: configuration)
                     completion(entry)
                 case .salmonRun:
-                    downloadImages(urls: schedule.coop.allWeaponImageURLs()) {
+                    downloadImages(urls: schedule.coop.allWeaponImageURLs(), resizeSize: .resizeToWidth(64.0)) {
                         let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes), configuration: configuration)
                         completion(entry)
                     }
@@ -127,7 +128,7 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
                     let timeline = timelineForGameModeTimeline(timeline, for: configuration)
                     completion(timeline)
                 case .coop(let timeline):
-                    downloadImages(urls: schedule.coop.allWeaponImageURLs(), asJPEG: false, resizeSize: CGSize(width: 64.0, height: 64.0)) {
+                    downloadImages(urls: schedule.coop.allWeaponImageURLs(), asJPEG: false, resizeSize: .resizeToWidth(64.0)) {
                         let timeline = timelineForCoopTimeline(timeline, for: configuration)
                         completion(timeline)
                     }
@@ -155,11 +156,11 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
     
     // MARK: -
     
-    func downloadImages(urls: [URL], asJPEG: Bool = true, resizeSize: CGSize? = nil, completion: @escaping ()->Void) {
+    func downloadImages(urls: [URL], asJPEG: Bool = true, resizeSize: MultiImageLoader.ResizeOption? = nil, completion: @escaping ()->Void) {
         let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
         let multiImageLoader = MultiImageLoader(urls: urls, directory: destination)
         multiImageLoader.storeAsJPEG = asJPEG
-        multiImageLoader.resizeSize = resizeSize
+        multiImageLoader.resizeOption = resizeSize
         imageLoaderManager.imageLoaders.append(multiImageLoader)
         multiImageLoader.load {
             completion()
@@ -173,6 +174,7 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
         let date: Date
         let events: GameModeEvents
         let configuration: Splatoon3_WatchScheduleIntent
+        var isPreview: Bool = false
         
         enum GameModeEvents {
             case gameModeEvents(events: [GameModeEvent])
@@ -205,7 +207,7 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
             Group {
                 switch entry.events {
                 case .gameModeEvents(let events):
-                    GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
+                    GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date, isPreview: entry.isPreview).foregroundColor(.white).environmentObject(imageQuality)
                 case .coopEvents(let events, let timeframes):
                     CoopEntryView(events: events, eventTimeframes: timeframes, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
                 }
@@ -257,7 +259,7 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
 
     static var exampleSchedule: Splatoon2.Schedule {
         // if available, use cached schedule
-        guard let cache = ScheduleFetcher.loadCachedSplatoon2Schedule() else { return Splatoon2.Schedule.empty }
+        guard let cache = ScheduleFetcher.loadCachedSplatoon2Schedule() else { return Splatoon2.Schedule.example }
         return cache.schedule
     }
     
@@ -270,23 +272,23 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
 
     // MARK: -
     func placeholder(in context: Context) -> GameModeEntry {
-        return GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2_WatchTimelineProvider.exampleGameEvents), configuration: Splatoon2_WatchScheduleIntent())
+        return GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2_WatchTimelineProvider.exampleGameEvents), configuration: Splatoon2_WatchScheduleIntent(), isPreview: true)
     }
 
     func getSnapshot(for configuration: Splatoon2_WatchScheduleIntent, in context: Context, completion: @escaping (GameModeEntry) -> ()) {
         if context.isPreview {
             switch configuration.scheduleType {
             case .regular, .unknown:
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2_WatchTimelineProvider.exampleSchedule.regular.events), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2_WatchTimelineProvider.exampleSchedule.regular.events), configuration: configuration, isPreview: true)
                 completion(entry)
             case .ranked:
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2_WatchTimelineProvider.exampleSchedule.ranked.events), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2_WatchTimelineProvider.exampleSchedule.ranked.events), configuration: configuration, isPreview: true)
                 completion(entry)
             case .league:
-                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2_WatchTimelineProvider.exampleSchedule.league.events), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2_WatchTimelineProvider.exampleSchedule.league.events), configuration: configuration, isPreview: true)
                 completion(entry)
             case .salmonRun:
-                let entry = GameModeEntry(date: Date(), events: .coopEvents(events: Splatoon2_WatchTimelineProvider.exampleSchedule.coop.events, timeframes: Splatoon2_WatchTimelineProvider.exampleSchedule.coop.otherTimeframes), configuration: configuration)
+                let entry = GameModeEntry(date: Date(), events: .coopEvents(events: Splatoon2_WatchTimelineProvider.exampleSchedule.coop.events, timeframes: Splatoon2_WatchTimelineProvider.exampleSchedule.coop.otherTimeframes), configuration: configuration, isPreview: true)
                 completion(entry)
                 break
             }
@@ -309,7 +311,7 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
                     let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.league.events), configuration: configuration)
                     completion(entry)
                 case .salmonRun:
-                    downloadImages(urls: schedule.coop.allWeaponImageURLs(), asJPEG: false, resizeSize: CGSize(width: 32.0, height: 32.0)) {
+                    downloadImages(urls: schedule.coop.allWeaponImageURLs(), asJPEG: false, resizeSize: .resizeToWidth(64.0)) {
                         let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes), configuration: configuration)
                         completion(entry)
                     }
@@ -352,7 +354,7 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
                     let timeline = timelineForGameModeTimeline(timeline, for: configuration)
                     completion(timeline)
                 case .coop(let timeline):
-                    downloadImages(urls: schedule.coop.allWeaponImageURLs(), asJPEG: false, resizeSize: CGSize(width: 64, height: 64)) {
+                    downloadImages(urls: schedule.coop.allWeaponImageURLs(), asJPEG: false, resizeSize: .resizeToWidth(64.0)) {
                         let timeline = timelineForCoopTimeline(timeline, for: configuration)
                         completion(timeline)
                     }
@@ -378,11 +380,11 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
     
     // MARK: -
     
-    func downloadImages(urls: [URL], asJPEG: Bool = true, resizeSize: CGSize? = nil, completion: @escaping ()->Void) {
+    func downloadImages(urls: [URL], asJPEG: Bool = true, resizeSize: MultiImageLoader.ResizeOption? = nil, completion: @escaping ()->Void) {
         let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
         let multiImageLoader = MultiImageLoader(urls: urls, directory: destination)
         multiImageLoader.storeAsJPEG = asJPEG
-        multiImageLoader.resizeSize = resizeSize
+        multiImageLoader.resizeOption = resizeSize
         imageLoaderManager.imageLoaders.append(multiImageLoader)
         multiImageLoader.load {
             completion()
@@ -395,6 +397,7 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
         let date: Date
         let events: GameModeEvents
         let configuration: Splatoon2_WatchScheduleIntent
+        var isPreview: Bool = false
     }
 
     enum GameModeEvents {
@@ -431,12 +434,14 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
         
         var gameModeType : GameModeType {
             switch entry.configuration.scheduleType {
-            case .unknown, .salmonRun, .regular:
+            case .unknown, .regular:
                 return .splatoon2(type: .turfWar)
             case .ranked:
                 return .splatoon2(type: .ranked)
             case .league:
                 return .splatoon2(type: .league)
+            case .salmonRun:
+                return .splatoon2(type: .salmonRun)
             }
         }
 
@@ -445,7 +450,7 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
             Group {
                 switch entry.events {
                 case .gameModeEvents(let events):
-                    GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
+                    GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date, isPreview: entry.isPreview).foregroundColor(.white).environmentObject(imageQuality)
                 case .coopEvents(let events, let timeframes):
                     CoopEntryView(events: events, eventTimeframes: timeframes, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
 

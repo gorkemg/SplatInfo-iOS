@@ -28,11 +28,14 @@ struct IconCircularWidgetView: View {
 
             }, currentValueLabel: {
                 if let name = imageName {
-                    Image(name).resizable().aspectRatio(contentMode: .fit).frame(width: 30)
+                    Image(name).resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 30)
+                        .unredacted()
                 }
             })
             .progressViewStyle(.circular)
             .tint(progressTintColor)
-        }
+        }.widgetAccentable()
     }
 }
