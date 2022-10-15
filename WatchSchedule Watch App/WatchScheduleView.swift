@@ -14,16 +14,40 @@ struct WatchScheduleView: View {
     private let imageLoaderManager = ImageLoaderManager()
     private let screenWidth = WKInterfaceDevice.current().screenBounds.width * WKInterfaceDevice.current().screenScale
     private let screenScale = WKInterfaceDevice.current().screenScale
+        
 
+    func updateSchedules() {
+        ScheduleFetcher.useSharedFolderForCaching = true
+
+        scheduleFetcher.updateSchedules {
+            downloadImages(urls: scheduleFetcher.splatoon2Schedule.allImageURLs(), asJPEG: true, resizeOption: .resizeToWidth(screenWidth)) {
+                print("Splatoon2 Images downloaded")
+                downloadImages(urls: scheduleFetcher.splatoon2Schedule.coop.allWeaponImageURLs(), asJPEG: false, resizeOption: .resizeToWidth(64.0)) {
+                    print("Weapons downloaded")
+                    WidgetCenter.shared.reloadTimelines(ofKind: kindWatchSplatoon2ScheduleWidgets)
+                    print("Splatoon 2 Update finished")
+                }
+            }
+            downloadImages(urls: scheduleFetcher.splatoon3Schedule.allImageURLs(), asJPEG: true, resizeOption: .resizeToWidth(screenWidth)) {
+                print("Splatoon 3 Images downloaded")
+                downloadImages(urls: scheduleFetcher.splatoon3Schedule.coop.allWeaponImageURLs(), asJPEG: false, resizeOption: .resizeToWidth(64.0)) {
+                    print("Weapons downloaded")
+                    WidgetCenter.shared.reloadTimelines(ofKind: kindWatchSplatoon3ScheduleWidgets)
+                    print("Splatoon 3 Update finished")
+                }
+            }
+        }
+    }
+    
     var body: some View {
         
         NavigationView {
             GeometryReader { geo in
                 VStack(alignment: .center, spacing: 4.0){
-                    NavigationLink(destination: Splatoon3TimelinesView(schedule: $scheduleFetcher.splatoon3Schedule)) {
+                    NavigationLink(destination: Splatoon3TimelinesView(schedule: $scheduleFetcher.splatoon3Schedule, date: Date())) {
                         Image("Splatoon3_number_icon").frame(height: geo.size.height/2)
                     }
-                    NavigationLink(destination: Splatoon2TimelinesView(schedule: $scheduleFetcher.splatoon2Schedule)) {
+                    NavigationLink(destination: Splatoon2TimelinesView(schedule: $scheduleFetcher.splatoon2Schedule, date: Date())) {
                         Image("Splatoon2_number_icon").frame(height: geo.size.height/2)
                     }
                 }
@@ -32,39 +56,7 @@ struct WatchScheduleView: View {
         .onAppear {
             print("Appeared")
             print("Device Screen size: \(WKInterfaceDevice.current().screenBounds) @ \(screenScale)")
-            ScheduleFetcher.useSharedFolderForCaching = true
-
-            scheduleFetcher.fetchSplatoon2Schedule { result in
-
-                switch result {
-                case .success(let success):
-                    downloadImages(urls: success.allImageURLs(), asJPEG: true, resizeOption: .resizeToWidth(screenWidth)) {
-                        print("Splatoon2 Images downloaded")
-                        downloadImages(urls: success.coop.allWeaponImageURLs(), asJPEG: false, resizeOption: .resizeToWidth(64.0)) {
-                            print("Weapons downloaded")
-                            WidgetCenter.shared.reloadTimelines(ofKind: kindWatchSplatoon2ScheduleWidgets)
-                        }
-                    }
-                    break
-                case .failure(let error):
-                    print("Error: \(error)")
-                }
-            }
-            scheduleFetcher.fetchSplatoon3Schedule { result in
-
-                switch result {
-                case .success(let success):
-                    downloadImages(urls: success.allImageURLs(), asJPEG: true, resizeOption: .resizeToWidth(screenWidth)) {
-                        print("Splatoon 3 Images downloaded")
-                        downloadImages(urls: success.coop.allWeaponImageURLs(), asJPEG: false, resizeOption: .resizeToWidth(64.0)) {
-                            print("Weapons downloaded")
-                            WidgetCenter.shared.reloadTimelines(ofKind: kindWatchSplatoon3ScheduleWidgets)
-                        }
-                    }
-                case .failure(let error):
-                    print("Error: \(error)")
-                }
-            }
+            updateSchedules()
         }
     }
     
@@ -80,10 +72,33 @@ struct WatchScheduleView: View {
     }
 }
 
+class TimelineUpdater: ObservableObject {
+
+    @State var id = UUID().uuidString
+    @Published var updatedDate: Date = Date()
+    private var timer: Timer? = nil
+    
+
+    func startTimer(timerFired: @escaping ()->Void) {
+        self.timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true, block: { timer in
+            print("Timer fired")
+            self.updatedDate = Date.now
+            self.id = UUID().uuidString
+            timerFired()
+        })
+    }
+    
+    func stopTimer() {
+        self.timer?.invalidate()
+        self.timer = nil
+    }
+}
 
 struct Splatoon3TimelinesView: View {
     
     @Binding var schedule: Splatoon3.Schedule
+    var date: Date
+
     @State private var selectedPage: Splatoon3.GameModeType = .turfWar
 
     var timelineTypes: [Splatoon3.TimelineType] {
@@ -103,7 +118,7 @@ struct Splatoon3TimelinesView: View {
                 ForEach(timelineTypes, id:\.self) { timelineType in
                     switch timelineType {
                     case .game(_, let timeline):
-                        GameSmallTimelineView(timeline: timeline).tag(timelineType.modeType)
+                        GameSmallTimelineView(timeline: timeline, date: date).tag(timelineType.modeType)
                     case .coop(let timeline):
                         CoopSmallTimelineView(timeline: timeline).tag(timelineType.modeType)
                     }
@@ -148,6 +163,15 @@ struct Splatoon3TimelinesView: View {
         }
         .environmentObject(imageQuality)
         .navigationTitle("Splatoon 3")
+//        .onAppear {
+//            self.timelineUpdater.startTimer(timerFired: {
+//                print("Timer fired View")
+//                id = UUID().uuidString
+//            })
+//        }
+//        .onDisappear {
+//            self.timelineUpdater.stopTimer()
+//        }
     }
     
     var imageQuality : ImageQuality = {
@@ -160,6 +184,7 @@ struct Splatoon3TimelinesView: View {
 struct Splatoon2TimelinesView: View {
     
     @Binding var schedule: Splatoon2.Schedule
+    var date: Date
     @State private var selectedPage: Splatoon2.GameModeType = .turfWar
 
     var modes: [Splatoon2.TimelineType] {
@@ -177,7 +202,7 @@ struct Splatoon2TimelinesView: View {
                 ForEach(modes, id:\.self) { mode in
                     switch mode {
                     case .game(_, let timeline):
-                        GameSmallTimelineView(timeline: timeline).tag(mode.modeType)
+                        GameSmallTimelineView(timeline: timeline, date: date).tag(mode.modeType)
                     case .coop(let timeline):
                         CoopSmallTimelineView(timeline: timeline).tag(mode.modeType)
                     }
@@ -187,6 +212,7 @@ struct Splatoon2TimelinesView: View {
             
             VStack(alignment: .center){
                 Spacer()
+                Text(date, style: .relative).splat2Font(size: 9)
                 HStack(alignment: .bottom, spacing: 1.0) {
                     ForEach(0..<modes.count, id: \.self) { index in
                         let mode = modes[index]
@@ -228,7 +254,7 @@ struct GameSmallTimelineView: View {
     let timeline: GameTimeline
     
     var nextEvent: GameModeEvent? = nil
-    let date: Date = Date()
+    let date: Date
 
     func nextEvent(for event: GameModeEvent) -> GameModeEvent? {
         if let index = timeline.events.firstIndex(of: event) {
@@ -297,9 +323,9 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         WatchScheduleView()
             .previewDisplayName("Start")
-        Splatoon2TimelinesView(schedule: $exampleSchedule2)
+        Splatoon2TimelinesView(schedule: $exampleSchedule2, date: Date())
             .previewDisplayName("Splatton 2")
-        Splatoon3TimelinesView(schedule: $exampleSchedule3)
+        Splatoon3TimelinesView(schedule: $exampleSchedule3, date: Date())
             .previewDisplayName("Splatoon 3")
     }
 }

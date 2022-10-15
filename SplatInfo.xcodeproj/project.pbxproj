@@ -100,6 +100,10 @@
 		DE501256253A1C2400A73F7A /* na-5060-rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501255253A1C2400A73F7A /* na-5060-rankings.json */; };
 		DE501257253A1C2400A73F7A /* na-5060-rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501255253A1C2400A73F7A /* na-5060-rankings.json */; };
 		DE501258253A1C2400A73F7A /* na-5060-rankings.json in Resources */ = {isa = PBXBuildFile; fileRef = DE501255253A1C2400A73F7A /* na-5060-rankings.json */; };
+		DE5A7EED28FAB06900D77610 /* ColoredActivityTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5A7EEC28FAB06900D77610 /* ColoredActivityTextView.swift */; };
+		DE5A7EEE28FAB06900D77610 /* ColoredActivityTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5A7EEC28FAB06900D77610 /* ColoredActivityTextView.swift */; };
+		DE5A7EEF28FAB06900D77610 /* ColoredActivityTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5A7EEC28FAB06900D77610 /* ColoredActivityTextView.swift */; };
+		DE5A7EF028FAB06900D77610 /* ColoredActivityTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE5A7EEC28FAB06900D77610 /* ColoredActivityTextView.swift */; };
 		DE68BEC928D8586700700A80 /* Splatoon2ScheduleWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BEC828D8586700700A80 /* Splatoon2ScheduleWidget.swift */; };
 		DE68BECB28D859B500700A80 /* Splatoon3ScheduleWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECA28D859B500700A80 /* Splatoon3ScheduleWidget.swift */; };
 		DE68BECD28D912CB00700A80 /* Splatoon2TimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECC28D912CB00700A80 /* Splatoon2TimelineProvider.swift */; };
@@ -351,6 +355,7 @@
 		DE501244253A1BE200A73F7A /* merchandise.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = merchandise.json; sourceTree = "<group>"; };
 		DE50124B253A1BFF00A73F7A /* festivals.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = festivals.json; sourceTree = "<group>"; };
 		DE501255253A1C2400A73F7A /* na-5060-rankings.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "na-5060-rankings.json"; sourceTree = "<group>"; };
+		DE5A7EEC28FAB06900D77610 /* ColoredActivityTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColoredActivityTextView.swift; sourceTree = "<group>"; };
 		DE68BEC828D8586700700A80 /* Splatoon2ScheduleWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splatoon2ScheduleWidget.swift; sourceTree = "<group>"; };
 		DE68BECA28D859B500700A80 /* Splatoon3ScheduleWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splatoon3ScheduleWidget.swift; sourceTree = "<group>"; };
 		DE68BECC28D912CB00700A80 /* Splatoon2TimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splatoon2TimelineProvider.swift; sourceTree = "<group>"; };
@@ -587,6 +592,7 @@
 				DE41B92125419C2B00AAD49A /* CoopEventView.swift */,
 				DE41B92625419C5600AAD49A /* TimelineCard.swift */,
 				DE41B93E2541A8F400AAD49A /* ScaledFont.swift */,
+				DE5A7EEC28FAB06900D77610 /* ColoredActivityTextView.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -1034,6 +1040,7 @@
 				DE01122E28E9AFD0001849CC /* FileManager+Extensions.swift in Sources */,
 				DEB230D428E9D0AF00B7FE8C /* SplatInfo+ProjectCommon.swift in Sources */,
 				DE01123028E9B143001849CC /* CoopEventView.swift in Sources */,
+				DE5A7EEF28FAB06900D77610 /* ColoredActivityTextView.swift in Sources */,
 				DE01123228E9B143001849CC /* ScaledFont.swift in Sources */,
 				DE01123628E9BBC3001849CC /* TimelineCard.swift in Sources */,
 			);
@@ -1073,6 +1080,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DEAFEA5E25431D0A00FFA812 /* Constants.swift in Sources */,
+				DE5A7EED28FAB06900D77610 /* ColoredActivityTextView.swift in Sources */,
 				DE50121B2539D22800A73F7A /* SplatoonKit.swift in Sources */,
 				DE41B91325419B8200AAD49A /* GameModeEventView.swift in Sources */,
 				DEE38191254E0300005D5062 /* SmallGameModeWidgetView.swift in Sources */,
@@ -1138,6 +1146,7 @@
 				DEC8A68628EC82030063D3BD /* GameModeRectangularWidgetView.swift in Sources */,
 				DE74F64428EB3CF5008B3C67 /* Splatoon2InkAPI.swift in Sources */,
 				DEC8A67928EC801B0063D3BD /* CoopEntryView.swift in Sources */,
+				DE5A7EF028FAB06900D77610 /* ColoredActivityTextView.swift in Sources */,
 				DE74F64F28EB3F46008B3C67 /* PillStageImage.swift in Sources */,
 				DE74F65628EB3F61008B3C67 /* ScheduleGrid.swift in Sources */,
 				DE74F64628EB3CF5008B3C67 /* SplatoonKit.swift in Sources */,
@@ -1201,6 +1210,7 @@
 				DEF7CEFD28E2E2E6009281E8 /* Splatoon3TimelineProvider.swift in Sources */,
 				DEC8A67728EC801B0063D3BD /* CoopEntryView.swift in Sources */,
 				DE0EF5B4258632380088BF45 /* MediumGameModeWidgetView.swift in Sources */,
+				DE5A7EEE28FAB06900D77610 /* ColoredActivityTextView.swift in Sources */,
 				DE72E3A72587B99100CA0BCD /* MediumCoopWidgetView.swift in Sources */,
 				DE9DFA6F254AF6A700267508 /* FileManager+Extensions.swift in Sources */,
 			);

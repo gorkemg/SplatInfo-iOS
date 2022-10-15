@@ -81,7 +81,7 @@ struct Splatoon2TimelineCard: View {
                 VStack(alignment: .center, spacing: 8.0) {
 
                     TitleView(title: mode.name, logoName: mode.logoName)
-                    GameModeTimelineView(mode: .splatoon2(type: mode), events: Array(timeline.upcomingEventsAfterDate(date: Date()).prefix(4)))
+                    GameModeTimelineView(mode: .splatoon2(type: mode), events: Array(timeline.events.prefix(4)))
                     Spacer()
                 }
                 .frame(minHeight: 450, maxHeight: .infinity, alignment: .top)
@@ -128,7 +128,7 @@ struct Splatoon3TimelineCard: View {
                 VStack(alignment: .center, spacing: 8.0) {
 
                     TitleView(title: mode.name, logoName: mode.logoName)
-                    GameModeTimelineView(mode: .splatoon3(type: mode), events: Array(timeline.upcomingEventsAfterDate(date: Date()).prefix(4)))
+                    GameModeTimelineView(mode: .splatoon3(type: mode), events: Array(timeline.events.prefix(4)))
                     Spacer()
                 }
                 .frame(minHeight: 450, maxHeight: .infinity, alignment: .top)

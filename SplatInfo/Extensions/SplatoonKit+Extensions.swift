@@ -132,13 +132,77 @@ extension Splatoon3.GameModeType {
             }
         }
     }
-
-
 }
+
+extension Splatoon3.Schedule: CustomDebugStringConvertible {
+
+    var debugDescription: String {
+        var text = "Regular: \(regular)"
+        text += "Anarchy Battle Open: \(anarchyBattleOpen)"
+        text += "Anarchy Battle Series: \(anarchyBattleSeries)"
+//        text += "League: \(league)"
+//        text += "X: \(x)"
+        text += "Coop: \(coop)"
+        return text
+    }
+}
+
+extension Splatoon2.Schedule: CustomDebugStringConvertible {
+
+    var debugDescription: String {
+        var text = "Regular: \(regular)"
+        text += "Ranked: \(ranked)"
+        text += "League: \(league)"
+        text += "Coop: \(coop)"
+        return text
+    }
+}
+
+extension GameTimeline: CustomDebugStringConvertible {
+    
+    var debugDescription: String {
+        var text = "Events: \(events.count)\n"
+        for event in events {
+            text += "\(event.mode) \(event.rule) \(event.timeframe)\n"
+        }
+        return text
+    }
+}
+
+extension CoopTimeline: CustomDebugStringConvertible {
+    
+    var debugDescription: String {
+        var text = "Events: \(events.count)\n"
+        for event in events {
+            text += "\(event.timeframe)\n"
+        }
+        return text
+    }
+}
+
+extension GameModeType: CustomDebugStringConvertible {
+    
+    var debugDescription: String {
+        switch self {
+        case .splatoon2(let type):
+            return type.name
+        case .splatoon3(let type):
+            return type.name
+        }
+    }
+}
+
 extension CoopEvent {
 
     var color : Color {
         return Color.coopModeColor
+    }
+}
+
+extension EventTimeframe: CustomDebugStringConvertible {
+    
+    var debugDescription: String {
+        return "\(startDate.formatted()) - \(endDate.formatted())"
     }
 }
 

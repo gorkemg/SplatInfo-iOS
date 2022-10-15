@@ -431,6 +431,17 @@ extension GameTimeline: UpcomingEvents {
     func upcomingEventsAfterDate(date: Date) -> [GameModeEvent] {
         return self.events.filter({ $0.timeframe.state(date: date) != .over })
     }
+    
+    func eventChangingDates() -> [Date] {
+        let now = Date()
+        let startDates = self.events.map({ $0.timeframe.startDate })
+        let endDates = self.events.map({ $0.timeframe.endDate })
+        var eventDates = (startDates+endDates).sorted()
+        if let firstDate = eventDates.first, now < firstDate {
+            eventDates.insert(now, at: 0)
+        }
+        return eventDates
+    }
 }
 
 extension CoopTimeline: UpcomingEvents {

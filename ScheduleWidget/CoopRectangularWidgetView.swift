@@ -26,28 +26,46 @@ struct CoopRectangularWidgetView: View {
                 AccessoryWidgetBackground()
             }
             
-            HStack(alignment: .center, spacing: 4.0) {
-                                
-                VStack(alignment: .leading, spacing: 2.0) {
+            VStack(alignment: .leading, spacing: 2.0) {
+                
+                HStack(alignment: .center){
                     
-                    HStack(alignment: .center){
-                        CoopLogo(event: event).frame(height: 16.0)
-                        Text(event.stage.name).scaledSplat2Font(size: 9.0).lineLimit(1)
+                    CoopLogo(event: event).frame(height: 30.0)
+                    
+                    ColoredActivityTextView(state: state)
+                        .scaledSplat2Font(size: 8.0)
+                        .padding(.vertical, 2.0)
+                        .padding(.horizontal, 4.0)
+                    
+                    VStack(alignment: .leading){
+                    
+                        Text(event.stage.name)
+                            .scaledSplat2Font(size: 14.0)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
+                            .minimumScaleFactor(0.5)
+
+                        RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                            .scaledSplat2Font(size: 12.0)
+                            .lineLimit(1)
+                            .multilineTextAlignment(.leading)
+                            .minimumScaleFactor(0.5)
+                        
                     }.foregroundColor(.primary)
 
-                    HStack(alignment: .center){
-                        ColoredActivityTextView(state: state).splat2Font(size: 8.0)
-                        RelativeTimeframeView(timeframe: event.timeframe, state: state)
-                            .scaledSplat2Font(size: 8.0)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.5)
-                    }.foregroundColor(.primary)
-                    
+                }.foregroundColor(.primary)
+
+                HStack(alignment: .center) {
                     WeaponsList(weapons: event.weaponDetails)
+                        .frame(maxHeight: 24)
+                    Spacer()
+                    // TODO: GEAR ICON
+//                    CoopLogo(event: event).frame(height: 24.0)
                 }
             }
-            .padding(.horizontal, 8.0)
+            .padding(.horizontal, 4.0)
             .padding(.vertical, 2.0)
+
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .clipShape(RoundedRectangle(cornerRadius: 8))

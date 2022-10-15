@@ -306,7 +306,8 @@ struct WeaponsList: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: spacing) {
-            ForEach(weapons, id: \.id) { weapon in
+            ForEach(weapons.indices, id: \.self) { index in
+                let weapon = weapons[index]
                 WeaponImage(weapon: weapon)
                     .shadow(color: .black, radius: 1.0, x: 0.0, y: 0.0)
             }
@@ -316,6 +317,7 @@ struct WeaponsList: View {
 
 struct WeaponImage: View {
     let weapon: WeaponDetails
+    let imageLoaderManager = ImageLoaderManager()
 
     var body: some View {
         if let image = weapon.image {

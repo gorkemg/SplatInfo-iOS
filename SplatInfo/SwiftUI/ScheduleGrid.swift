@@ -41,7 +41,7 @@ struct ScheduleGrid: View {
                         .padding(.horizontal, 12.0)
                         .background( selectedSchedules.contains(.splatoon3) ? .blue : .clear)
                         .cornerRadius(20)
-                        .splat2Font(size: 30)
+                        .splat1Font(size: 30)
 
                         Button {
                             print("Splatoon 2 pressed")
@@ -57,7 +57,7 @@ struct ScheduleGrid: View {
                         .padding(.horizontal, 12.0)
                         .background( selectedSchedules.contains(.splatoon2) ? .pink : .clear)
                         .cornerRadius(20)
-                        .splat2Font(size: 30)
+                        .splat1Font(size: 30)
                     }
                     
                     if selectedSchedules.contains(.splatoon3) {
@@ -146,7 +146,7 @@ struct GameModeTimelineView: View {
     }
 }
 
-struct CoopTimelineView_Previews: PreviewProvider {
+struct ScheduleGrid_Previews: PreviewProvider {
     
     @State static var exampleSchedule = Splatoon2.Schedule.example
     @State static var exampleSchedule3 = Splatoon3.Schedule.example
@@ -154,7 +154,6 @@ struct CoopTimelineView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             ScheduleGrid(splatoon2Schedule: $exampleSchedule, splatoon3Schedule: $exampleSchedule3)
-//            CoopTimelineView(coopTimeline: Splatoon2Schedule.example.coop)
                 .environmentObject(imageQuality)
         }
         .previewInterfaceOrientation(.landscapeRight)

@@ -7,5 +7,10 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.widgetkit-extension</string>
 	</dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Splatoon1.otf</string>
+		<string>Splatoon2.otf</string>
+	</array>
 </dict>
 </plist>

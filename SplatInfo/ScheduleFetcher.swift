@@ -17,6 +17,126 @@ extension GameTimeline: ImageURLs {
     }
 }
 
+extension Splatoon3.Schedule {
+    
+    func allGameTimelines() -> [GameTimeline] {
+        return [regular, anarchyBattleOpen, anarchyBattleSeries, league, x]
+    }
+    
+    func eventChangingDates() -> [Date] {
+        var eventChangingDates = allGameTimelines().flatMap({ $0.eventChangingDates() })
+        eventChangingDates.append(contentsOf: coop.eventChangingDates())
+        return eventChangingDates.unique().sorted()
+    }
+    
+    func nextChangingDate() -> Date? {
+        let allTimeframes = allGameTimelines().flatMap({ $0.events }).compactMap({ $0.timeframe }).sorted(by: { $0.startDate <= $1.startDate }).filter({ $0.startDate > Date.now }).unique()
+        guard let nextTimeframe = allTimeframes.first else { return nil }
+        return nextTimeframe.startDate
+    }
+    
+    func upcomingSchedule() -> Self {
+        guard let nextDate = nextChangingDate() else { return self }
+        return upcomingSchedule(after: nextDate)
+    }
+    
+    func upcomingSchedule(after date: Date) -> Self {
+        let updatedSchedule = Splatoon3.Schedule(regular: GameTimeline(events: regular.upcomingEventsAfterDate(date: date)),
+                                                 anarchyBattleOpen: GameTimeline(events: anarchyBattleOpen.upcomingEventsAfterDate(date: date)),
+                                                 anarchyBattleSeries: GameTimeline(events: anarchyBattleSeries.upcomingEventsAfterDate(date: date)),
+                                                 league: GameTimeline(events: league.upcomingEventsAfterDate(date: date)),
+                                                 x: GameTimeline(events: x.upcomingEventsAfterDate(date: date)),
+                                                 coop: CoopTimeline(game: .splatoon3, events: coop.events.upcomingEventsAfterDate(date: date), otherTimeframes: coop.otherTimeframes.upcomingTimeframesAfterDate(date: date)),
+                                                 splatfest: Splatfest(timeline: GameTimeline(events: splatfest.timeline.upcomingEventsAfterDate(date: date)), fest: splatfest.fest))
+        return updatedSchedule
+    }
+    
+    
+    var earliestFinalEndDate: Date? {
+        var array: [Date] = []
+        if let regularEventDate = regular.events.last?.timeframe.endDate {
+            array.append(regularEventDate)
+        }
+        if let anarchyBattleOpenDate = anarchyBattleOpen.events.last?.timeframe.endDate {
+            array.append(anarchyBattleOpenDate)
+        }
+        if let anarchyBattleSeriesDate = anarchyBattleSeries.events.last?.timeframe.endDate {
+            array.append(anarchyBattleSeriesDate)
+        }
+        if let leagueDate = league.events.last?.timeframe.endDate {
+            array.append(leagueDate)
+        }
+        if let xDate = x.events.last?.timeframe.endDate {
+            array.append(xDate)
+        }
+        if let salmonRunDate = coop.events.last?.timeframe.endDate {
+            array.append(salmonRunDate)
+        }
+        return array.sorted().first
+    }
+    
+    var isOutdated: Bool {
+        guard let earliestFinalEndDate else { return true }
+        return earliestFinalEndDate <= Date.now
+    }
+    
+}
+
+extension Splatoon2.Schedule {
+    
+    func allGameTimelines() -> [GameTimeline] {
+        return [regular, ranked, league]
+    }
+    
+    func eventChangingDates() -> [Date] {
+        var eventChangingDates = allGameTimelines().flatMap({ $0.eventChangingDates() })
+        eventChangingDates.append(contentsOf: coop.eventChangingDates())
+        return eventChangingDates.unique().sorted()
+    }
+
+    func nextChangingDate() -> Date? {
+        let allTimeframes = allGameTimelines().flatMap({ $0.events }).compactMap({ $0.timeframe }).sorted(by: { $0.startDate <= $1.startDate }).filter({ $0.startDate > Date.now }).unique()
+        guard let nextTimeframe = allTimeframes.first else { return nil }
+        return nextTimeframe.startDate
+    }
+    
+    func upcomingSchedule() -> Self {
+        guard let nextDate = nextChangingDate() else { return self }
+        return upcomingSchedule(after: nextDate)
+    }
+
+    func upcomingSchedule(after date: Date) -> Self {
+        let updatedSchedule = Splatoon2.Schedule(regular: GameTimeline(events: regular.upcomingEventsAfterDate(date: date)),
+                                                 ranked: GameTimeline(events: ranked.upcomingEventsAfterDate(date: date)),
+                                                 league: GameTimeline(events: league.upcomingEventsAfterDate(date: date)),
+                                                 coop: CoopTimeline(game: .splatoon3, events: coop.events.upcomingEventsAfterDate(date: date), otherTimeframes: coop.otherTimeframes.upcomingTimeframesAfterDate(date: date)))
+        return updatedSchedule
+    }
+    
+    var earliestFinalEndDate: Date? {
+        var array: [Date] = []
+        if let regularEventDate = regular.events.last?.timeframe.endDate {
+            array.append(regularEventDate)
+        }
+        if let rankedDate = ranked.events.last?.timeframe.endDate {
+            array.append(rankedDate)
+        }
+        if let leagueDate = league.events.last?.timeframe.endDate {
+            array.append(leagueDate)
+        }
+        if let salmonRunDate = coop.events.last?.timeframe.endDate {
+            array.append(salmonRunDate)
+        }
+        return array.sorted().first
+    }
+    
+    var isOutdated: Bool {
+        guard let earliestFinalEndDate else { return true }
+        return earliestFinalEndDate <= Date.now
+    }
+}
+
+
 extension Splatoon3.Schedule: ImageURLs {
     
     /// Returns all image urls for all stages
@@ -195,6 +315,11 @@ class ScheduleFetcher: ObservableObject {
     @Published var splatoon2Schedule : Splatoon2.Schedule = Splatoon2.Schedule.example
     @Published var splatoon3Schedule : Splatoon3.Schedule = Splatoon3.Schedule.example
 
+    var timer: Timer? = nil
+    
+    
+    // MARK: - Cache
+    
     private static func loadCachedData<T>(filename: String, resultType: T.Type) -> TimelineCache<T>? where T:Codable {
         let filePath = cacheFileURL(filename: filename)
         let fileManager = FileManager.default
@@ -394,6 +519,106 @@ class ScheduleFetcher: ObservableObject {
             completion(.success(schedule))
         }
 
+    }
+    
+    // MARK: - Update Schedules
+    enum UpdateScheduleType {
+        case onlySplatoon2
+        case onlySplatoon3
+        case all
+    }
+    
+    func updateSchedules(type: UpdateScheduleType = .all, completion: @escaping ()->Void) {
+        switch type {
+        case .all:
+            
+            guard splatoon3Schedule.isOutdated || splatoon2Schedule.isOutdated else {
+                self.splatoon3Schedule = self.splatoon3Schedule.upcomingSchedule(after: Date.now)
+                self.splatoon2Schedule = self.splatoon2Schedule.upcomingSchedule(after: Date.now)
+                return
+            }
+            
+            fetchSplatoon2Schedule { [weak self] _ in
+                guard let self = self else {
+                    completion()
+                    return
+                }
+                self.fetchSplatoon3Schedule { _ in
+                    completion()
+                    self.createTimerForScheduleChanges {
+                        print("Timer fired")
+                    }
+                }
+            }
+        case .onlySplatoon2:
+            guard splatoon2Schedule.isOutdated else {
+                self.splatoon2Schedule = self.splatoon2Schedule.upcomingSchedule(after: Date.now)
+                return
+            }
+            fetchSplatoon2Schedule { _ in
+                completion()
+                self.createTimerForScheduleChanges {
+                    print("Timer fired")
+                }
+            }
+        case .onlySplatoon3:
+            guard splatoon3Schedule.isOutdated else {
+                self.splatoon3Schedule = self.splatoon3Schedule.upcomingSchedule(after: Date.now)
+                return
+            }
+            fetchSplatoon3Schedule { _ in
+                completion()
+                self.createTimerForScheduleChanges {
+                    print("Timer fired")
+                }
+            }
+        }
+    }
+    
+    // MARK: - Timer
+    func testCreateTimerForScheduleChanges(fire: @escaping ()->Void) {
+        stopTimer()
+        let timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true, block: { [weak self] timer in
+            print("Timer fired")
+            guard let self = self else { return }
+            self.splatoon3Schedule = self.splatoon3Schedule.upcomingSchedule()
+            self.splatoon2Schedule = self.splatoon2Schedule.upcomingSchedule()
+        })
+        self.timer = timer
+    }
+
+    private func createTimerForScheduleChanges(fire: @escaping ()->Void) {
+        startTimer() { [weak self] in
+            guard let self = self else { return }
+            let nextDate = self.splatoon3Schedule.eventChangingDates().first(where: { $0 >= Date.now })
+            print("\(Date.now.formatted()) Timer fired: Next change \(nextDate?.formatted(.relative(presentation: .numeric, unitsStyle: .abbreviated)) ?? "")")
+            self.updateSchedules {
+                fire()
+            }
+        }
+    }
+
+    func startTimer(fire: @escaping ()->Void) {
+        stopTimer()
+        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { timer in
+            fire()
+        }
+        self.timer = timer
+    }
+    
+    func startTimer(at date: Date, fire: @escaping ()->Void) {
+        guard Date.now < date else { return }
+        stopTimer()
+        let timer = Timer(fire: date, interval: 1.0, repeats: false, block: { timer in
+            fire()
+        })
+        RunLoop.current.add(timer, forMode: .default)
+        self.timer = timer
+    }
+
+    func stopTimer() {
+        self.timer?.invalidate()
+        self.timer = nil
     }
 
 }
