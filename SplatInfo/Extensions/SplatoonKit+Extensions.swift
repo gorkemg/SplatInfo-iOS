@@ -250,3 +250,57 @@ extension Color {
     }
 }
 
+extension GameModeTimeline {
+    
+    var color: Color {
+        switch self.mode {
+        case .splatoon2(let type):
+            switch type {
+            case .turfWar:
+                return Color.regularModeColor
+            case .ranked:
+                return Color.rankedModeColor
+            case .league:
+                return Color.leagueModeColor
+            case .salmonRun:
+                return Color.coopModeColor
+            }
+        case .splatoon3(let type):
+            switch type {
+            case .splatfest:
+                return Color.regularModeColor
+            case .turfWar:
+                return Color.regularModeColor
+            case .anarchyBattleOpen:
+                return Color.rankedModeColor
+            case .anarchyBattleSeries:
+                return Color.rankedModeColor
+            case .league:
+                return Color.leagueModeColor
+            case .x:
+                return Color.rankedModeColor
+            case .salmonRun:
+                return Color.coopModeColor
+            }
+        }
+    }
+    
+    var bgImage: Image {
+        switch self.mode {
+        case .splatoon2(let type):
+            switch type {
+            case .turfWar, .ranked, .league:
+                return Image("splatoon-card-bg").resizable(resizingMode: .tile)
+            case .salmonRun:
+                return Image("bg-spots").resizable(resizingMode: .tile)
+            }
+        case .splatoon3(let type):
+            switch type {
+            case .splatfest, .turfWar, .anarchyBattleOpen, .anarchyBattleSeries, .league, .x:
+                return Image("splatoon-card-bg").resizable(resizingMode: .tile)
+            case .salmonRun:
+                return Image("bg-spots").resizable(resizingMode: .tile)
+            }
+        }
+    }
+}

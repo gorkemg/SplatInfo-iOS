@@ -312,8 +312,8 @@ class ScheduleFetcher: ObservableObject {
     static var defaultCacheDirectory: String = NSTemporaryDirectory()
     static var useSharedFolderForCaching: Bool = false
     
-    @Published var splatoon2Schedule : Splatoon2.Schedule = Splatoon2.Schedule.example
-    @Published var splatoon3Schedule : Splatoon3.Schedule = Splatoon3.Schedule.example
+    @Published var splatoon2Schedule : Splatoon2.Schedule = Splatoon2.Schedule.empty
+    @Published var splatoon3Schedule : Splatoon3.Schedule = Splatoon3.Schedule.empty
 
     var timer: Timer? = nil
     

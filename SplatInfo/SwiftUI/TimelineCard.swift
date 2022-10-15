@@ -7,65 +7,12 @@
 
 import SwiftUI
 
-extension GameModeTimeline {
-    
-    var color: Color {
-        switch self.mode {
-        case .splatoon2(let type):
-            switch type {
-            case .turfWar:
-                return Color.regularModeColor
-            case .ranked:
-                return Color.rankedModeColor
-            case .league:
-                return Color.leagueModeColor
-            case .salmonRun:
-                return Color.coopModeColor
-            }
-        case .splatoon3(let type):
-            switch type {
-            case .splatfest:
-                return Color.regularModeColor
-            case .turfWar:
-                return Color.regularModeColor
-            case .anarchyBattleOpen:
-                return Color.rankedModeColor
-            case .anarchyBattleSeries:
-                return Color.rankedModeColor
-            case .league:
-                return Color.leagueModeColor
-            case .x:
-                return Color.rankedModeColor
-            case .salmonRun:
-                return Color.coopModeColor
-            }
-        }
-    }
-    
-    var bgImage: Image {
-        switch self.mode {
-        case .splatoon2(let type):
-            switch type {
-            case .turfWar, .ranked, .league:
-                return Image("splatoon-card-bg").resizable(resizingMode: .tile)
-            case .salmonRun:
-                return Image("bg-spots").resizable(resizingMode: .tile)
-            }
-        case .splatoon3(let type):
-            switch type {
-            case .splatfest, .turfWar, .anarchyBattleOpen, .anarchyBattleSeries, .league, .x:
-                return Image("splatoon-card-bg").resizable(resizingMode: .tile)
-            case .salmonRun:
-                return Image("bg-spots").resizable(resizingMode: .tile)
-            }
-        }
-    }
-}
-
 struct Splatoon2TimelineCard: View {
     
     let timeline : Splatoon2.TimelineType
-
+    var numberOfEventsDisplayed: Int = 4
+    @State private var showingSheet = false
+    
     var body: some View {
 
         ZStack(alignment: .top) {
@@ -81,8 +28,25 @@ struct Splatoon2TimelineCard: View {
                 VStack(alignment: .center, spacing: 8.0) {
 
                     TitleView(title: mode.name, logoName: mode.logoName)
-                    GameModeTimelineView(mode: .splatoon2(type: mode), events: Array(timeline.events.prefix(4)))
+                    GameModeTimelineView(mode: .splatoon2(type: mode), events: Array(timeline.events.prefix(numberOfEventsDisplayed)))
                     Spacer()
+                    if timeline.events.count > numberOfEventsDisplayed {
+                        Button {
+                            showingSheet.toggle()
+                        } label: {
+                            Text("More Events")
+                        }
+                        .padding(.vertical, 4.0)
+                        .padding(.horizontal, 12.0)
+                        .background(.white.opacity(0.3))
+                        .cornerRadius(10)
+                        .splat1Font(size: 18)
+                        .sheet(isPresented: $showingSheet) {
+                            Splatoon2TimelineSheetView(timeline: self.timeline)
+                                .clearModalBackground()
+                        }
+                    }
+
                 }
                 .frame(minHeight: 450, maxHeight: .infinity, alignment: .top)
                 .padding()
@@ -98,6 +62,23 @@ struct Splatoon2TimelineCard: View {
                     TitleView(title: mode.name, logoName: mode.logoName)
                     CoopTimelineView(coopTimeline: timeline)
                     Spacer()
+                    
+                    if timeline.events.count > numberOfEventsDisplayed {
+                        Button {
+                            showingSheet.toggle()
+                        } label: {
+                            Text("More Events")
+                        }
+                        .padding(.vertical, 4.0)
+                        .padding(.horizontal, 12.0)
+                        .background(.white.opacity(0.3))
+                        .cornerRadius(10)
+                        .splat1Font(size: 18)
+                        .sheet(isPresented: $showingSheet) {
+                            Splatoon2TimelineSheetView(timeline: self.timeline)
+                                .clearModalBackground()
+                        }
+                    }
                 }
                 .frame(minHeight: 450, maxHeight: .infinity, alignment: .top)
                 .padding()
@@ -106,12 +87,26 @@ struct Splatoon2TimelineCard: View {
         }
         .clipShape(RoundedRectangle(cornerSize: CGSize(width: 30, height: 30)))
         .splat2Font(size: 12)
+    }
+}
+
+struct Splatoon2TimelineSheetView: View {
+    
+    let timeline : Splatoon2.TimelineType
+
+    var body: some View {
+        ScrollView(.vertical) {
+            Splatoon2TimelineCard(timeline: self.timeline, numberOfEventsDisplayed: self.timeline.events.count)
+                .frame(minHeight: CGFloat(self.timeline.events.count) * 80.0)
+        }
     }
 }
 
 struct Splatoon3TimelineCard: View {
 
     let timeline : Splatoon3.TimelineType
+    var numberOfEventsDisplayed: Int = 4
+    @State private var showingSheet = false
 
     var body: some View {
 
@@ -128,8 +123,28 @@ struct Splatoon3TimelineCard: View {
                 VStack(alignment: .center, spacing: 8.0) {
 
                     TitleView(title: mode.name, logoName: mode.logoName)
-                    GameModeTimelineView(mode: .splatoon3(type: mode), events: Array(timeline.events.prefix(4)))
+                    ScrollView(.vertical) {
+                        GameModeTimelineView(mode: .splatoon3(type: mode), events: Array(timeline.events.prefix(numberOfEventsDisplayed)))
+                            .frame(minHeight: CGFloat(numberOfEventsDisplayed) * 80.0, alignment: .center)
+                            .padding(4.0)
+                    }
                     Spacer()
+                    if timeline.events.count > numberOfEventsDisplayed {
+                        Button {
+                            showingSheet.toggle()
+                        } label: {
+                            Text("More Events")
+                        }
+                        .padding(.vertical, 4.0)
+                        .padding(.horizontal, 12.0)
+                        .background(.white.opacity(0.3))
+                        .cornerRadius(10)
+                        .splat1Font(size: 18)
+                        .sheet(isPresented: $showingSheet) {
+                            Splatoon3TimelineSheetView(timeline: self.timeline)
+                                .clearModalBackground()
+                        }
+                    }
                 }
                 .frame(minHeight: 450, maxHeight: .infinity, alignment: .top)
                 .padding()
@@ -143,8 +158,24 @@ struct Splatoon3TimelineCard: View {
                 VStack(alignment: .center, spacing: 8.0) {
 
                     TitleView(title: mode.name, logoName: mode.logoName)
-                    CoopTimelineView(coopTimeline: timeline)
+                    CoopTimelineView(coopTimeline: timeline, numberOfEventsDisplayed: numberOfEventsDisplayed)
                     Spacer()
+                    if timeline.events.count > numberOfEventsDisplayed {
+                        Button {
+                            showingSheet.toggle()
+                        } label: {
+                            Text("More Events")
+                        }
+                        .padding(.vertical, 4.0)
+                        .padding(.horizontal, 12.0)
+                        .background(.white.opacity(0.3))
+                        .cornerRadius(10)
+                        .splat1Font(size: 18)
+                        .sheet(isPresented: $showingSheet) {
+                            Splatoon3TimelineSheetView(timeline: self.timeline)
+                                .clearModalBackground()
+                        }
+                    }
                 }
                 .frame(minHeight: 450, maxHeight: .infinity, alignment: .top)
                 .padding()
@@ -153,6 +184,15 @@ struct Splatoon3TimelineCard: View {
         }
         .clipShape(RoundedRectangle(cornerSize: CGSize(width: 30, height: 30)))
         .splat2Font(size: 12)
+    }
+}
+
+struct Splatoon3TimelineSheetView: View {
+    
+    let timeline : Splatoon3.TimelineType
+
+    var body: some View {
+        Splatoon3TimelineCard(timeline: self.timeline, numberOfEventsDisplayed: self.timeline.events.count)
     }
 }
 

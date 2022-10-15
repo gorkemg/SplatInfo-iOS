@@ -106,12 +106,13 @@ struct ScheduleGrid: View {
 
 struct CoopTimelineView: View {
     let coopTimeline: CoopTimeline
-    
+    var numberOfEventsDisplayed: Int = 4
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16.0) {
             VStack(alignment: .leading, spacing: 16.0) {
                 if !coopTimeline.events.isEmpty {
-                    ForEach(0..<coopTimeline.events.prefix(4).count, id: \.self) { i in
+                    ForEach(coopTimeline.events.prefix(numberOfEventsDisplayed).indices, id: \.self) { i in
                         let event = coopTimeline.events[i]
                         let state = event.timeframe.state(date: Date())
                         let style: CoopEventView.Style = i == 0 ? .large : .sideBySide

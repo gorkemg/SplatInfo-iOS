@@ -325,6 +325,16 @@ struct Splatoon3: Codable {
         case game(mode: Splatoon3.GameModeType, timeline: GameTimeline)
         case coop(timeline: CoopTimeline)
         
+        var events: [Event] {
+            switch self {
+            case .game(_, let timeline):
+                return timeline.events
+            case .coop(let timeline):
+                return timeline.events
+            }
+        }
+        
+        
         var modeType: Splatoon3.GameModeType {
             switch self {
             case .game(let mode, _):
@@ -499,6 +509,16 @@ struct Splatoon2: Codable {
     enum TimelineType: Codable, Hashable, Equatable {
         case game(mode: Splatoon2.GameModeType, timeline: GameTimeline)
         case coop(timeline: CoopTimeline)
+        
+        var events: [Event] {
+            switch self {
+            case .game(_, let timeline):
+                return timeline.events
+            case .coop(let timeline):
+                return timeline.events
+            }
+        }
+        
         
         var modeType: Splatoon2.GameModeType {
             switch self {
