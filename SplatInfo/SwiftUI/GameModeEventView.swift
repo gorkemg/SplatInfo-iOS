@@ -60,7 +60,7 @@ struct GameModeEventView: View {
                                 .splat2Font(size: 12).lineLimit(1).minimumScaleFactor(0.5).multilineTextAlignment(.trailing)
                             if state != .active {
                                 ColoredActivityTextView(state: state)
-                                    .splat2Font(size: 12)
+                                    .scaledSplat2Font(size: 12)
                             }
                         }
                     }.padding(.horizontal, 6).padding(.vertical, 4.0)

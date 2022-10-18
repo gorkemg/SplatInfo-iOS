@@ -242,7 +242,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
 //            print("#########")
 //        }
         for gameEvent in eventTimelineResult.events {
-            let entry = GameModeEntry(date: gameEvent.date, events: .coopEvents(events: gameEvent.events, timeframes: []), configuration: configuration)
+            let entry = GameModeEntry(date: gameEvent.date, events: .coopEvents(events: gameEvent.events, timeframes: gameEvent.timeframes), configuration: configuration)
             entries.append(entry)
         }
 

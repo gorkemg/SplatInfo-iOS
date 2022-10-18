@@ -53,7 +53,7 @@ struct Previews_Splatoon2ScheduleWidget_Previews: PreviewProvider {
         Splatoon2TimelineProvider.ScheduleEntryView(entry: Splatoon2TimelineProvider.GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.ranked.events), configuration: Splatoon2_ScheduleIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
 
-        Splatoon2TimelineProvider.ScheduleEntryView(entry: Splatoon2TimelineProvider.GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: []), configuration: Splatoon2_ScheduleIntent()))
+        Splatoon2TimelineProvider.ScheduleEntryView(entry: Splatoon2TimelineProvider.GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes), configuration: Splatoon2_ScheduleIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
         #endif
     }

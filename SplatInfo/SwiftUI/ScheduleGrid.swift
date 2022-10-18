@@ -36,12 +36,14 @@ struct ScheduleGrid: View {
                             }
                         } label: {
                             Text("Splatoon 3")
+                                .splat1Font(size: 30)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
                         }
                         .padding(.vertical, 4.0)
                         .padding(.horizontal, 12.0)
                         .background( selectedSchedules.contains(.splatoon3) ? .blue : .clear)
                         .cornerRadius(20)
-                        .splat1Font(size: 30)
 
                         Button {
                             print("Splatoon 2 pressed")
@@ -52,12 +54,14 @@ struct ScheduleGrid: View {
                             }
                         } label: {
                             Text("Splatoon 2")
+                                .splat1Font(size: 30)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
                         }
                         .padding(.vertical, 4.0)
                         .padding(.horizontal, 12.0)
                         .background( selectedSchedules.contains(.splatoon2) ? .pink : .clear)
                         .cornerRadius(20)
-                        .splat1Font(size: 30)
                     }
                     
                     if selectedSchedules.contains(.splatoon3) {
@@ -116,8 +120,7 @@ struct CoopTimelineView: View {
                         let event = coopTimeline.events[i]
                         let state = event.timeframe.state(date: Date())
                         let style: CoopEventView.Style = i == 0 ? .large : .sideBySide
-                        let height: CGFloat? = nil //i == 0 ? 250.0 : nil
-                        CoopEventView(event: event, style: style, state: state, showTitle: false, height: height)
+                        CoopEventView(event: event, style: style, state: state, showTitle: false)
                     }
                 }
             }
@@ -157,8 +160,8 @@ struct ScheduleGrid_Previews: PreviewProvider {
             ScheduleGrid(splatoon2Schedule: $exampleSchedule, splatoon3Schedule: $exampleSchedule3)
                 .environmentObject(imageQuality)
         }
-        .previewInterfaceOrientation(.landscapeRight)
-        .previewDevice("iPad Air (5th generation)")
+        .previewInterfaceOrientation(.portrait)
+        .previewDevice("iPhone 14 Pro Max")
         .previewLayout(.device)
     }
     

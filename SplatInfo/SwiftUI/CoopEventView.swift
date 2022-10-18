@@ -33,7 +33,6 @@ struct CoopEventView: View {
     let style: Style
     let state: TimeframeActivityState
     var showTitle: Bool = true
-    var height: CGFloat? = nil
 
     enum Style {
         case large
@@ -45,13 +44,13 @@ struct CoopEventView: View {
     var body: some View {
         switch style {
         case .large:
-            CoopLargeEventView(event: event, state: state, showTitle: showTitle, height: height)
+            CoopLargeEventView(event: event, state: state, showTitle: showTitle)
         case .sideBySide:
-            CoopSideBySideEventView(event: event, state: state, showTitle: showTitle, height: height)
+            CoopSideBySideEventView(event: event, state: state, showTitle: showTitle)
         case .topBottom:
             CoopTopBottomEventView(event: event, state: state)
         case .narrow:
-            CoopNarrowEventView(event: event, state: state, showTitle: showTitle, height: height)
+            CoopNarrowEventView(event: event, state: state, showTitle: showTitle)
         }
     }
 }
@@ -60,14 +59,13 @@ struct CoopLargeEventView : View {
     let event: CoopEvent
     let state: TimeframeActivityState
     var showTitle: Bool = true
-    var height: CGFloat? = nil
     @EnvironmentObject var imageQuality: ImageQuality
 
     var body: some View {
         GeometryReader { geo in
             ZStack {
 
-                PillStageImage(stage: event.stage, height: height ?? geo.size.height)
+                PillStageImage(stage: event.stage)
 
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
@@ -112,11 +110,13 @@ struct CoopLargeEventView : View {
 
                             if event.game == .splatoon2 {
                                 ColoredActivityTextView(state: state)
-                                    .splat2Font(size: 12)
+                                    .scaledSplat2Font(size: 12)
                             }
                         }
                         
                         ActivityTimeFrameView(timeframe: event.timeframe, state: state, fontSize: 12).lineLimit(1).minimumScaleFactor(0.5)
+                        
+                        Spacer(minLength: 15)
                     }
                 }
                 .padding(8.0)
@@ -177,7 +177,7 @@ struct CoopNarrowEventView : View {
                             
                             if state != .active {
                                 ColoredActivityTextView(state: state)
-                                    .splat2Font(size: 10)
+                                    .scaledSplat2Font(size: 10)
                             }
                         }
                         ActivityTimeFrameView(timeframe: event.timeframe, state: state)
@@ -202,18 +202,6 @@ struct CoopTopBottomEventView : View {
             Image("bg-spots").resizable(resizingMode: .tile)
 
             PillStageImage(stage: event.stage, namePosition: .hidden)
-
-//            GeometryReader { geometry in
-//                VStack(spacing: 0.0) {
-//                    if let image = event.stage.image {
-//                        Image(uiImage: image)
-//                            .resizable()
-//                            .aspectRatio(contentMode: .fill)
-//                            .frame(width: geometry.size.width, height: geometry.size.height)
-//                            .clipped()
-//                    }
-//                }.cornerRadius(10.0)
-//            }
                         
             VStack(alignment: .leading, spacing: 0.0) {
                 
@@ -272,7 +260,7 @@ struct CoopSideBySideEventView : View {
                         if showTitle {
                             CoopEventTitleView(event: event)
                         }
-                        ColoredActivityTextView(state: state).splat2Font(size: 10)
+                        ColoredActivityTextView(state: state).scaledSplat2Font(size: 10)
                     }
                     Spacer()
                     RelativeTimeframeView(timeframe: event.timeframe, state: state)

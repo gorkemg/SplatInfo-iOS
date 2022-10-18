@@ -31,7 +31,7 @@ extension GameTimeline {
         var entries: [GameTimelineEvent] = []
         for date in dates {
             let events = self.events.upcomingEventsAfterDate(date: date)
-            if events.count > 1 {
+            if !events.isEmpty {
                 let entry = GameTimelineEvent(date: date, events: events)
                 entries.append(entry)
             }
@@ -50,6 +50,7 @@ extension CoopTimeline {
     struct CoopTimelineEvent {
         let date: Date      // widget update date
         let events: [CoopEvent]
+        let timeframes: [EventTimeframe]
     }
     
     struct EventTimelineResult {
@@ -64,8 +65,9 @@ extension CoopTimeline {
         var entries: [CoopTimelineEvent] = []
         for date in dates {
             let events = self.events.upcomingEventsAfterDate(date: date)
-            if events.count > 1 {
-                let entry = CoopTimelineEvent(date: date, events: events)
+            let eventTimeframes = self.otherTimeframes.upcomingTimeframesAfterDate(date: date)
+            if !events.isEmpty {
+                let entry = CoopTimelineEvent(date: date, events: events, timeframes: eventTimeframes)
                 entries.append(entry)
             }
         }
