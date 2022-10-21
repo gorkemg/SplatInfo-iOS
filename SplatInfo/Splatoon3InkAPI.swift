@@ -23,12 +23,24 @@ class Splatoon3InkAPI {
         requestAPIAndParse(url: url, completion: completion)
     }
 
+    func requestCoop(completion: @escaping (_ response: CoopAPIResponse?, _ error: Error?)->Void) {
+        let urlString = "\(apiURL)/coop.json"
+        guard let url = URL(string: urlString) else { completion(nil, InvalidAPIRequestURLError()); return }
+        requestAPIAndParse(url: url, keyDecodingStrategy: .useDefaultKeys, completion: completion)
+    }
+
+    func requestFestivals(completion: @escaping (_ response: SchedulesAPIResponse?, _ error: Error?)->Void) {
+        let urlString = "\(apiURL)/festivals.json"
+        guard let url = URL(string: urlString) else { completion(nil, InvalidAPIRequestURLError()); return }
+        requestAPIAndParse(url: url, completion: completion)
+    }
+
     /// Convenience method
     /// Requests data from the API, parses it and returns the appropriate response
     /// - Parameters:
     ///   - url: endpoint to fetch data from
     ///   - completion: completion is called when the response is received
-    func requestAPIAndParse<T:Decodable>(url: URL, completion: @escaping (_ response: T?, _ error: Error?)->Void) {
+    func requestAPIAndParse<T:Decodable>(url: URL, keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .convertFromSnakeCase, completion: @escaping (_ response: T?, _ error: Error?)->Void) {
         requestAPI(url: url) { (response, data, error) in
 
             OperationQueue.main.addOperation {
@@ -43,7 +55,7 @@ class Splatoon3InkAPI {
                     return
                 }
 
-                guard let parsedResult : T = self.parseAPIResponse(data: data) else {
+                guard let parsedResult : T = self.parseAPIResponse(data: data, keyDecodingStrategy: keyDecodingStrategy) else {
                     completion(nil, InvalidAPIResponseError())
                     return
                 }
@@ -56,10 +68,10 @@ class Splatoon3InkAPI {
     /// - Parameters:
     ///   - data: data received from the API
     ///   - completion: completion is called when the response is received
-    func parseAPIResponse<T:Decodable>(data: Data) -> T? {
+    func parseAPIResponse<T:Decodable>(data: Data, keyDecodingStrategy: JSONDecoder.KeyDecodingStrategy = .convertFromSnakeCase) -> T? {
         let jsonDecoder = JSONDecoder()
         jsonDecoder.dateDecodingStrategy = .iso8601
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        jsonDecoder.keyDecodingStrategy = keyDecodingStrategy
         do {
             let apiResponse = try jsonDecoder.decode(T.self, from: data)
             return apiResponse
@@ -344,6 +356,32 @@ class Splatoon3InkAPI {
         let url: URL
     }
     
+    struct CoopAPIResponse: Codable {
+        let data: CoopData
+        
+        struct CoopData: Codable {
+            let coopResult: CoopResult
+            
+            struct CoopResult: Codable {
+                let monthlyGear: MonthlyGear
+                
+                struct MonthlyGear: Codable {
+                    let id: String
+                    let typeName: String
+                    let name: String
+                    let image: ImageURL
+                    
+                    enum CodingKeys: String, CodingKey {
+                        case id = "__splatoon3ink_id"
+                        case typeName = "__typename"
+                        case name
+                        case image
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 

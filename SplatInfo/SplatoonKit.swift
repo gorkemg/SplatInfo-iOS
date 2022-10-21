@@ -137,6 +137,7 @@ struct CoopTimeline: Codable, Hashable, Equatable {
     let game: Game
     var events: [CoopEvent]
     var otherTimeframes: [EventTimeframe]
+    var monthlyGear: CoopGear?
 }
 
 struct CoopEvent: Hashable, Identifiable, Event {
@@ -249,13 +250,13 @@ protocol LogoNameable: Codable {
 struct Splatoon3: Codable {
         
     struct Schedule: Codable {
-        let regular: GameTimeline
-        let anarchyBattleOpen: GameTimeline
-        let anarchyBattleSeries: GameTimeline
-        let league: GameTimeline
-        let x: GameTimeline
-        let coop: CoopTimeline
-        let splatfest: Splatfest
+        var regular: GameTimeline
+        var anarchyBattleOpen: GameTimeline
+        var anarchyBattleSeries: GameTimeline
+        var league: GameTimeline
+        var x: GameTimeline
+        var coop: CoopTimeline
+        var splatfest: Splatfest
 
         struct Splatfest: Codable {
             let timeline: GameTimeline
@@ -413,6 +414,13 @@ struct Splatoon3: Codable {
             }
         }
     }
+    
+//    struct CoopRewardGear: Codable {
+//        let id: String
+//        let type: GearKind
+//        let name: String
+//        let imageURL: URL
+//    }
 }
 
 // MARK: - Splatoon 2 specific
@@ -677,9 +685,29 @@ struct CoopRandomWeapon: Codable {
 
 // MARK: - Gear
 
+struct CoopGear: Codable, Hashable, Equatable {
+    let id: String
+    let type: GearKind
+    let name: String
+    let imageURL: URL
+}
+
 struct CoopRewardGear: Codable {
     let startDate: Date
     let gear: Gear
+    
+    var id: String {
+        return gear.id
+    }
+    var type: GearKind {
+        return gear.kind
+    }
+    var name: String {
+        return gear.name
+    }
+    var imageURL: URL {
+        return gear.imageUrl
+    }
 }
 
 struct SplatNetGear: Codable {
@@ -694,7 +722,7 @@ struct SplatNetGear: Codable {
 struct Gear: Codable {
     let id: String
     let name: String
-    let imageUrl: String
+    let imageUrl: URL
     let brand: GearBrand
     let rarity: Int
     let kind: GearKind

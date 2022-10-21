@@ -351,6 +351,11 @@ class ScheduleFetcher: ObservableObject {
         try? FileManager().copyItem(at: sourceURL, to: destinationURL)
     }
     
+    static func removeCacheData(filename: String) {
+        guard let url = cacheFileURL(filename: filename) else { return }
+        try? FileManager.default.removeItem(at: url)
+    }
+    
     
     // MARK: - Fetch
     private static let splat2CachedScheduleFilename = "splat2-schedules.json"
@@ -363,6 +368,10 @@ class ScheduleFetcher: ObservableObject {
             return nil
         }
         return cacheData
+    }
+    
+    static func clearSplatoon2Cache() {
+        removeCacheData(filename: splat2CachedScheduleFilename)
     }
     
     func fetchSplatoon2Schedule(completion: @escaping (Result<Splatoon2.Schedule, Error>) -> Void) {
@@ -475,8 +484,12 @@ class ScheduleFetcher: ObservableObject {
         return cacheData
     }
     
+    static func clearSplatoon3Cache() {
+        removeCacheData(filename: splat3CachedScheduleFilename)
+    }
+    
     func fetchSplatoon3Schedule(completion: @escaping (Result<Splatoon3.Schedule, Error>) -> Void) {
-        
+                
         // load cache
         if let cachedTimeline = timelineCache.splatoon3, !cachedTimeline.isOutdated {
 //            print("Splatoon3 using cached Timeline \(cachedTimeline.date) outdated:\(cachedTimeline.isOutdated)")
@@ -504,19 +517,26 @@ class ScheduleFetcher: ObservableObject {
                 return
             }
             
-            let schedule = Splatoon3.Schedule(regular: response.regularTimeline, anarchyBattleOpen: response.anarchyBattleOpenTimeline, anarchyBattleSeries: response.anarchyBattleSeriesTimeline, league: response.leageTimeline, x: response.xTimeline, coop: response.coopTimeline, splatfest: .init(timeline: response.splatfestTimeline, fest: response.splatfest))
-            let cacheData = TimelineCache(schedule: schedule, date: Date())
+            var schedule = Splatoon3.Schedule(regular: response.regularTimeline, anarchyBattleOpen: response.anarchyBattleOpenTimeline, anarchyBattleSeries: response.anarchyBattleSeriesTimeline, league: response.leageTimeline, x: response.xTimeline, coop: response.coopTimeline, splatfest: .init(timeline: response.splatfestTimeline, fest: response.splatfest))
 
-            // store in cache
-            self.timelineCache.splatoon3 = cacheData
+            self.splat3API.requestCoop { response, error in
+                
+                let reward = response?.coopRewardGear
+                schedule.coop.monthlyGear = reward
+                
+                let cacheData = TimelineCache(schedule: schedule, date: Date())
 
-            // store on disk
-            Self.cacheData(cacheData: cacheData, filename: ScheduleFetcher.splat3CachedScheduleFilename)
+                // store in cache
+                self.timelineCache.splatoon3 = cacheData
 
-            // save
-            self.splatoon3Schedule = schedule
+                // store on disk
+                Self.cacheData(cacheData: cacheData, filename: ScheduleFetcher.splat3CachedScheduleFilename)
 
-            completion(.success(schedule))
+                // save
+                self.splatoon3Schedule = schedule
+
+                completion(.success(schedule))
+            }
         }
 
     }
@@ -761,7 +781,30 @@ extension Splatoon3InkAPI.Weapon {
     var weapon: Weapon {
         return .weapon(details: WeaponDetails(id: UUID().uuidString, name: self.name, imageUrl: self.image.url))
     }
+}
+
+extension Splatoon3InkAPI.CoopAPIResponse {
     
+    var coopRewardGear: CoopGear {
+        let gearData = self.data.coopResult.monthlyGear
+        return .init(id: gearData.id, type: gearData.gearType, name: gearData.name, imageURL: gearData.image.url)
+    }
+}
+
+extension Splatoon3InkAPI.CoopAPIResponse.CoopData.CoopResult.MonthlyGear {
+    
+    var gearType: GearKind {
+        switch self.typeName {
+        case "HeadGear":
+            return .head
+        case "ShoesGear":
+            return .shoes
+        case "ClothesGear":
+            return .clothes
+        default:
+            return .head
+        }
+    }
 }
 
 extension Decodable where Self: EventDetails {
