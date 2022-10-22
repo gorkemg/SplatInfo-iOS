@@ -69,67 +69,69 @@ struct CoopLargeEventView : View {
 
                 PillStageImage(stage: event.stage)
 
-                HStack(alignment: .top, spacing: 0.0) {
-                    VStack(alignment: .leading) {
-                        HStack(alignment: .center) {
-                            if showTitle {
-                                CoopEventTitleView(event: event, gameLogoPosition: .trailing)
-                            }
+                VStack(alignment: .leading) {
+                    
+                    HStack(alignment: .top) {
+                        if showTitle {
+                            CoopEventTitleView(event: event, gameLogoPosition: .trailing)
+                        }else{
+                            Spacer()
                         }
-                        Spacer(minLength: 2.0)
-                        VStack(alignment: .leading) {
-                            HStack {
-                                WeaponsList(weapons: event.weaponDetails)
-                                    .frame(minHeight: 20, maxHeight: 40.0)
-                                    .padding(.vertical, 2.0)
-                                    .padding(.horizontal, 4.0)
-                                #if !os(watchOS)
-                                    .background(.ultraThinMaterial.opacity(0.9))
-                                #else
-                                    .background(Color.white.opacity(0.5))
-                                #endif
-                                    .cornerRadius(8.0)
-                                    .clipShape(ContainerRelativeShape())
-                                
-                                if let gear = gear {
-                                    GearImage(gear: gear)
-                                        .frame(minHeight: 20, maxHeight: 40.0)
-                                        .padding(.vertical, 2.0)
-                                        .padding(.horizontal, 4.0)
-                                    #if !os(watchOS)
-                                        .background(.ultraThinMaterial.opacity(0.9))
-                                    #else
-                                        .background(Color.white.opacity(0.5))
-                                    #endif
-                                        .cornerRadius(8.0)
-                                        .clipShape(ContainerRelativeShape())
+
+                        VStack(alignment: .trailing) {
+                            HStack(alignment: .center, spacing: 4.0) {
+
+                                RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                                    .splat2Font(size: 14)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.5)
+                                .multilineTextAlignment(.trailing)
+
+                                if event.game == .splatoon2 {
+                                    ColoredActivityTextView(state: state)
+                                        .scaledSplat2Font(size: 12)
                                 }
                             }
+                            
+                            ActivityTimeFrameView(timeframe: event.timeframe, state: state, fontSize: 12).lineLimit(1).minimumScaleFactor(0.5)
+                            
                         }
-
-                    }.background(.red)
-                                        
-                    VStack(alignment: .trailing) {
-                        HStack(alignment: .center, spacing: 4.0) {
-
-                            RelativeTimeframeView(timeframe: event.timeframe, state: state)
-                                .splat2Font(size: 14)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
-                            .multilineTextAlignment(.trailing)
-
-                            if event.game == .splatoon2 {
-                                ColoredActivityTextView(state: state)
-                                    .scaledSplat2Font(size: 12)
-                            }
+                    }
+                    
+                    Spacer()
+                    
+                    HStack(alignment: .bottom) {
+                        WeaponsList(weapons: event.weaponDetails)
+                            .frame(minHeight: 20, maxHeight: 40.0)
+                            .padding(.vertical, 2.0)
+                            .padding(.horizontal, 4.0)
+                        #if !os(watchOS)
+                            .background(.ultraThinMaterial.opacity(0.9))
+                        #else
+                            .background(Color.white.opacity(0.5))
+                        #endif
+                            .cornerRadius(8.0)
+                            .clipShape(ContainerRelativeShape())
+                        
+                        if let gear = gear {
+                            GearImage(gear: gear)
+                                .frame(minHeight: 20, maxHeight: 40.0)
+                                .padding(.vertical, 2.0)
+                                .padding(.horizontal, 4.0)
+                            #if !os(watchOS)
+                                .background(.ultraThinMaterial.opacity(0.9))
+                            #else
+                                .background(Color.white.opacity(0.5))
+                            #endif
+                                .cornerRadius(8.0)
+                                .clipShape(ContainerRelativeShape())
                         }
                         
-                        ActivityTimeFrameView(timeframe: event.timeframe, state: state, fontSize: 12).lineLimit(1).minimumScaleFactor(0.5)
-                        
-                        Spacer(minLength: 15)
-                    }.background(.blue)
+                        Spacer()
+                    }
                 }
-                .padding(8.0)
+                .padding(.horizontal, 4.0)
+                .padding(.vertical, 2.0)
             }
         }.frame(idealHeight: 200)
     }
