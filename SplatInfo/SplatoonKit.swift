@@ -137,7 +137,7 @@ struct CoopTimeline: Codable, Hashable, Equatable {
     let game: Game
     var events: [CoopEvent]
     var otherTimeframes: [EventTimeframe]
-    var monthlyGear: CoopGear?
+    var gear: CoopGear?
 }
 
 struct CoopEvent: Hashable, Identifiable, Event {

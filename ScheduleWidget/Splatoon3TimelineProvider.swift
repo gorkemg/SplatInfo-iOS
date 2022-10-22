@@ -65,7 +65,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
                     let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.x.events), configuration: configuration)
                     completion(entry)
                 case .salmonRun:
-                    let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes), configuration: configuration)
+                    let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes, gear: schedule.coop.gear), configuration: configuration)
                     completion(entry)
                 }
             case .failure(_):
@@ -106,17 +106,16 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
                     urls = schedule.coop.allImageURLs()
                     selectedTimeline = .coop(timeline: schedule.coop)
                 }
-                let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
-                let multiImageLoader = MultiImageLoader(urls: urls, directory: destination)
-                imageLoaderManager.imageLoaders.append(multiImageLoader)
-                multiImageLoader.load {
+                downloadImages(urls: urls, asJPEG: true) {
                     switch selectedTimeline {
                     case .game(let timeline):
                         let timeline = timelineForGameModeTimeline(timeline, for: configuration)
                         completion(timeline)
                     case .coop(let timeline):
-                        let timeline = timelineForCoopTimeline(timeline, for: configuration)
-                        completion(timeline)
+                        downloadImages(urls: schedule.coop.allWeaponImageURLs() + schedule.coop.allGearImageURLs(), asJPEG: false) {
+                            let timeline = timelineForCoopTimeline(timeline, for: configuration)
+                            completion(timeline)
+                        }
                     }
                 }
                 return
@@ -151,7 +150,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
         let now = Date()
         let eventTimelineResult = coopTimeline.eventTimeline(startDate: now, numberOfRemainingEventsBeforeUpdate: 2)
         for gameEvent in eventTimelineResult.events {
-            let entry = GameModeEntry(date: gameEvent.date, events: .coopEvents(events: gameEvent.events, timeframes: []), configuration: configuration)
+            let entry = GameModeEntry(date: gameEvent.date, events: .coopEvents(events: gameEvent.events, timeframes: [], gear: coopTimeline.gear), configuration: configuration)
             entries.append(entry)
         }
         let timeline = Timeline(entries: entries, policy: eventTimelineResult.updatePolicy)
@@ -167,7 +166,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
 
     enum GameModeEvents {
         case gameModeEvents(events: [GameModeEvent])
-        case coopEvents(events: [CoopEvent], timeframes: [EventTimeframe])
+        case coopEvents(events: [CoopEvent], timeframes: [EventTimeframe], gear: CoopGear?)
     }
 
 
@@ -196,8 +195,8 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
                 switch entry.events {
                 case .gameModeEvents(_):
                     GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
-                case .coopEvents(events: _, timeframes: let timeframes):
-                    CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
+                case .coopEvents(events: _, timeframes: let timeframes, let gear):
+                    CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date, gear: gear).foregroundColor(.white).environmentObject(imageQuality)
                 }
             }
         }
@@ -227,7 +226,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
 
         var coopEvents: [CoopEvent] {
             switch entry.events {
-            case .coopEvents(events: let events, timeframes: _):
+            case .coopEvents(let events, _, _):
                 if displayNext, events.count > 1 { return Array(events.suffix(from: 1)) }
                 return events
             default:
@@ -237,6 +236,19 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
         }
 
     }
+    
+    // MARK: -
+
+    func downloadImages(urls: [URL], asJPEG: Bool = true, completion: @escaping ()->Void) {
+        let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
+        let multiImageLoader = MultiImageLoader(urls: urls, directory: destination)
+        multiImageLoader.storeAsJPEG = asJPEG
+        imageLoaderManager.imageLoaders.append(multiImageLoader)
+        multiImageLoader.load {
+            completion()
+        }
+    }
+
 }
 
 extension Splatoon3_ScheduleIntent {

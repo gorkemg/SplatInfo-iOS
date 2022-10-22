@@ -11,6 +11,7 @@ struct MediumCoopWidgetView : View {
     let event: CoopEvent
     let nextEvent: CoopEvent?
     let date: Date
+    let gear: CoopGear?
 
     var state: TimeframeActivityState {
         return event.timeframe.state(date: date)
@@ -27,11 +28,11 @@ struct MediumCoopWidgetView : View {
 
             VStack(alignment: .leading, spacing: 8.0) {
 
-                CoopEventView(event: event, style: .narrow, state: state, showTitle: true)
+                CoopEventView(event: event, gear: gear, style: .narrow, state: state, showTitle: true)
 
                 if let nextEvent = nextEvent {
                     let state = nextEvent.timeframe.state(date: date)
-                    CoopEventView(event: nextEvent, style: .sideBySide, state: state, showTitle: false)
+                    CoopEventView(event: nextEvent, gear: gear, style: .sideBySide, state: state, showTitle: false)
                 }
                 
             }

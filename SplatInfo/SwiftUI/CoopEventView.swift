@@ -30,6 +30,7 @@ extension Date {
 
 struct CoopEventView: View {
     let event : CoopEvent
+    var gear: CoopGear?
     let style: Style
     let state: TimeframeActivityState
     var showTitle: Bool = true
@@ -44,19 +45,20 @@ struct CoopEventView: View {
     var body: some View {
         switch style {
         case .large:
-            CoopLargeEventView(event: event, state: state, showTitle: showTitle)
+            CoopLargeEventView(event: event, gear: gear, state: state, showTitle: showTitle)
         case .sideBySide:
-            CoopSideBySideEventView(event: event, state: state, showTitle: showTitle)
+            CoopSideBySideEventView(event: event, gear: gear, state: state, showTitle: showTitle)
         case .topBottom:
-            CoopTopBottomEventView(event: event, state: state)
+            CoopTopBottomEventView(event: event, gear: gear, state: state)
         case .narrow:
-            CoopNarrowEventView(event: event, state: state, showTitle: showTitle)
+            CoopNarrowEventView(event: event, gear: gear, state: state, showTitle: showTitle)
         }
     }
 }
 
 struct CoopLargeEventView : View {
     let event: CoopEvent
+    var gear: CoopGear?
     let state: TimeframeActivityState
     var showTitle: Bool = true
     @EnvironmentObject var imageQuality: ImageQuality
@@ -67,7 +69,7 @@ struct CoopLargeEventView : View {
 
                 PillStageImage(stage: event.stage)
 
-                HStack(alignment: .top) {
+                HStack(alignment: .top, spacing: 0.0) {
                     VStack(alignment: .leading) {
                         HStack(alignment: .center) {
                             if showTitle {
@@ -76,13 +78,9 @@ struct CoopLargeEventView : View {
                         }
                         Spacer(minLength: 2.0)
                         VStack(alignment: .leading) {
-                            VStack(alignment: .center, spacing: 0.0) {
-                                Text("Available Weapons")
-                                    .splat1Font(size: 12)
-                                    .lineLimit(2)
-                                    .minimumScaleFactor(0.5)
+                            HStack {
                                 WeaponsList(weapons: event.weaponDetails)
-                                    .frame(minHeight: 20, maxHeight: 30.0)
+                                    .frame(minHeight: 20, maxHeight: 40.0)
                                     .padding(.vertical, 2.0)
                                     .padding(.horizontal, 4.0)
                                 #if !os(watchOS)
@@ -92,13 +90,25 @@ struct CoopLargeEventView : View {
                                 #endif
                                     .cornerRadius(8.0)
                                     .clipShape(ContainerRelativeShape())
+                                
+                                if let gear = gear {
+                                    GearImage(gear: gear)
+                                        .frame(minHeight: 20, maxHeight: 40.0)
+                                        .padding(.vertical, 2.0)
+                                        .padding(.horizontal, 4.0)
+                                    #if !os(watchOS)
+                                        .background(.ultraThinMaterial.opacity(0.9))
+                                    #else
+                                        .background(Color.white.opacity(0.5))
+                                    #endif
+                                        .cornerRadius(8.0)
+                                        .clipShape(ContainerRelativeShape())
+                                }
                             }
                         }
 
-                    }
-                    
-                    Spacer()
-                    
+                    }.background(.red)
+                                        
                     VStack(alignment: .trailing) {
                         HStack(alignment: .center, spacing: 4.0) {
 
@@ -117,16 +127,17 @@ struct CoopLargeEventView : View {
                         ActivityTimeFrameView(timeframe: event.timeframe, state: state, fontSize: 12).lineLimit(1).minimumScaleFactor(0.5)
                         
                         Spacer(minLength: 15)
-                    }
+                    }.background(.blue)
                 }
                 .padding(8.0)
             }
-        }
+        }.frame(idealHeight: 200)
     }
 }
 
 struct CoopNarrowEventView : View {
     let event: CoopEvent
+    var gear: CoopGear?
     let state: TimeframeActivityState
     var showTitle: Bool = true
     var height: CGFloat? = nil
@@ -150,39 +161,75 @@ struct CoopNarrowEventView : View {
 
                         Spacer()
 
-                        WeaponsList(weapons: event.weaponDetails)
-                            .frame(minHeight: 12, maxHeight: 24, alignment: .leading)
-                            .padding(.vertical, 2.0)
-                            .padding(.horizontal, 4.0)
-                        #if !os(watchOS)
-                            .background(.ultraThinMaterial.opacity(0.9))
-                        #else
-                            .background(Color.white.opacity(0.5))
-                        #endif
-                            .cornerRadius(4.0)
-                            .clipShape(ContainerRelativeShape())
+                        HStack {
+                            WeaponsList(weapons: event.weaponDetails)
+                                .frame(minHeight: 12, maxHeight: 24, alignment: .leading)
+                                .padding(.vertical, 2.0)
+                                .padding(.horizontal, 4.0)
+                            #if !os(watchOS)
+                                .background(.ultraThinMaterial.opacity(0.9))
+                            #else
+                                .background(Color.white.opacity(0.5))
+                            #endif
+                                .cornerRadius(4.0)
+                                .clipShape(ContainerRelativeShape())
+                            
+                            if let gear = gear {
+                                GearImage(gear: gear)
+                                    .frame(minHeight: 12, maxHeight: 24.0)
+                                    .padding(.vertical, 2.0)
+                                    .padding(.horizontal, 4.0)
+                                #if !os(watchOS)
+                                    .background(.ultraThinMaterial.opacity(0.9))
+                                #else
+                                    .background(Color.white.opacity(0.5))
+                                #endif
+                                    .cornerRadius(4.0)
+                                    .clipShape(ContainerRelativeShape())
+                            }
+                        }
 
                     }
                     
                     Spacer()
-                    
-                    VStack(alignment: .trailing) {
+
+                    VStack(alignment: .trailing, spacing: 2.0) {
                         HStack(alignment: .center, spacing: 4.0) {
-                            
+
                             RelativeTimeframeView(timeframe: event.timeframe, state: state)
                                 .splat2Font(size: 14)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
-                                .multilineTextAlignment(.trailing)
-                            
-                            if state != .active {
+                            .multilineTextAlignment(.trailing)
+
+                            if event.game == .splatoon2 {
                                 ColoredActivityTextView(state: state)
-                                    .scaledSplat2Font(size: 10)
+                                    .scaledSplat2Font(size: 12)
                             }
                         }
-                        ActivityTimeFrameView(timeframe: event.timeframe, state: state)
-                            .lineLimit(1).minimumScaleFactor(0.5)
+                        
+                        ActivityTimeFrameView(timeframe: event.timeframe, state: state, fontSize: 12).lineLimit(1).minimumScaleFactor(0.5)
+                        
+                        Spacer(minLength: 24)
                     }
+
+//                    VStack(alignment: .trailing) {
+//                        HStack(alignment: .center, spacing: 4.0) {
+//
+//                            RelativeTimeframeView(timeframe: event.timeframe, state: state)
+//                                .splat2Font(size: 14)
+//                                .lineLimit(1)
+//                                .minimumScaleFactor(0.5)
+//                                .multilineTextAlignment(.trailing)
+//
+//                            if state != .active {
+//                                ColoredActivityTextView(state: state)
+//                                    .scaledSplat2Font(size: 10)
+//                            }
+//                        }
+//                        ActivityTimeFrameView(timeframe: event.timeframe, state: state)
+//                            .lineLimit(1).minimumScaleFactor(0.5)
+//                    }
                 }
                 .padding(.horizontal, 8.0).padding(.vertical, 4.0)
             }
@@ -192,6 +239,7 @@ struct CoopNarrowEventView : View {
 
 struct CoopTopBottomEventView : View {
     let event: CoopEvent
+    var gear: CoopGear?
     let state: TimeframeActivityState
     
     var body: some View {
@@ -207,7 +255,22 @@ struct CoopTopBottomEventView : View {
                 
                 VStack(alignment: .leading, spacing: 0.0) {
                     CoopEventTitleView(event: event, gameLogoPosition: .trailing)
-                    Text(event.stage.name).splat2Font(size: 10)
+                    HStack {
+                        Text(event.stage.name).splat2Font(size: 10)
+                        Spacer()
+                        if let gear = gear, gear.image != nil {
+                            GearImage(gear: gear)
+                                .shadow(color: .black, radius: 1.0, x: 0.0, y: 0.0)
+                                .frame(minHeight: 16, maxHeight: 24)
+                                .padding(.horizontal, 4.0)
+                            #if !os(watchOS)
+                                .background(.ultraThinMaterial.opacity(0.9))
+                            #else
+                                .background(Color.white.opacity(0.5))
+                            #endif
+                                .cornerRadius(8.0)
+                        }
+                    }
                 }
 
                 Spacer()
@@ -221,7 +284,7 @@ struct CoopTopBottomEventView : View {
                     }.splat2Font(size: 12)
                     
                     ActivityTimeFrameView(timeframe: event.timeframe, state: state).lineLimit(1).minimumScaleFactor(0.5)
-                    HStack(spacing: 4.0) {
+                    HStack(spacing: 2.0) {
                         Group {
                             WeaponsList(weapons: event.weaponDetails)
                                 .frame(maxHeight: 24.0)
@@ -233,8 +296,7 @@ struct CoopTopBottomEventView : View {
                             #endif
                                 .cornerRadius(8.0)
                         }
-                        
-                        Spacer()
+//                        Spacer()
                     }
                 }.lineSpacing(0)
             }.padding(.horizontal, 10.0).padding(.vertical, 4.0)
@@ -244,6 +306,7 @@ struct CoopTopBottomEventView : View {
 
 struct CoopSideBySideEventView : View {
     let event: CoopEvent
+    var gear: CoopGear?
     let state: TimeframeActivityState
     var showTitle: Bool = true
     var height: CGFloat? = nil
@@ -275,17 +338,31 @@ struct CoopSideBySideEventView : View {
             }
 
             VStack(alignment: .leading, spacing: 2.0) {
-                TimeframeView(timeframe: event.timeframe, datesStyle: .always, fontSize: 12)
+                TimeframeView(timeframe: event.timeframe, datesStyle: .always, fontSize: 10)
+                    .fixedSize(horizontal: false, vertical: true)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.6)
+                    .multilineTextAlignment(.leading)
+                    .minimumScaleFactor(0.4)
                 HStack(alignment: .center, spacing: 4.0) {
                     WeaponsList(weapons: event.weaponDetails, spacing: 4.0)
-                        .frame(minHeight: 16, maxHeight: 24, alignment: .leading)
+                        .frame(minHeight: 20, maxHeight: 24, alignment: .leading)
                     Spacer()
+                    if let gear = gear {
+                        GearImage(gear: gear)
+                            .frame(minHeight: 20, maxHeight: 30)
+                            .shadow(color: .black, radius: 1.0, x: 0.0, y: 0.0)
+                    }
                 }
             }
         }.frame(maxHeight: 60)
     }
+    
+    private var isiOS16: Bool {
+            guard #available(iOS 16, *) else {
+                return true
+            }
+            return false
+        }
 }
 
 struct WeaponsList: View {
@@ -322,6 +399,61 @@ struct WeaponImage: View {
                 #endif
             }
         }
+    }
+}
+
+struct GearImage: View {
+    let gear: CoopGear
+    let imageLoaderManager = ImageLoaderManager()
+
+    var body: some View {
+        if let image = gear.image {
+            Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+        }else{
+            AsyncImage(url: gear.imageURL) { image in
+                image.resizable()
+                    .aspectRatio(contentMode: .fit)
+            } placeholder: {
+                #if !os(watchOS)
+                ProgressView()
+                #endif
+            }
+        }
+    }
+}
+
+extension CoopGear {
+    
+    var image : UIImage? {
+        return assetImage ?? assetThumbImage ?? cachedImage() ?? cachedImage(directory: FileManager.default.appGroupContainerURL)
+    }
+
+    func cachedImage(directory: URL? = URL(fileURLWithPath: NSTemporaryDirectory())) -> UIImage? {
+        let fileManager = FileManager.default
+        if let dir = directory {
+            let url = self.imageURL
+            let fileURL = dir.appendingPathComponent(url.lastPathComponent)
+            if fileManager.fileExists(atPath: fileURL.path) {
+                return UIImage(contentsOfFile: fileURL.path)
+            }else{
+                // try JPEG
+                let jpegURL = fileURL.deletingPathExtension().appendingPathExtension("jpeg")
+                if fileManager.fileExists(atPath: jpegURL.path) {
+                    return UIImage(contentsOfFile: jpegURL.path)
+                }
+            }
+        }
+        return nil
+    }
+    
+    var assetImage: UIImage? {
+        return UIImage(named: "gear_\(id)")
+    }
+
+    var assetThumbImage: UIImage? {
+        return UIImage(named: "gear_thumb_\(id)")
     }
 }
 

@@ -13,6 +13,7 @@ struct CoopEntryView : View {
     let events: [CoopEvent]
     let eventTimeframes: [EventTimeframe]
     let date: Date
+    let gear: CoopGear?
 
     @Environment(\.widgetFamily) private var widgetFamily
 
@@ -20,13 +21,13 @@ struct CoopEntryView : View {
         if let event = event {
             switch widgetFamily {
             case .systemSmall:
-                SmallCoopWidgetView(event: event, state: event.timeframe.state(date: date))
+                SmallCoopWidgetView(event: event, gear: gear, state: event.timeframe.state(date: date))
             case .systemMedium:
-                MediumCoopWidgetView(event: event, nextEvent: nextEvent, date: date)
+                MediumCoopWidgetView(event: event, nextEvent: nextEvent, date: date, gear: gear)
             case .systemLarge:
-                LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date)
+                LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date, gear: gear)
             case .systemExtraLarge:
-                LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date)
+                LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date, gear: gear)
             case .accessoryCircular:
                 if #available(iOSApplicationExtension 16.0, *) {
                     #if os(watchOS)
@@ -37,7 +38,7 @@ struct CoopEntryView : View {
                 }
             case .accessoryRectangular:
                 if #available(iOSApplicationExtension 16.0, *) {
-                    CoopRectangularWidgetView(event: event, date: date)
+                    CoopRectangularWidgetView(event: event, date: date, gear: gear)
                 }
             case .accessoryInline:
                 if #available(iOSApplicationExtension 16.0, *) {
@@ -53,7 +54,7 @@ struct CoopEntryView : View {
                     }
             #endif
             @unknown default:
-                SmallCoopWidgetView(event: event, state: event.timeframe.state(date: date))
+                SmallCoopWidgetView(event: event, gear: gear, state: event.timeframe.state(date: date))
             }
         }else{
             Text("No event available")

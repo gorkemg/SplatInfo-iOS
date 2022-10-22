@@ -146,6 +146,18 @@ struct TemporaryImageCache: ImageCache {
 
 class MultiImageLoader {
     
+    static var tempFolder: URL {
+        return URL(fileURLWithPath: NSTemporaryDirectory())
+    }
+
+    static var appGroupFolder: URL? {
+        return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName)
+    }
+
+    static var defaultFolder: URL {
+        return appGroupFolder ?? tempFolder
+    }
+    
     let urls : [URL]
     @Published var finishedURLs : [URL] = []
     let directory: URL
@@ -164,6 +176,19 @@ class MultiImageLoader {
     init(urls: [URL], directory: URL) {
         self.urls = urls
         self.directory = directory
+    }
+    
+    static func clearCache() {
+        var files: [URL] = []
+        if let tempFiles = try? FileManager.default.contentsOfDirectory(at: tempFolder, includingPropertiesForKeys: nil) {
+            files.append(contentsOf: tempFiles)
+        }
+        if let folder = appGroupFolder, let appGroupFiles = try? FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil) {
+            files.append(contentsOf: appGroupFiles)
+        }
+        for file in files.filter({ ["jpg","png","jpeg"].contains($0.pathExtension) }) {
+            try? FileManager.default.removeItem(at: file)
+        }
     }
     
     func load(completion: @escaping ()->Void) {

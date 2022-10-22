@@ -19,7 +19,7 @@ struct SplatInfoApp: App {
         WindowGroup {
             ScheduleGrid(splatoon2Schedule: $scheduleFetcher.splatoon2Schedule, splatoon3Schedule: $scheduleFetcher.splatoon3Schedule)
                 .onAppear {
-                    
+                                        
                     scheduleFetcher.updateSchedules {
 
                         downloadImages(urls: scheduleFetcher.splatoon2Schedule.allImageURLs(), asJPEG: true) {

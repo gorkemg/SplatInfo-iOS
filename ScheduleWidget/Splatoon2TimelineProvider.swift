@@ -78,7 +78,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
                     completion(entry)
                     break
                 case .salmonRun:
-                    let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes), configuration: configuration)
+                    let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes, gear: schedule.coop.gear), configuration: configuration)
                     completion(entry)
                     break
                 }
@@ -125,7 +125,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
                         let timeline = timelineForGameModeTimeline(timeline, for: configuration)
                         completion(timeline)
                     case .coop(let timeline):
-                        downloadImages(urls: schedule.coop.allWeaponImageURLs(), asJPEG: false) {
+                        downloadImages(urls: schedule.coop.allWeaponImageURLs() + schedule.coop.allGearImageURLs(), asJPEG: false) {
                             let timeline = timelineForCoopTimeline(timeline, for: configuration)
                             completion(timeline)
                         }
@@ -176,7 +176,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
     func timelineForCoopTimeline(_ coopTimeline: CoopTimeline, for configuration: Splatoon2_ScheduleIntent) -> Timeline<GameModeEntry> {
         if configuration.isDisplayNext, let firstEvent = coopTimeline.events.first, let secondEvent = coopTimeline.events.second {
             // only show next event
-            let entry = GameModeEntry(date: Date(), events: .coopEvents(events: [secondEvent], timeframes: []), configuration: configuration)
+            let entry = GameModeEntry(date: Date(), events: .coopEvents(events: [secondEvent], timeframes: [], gear: coopTimeline.gear), configuration: configuration)
             let timeline = Timeline(entries: [entry], policy: .after(firstEvent.timeframe.endDate))
             return timeline
         }
@@ -242,7 +242,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
 //            print("#########")
 //        }
         for gameEvent in eventTimelineResult.events {
-            let entry = GameModeEntry(date: gameEvent.date, events: .coopEvents(events: gameEvent.events, timeframes: gameEvent.timeframes), configuration: configuration)
+            let entry = GameModeEntry(date: gameEvent.date, events: .coopEvents(events: gameEvent.events, timeframes: gameEvent.timeframes, gear: coopTimeline.gear), configuration: configuration)
             entries.append(entry)
         }
 
@@ -259,7 +259,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
 
     enum GameModeEvents {
         case gameModeEvents(events: [GameModeEvent])
-        case coopEvents(events: [CoopEvent], timeframes: [EventTimeframe])
+        case coopEvents(events: [CoopEvent], timeframes: [EventTimeframe], gear: CoopGear?)
     }
 
 
@@ -282,8 +282,8 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
                 switch entry.events {
                 case .gameModeEvents(_):
                     GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
-                case .coopEvents(events: _, timeframes: let timeframes):
-                    CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
+                case .coopEvents(events: _, timeframes: let timeframes, let gear):
+                    CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date, gear: gear).foregroundColor(.white).environmentObject(imageQuality)
                 }
             }
         }
@@ -313,7 +313,7 @@ struct Splatoon2TimelineProvider: IntentTimelineProvider {
 
         var coopEvents: [CoopEvent] {
             switch entry.events {
-            case .coopEvents(events: let events, timeframes: _):
+            case .coopEvents(let events, _, _):
                 if displayNext, events.count > 1 { return Array(events.suffix(from: 1)) }
                 return events
             default:

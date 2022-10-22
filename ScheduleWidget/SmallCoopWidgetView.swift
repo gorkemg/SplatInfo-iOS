@@ -9,9 +9,10 @@ import SwiftUI
 
 struct SmallCoopWidgetView : View {
     let event: CoopEvent
+    let gear: CoopGear?
     let state: TimeframeActivityState
 
     var body: some View {
-        CoopEventView(event: event, style: .topBottom, state: state)
+        CoopEventView(event: event, gear: gear, style: .topBottom, state: state)
     }
 }

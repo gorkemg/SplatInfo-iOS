@@ -46,7 +46,7 @@ extension Splatoon3.Schedule {
                                                  anarchyBattleSeries: GameTimeline(events: anarchyBattleSeries.upcomingEventsAfterDate(date: date)),
                                                  league: GameTimeline(events: league.upcomingEventsAfterDate(date: date)),
                                                  x: GameTimeline(events: x.upcomingEventsAfterDate(date: date)),
-                                                 coop: CoopTimeline(game: .splatoon3, events: coop.events.upcomingEventsAfterDate(date: date), otherTimeframes: coop.otherTimeframes.upcomingTimeframesAfterDate(date: date)),
+                                                 coop: CoopTimeline(game: .splatoon3, events: coop.events.upcomingEventsAfterDate(date: date), otherTimeframes: coop.otherTimeframes.upcomingTimeframesAfterDate(date: date), gear: coop.gear),
                                                  splatfest: Splatfest(timeline: GameTimeline(events: splatfest.timeline.upcomingEventsAfterDate(date: date)), fest: splatfest.fest))
         return updatedSchedule
     }
@@ -109,7 +109,7 @@ extension Splatoon2.Schedule {
         let updatedSchedule = Splatoon2.Schedule(regular: GameTimeline(events: regular.upcomingEventsAfterDate(date: date)),
                                                  ranked: GameTimeline(events: ranked.upcomingEventsAfterDate(date: date)),
                                                  league: GameTimeline(events: league.upcomingEventsAfterDate(date: date)),
-                                                 coop: CoopTimeline(game: .splatoon3, events: coop.events.upcomingEventsAfterDate(date: date), otherTimeframes: coop.otherTimeframes.upcomingTimeframesAfterDate(date: date)))
+                                                 coop: CoopTimeline(game: .splatoon3, events: coop.events.upcomingEventsAfterDate(date: date), otherTimeframes: coop.otherTimeframes.upcomingTimeframesAfterDate(date: date), gear: coop.gear))
         return updatedSchedule
     }
     
@@ -162,7 +162,11 @@ extension Splatoon3.Schedule: ImageURLs {
         guard let schedulesPath = Bundle.main.path(forResource: "splat3schedules", ofType: "json")  else { return Splatoon3.Schedule.empty }
         guard let schedulesData = try? Data(contentsOf: URL(fileURLWithPath: schedulesPath)) else { return Splatoon3.Schedule.empty }
         guard let scheduleResponse : Splatoon3InkAPI.SchedulesAPIResponse = Splatoon3InkAPI.shared().parseAPIResponse(data: schedulesData) else { return Splatoon3.Schedule.empty }
-        let schedule = scheduleResponse.schedule
+        var schedule = scheduleResponse.schedule
+        guard let coopPath = Bundle.main.path(forResource: "coop", ofType: "json")  else { return schedule }
+        guard let coopData = try? Data(contentsOf: URL(fileURLWithPath: coopPath)) else { return schedule }
+        guard let coopResponse : Splatoon3InkAPI.CoopAPIResponse = Splatoon3InkAPI.shared().parseAPIResponse(data: coopData, keyDecodingStrategy: .useDefaultKeys) else { return schedule }
+        schedule.coop.gear = coopResponse.coopRewardGear
         return schedule
     }
     
@@ -229,13 +233,18 @@ extension ScheduleEvents: ImageURLs {
     }
 }
 
-extension CoopTimeline: ImageURLs, WeaponImageURLs {
+extension CoopTimeline: ImageURLs, WeaponImageURLs, GearImageURLs {
     func allImageURLs() -> [URL] {
         return self.events.compactMap({ $0.allImageURLs() }).flatMap({ $0 }).unique()
     }
     
     func allWeaponImageURLs() -> [URL] {
         return self.events.compactMap({ $0.allWeaponImageURLs() }).flatMap({ $0 }).unique()
+    }
+    
+    func allGearImageURLs() -> [URL] {
+        guard let gear = gear else { return [] }
+        return [gear.imageURL]
     }
 }
 
@@ -272,6 +281,10 @@ protocol ImageURLs {
 
 protocol WeaponImageURLs {
     func allWeaponImageURLs() -> [URL]
+}
+
+protocol GearImageURLs {
+    func allGearImageURLs() -> [URL]
 }
 
 extension Encodable {
@@ -489,7 +502,8 @@ class ScheduleFetcher: ObservableObject {
     }
     
     func fetchSplatoon3Schedule(completion: @escaping (Result<Splatoon3.Schedule, Error>) -> Void) {
-                
+        
+        
         // load cache
         if let cachedTimeline = timelineCache.splatoon3, !cachedTimeline.isOutdated {
 //            print("Splatoon3 using cached Timeline \(cachedTimeline.date) outdated:\(cachedTimeline.isOutdated)")
@@ -518,26 +532,32 @@ class ScheduleFetcher: ObservableObject {
             }
             
             var schedule = Splatoon3.Schedule(regular: response.regularTimeline, anarchyBattleOpen: response.anarchyBattleOpenTimeline, anarchyBattleSeries: response.anarchyBattleSeriesTimeline, league: response.leageTimeline, x: response.xTimeline, coop: response.coopTimeline, splatfest: .init(timeline: response.splatfestTimeline, fest: response.splatfest))
+            
+//            self.saveSchedule(schedule)
 
             self.splat3API.requestCoop { response, error in
                 
                 let reward = response?.coopRewardGear
-                schedule.coop.monthlyGear = reward
+                schedule.coop.gear = reward
                 
-                let cacheData = TimelineCache(schedule: schedule, date: Date())
-
-                // store in cache
-                self.timelineCache.splatoon3 = cacheData
-
-                // store on disk
-                Self.cacheData(cacheData: cacheData, filename: ScheduleFetcher.splat3CachedScheduleFilename)
-
-                // save
-                self.splatoon3Schedule = schedule
+                self.saveSchedule(schedule)
 
                 completion(.success(schedule))
             }
         }
+    }
+    
+    func saveSchedule(_ schedule: Splatoon3.Schedule) {
+        let cacheData = TimelineCache(schedule: schedule, date: Date())
+
+        // store in cache
+        self.timelineCache.splatoon3 = cacheData
+
+        // store on disk
+        Self.cacheData(cacheData: cacheData, filename: ScheduleFetcher.splat3CachedScheduleFilename)
+
+        // save
+        self.splatoon3Schedule = schedule
 
     }
     

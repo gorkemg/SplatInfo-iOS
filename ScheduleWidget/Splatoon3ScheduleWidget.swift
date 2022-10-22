@@ -55,7 +55,7 @@ struct Previews_Splatoon3ScheduleWidget_Previews: PreviewProvider {
         Splatoon3TimelineProvider.ScheduleEntryView(entry: Splatoon3TimelineProvider.GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.anarchyBattleSeries.events), configuration: Splatoon3_ScheduleIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
 
-        Splatoon3TimelineProvider.ScheduleEntryView(entry: Splatoon3TimelineProvider.GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: []), configuration: Splatoon3_ScheduleIntent()))
+        Splatoon3TimelineProvider.ScheduleEntryView(entry: Splatoon3TimelineProvider.GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: [], gear: schedule.coop.gear), configuration: Splatoon3_ScheduleIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
 #endif
     }

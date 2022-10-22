@@ -12,6 +12,7 @@ struct LargeCoopWidgetView : View {
     var maxVisibleEvents: Int = 4
     var eventTimeframes: [EventTimeframe]?
     let date: Date
+    let gear: CoopGear?
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -29,7 +30,7 @@ struct LargeCoopWidgetView : View {
                     ForEach(events.prefix(maxVisibleEvents).indices, id: \.self) { i in
                         let event = events[i]
                         let state = event.timeframe.state(date: date)
-                        CoopEventView(event: event, style: i == 0 ? .large : .sideBySide, state: state, showTitle: i == 0)
+                        CoopEventView(event: event, gear: gear, style: i == 0 ? .large : .sideBySide, state: state, showTitle: i == 0)
                     }
                     
                     VStack {

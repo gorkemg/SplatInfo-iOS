@@ -134,6 +134,10 @@
 		DE74F65528EB3F61008B3C67 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE41B91725419BC400AAD49A /* TitleView.swift */; };
 		DE787FB328EC35FA00661090 /* SplatInfo+WidgetsCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE787FB228EC35FA00661090 /* SplatInfo+WidgetsCommon.swift */; };
 		DE787FB428EC35FA00661090 /* SplatInfo+WidgetsCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE787FB228EC35FA00661090 /* SplatInfo+WidgetsCommon.swift */; };
+		DE8F194B2903222200BEAA8C /* coop.json in Resources */ = {isa = PBXBuildFile; fileRef = DE8F194A2903222200BEAA8C /* coop.json */; };
+		DE8F194C2903222200BEAA8C /* coop.json in Resources */ = {isa = PBXBuildFile; fileRef = DE8F194A2903222200BEAA8C /* coop.json */; };
+		DE8F194D2903222200BEAA8C /* coop.json in Resources */ = {isa = PBXBuildFile; fileRef = DE8F194A2903222200BEAA8C /* coop.json */; };
+		DE8F194E2903222200BEAA8C /* coop.json in Resources */ = {isa = PBXBuildFile; fileRef = DE8F194A2903222200BEAA8C /* coop.json */; };
 		DE9DFA6E254AF6A700267508 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */; };
 		DE9DFA6F254AF6A700267508 /* FileManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */; };
 		DEAE259C25541CDB00253E79 /* LargeGameModeWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEAE259A25541CDB00253E79 /* LargeGameModeWidgetView.swift */; };
@@ -363,6 +367,7 @@
 		DE74F63428EB36E1008B3C67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DE74F63628EB36E1008B3C67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DE787FB228EC35FA00661090 /* SplatInfo+WidgetsCommon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SplatInfo+WidgetsCommon.swift"; sourceTree = "<group>"; };
+		DE8F194A2903222200BEAA8C /* coop.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = coop.json; sourceTree = "<group>"; };
 		DE9DFA6D254AF6A700267508 /* FileManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Extensions.swift"; sourceTree = "<group>"; };
 		DEAE259A25541CDB00253E79 /* LargeGameModeWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeGameModeWidgetView.swift; sourceTree = "<group>"; };
 		DEAFEA032543121500FFA812 /* SplatInfoScheduleWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SplatInfoScheduleWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -676,6 +681,7 @@
 		DEE7C1B028D5F0850024D6A9 /* Splatoon3 */ = {
 			isa = PBXGroup;
 			children = (
+				DE8F194A2903222200BEAA8C /* coop.json */,
 				DEE7C1A828D5F0670024D6A9 /* gear.json */,
 				DEE7C1A628D5F0630024D6A9 /* splat3schedules.json */,
 				DE49D30228E17CD1000FAB3D /* schedules-20220924-210001.json */,
@@ -903,6 +909,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DEB230D628E9D0E900B7FE8C /* Splatoon2.otf in Resources */,
+				DE8F194D2903222200BEAA8C /* coop.json in Resources */,
 				DEB230D528E9D0E600B7FE8C /* Splatoon1.otf in Resources */,
 				DE01123A28E9CDF1001849CC /* gear.json in Resources */,
 				DE01123E28E9CDF1001849CC /* schedules-20220924-210001.json in Resources */,
@@ -939,6 +946,7 @@
 				DE501245253A1BE200A73F7A /* merchandise.json in Resources */,
 				DEE7C1A928D5F0670024D6A9 /* gear.json in Resources */,
 				DE49D30328E17CD1000FAB3D /* schedules-20220924-210001.json in Resources */,
+				DE8F194B2903222200BEAA8C /* coop.json in Resources */,
 				DE501237253A1BA300A73F7A /* coop-schedules.json in Resources */,
 				DE50124C253A1BFF00A73F7A /* festivals.json in Resources */,
 				DE2BD6012538489C006E5531 /* Preview Assets.xcassets in Resources */,
@@ -985,6 +993,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE74F64A28EB3CF5008B3C67 /* Splatoon1.otf in Resources */,
+				DE8F194E2903222200BEAA8C /* coop.json in Resources */,
 				DE74F64328EB3CF5008B3C67 /* Splatoon2.otf in Resources */,
 				DE74F63528EB36E1008B3C67 /* Assets.xcassets in Resources */,
 				DEC8A66D28EC7B060063D3BD /* coop-schedules.json in Resources */,
@@ -1003,6 +1012,7 @@
 				DEAFEA4425431BF400FFA812 /* Splatoon2.otf in Resources */,
 				DE49D30528E1CE3F000FAB3D /* schedules.json in Resources */,
 				DEAFEA0E2543121800FFA812 /* Assets.xcassets in Resources */,
+				DE8F194C2903222200BEAA8C /* coop.json in Resources */,
 				DEF7CF0028E306DF009281E8 /* schedules-20220925-160000.json in Resources */,
 				DEF7CEFF28E306DC009281E8 /* schedules-20220924-210001.json in Resources */,
 				DE49D30628E1CE3F000FAB3D /* coop-schedules.json in Resources */,

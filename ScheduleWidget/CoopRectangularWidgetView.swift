@@ -13,6 +13,7 @@ struct CoopRectangularWidgetView: View {
     
     let event: CoopEvent
     let date: Date
+    var gear: CoopGear?
     var isBackgroundBlurred: Bool = false
 
     var state: TimeframeActivityState {
@@ -59,8 +60,11 @@ struct CoopRectangularWidgetView: View {
                     WeaponsList(weapons: event.weaponDetails)
                         .frame(maxHeight: 24)
                     Spacer()
-                    // TODO: GEAR ICON
-//                    CoopLogo(event: event).frame(height: 24.0)
+                    if let gear = gear {
+                        GearImage(gear: gear)
+                            .frame(minHeight: 16, maxHeight: 24)
+                            .shadow(color: .black, radius: 1.0, x: 0.0, y: 0.0)
+                    }
                 }
             }
             .padding(.horizontal, 4.0)

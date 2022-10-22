@@ -58,7 +58,8 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
                 let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.x.events), configuration: configuration, isPreview: true)
                 completion(entry)
             case .salmonRun:
-                let entry = GameModeEntry(date: Date(), events: .coopEvents(events: Splatoon3_WatchTimelineProvider.exampleSchedule.coop.events, timeframes: Splatoon3_WatchTimelineProvider.exampleSchedule.coop.otherTimeframes), configuration: configuration, isPreview: true)
+                let schedule = Splatoon3_WatchTimelineProvider.exampleSchedule
+                let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes, gear: schedule.coop.gear), configuration: configuration, isPreview: true)
                 completion(entry)
             }
             return
@@ -87,7 +88,7 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
                     completion(entry)
                 case .salmonRun:
                     downloadImages(urls: schedule.coop.allWeaponImageURLs(), resizeSize: .resizeToWidth(32.0)) {
-                        let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes), configuration: configuration)
+                        let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes, gear: schedule.coop.gear), configuration: configuration)
                         completion(entry)
                     }
                 }
@@ -178,7 +179,7 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
         
         enum GameModeEvents {
             case gameModeEvents(events: [GameModeEvent])
-            case coopEvents(events: [CoopEvent], timeframes: [EventTimeframe])
+            case coopEvents(events: [CoopEvent], timeframes: [EventTimeframe], gear: CoopGear?)
         }
     }
     
@@ -208,8 +209,10 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
                 switch entry.events {
                 case .gameModeEvents(let events):
                     GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date, isPreview: entry.isPreview).foregroundColor(.white).environmentObject(imageQuality)
-                case .coopEvents(let events, let timeframes):
-                    CoopEntryView(events: events, eventTimeframes: timeframes, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
+                case .coopEvents(let events, let timeframes, let gear):
+                    CoopEntryView(events: events, eventTimeframes: timeframes, date: entry.date, gear: gear)
+                        .foregroundColor(.white)
+                        .environmentObject(imageQuality)
                 }
             }
         }
@@ -239,7 +242,7 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
         let now = Date()
         let eventTimelineResult = coopTimeline.eventTimeline(startDate: now, numberOfRemainingEventsBeforeUpdate: 2)
         for gameEvent in eventTimelineResult.events {
-            let entry = GameModeEntry(date: gameEvent.date, events: .coopEvents(events: gameEvent.events, timeframes: []), configuration: configuration)
+            let entry = GameModeEntry(date: gameEvent.date, events: .coopEvents(events: gameEvent.events, timeframes: [], gear: coopTimeline.gear), configuration: configuration)
             entries.append(entry)
         }
         let timeline = Timeline(entries: entries, policy: eventTimelineResult.updatePolicy)
@@ -288,7 +291,8 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
                 let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: Splatoon2_WatchTimelineProvider.exampleSchedule.league.events), configuration: configuration, isPreview: true)
                 completion(entry)
             case .salmonRun:
-                let entry = GameModeEntry(date: Date(), events: .coopEvents(events: Splatoon2_WatchTimelineProvider.exampleSchedule.coop.events, timeframes: Splatoon2_WatchTimelineProvider.exampleSchedule.coop.otherTimeframes), configuration: configuration, isPreview: true)
+                let coop = Splatoon2_WatchTimelineProvider.exampleSchedule.coop
+                let entry = GameModeEntry(date: Date(), events: .coopEvents(events: coop.events, timeframes: coop.otherTimeframes, gear: coop.gear), configuration: configuration, isPreview: true)
                 completion(entry)
                 break
             }
@@ -311,8 +315,9 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
                     let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.league.events), configuration: configuration)
                     completion(entry)
                 case .salmonRun:
-                    downloadImages(urls: schedule.coop.allWeaponImageURLs(), asJPEG: false, resizeSize: .resizeToWidth(64.0)) {
-                        let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes), configuration: configuration)
+                    let coop = schedule.coop
+                    downloadImages(urls: coop.allWeaponImageURLs(), asJPEG: false, resizeSize: .resizeToWidth(64.0)) {
+                        let entry = GameModeEntry(date: Date(), events: .coopEvents(events: coop.events, timeframes: coop.otherTimeframes, gear: coop.gear), configuration: configuration)
                         completion(entry)
                     }
                 }
@@ -402,7 +407,7 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
 
     enum GameModeEvents {
         case gameModeEvents(events: [GameModeEvent])
-        case coopEvents(events: [CoopEvent], timeframes: [EventTimeframe])
+        case coopEvents(events: [CoopEvent], timeframes: [EventTimeframe], gear: CoopGear?)
     }
     
     func timelineForGameModeTimeline(_ modeTimeline: GameTimeline, for configuration: Splatoon2_WatchScheduleIntent) -> Timeline<GameModeEntry> {
@@ -422,7 +427,7 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
         let now = Date()
         let eventTimelineResult = coopTimeline.eventTimeline(startDate: now, numberOfRemainingEventsBeforeUpdate: 2)
         for gameEvent in eventTimelineResult.events {
-            let entry = GameModeEntry(date: gameEvent.date, events: .coopEvents(events: gameEvent.events, timeframes: []), configuration: configuration)
+            let entry = GameModeEntry(date: gameEvent.date, events: .coopEvents(events: gameEvent.events, timeframes: [], gear: coopTimeline.gear), configuration: configuration)
             entries.append(entry)
         }
         let timeline = Timeline(entries: entries, policy: eventTimelineResult.updatePolicy)
@@ -451,8 +456,10 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
                 switch entry.events {
                 case .gameModeEvents(let events):
                     GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date, isPreview: entry.isPreview).foregroundColor(.white).environmentObject(imageQuality)
-                case .coopEvents(let events, let timeframes):
-                    CoopEntryView(events: events, eventTimeframes: timeframes, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
+                case .coopEvents(let events, let timeframes, _):
+                    CoopEntryView(events: events, eventTimeframes: timeframes, date: entry.date, gear: nil)
+                        .foregroundColor(.white)
+                        .environmentObject(imageQuality)
 
                 }
             }
@@ -507,7 +514,7 @@ struct WatchScheduleWidgets_Previews: PreviewProvider {
             .previewContext(WidgetPreviewContext(family: .accessoryRectangular))
             .previewDisplayName("2 - Ranked")
 
-        Splatoon2_WatchTimelineProvider.WatchScheduleWidgetsEntryView(entry: Splatoon2_WatchTimelineProvider.GameModeEntry(date: Date(), events: .coopEvents(events: splat2Schedule.coop.events, timeframes: splat2Schedule.coop.otherTimeframes), configuration: .salmonRunConfig))
+        Splatoon2_WatchTimelineProvider.WatchScheduleWidgetsEntryView(entry: Splatoon2_WatchTimelineProvider.GameModeEntry(date: Date(), events: .coopEvents(events: splat2Schedule.coop.events, timeframes: splat2Schedule.coop.otherTimeframes, gear: splat2Schedule.coop.gear), configuration: .salmonRunConfig))
             .previewContext(WidgetPreviewContext(family: .accessoryRectangular))
             .previewDisplayName("2 - Salmon Run")
 
@@ -515,7 +522,7 @@ struct WatchScheduleWidgets_Previews: PreviewProvider {
             .previewContext(WidgetPreviewContext(family: .accessoryRectangular))
             .previewDisplayName("3 - Anarchy Open")
 
-        Splatoon3_WatchTimelineProvider.WatchScheduleWidgetsEntryView(entry: Splatoon3_WatchTimelineProvider.GameModeEntry(date: Date(), events: .coopEvents(events: splat3Schedule.coop.events, timeframes: []), configuration: .salmonRunConfig))
+        Splatoon3_WatchTimelineProvider.WatchScheduleWidgetsEntryView(entry: Splatoon3_WatchTimelineProvider.GameModeEntry(date: Date(), events: .coopEvents(events: splat3Schedule.coop.events, timeframes: [], gear: splat3Schedule.coop.gear), configuration: .salmonRunConfig))
             .previewContext(WidgetPreviewContext(family: .accessoryRectangular))
             .previewDisplayName("3 - Salmon Run")
     }

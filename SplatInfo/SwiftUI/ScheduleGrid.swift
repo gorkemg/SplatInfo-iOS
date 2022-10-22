@@ -120,7 +120,7 @@ struct CoopTimelineView: View {
                         let event = coopTimeline.events[i]
                         let state = event.timeframe.state(date: Date())
                         let style: CoopEventView.Style = i == 0 ? .large : .sideBySide
-                        CoopEventView(event: event, style: style, state: state, showTitle: false)
+                        CoopEventView(event: event, gear: coopTimeline.gear, style: style, state: state, showTitle: false)
                     }
                 }
             }
