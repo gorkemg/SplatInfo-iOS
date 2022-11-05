@@ -39,14 +39,14 @@ struct SplatInfoApp: App {
 
                     }
                                         
-                }.environmentObject(imageQuality)
+                }.environmentObject(eventViewSettings)
         }
     }
     
     
-    var imageQuality : ImageQuality = {
-        let quality = ImageQuality()
-        quality.thumbnail = false
+    var eventViewSettings : EventViewSettings = {
+        let quality = EventViewSettings()
+        quality.settings.useThumbnailQuality = false
         return quality
     }()
     

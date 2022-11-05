@@ -14,6 +14,22 @@ struct LargeCoopWidgetView : View {
     let date: Date
     let gear: CoopGear?
 
+    @EnvironmentObject var eventViewSettings: EventViewSettings
+
+    var topSettings: EventViewSettings {
+        let settings = self.eventViewSettings.copy()
+        settings.settings.showTitle = true
+        settings.settings.showMonthlyGear = true
+        return settings
+    }
+
+    var bottomSettings: EventViewSettings {
+        let settings = self.eventViewSettings.copy()
+        settings.settings.showTitle = false
+        settings.settings.showMonthlyGear = false
+        return settings
+    }
+
     var body: some View {
         ZStack(alignment: .topLeading) {
 
@@ -30,7 +46,8 @@ struct LargeCoopWidgetView : View {
                     ForEach(events.prefix(maxVisibleEvents).indices, id: \.self) { i in
                         let event = events[i]
                         let state = event.timeframe.state(date: date)
-                        CoopEventView(event: event, gear: gear, style: i == 0 ? .large : .sideBySide, state: state, showTitle: i == 0)
+                        CoopEventView(event: event, gear: gear, style: i == 0 ? .large : .sideBySide, state: state)
+                            .environmentObject(i == 0 ? topSettings : bottomSettings)
                     }
                     
                     VStack {

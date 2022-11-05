@@ -187,6 +187,10 @@
 		DEC8A68928EC82030063D3BD /* CoopCircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0111BE28E86DDF001849CC /* CoopCircularWidgetView.swift */; };
 		DEC8A68A28EC82BC0063D3BD /* SmallCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */; };
 		DEC8A68B28EC82C50063D3BD /* MediumCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */; };
+		DEDD1935290563BC00FA2A97 /* EventViewSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEDD1934290563BC00FA2A97 /* EventViewSettings.swift */; };
+		DEDD1936290563BC00FA2A97 /* EventViewSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEDD1934290563BC00FA2A97 /* EventViewSettings.swift */; };
+		DEDD1937290563BC00FA2A97 /* EventViewSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEDD1934290563BC00FA2A97 /* EventViewSettings.swift */; };
+		DEDD1938290563BC00FA2A97 /* EventViewSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEDD1934290563BC00FA2A97 /* EventViewSettings.swift */; };
 		DEE3817F254E016E005D5062 /* SmallCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */; };
 		DEE38180254E016F005D5062 /* SmallCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */; };
 		DEE38186254E0226005D5062 /* SplatoonKit+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE38185254E0226005D5062 /* SplatoonKit+Extensions.swift */; };
@@ -382,6 +386,7 @@
 		DEB230D728E9D2C500B7FE8C /* WatchSchedule-Watch-App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "WatchSchedule-Watch-App-Info.plist"; sourceTree = SOURCE_ROOT; };
 		DEC8A66E28EC7F930063D3BD /* GameModeEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModeEntryView.swift; sourceTree = "<group>"; };
 		DEC8A67528EC801B0063D3BD /* CoopEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopEntryView.swift; sourceTree = "<group>"; };
+		DEDD1934290563BC00FA2A97 /* EventViewSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewSettings.swift; sourceTree = "<group>"; };
 		DEE3817E254E016E005D5062 /* SmallCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallCoopWidgetView.swift; sourceTree = "<group>"; };
 		DEE38185254E0226005D5062 /* SplatoonKit+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SplatoonKit+Extensions.swift"; sourceTree = "<group>"; };
 		DEE38190254E0300005D5062 /* SmallGameModeWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallGameModeWidgetView.swift; sourceTree = "<group>"; };
@@ -550,6 +555,7 @@
 				DE787FB228EC35FA00661090 /* SplatInfo+WidgetsCommon.swift */,
 				DEC8A66E28EC7F930063D3BD /* GameModeEntryView.swift */,
 				DEC8A67528EC801B0063D3BD /* CoopEntryView.swift */,
+				DEDD1934290563BC00FA2A97 /* EventViewSettings.swift */,
 			);
 			path = SplatInfo;
 			sourceTree = "<group>";
@@ -1042,6 +1048,7 @@
 				DE01123328E9B143001849CC /* TimeframeView.swift in Sources */,
 				DE74F63828EB36E1008B3C67 /* WatchScheduleWidgets.intentdefinition in Sources */,
 				DEC8A68A28EC82BC0063D3BD /* SmallCoopWidgetView.swift in Sources */,
+				DEDD1937290563BC00FA2A97 /* EventViewSettings.swift in Sources */,
 				DE01122528E9AFCA001849CC /* Splatoon3InkAPI.swift in Sources */,
 				DE01122E28E9AFD0001849CC /* FileManager+Extensions.swift in Sources */,
 				DEB230D428E9D0AF00B7FE8C /* SplatInfo+ProjectCommon.swift in Sources */,
@@ -1100,6 +1107,7 @@
 				DE2BD5FA25384899006E5531 /* SplatInfoApp.swift in Sources */,
 				DE41B93F2541A8F400AAD49A /* ScaledFont.swift in Sources */,
 				DEF7CF0428E434DD009281E8 /* SplatInfo+ProjectCommon.swift in Sources */,
+				DEDD1935290563BC00FA2A97 /* EventViewSettings.swift in Sources */,
 				DE50121425385E0D00A73F7A /* Splatoon2InkAPI.swift in Sources */,
 				DE41B92C25419C7D00AAD49A /* ScheduleGrid.swift in Sources */,
 				DEE3817F254E016E005D5062 /* SmallCoopWidgetView.swift in Sources */,
@@ -1158,6 +1166,7 @@
 				DE74F64528EB3CF5008B3C67 /* Constants.swift in Sources */,
 				DE74F63728EB36E1008B3C67 /* WatchScheduleWidgets.intentdefinition in Sources */,
 				DE74F64128EB3CA4008B3C67 /* SplatInfo+ProjectCommon.swift in Sources */,
+				DEDD1938290563BC00FA2A97 /* EventViewSettings.swift in Sources */,
 				DEC8A68728EC82030063D3BD /* IconCircularWidgetView.swift in Sources */,
 				DEC8A67228EC7F930063D3BD /* GameModeEntryView.swift in Sources */,
 				DEC8A68028EC82030063D3BD /* MediumGameModeWidgetView.swift in Sources */,
@@ -1192,6 +1201,7 @@
 				DE68BECD28D912CB00700A80 /* Splatoon2TimelineProvider.swift in Sources */,
 				DE49D2FE28DAF076000FAB3D /* GameModeInlineWidgetView.swift in Sources */,
 				DEAFEA5F25431D0A00FFA812 /* Constants.swift in Sources */,
+				DEDD1936290563BC00FA2A97 /* EventViewSettings.swift in Sources */,
 				DEE38187254E0226005D5062 /* SplatoonKit+Extensions.swift in Sources */,
 				DEAFEA5325431BFC00FFA812 /* ScaledFont.swift in Sources */,
 				DEE3AD0B28D9D26500A36D87 /* CoopRectangularWidgetView.swift in Sources */,

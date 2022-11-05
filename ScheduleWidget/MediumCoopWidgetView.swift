@@ -17,6 +17,22 @@ struct MediumCoopWidgetView : View {
         return event.timeframe.state(date: date)
     }
     
+    @EnvironmentObject var eventViewSettings: EventViewSettings
+
+    var topSettings: EventViewSettings {
+        let settings = self.eventViewSettings.copy()
+        settings.settings.showTitle = true
+        settings.settings.showMonthlyGear = true
+        return settings
+    }
+
+    var bottomSettings: EventViewSettings {
+        let settings = self.eventViewSettings.copy()
+        settings.settings.showTitle = false
+        settings.settings.showMonthlyGear = false
+        return settings
+    }
+
     var body: some View {
         ZStack(alignment: .center) {
 
@@ -28,11 +44,13 @@ struct MediumCoopWidgetView : View {
 
             VStack(alignment: .leading, spacing: 8.0) {
 
-                CoopEventView(event: event, gear: gear, style: .narrow, state: state, showTitle: true)
+                CoopEventView(event: event, gear: gear, style: .narrow, state: state)
+                    .environmentObject(topSettings)
 
                 if let nextEvent = nextEvent {
                     let state = nextEvent.timeframe.state(date: date)
-                    CoopEventView(event: nextEvent, gear: gear, style: .sideBySide, state: state, showTitle: false)
+                    CoopEventView(event: nextEvent, gear: gear, style: .sideBySide, state: state)
+                        .environmentObject(bottomSettings)
                 }
                 
             }

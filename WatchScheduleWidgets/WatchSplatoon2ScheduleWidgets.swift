@@ -208,18 +208,17 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
             Group {
                 switch entry.events {
                 case .gameModeEvents(let events):
-                    GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date, isPreview: entry.isPreview).foregroundColor(.white).environmentObject(imageQuality)
+                    GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date, isPreview: entry.isPreview, eventViewSettings: eventViewSettings).foregroundColor(.white)
                 case .coopEvents(let events, let timeframes, let gear):
-                    CoopEntryView(events: events, eventTimeframes: timeframes, date: entry.date, gear: gear)
+                    CoopEntryView(events: events, eventTimeframes: timeframes, date: entry.date, gear: gear, eventViewSettings: eventViewSettings)
                         .foregroundColor(.white)
-                        .environmentObject(imageQuality)
                 }
             }
         }
         
-        var imageQuality : ImageQuality = {
-            let quality = ImageQuality()
-            quality.thumbnail = true
+        var eventViewSettings : EventViewSettings = {
+            let quality = EventViewSettings()
+            quality.settings.useThumbnailQuality = true
             return quality
         }()
     }
@@ -455,19 +454,17 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
             Group {
                 switch entry.events {
                 case .gameModeEvents(let events):
-                    GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date, isPreview: entry.isPreview).foregroundColor(.white).environmentObject(imageQuality)
+                    GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date, isPreview: entry.isPreview, eventViewSettings: eventViewSettings).foregroundColor(.white)
                 case .coopEvents(let events, let timeframes, _):
-                    CoopEntryView(events: events, eventTimeframes: timeframes, date: entry.date, gear: nil)
+                    CoopEntryView(events: events, eventTimeframes: timeframes, date: entry.date, gear: nil, eventViewSettings: eventViewSettings)
                         .foregroundColor(.white)
-                        .environmentObject(imageQuality)
-
                 }
             }
         }
         
-        var imageQuality : ImageQuality = {
-            let quality = ImageQuality()
-            quality.thumbnail = true
+        var eventViewSettings : EventViewSettings = {
+            let quality = EventViewSettings()
+            quality.settings.useThumbnailQuality = true
             return quality
         }()
     }

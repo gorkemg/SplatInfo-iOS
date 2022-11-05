@@ -194,19 +194,28 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
             Group {
                 switch entry.events {
                 case .gameModeEvents(_):
-                    GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date).foregroundColor(.white).environmentObject(imageQuality)
+                    GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date, eventViewSettings: gameModeSettings)
+                        .foregroundColor(.white)
                 case .coopEvents(events: _, timeframes: let timeframes, let gear):
-                    CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date, gear: gear).foregroundColor(.white).environmentObject(imageQuality)
+                    CoopEntryView(events: coopEvents, eventTimeframes: timeframes, date: entry.date, gear: gear, eventViewSettings: coopSettings)
+                        .foregroundColor(.white)
                 }
             }
         }
         
-        var imageQuality : ImageQuality = {
-            let quality = ImageQuality()
-            quality.thumbnail = true
-            return quality
+        var gameModeSettings : EventViewSettings = {
+            let settings = EventViewSettings()
+            settings.settings.useThumbnailQuality = true
+            settings.settings.showModeName = false
+            return settings
         }()
-        
+
+        var coopSettings : EventViewSettings = {
+            let settings = EventViewSettings()
+            settings.settings.useThumbnailQuality = true
+            return settings
+        }()
+
         
         var displayNext: Bool {
             guard let displayNext = entry.configuration.displayNext else { return false }

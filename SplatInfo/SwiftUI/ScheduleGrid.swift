@@ -112,6 +112,23 @@ struct CoopTimelineView: View {
     let coopTimeline: CoopTimeline
     var numberOfEventsDisplayed: Int = 4
 
+    @EnvironmentObject var eventViewSettings: EventViewSettings
+
+    var largeEventViewSettings: EventViewSettings {
+        var regularSettings = eventViewSettings.settings
+        regularSettings.showMonthlyGear = true
+        regularSettings.showTitle = false
+        return EventViewSettings(settings: regularSettings)
+    }
+
+    var smallEventViewSettings: EventViewSettings {
+        var regularSettings = eventViewSettings.settings
+        regularSettings.showMonthlyGear = false
+        regularSettings.showTitle = false
+        return EventViewSettings(settings: regularSettings)
+    }
+
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16.0) {
             VStack(alignment: .leading, spacing: 16.0) {
@@ -120,7 +137,8 @@ struct CoopTimelineView: View {
                         let event = coopTimeline.events[i]
                         let state = event.timeframe.state(date: Date())
                         let style: CoopEventView.Style = i == 0 ? .large : .sideBySide
-                        CoopEventView(event: event, gear: coopTimeline.gear, style: style, state: state, showTitle: false)
+                        CoopEventView(event: event, gear: coopTimeline.gear, style: style, state: state)
+                            .environmentObject(i == 0 ? largeEventViewSettings : smallEventViewSettings)
                     }
                 }
             }
@@ -140,11 +158,26 @@ struct GameModeTimelineView: View {
     let mode: GameModeType
     let events : [GameModeEvent]
     
+    @EnvironmentObject var eventViewSettings: EventViewSettings
+
+    func topSettings(event: GameModeEvent) -> EventViewSettings {
+        let settings = self.eventViewSettings.copy()
+        settings.settings.showModeLogo = false
+        return settings
+    }
+
+    func bottomSettings(event: GameModeEvent) -> EventViewSettings {
+        let settings = self.eventViewSettings.copy()
+        settings.settings.showTitle = false
+        return settings
+    }
+
     var body: some View {
         if events.count > 0 {
             ForEach(0..<events.count, id: \.self) { i in
                 let event = events[i]
-                GameModeEventView(event: event, style: i == 0 ? .large : .threeColumns, date: Date(), isRuleLogoVisible: !event.mode.isTurfWar)
+                GameModeEventView(event: event, style: i == 0 ? .large : .threeColumns, date: Date())
+                    .environmentObject(i == 0 ? topSettings(event: event) : bottomSettings(event: event))
             }
         }
     }
@@ -158,16 +191,16 @@ struct ScheduleGrid_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             ScheduleGrid(splatoon2Schedule: $exampleSchedule, splatoon3Schedule: $exampleSchedule3)
-                .environmentObject(imageQuality)
+                .environmentObject(eventViewSettings)
         }
         .previewInterfaceOrientation(.portrait)
         .previewDevice("iPhone 14 Pro Max")
         .previewLayout(.device)
     }
     
-    static var imageQuality : ImageQuality {
-        let quality = ImageQuality()
-        quality.thumbnail = false
-        return quality
+    static var eventViewSettings : EventViewSettings {
+        let eventViewSettings = EventViewSettings()
+        eventViewSettings.settings.useThumbnailQuality = false
+        return eventViewSettings
     }
 }

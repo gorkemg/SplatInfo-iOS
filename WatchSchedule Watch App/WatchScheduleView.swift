@@ -161,22 +161,13 @@ struct Splatoon3TimelinesView: View {
             }
             .edgesIgnoringSafeArea(.all)
         }
-        .environmentObject(imageQuality)
+        .environmentObject(eventViewSettings)
         .navigationTitle("Splatoon 3")
-//        .onAppear {
-//            self.timelineUpdater.startTimer(timerFired: {
-//                print("Timer fired View")
-//                id = UUID().uuidString
-//            })
-//        }
-//        .onDisappear {
-//            self.timelineUpdater.stopTimer()
-//        }
     }
     
-    var imageQuality : ImageQuality = {
-        let quality = ImageQuality()
-        quality.thumbnail = true
+    var eventViewSettings : EventViewSettings = {
+        let quality = EventViewSettings()
+        quality.settings.useThumbnailQuality = true
         return quality
     }()
 }
@@ -238,13 +229,13 @@ struct Splatoon2TimelinesView: View {
             }
             .edgesIgnoringSafeArea(.all)
         }
-        .environmentObject(imageQuality)
+        .environmentObject(eventViewSettings)
         .navigationTitle("Splatoon 2")
     }
     
-    var imageQuality : ImageQuality = {
-        let quality = ImageQuality()
-        quality.thumbnail = true
+    var eventViewSettings : EventViewSettings = {
+        let quality = EventViewSettings()
+        quality.settings.useThumbnailQuality = true
         return quality
     }()
 }

@@ -14,11 +14,7 @@ struct GameModeEventView: View {
     let style: Style
     var date: Date
     
-    var isTitleVisible: Bool = true
-    var isModeLogoVisible: Bool = true
-    var isModeTypeVisible: Bool = true
-    var isRuleLogoVisible: Bool = true
-    var isRuleNameVisible: Bool = true
+    @EnvironmentObject var eventViewSettings: EventViewSettings
 
     enum Style {
         case large
@@ -49,8 +45,8 @@ struct GameModeEventView: View {
                     HStack(alignment: .top) {
                         HStack(alignment: .center, spacing: 2.0) {
 
-                            if isTitleVisible {
-                                GameModeEventTitleView(event: event, gameLogoPosition: .trailing, isTitleVisible: isTitleVisible, isModeLogoVisible: isModeLogoVisible, isModeTypeVisible: isModeTypeVisible, isRuleLogoVisible: isRuleLogoVisible, isRuleNameVisible: isRuleNameVisible)
+                            if eventViewSettings.settings.showTitle {
+                                GameModeEventTitleView(event: event)
                             }
                         }
                         Spacer()
@@ -74,7 +70,7 @@ struct GameModeEventView: View {
                         
                         VStack(alignment: .center, spacing: 0.5) {
                             HStack(alignment: .center, spacing: 2.0){
-                                if isRuleLogoVisible {
+                                if eventViewSettings.settings.showRuleLogo {
                                     Image(event.rule.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(width: 16).shadow(color: .black, radius: 1, x: 0, y: 1)
                                 }
                                 Text(event.rule.name).splat2Font(size: 16)
@@ -138,7 +134,7 @@ struct GameModeEventView: View {
                         VStack(alignment: .leading, spacing: 0.0) {
                             
                             VStack(alignment: .leading, spacing: 0.0) {
-                                GameModeEventTitleView(event: event, gameLogoPosition: .trailing, isRuleLogoVisible: !event.mode.isTurfWar)
+                                GameModeEventTitleView(event: event)
                             }
                             
                             Spacer()
@@ -182,18 +178,20 @@ extension GameModeEvent {
 
 struct GameModeEventTitleView: View {
     let event: GameModeEvent
-    var gameLogoPosition: GameLogoPosition = .hidden
+    //var gameLogoPosition: GameLogoPosition = .hidden
+
+    @EnvironmentObject var eventViewSettings: EventViewSettings
 
     enum Style {
         case oneLine
         case twoLines
     }
     
-    var isTitleVisible: Bool = true
-    var isModeLogoVisible: Bool = true
-    var isModeTypeVisible: Bool = true
-    var isRuleLogoVisible: Bool = true
-    var isRuleNameVisible: Bool = true
+//    var isTitleVisible: Bool = true
+//    var isModeLogoVisible: Bool = true
+//    var isModeTypeVisible: Bool = true
+//    var isRuleLogoVisible: Bool = true
+//    var isRuleNameVisible: Bool = true
 
     enum GameLogoPosition {
         case hidden
@@ -210,28 +208,28 @@ struct GameModeEventTitleView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0.0){
             HStack(alignment: .center, spacing: 4.0) {
-                if gameLogoPosition == .leading {
+                if eventViewSettings.settings.showGameLogoAt == .leading {
                     gameLogo
                 }
                 VStack(alignment: .center, spacing: 0.0){
-                    if isModeLogoVisible {
+                    if eventViewSettings.settings.showModeLogo {
                         modeLogoImage.resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
                     }
                 }
-                if isRuleLogoVisible {
+                if eventViewSettings.settings.showRuleLogo {
                     Image(event.rule.logoNameSmall).resizable().aspectRatio(contentMode: .fit).frame(width: 24).shadow(color: .black, radius: 1, x: 0, y: 1)
                 }
-                if isRuleNameVisible {
+                if eventViewSettings.settings.showRuleName {
                     Text(event.rule.name).splat2Font(size: 14)
                         .minimumScaleFactor(0.5)
                         .lineLimit(1)
                 }
-                if gameLogoPosition == .trailing {
+                if eventViewSettings.settings.showGameLogoAt == .trailing {
                     gameLogo
                 }
             }
             
-            if isModeTypeVisible, case .splatoon3(let type) = event.mode {
+            if eventViewSettings.settings.showModeType, case .splatoon3(let type) = event.mode {
                 switch type {
                 case .anarchyBattleOpen:
                     Splatoon3TagView(text: "Open")

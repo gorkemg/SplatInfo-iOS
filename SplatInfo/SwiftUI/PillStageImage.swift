@@ -19,14 +19,10 @@ extension Image {
     }
 }
 
-class ImageQuality: ObservableObject {
-    @Published var thumbnail: Bool = false
-}
-
 struct StageImage: View {
     let stage : Stage
     var namePosition: NamePosition = .bottom
-    @EnvironmentObject var imageQuality: ImageQuality
+    @EnvironmentObject var eventViewSettings: EventViewSettings
     
     enum NamePosition {
         case hidden
@@ -41,7 +37,7 @@ struct StageImage: View {
             ZStack(alignment: .bottomTrailing) {
 
 
-                if let image = (imageQuality.thumbnail ? stage.thumbImage : stage.image) {
+                if let image = (eventViewSettings.settings.useThumbnailQuality ? stage.thumbImage : stage.image) {
                     Image(uiImage: image).centerCropped()//.scaledToFill()
                         .frame(maxWidth: width, maxHeight: height, alignment: .center)
                 }else{
@@ -76,7 +72,7 @@ struct StageImage: View {
 struct PillStageImage: View {
     let stage : Stage
     var namePosition: StageImage.NamePosition = .bottom
-    @EnvironmentObject var imageQuality: ImageQuality
+    @EnvironmentObject var eventViewSettings: EventViewSettings
 
     var width: CGFloat?
     var height: CGFloat?

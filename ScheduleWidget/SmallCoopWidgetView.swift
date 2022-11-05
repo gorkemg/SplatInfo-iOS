@@ -12,7 +12,17 @@ struct SmallCoopWidgetView : View {
     let gear: CoopGear?
     let state: TimeframeActivityState
 
+    @EnvironmentObject var eventViewSettings: EventViewSettings
+
+    var settings: EventViewSettings {
+        let settings = self.eventViewSettings.copy()
+        settings.settings.showTitle = true
+        settings.settings.showGameLogoAt = .trailing
+        return settings
+    }
+
     var body: some View {
         CoopEventView(event: event, gear: gear, style: .topBottom, state: state)
+            .environmentObject(settings)
     }
 }

@@ -14,51 +14,54 @@ struct CoopEntryView : View {
     let eventTimeframes: [EventTimeframe]
     let date: Date
     let gear: CoopGear?
+    let eventViewSettings: EventViewSettings
 
     @Environment(\.widgetFamily) private var widgetFamily
 
     var body: some View {
-        if let event = event {
-            switch widgetFamily {
-            case .systemSmall:
-                SmallCoopWidgetView(event: event, gear: gear, state: event.timeframe.state(date: date))
-            case .systemMedium:
-                MediumCoopWidgetView(event: event, nextEvent: nextEvent, date: date, gear: gear)
-            case .systemLarge:
-                LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date, gear: gear)
-            case .systemExtraLarge:
-                LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date, gear: gear)
-            case .accessoryCircular:
-                if #available(iOSApplicationExtension 16.0, *) {
-                    #if os(watchOS)
-                    CoopCircularWidgetView(event: event, date: date, displayStyle: .icon)
-                    #else
-                    CoopCircularWidgetView(event: event, date: date, displayStyle: .weapons)
-                    #endif
-                }
-            case .accessoryRectangular:
-                if #available(iOSApplicationExtension 16.0, *) {
-                    CoopRectangularWidgetView(event: event, date: date, gear: gear)
-                }
-            case .accessoryInline:
-                if #available(iOSApplicationExtension 16.0, *) {
-                    CoopInlineWidgetView(event: event, date: date)
-                }
-            #if os(watchOS)
-            case .accessoryCorner:
-                Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 50)
-                    .unredacted()
-                    .widgetLabel {
-                        ProgressView(timerInterval: event.timeframe.startDate...event.timeframe.endDate)
-                            .tint(event.color)
+        Group {
+            if let event = event {
+                switch widgetFamily {
+                case .systemSmall:
+                    SmallCoopWidgetView(event: event, gear: gear, state: event.timeframe.state(date: date))
+                case .systemMedium:
+                    MediumCoopWidgetView(event: event, nextEvent: nextEvent, date: date, gear: gear)
+                case .systemLarge:
+                    LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date, gear: gear)
+                case .systemExtraLarge:
+                    LargeCoopWidgetView(events: events, eventTimeframes: otherTimeframes, date: date, gear: gear)
+                case .accessoryCircular:
+                    if #available(iOSApplicationExtension 16.0, *) {
+                        #if os(watchOS)
+                        CoopCircularWidgetView(event: event, date: date, displayStyle: .icon)
+                        #else
+                        CoopCircularWidgetView(event: event, date: date, displayStyle: .weapons)
+                        #endif
                     }
-            #endif
-            @unknown default:
-                SmallCoopWidgetView(event: event, gear: gear, state: event.timeframe.state(date: date))
+                case .accessoryRectangular:
+                    if #available(iOSApplicationExtension 16.0, *) {
+                        CoopRectangularWidgetView(event: event, date: date, gear: gear)
+                    }
+                case .accessoryInline:
+                    if #available(iOSApplicationExtension 16.0, *) {
+                        CoopInlineWidgetView(event: event, date: date)
+                    }
+                #if os(watchOS)
+                case .accessoryCorner:
+                    Image(event.logoName).resizable().aspectRatio(contentMode: .fit).frame(maxHeight: 50)
+                        .unredacted()
+                        .widgetLabel {
+                            ProgressView(timerInterval: event.timeframe.startDate...event.timeframe.endDate)
+                                .tint(event.color)
+                        }
+                #endif
+                @unknown default:
+                    SmallCoopWidgetView(event: event, gear: gear, state: event.timeframe.state(date: date))
+                }
+            }else{
+                Text("No event available")
             }
-        }else{
-            Text("No event available")
-        }
+        }.environmentObject(eventViewSettings)
     }
 
     var event: CoopEvent? {
