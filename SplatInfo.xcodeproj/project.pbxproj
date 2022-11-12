@@ -106,6 +106,18 @@
 		DE68BECB28D859B500700A80 /* Splatoon3ScheduleWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECA28D859B500700A80 /* Splatoon3ScheduleWidget.swift */; };
 		DE68BECD28D912CB00700A80 /* Splatoon2TimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECC28D912CB00700A80 /* Splatoon2TimelineProvider.swift */; };
 		DE68BECF28D9148F00700A80 /* IconCircularWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE68BECE28D9148F00700A80 /* IconCircularWidgetView.swift */; };
+		DE6F2D452916865C007554EA /* splat3festivals.json in Resources */ = {isa = PBXBuildFile; fileRef = DE6F2D442916865C007554EA /* splat3festivals.json */; };
+		DE6F2D462916865C007554EA /* splat3festivals.json in Resources */ = {isa = PBXBuildFile; fileRef = DE6F2D442916865C007554EA /* splat3festivals.json */; };
+		DE6F2D472916865C007554EA /* splat3festivals.json in Resources */ = {isa = PBXBuildFile; fileRef = DE6F2D442916865C007554EA /* splat3festivals.json */; };
+		DE6F2D482916865C007554EA /* splat3festivals.json in Resources */ = {isa = PBXBuildFile; fileRef = DE6F2D442916865C007554EA /* splat3festivals.json */; };
+		DE6F2D54291FB96B007554EA /* SplatfestIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6F2D53291FB96B007554EA /* SplatfestIcon.swift */; };
+		DE6F2D55291FB96B007554EA /* SplatfestIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6F2D53291FB96B007554EA /* SplatfestIcon.swift */; };
+		DE6F2D69291FBEC0007554EA /* PocketSVG in Frameworks */ = {isa = PBXBuildFile; productRef = DE6F2D68291FBEC0007554EA /* PocketSVG */; };
+		DE6F2D6B291FBF82007554EA /* PocketSVG in Frameworks */ = {isa = PBXBuildFile; productRef = DE6F2D6A291FBF82007554EA /* PocketSVG */; };
+		DE6F2D6D291FC568007554EA /* tricolor.rgb.svg in Resources */ = {isa = PBXBuildFile; fileRef = DE6F2D6C291FC568007554EA /* tricolor.rgb.svg */; };
+		DE6F2D6E291FC568007554EA /* tricolor.rgb.svg in Resources */ = {isa = PBXBuildFile; fileRef = DE6F2D6C291FC568007554EA /* tricolor.rgb.svg */; };
+		DE6F2D6F291FC568007554EA /* tricolor.rgb.svg in Resources */ = {isa = PBXBuildFile; fileRef = DE6F2D6C291FC568007554EA /* tricolor.rgb.svg */; };
+		DE6F2D70291FC568007554EA /* tricolor.rgb.svg in Resources */ = {isa = PBXBuildFile; fileRef = DE6F2D6C291FC568007554EA /* tricolor.rgb.svg */; };
 		DE72E3A12587B69E00CA0BCD /* LargeCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A02587B69E00CA0BCD /* LargeCoopWidgetView.swift */; };
 		DE72E3A72587B99100CA0BCD /* MediumCoopWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */; };
 		DE74F62E28EB36E0008B3C67 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEAFEA052543121500FFA812 /* WidgetKit.framework */; };
@@ -363,6 +375,9 @@
 		DE68BECA28D859B500700A80 /* Splatoon3ScheduleWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splatoon3ScheduleWidget.swift; sourceTree = "<group>"; };
 		DE68BECC28D912CB00700A80 /* Splatoon2TimelineProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Splatoon2TimelineProvider.swift; sourceTree = "<group>"; };
 		DE68BECE28D9148F00700A80 /* IconCircularWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCircularWidgetView.swift; sourceTree = "<group>"; };
+		DE6F2D442916865C007554EA /* splat3festivals.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = splat3festivals.json; sourceTree = "<group>"; };
+		DE6F2D53291FB96B007554EA /* SplatfestIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatfestIcon.swift; sourceTree = "<group>"; };
+		DE6F2D6C291FC568007554EA /* tricolor.rgb.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = tricolor.rgb.svg; sourceTree = "<group>"; };
 		DE72E3A02587B69E00CA0BCD /* LargeCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeCoopWidgetView.swift; sourceTree = "<group>"; };
 		DE72E3A62587B99100CA0BCD /* MediumCoopWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediumCoopWidgetView.swift; sourceTree = "<group>"; };
 		DE74F62D28EB36E0008B3C67 /* WatchScheduleWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WatchScheduleWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -426,6 +441,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE6F2D69291FBEC0007554EA /* PocketSVG in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -456,6 +472,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE6F2D6B291FBF82007554EA /* PocketSVG in Frameworks */,
 				DEAFEA082543121500FFA812 /* SwiftUI.framework in Frameworks */,
 				DEAFEA062543121500FFA812 /* WidgetKit.framework in Frameworks */,
 			);
@@ -537,6 +554,7 @@
 		DE2BD5F825384899006E5531 /* SplatInfo */ = {
 			isa = PBXGroup;
 			children = (
+				DE6F2D6C291FC568007554EA /* tricolor.rgb.svg */,
 				DEAFEA2D2543136200FFA812 /* SplatInfo.entitlements */,
 				DE41B9332541A10300AAD49A /* Fonts */,
 				DE5012212539E24A00A73F7A /* ScheduleFetcher.swift */,
@@ -556,6 +574,7 @@
 				DEC8A66E28EC7F930063D3BD /* GameModeEntryView.swift */,
 				DEC8A67528EC801B0063D3BD /* CoopEntryView.swift */,
 				DEDD1934290563BC00FA2A97 /* EventViewSettings.swift */,
+				DE6F2D53291FB96B007554EA /* SplatfestIcon.swift */,
 			);
 			path = SplatInfo;
 			sourceTree = "<group>";
@@ -687,6 +706,7 @@
 		DEE7C1B028D5F0850024D6A9 /* Splatoon3 */ = {
 			isa = PBXGroup;
 			children = (
+				DE6F2D442916865C007554EA /* splat3festivals.json */,
 				DE8F194A2903222200BEAA8C /* coop.json */,
 				DEE7C1A828D5F0670024D6A9 /* gear.json */,
 				DEE7C1A628D5F0630024D6A9 /* splat3schedules.json */,
@@ -714,6 +734,8 @@
 				DE74F63A28EB36E1008B3C67 /* PBXTargetDependency */,
 			);
 			name = "WatchSchedule Watch App";
+			packageProductDependencies = (
+			);
 			productName = "WatchSchedule Watch App";
 			productReference = DE0111F228E9ADF0001849CC /* WatchSchedule Watch App.app */;
 			productType = "com.apple.product-type.application";
@@ -771,6 +793,9 @@
 				DEB230DB28EB2C5300B7FE8C /* PBXTargetDependency */,
 			);
 			name = SplatInfo;
+			packageProductDependencies = (
+				DE6F2D68291FBEC0007554EA /* PocketSVG */,
+			);
 			productName = SplatInfo;
 			productReference = DE2BD5F625384899006E5531 /* SplatInfo.app */;
 			productType = "com.apple.product-type.application";
@@ -824,6 +849,8 @@
 			dependencies = (
 			);
 			name = WatchScheduleWidgetsExtension;
+			packageProductDependencies = (
+			);
 			productName = WatchScheduleWidgetsExtension;
 			productReference = DE74F62D28EB36E0008B3C67 /* WatchScheduleWidgetsExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -841,6 +868,9 @@
 			dependencies = (
 			);
 			name = SplatInfoScheduleWidgetExtension;
+			packageProductDependencies = (
+				DE6F2D6A291FBF82007554EA /* PocketSVG */,
+			);
 			productName = ScheduleExtension;
 			productReference = DEAFEA032543121500FFA812 /* SplatInfoScheduleWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -893,6 +923,9 @@
 				Base,
 			);
 			mainGroup = DE2BD5ED25384899006E5531;
+			packageReferences = (
+				DE6F2D67291FBEC0007554EA /* XCRemoteSwiftPackageReference "PocketSVG" */,
+			);
 			productRefGroup = DE2BD5F725384899006E5531 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -920,11 +953,13 @@
 				DE01123A28E9CDF1001849CC /* gear.json in Resources */,
 				DE01123E28E9CDF1001849CC /* schedules-20220924-210001.json in Resources */,
 				DE01123928E9CDF1001849CC /* schedules.json in Resources */,
+				DE6F2D6F291FC568007554EA /* tricolor.rgb.svg in Resources */,
 				DE0111FC28E9ADF1001849CC /* Preview Assets.xcassets in Resources */,
 				DE01123D28E9CDF1001849CC /* splat3schedules.json in Resources */,
 				DE0111F928E9ADF1001849CC /* Assets.xcassets in Resources */,
 				DE01123B28E9CDF1001849CC /* coop-schedules.json in Resources */,
 				DE01123C28E9CDF1001849CC /* schedules-20220925-160000.json in Resources */,
+				DE6F2D472916865C007554EA /* splat3festivals.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -953,10 +988,12 @@
 				DEE7C1A928D5F0670024D6A9 /* gear.json in Resources */,
 				DE49D30328E17CD1000FAB3D /* schedules-20220924-210001.json in Resources */,
 				DE8F194B2903222200BEAA8C /* coop.json in Resources */,
+				DE6F2D452916865C007554EA /* splat3festivals.json in Resources */,
 				DE501237253A1BA300A73F7A /* coop-schedules.json in Resources */,
 				DE50124C253A1BFF00A73F7A /* festivals.json in Resources */,
 				DE2BD6012538489C006E5531 /* Preview Assets.xcassets in Resources */,
 				DE2BD5FE2538489C006E5531 /* Assets.xcassets in Resources */,
+				DE6F2D6D291FC568007554EA /* tricolor.rgb.svg in Resources */,
 				DE501256253A1C2400A73F7A /* na-5060-rankings.json in Resources */,
 				DE50123E253A1BC600A73F7A /* timeline.json in Resources */,
 				DEE7C1A728D5F0630024D6A9 /* splat3schedules.json in Resources */,
@@ -1001,10 +1038,12 @@
 				DE74F64A28EB3CF5008B3C67 /* Splatoon1.otf in Resources */,
 				DE8F194E2903222200BEAA8C /* coop.json in Resources */,
 				DE74F64328EB3CF5008B3C67 /* Splatoon2.otf in Resources */,
+				DE6F2D70291FC568007554EA /* tricolor.rgb.svg in Resources */,
 				DE74F63528EB36E1008B3C67 /* Assets.xcassets in Resources */,
 				DEC8A66D28EC7B060063D3BD /* coop-schedules.json in Resources */,
 				DEC8A66C28EC7B060063D3BD /* schedules.json in Resources */,
 				DEC8A66B28EC7B060063D3BD /* splat3schedules.json in Resources */,
+				DE6F2D482916865C007554EA /* splat3festivals.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1020,8 +1059,10 @@
 				DEAFEA0E2543121800FFA812 /* Assets.xcassets in Resources */,
 				DE8F194C2903222200BEAA8C /* coop.json in Resources */,
 				DEF7CF0028E306DF009281E8 /* schedules-20220925-160000.json in Resources */,
+				DE6F2D462916865C007554EA /* splat3festivals.json in Resources */,
 				DEF7CEFF28E306DC009281E8 /* schedules-20220924-210001.json in Resources */,
 				DE49D30628E1CE3F000FAB3D /* coop-schedules.json in Resources */,
+				DE6F2D6E291FC568007554EA /* tricolor.rgb.svg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1092,6 +1133,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DEAFEA5E25431D0A00FFA812 /* Constants.swift in Sources */,
+				DE6F2D54291FB96B007554EA /* SplatfestIcon.swift in Sources */,
 				DE5A7EED28FAB06900D77610 /* ColoredActivityTextView.swift in Sources */,
 				DE50121B2539D22800A73F7A /* SplatoonKit.swift in Sources */,
 				DE41B91325419B8200AAD49A /* GameModeEventView.swift in Sources */,
@@ -1212,6 +1254,7 @@
 				DEAFEA4D25431BFC00FFA812 /* GameModeEventView.swift in Sources */,
 				DEF7CF0528E434DD009281E8 /* SplatInfo+ProjectCommon.swift in Sources */,
 				DEC8A67028EC7F930063D3BD /* GameModeEntryView.swift in Sources */,
+				DE6F2D55291FB96B007554EA /* SplatfestIcon.swift in Sources */,
 				DEAE259C25541CDB00253E79 /* LargeGameModeWidgetView.swift in Sources */,
 				DEAFEA3E25431BE800FFA812 /* ScheduleFetcher.swift in Sources */,
 				DEAFEA5225431BFC00FFA812 /* TitleView.swift in Sources */,
@@ -1879,6 +1922,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DE6F2D67291FBEC0007554EA /* XCRemoteSwiftPackageReference "PocketSVG" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pocketsvg/PocketSVG.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DE6F2D68291FBEC0007554EA /* PocketSVG */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DE6F2D67291FBEC0007554EA /* XCRemoteSwiftPackageReference "PocketSVG" */;
+			productName = PocketSVG;
+		};
+		DE6F2D6A291FBF82007554EA /* PocketSVG */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DE6F2D67291FBEC0007554EA /* XCRemoteSwiftPackageReference "PocketSVG" */;
+			productName = PocketSVG;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = DE2BD5EE25384899006E5531 /* Project object */;
 }

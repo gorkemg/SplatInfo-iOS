@@ -15,9 +15,15 @@ struct SplatInfoApp: App {
 
     let imageLoaderManager = ImageLoaderManager()
     
+    static var eventViewSettings : EventViewSettings {
+        let eventViewSettings = EventViewSettings()
+        eventViewSettings.settings.useThumbnailQuality = false
+        return eventViewSettings
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ScheduleGrid(splatoon2Schedule: $scheduleFetcher.splatoon2Schedule, splatoon3Schedule: $scheduleFetcher.splatoon3Schedule)
+            ScheduleGrid(splatoon2Schedule: $scheduleFetcher.splatoon2Schedule, splatoon3Schedule: $scheduleFetcher.splatoon3Schedule, eventViewSettings: eventViewSettings)
                 .onAppear {
                                         
                     scheduleFetcher.updateSchedules {
@@ -78,8 +84,14 @@ struct Previews_SplatInfoApp_Previews: PreviewProvider {
     @State static var exampleSchedule = Splatoon2.Schedule.example
     @State static var exampleSchedule3 = Splatoon3.Schedule.example
     
+    static var eventViewSettings : EventViewSettings {
+        let eventViewSettings = EventViewSettings()
+        eventViewSettings.settings.useThumbnailQuality = false
+        return eventViewSettings
+    }
+    
     static var previews: some View {
         
-        ScheduleGrid(splatoon2Schedule: $exampleSchedule, splatoon3Schedule: $exampleSchedule3)
+        ScheduleGrid(splatoon2Schedule: $exampleSchedule, splatoon3Schedule: $exampleSchedule3, eventViewSettings: eventViewSettings)
     }
 }

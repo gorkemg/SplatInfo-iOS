@@ -101,7 +101,7 @@ extension Splatoon3.GameModeType {
     var color : Color {
         switch self {
         case .splatfest(_):
-            return Color.regularModeColor
+            return Color.white
         case .turfWar:
             return Color.regularModeColor
         case .anarchyBattleOpen:
@@ -120,10 +120,14 @@ extension Splatoon3.GameModeType {
     var bgImage: some View {
         Group {
             switch self {
-            case .splatfest(_):
+            case .splatfest(let fest):
                 ZStack {
+                    HStack(spacing: 0) {
+                        ForEach(fest.teams, id: \.self) { team in
+                            team.color.color
+                        }
+                    }
                     Image("splatoon-card-bg").resizable(resizingMode: .tile)
-                    LinearGradient(colors: [.red, .blue, .yellow], startPoint: .leading, endPoint: .trailing).opacity(0.5)
                 }
             case .turfWar, .anarchyBattleOpen, .anarchyBattleSeries, .league, .x:
                 Image("splatoon-card-bg").resizable(resizingMode: .tile)
@@ -132,6 +136,13 @@ extension Splatoon3.GameModeType {
             }
         }
     }
+}
+
+extension Splatoon3.Schedule.Splatfest.Fest.Team.RGBAColor {
+    var color: Color {
+        Color(red: Double(r), green: Double(g), blue: Double(b))
+    }
+    
 }
 
 extension Splatoon3.Schedule: CustomDebugStringConvertible {

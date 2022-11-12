@@ -29,7 +29,7 @@ class Splatoon3InkAPI {
         requestAPIAndParse(url: url, keyDecodingStrategy: .useDefaultKeys, completion: completion)
     }
 
-    func requestFestivals(completion: @escaping (_ response: SchedulesAPIResponse?, _ error: Error?)->Void) {
+    func requestFestivals(completion: @escaping (_ response: FestivalsAPIResponse?, _ error: Error?)->Void) {
         let urlString = "\(apiURL)/festivals.json"
         guard let url = URL(string: urlString) else { completion(nil, InvalidAPIRequestURLError()); return }
         requestAPIAndParse(url: url, completion: completion)
@@ -127,23 +127,32 @@ class Splatoon3InkAPI {
         let leagueSchedules: LeagueScheduleNodes
         let coopGroupingSchedule: CoopGroupingSchedule
         let festSchedules: FestScheduleNodes
-        let currentFest: CurrentFest?
+        let currentFest: Splatfest?
         let vsStages: StageNodes
     }
     
-    struct CurrentFest: Codable {
+    struct Splatfest: Codable {
         let id: String
         let startTime: Date
         let endTime: Date
-        let midtermTime: Date
+        let midtermTime: Date?
         let title: String
         let teams: [Team]
         let state: State
-        let tricolorStage: TricolorStage
+        let tricolorStage: TricolorStage?
+        
+        let image: ImageURL?
+        let lang: String?
+        let preVotes: Votes?
+        let votes: Votes?
+
+        struct Votes: Codable {
+            let totalCount: Int
+        }
 
         struct Team: Codable {
             let id: String
-            let role: Role
+            let role: Role?
             let color: RGBAColor
             
             enum Role: String, Codable {
@@ -163,6 +172,7 @@ class Splatoon3InkAPI {
             case scheduled = "SCHEDULED"
             case firstHalf = "FIRST_HALF"
             case secondHalf = "SECOND_HALF"
+            case closed = "CLOSED"
         }
         
         struct TricolorStage: Codable {
@@ -382,6 +392,22 @@ class Splatoon3InkAPI {
         }
     }
 
+    struct FestivalsAPIResponse: Codable {
+        let US: FestivalData
+        let EU: FestivalData
+        let JP: FestivalData
+        let AP: FestivalData
+    }
+    
+    struct FestivalData: Codable {
+        let data: FestRecords
+    }
+    struct FestRecords: Codable {
+        let festRecords: FestRecordNodes
+    }
+    struct FestRecordNodes: Codable {
+        let nodes: [Splatfest]
+    }
 }
 
 

@@ -273,6 +273,8 @@ struct Splatoon3: Codable {
                     return .active(isFirstHalf: true)
                 case .secondHalf:
                     return .active(isFirstHalf: false)
+                case .closed:
+                    return .over
                 }
             }
 
@@ -280,6 +282,7 @@ struct Splatoon3: Codable {
                 case none
                 case upcoming
                 case active(isFirstHalf: Bool)
+                case over
             }
 
             struct Fest: Codable, Hashable, Equatable {
@@ -289,15 +292,15 @@ struct Splatoon3: Codable {
                 
                 let id: String
                 let timeframe: EventTimeframe
-                let midtermTime: Date
+                let midtermTime: Date?
                 let title: String
                 let teams: [Team]
                 let state: State
-                let tricolorStage: Stage
+                let tricolorStage: Stage?
 
                 struct Team: Codable, Hashable {
                     let id: String
-                    let role: Role
+                    let role: Role?
                     let color: RGBAColor
                     
                     enum Role: String, Hashable, Codable {
@@ -317,6 +320,7 @@ struct Splatoon3: Codable {
                     case scheduled = "SCHEDULED"
                     case firstHalf = "FIRST_HALF"
                     case secondHalf = "SECOND_HALF"
+                    case closed = "CLOSED"
                 }
             }
         }
@@ -376,16 +380,16 @@ struct Splatoon3: Codable {
 
         var logoName : String {
             switch self {
-            case .splatfest:
-                return "mode-regular" //"regular-logo"
+            case .splatfest(let fest):
+                return "mode-regular"
             case .turfWar:
-                return "mode-regular" //"regular-logo"
+                return "mode-regular"
             case .anarchyBattleOpen:
-                return "mode-bankara" //"ranked-logo"
+                return "mode-bankara"
             case .anarchyBattleSeries:
-                return "mode-bankara" //"ranked-logo"
+                return "mode-bankara"
             case .league:
-                return "mode-league" //"league-logo"
+                return "mode-league"
             case .x:
                 return "mode-x"
             case .salmonRun:
@@ -589,15 +593,6 @@ struct Splatoon2: Codable {
                 return "mode-league" //"league-logo-small"
             case .salmonRun:
                 return "mr-grizz-logo-small"
-//                return "mode-coop" //"mr-grizz-logo-small"
-//            case .turfWar:
-//                return "regular-logo-small"
-//            case .ranked:
-//                return "ranked-logo-small"
-//            case .league:
-//                return "league-logo-small"
-//            case .salmonRun:
-//                return "mr-grizz-logo-small"
             }
         }
     }
@@ -782,4 +777,3 @@ extension TimeframeActivity {
     }
 
 }
-

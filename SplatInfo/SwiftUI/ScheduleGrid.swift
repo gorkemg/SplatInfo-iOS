@@ -13,7 +13,9 @@ struct ScheduleGrid: View {
     @Binding var splatoon3Schedule: Splatoon3.Schedule
 
     @State private var selectedSchedules: Set<Game> = Set(arrayLiteral: .splatoon2,.splatoon3)
-        
+     
+    let eventViewSettings: EventViewSettings
+
     let columns = [
         GridItem(.adaptive(minimum: 300, maximum: .infinity))
     ]
@@ -73,6 +75,8 @@ struct ScheduleGrid: View {
                                     // Splatfest not currently active
                                     if let fest = splatoon3Schedule.splatfest.fest {
                                         Splatoon3TimelineCard(timeline: .game(mode: .splatfest(fest: fest), timeline: splatoon3Schedule.splatfest.timeline))
+                                            .environmentObject(eventViewSettings)
+
                                     }else{
                                         // Splatfest scheduled
                                     }
@@ -80,12 +84,24 @@ struct ScheduleGrid: View {
                                     // Splatfest not currently active
                                     
                                     Splatoon3TimelineCard(timeline: .game(mode: .turfWar, timeline: splatoon3Schedule.regular))
+                                        .environmentObject(eventViewSettings)
+
                                     Splatoon3TimelineCard(timeline: .game(mode: .anarchyBattleOpen, timeline: splatoon3Schedule.anarchyBattleOpen))
+                                        .environmentObject(eventViewSettings)
+
                                     Splatoon3TimelineCard(timeline: .game(mode: .anarchyBattleSeries, timeline: splatoon3Schedule.anarchyBattleSeries))
+                                        .environmentObject(eventViewSettings)
+
                                     Splatoon3TimelineCard(timeline: .game(mode: .league, timeline: splatoon3Schedule.league))
+                                        .environmentObject(eventViewSettings)
+
                                     Splatoon3TimelineCard(timeline: .game(mode: .x, timeline: splatoon3Schedule.x))
+                                        .environmentObject(eventViewSettings)
+
                                 }
                                 Splatoon3TimelineCard(timeline: .coop(timeline: splatoon3Schedule.coop))
+                                    .environmentObject(eventViewSettings)
+
                             }
                         }
                     }
@@ -95,9 +111,17 @@ struct ScheduleGrid: View {
                             Image("Splatoon2_number_icon")
                             LazyVGrid(columns: columns, spacing: 50) {
                                 Splatoon2TimelineCard(timeline: .game(mode: .turfWar, timeline: splatoon2Schedule.regular))
+                                    .environmentObject(eventViewSettings)
+
                                 Splatoon2TimelineCard(timeline: .game(mode: .ranked, timeline: splatoon2Schedule.ranked))
+                                    .environmentObject(eventViewSettings)
+
                                 Splatoon2TimelineCard(timeline: .game(mode: .league, timeline: splatoon2Schedule.league))
+                                    .environmentObject(eventViewSettings)
+
                                 Splatoon2TimelineCard(timeline: .coop(timeline: splatoon2Schedule.coop))
+                                    .environmentObject(eventViewSettings)
+
                             }
                         }
                     }
@@ -190,8 +214,7 @@ struct ScheduleGrid_Previews: PreviewProvider {
 
     static var previews: some View {
         Group {
-            ScheduleGrid(splatoon2Schedule: $exampleSchedule, splatoon3Schedule: $exampleSchedule3)
-                .environmentObject(eventViewSettings)
+            ScheduleGrid(splatoon2Schedule: $exampleSchedule, splatoon3Schedule: $exampleSchedule3, eventViewSettings: eventViewSettings)
         }
         .previewInterfaceOrientation(.portrait)
         .previewDevice("iPhone 14 Pro Max")

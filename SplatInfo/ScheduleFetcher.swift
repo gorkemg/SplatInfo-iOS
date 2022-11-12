@@ -20,7 +20,7 @@ extension GameTimeline: ImageURLs {
 extension Splatoon3.Schedule {
     
     func allGameTimelines() -> [GameTimeline] {
-        return [regular, anarchyBattleOpen, anarchyBattleSeries, league, x]
+        return [regular, anarchyBattleOpen, anarchyBattleSeries, league, x, splatfest.timeline]
     }
     
     func eventChangingDates() -> [Date] {
@@ -533,16 +533,17 @@ class ScheduleFetcher: ObservableObject {
             
             var schedule = Splatoon3.Schedule(regular: response.regularTimeline, anarchyBattleOpen: response.anarchyBattleOpenTimeline, anarchyBattleSeries: response.anarchyBattleSeriesTimeline, league: response.leageTimeline, x: response.xTimeline, coop: response.coopTimeline, splatfest: .init(timeline: response.splatfestTimeline, fest: response.splatfest))
             
-//            self.saveSchedule(schedule)
+            self.splat3API.requestFestivals { response, error in
+             
+                self.splat3API.requestCoop { response, error in
+                    
+                    let reward = response?.coopRewardGear
+                    schedule.coop.gear = reward
+                    
+                    self.saveSchedule(schedule)
 
-            self.splat3API.requestCoop { response, error in
-                
-                let reward = response?.coopRewardGear
-                schedule.coop.gear = reward
-                
-                self.saveSchedule(schedule)
-
-                completion(.success(schedule))
+                    completion(.success(schedule))
+                }
             }
         }
     }
@@ -752,16 +753,22 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
     }
 }
 
-extension Splatoon3InkAPI.CurrentFest {
+extension Splatoon3InkAPI.Splatfest {
     
     var splatoonKitSplatfest: Splatoon3.Schedule.Splatfest.Fest {
         let timeframe = EventTimeframe(startDate: self.startTime, endDate: self.endTime)
         let teams = self.teams.map({ $0.splattonKitTeam })
-        return .init(id: self.id, timeframe: timeframe, midtermTime: self.midtermTime, title: self.title, teams: teams, state: self.state.splattonKitState, tricolorStage: Stage(id: self.tricolorStage.id, name: self.tricolorStage.name, imageUrl: self.tricolorStage.image.url))
+        return .init(id: self.id, timeframe: timeframe, midtermTime: self.midtermTime, title: self.title, teams: teams, state: self.state.splattonKitState, tricolorStage: self.splatoonKitTricolorStage)
     }
+    
+    var splatoonKitTricolorStage: Stage? {
+        guard let stage = self.tricolorStage else { return nil }
+        return Stage(id: stage.id, name: stage.name, imageUrl: stage.image.url)
+    }
+    
 }
 
-extension Splatoon3InkAPI.CurrentFest.State {
+extension Splatoon3InkAPI.Splatfest.State {
 
     var splattonKitState : Splatoon3.Schedule.Splatfest.Fest.State {
         switch self {
@@ -771,25 +778,27 @@ extension Splatoon3InkAPI.CurrentFest.State {
             return .firstHalf
         case .secondHalf:
             return .secondHalf
+        case .closed:
+            return .closed
         }
     }
 }
 
-extension Splatoon3InkAPI.CurrentFest.Team {
+extension Splatoon3InkAPI.Splatfest.Team {
 
     var splattonKitTeam : Splatoon3.Schedule.Splatfest.Fest.Team {
-        return .init(id: self.id, role: self.role.splattonKitRole, color: self.color.splattonKitColor)
+        return .init(id: self.id, role: self.role?.splattonKitRole, color: self.color.splattonKitColor)
     }
 }
 
-extension Splatoon3InkAPI.CurrentFest.Team.Role {
+extension Splatoon3InkAPI.Splatfest.Team.Role {
 
     var splattonKitRole : Splatoon3.Schedule.Splatfest.Fest.Team.Role {
         return .init(rawValue: self.rawValue) ?? .attack
     }
 }
 
-extension Splatoon3InkAPI.CurrentFest.Team.RGBAColor {
+extension Splatoon3InkAPI.Splatfest.Team.RGBAColor {
 
     var splattonKitColor : Splatoon3.Schedule.Splatfest.Fest.Team.RGBAColor {
         return .init(r: r, g: g, b: b, a: a)

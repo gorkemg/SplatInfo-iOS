@@ -12,7 +12,8 @@ struct Splatoon2TimelineCard: View {
     let timeline : Splatoon2.TimelineType
     var numberOfEventsDisplayed: Int = 4
     @State private var showingSheet = false
-    
+    @EnvironmentObject var eventViewSettings: EventViewSettings
+
     var body: some View {
 
         ZStack(alignment: .top) {
@@ -29,6 +30,7 @@ struct Splatoon2TimelineCard: View {
 
                     TitleView(title: mode.name, logoName: mode.logoName)
                     GameModeTimelineView(mode: .splatoon2(type: mode), events: Array(timeline.events.prefix(numberOfEventsDisplayed)))
+
                     Spacer()
                     if timeline.events.count > numberOfEventsDisplayed {
                         Button {
@@ -44,6 +46,7 @@ struct Splatoon2TimelineCard: View {
                         .sheet(isPresented: $showingSheet) {
                             Splatoon2TimelineSheetView(timeline: self.timeline)
                                 .clearModalBackground()
+                                .environmentObject(eventViewSettings)
                         }
                     }
 
@@ -61,6 +64,7 @@ struct Splatoon2TimelineCard: View {
 
                     TitleView(title: mode.name, logoName: mode.logoName)
                     CoopTimelineView(coopTimeline: timeline)
+
                     Spacer()
                     
                     if timeline.events.count > numberOfEventsDisplayed {
@@ -77,6 +81,8 @@ struct Splatoon2TimelineCard: View {
                         .sheet(isPresented: $showingSheet) {
                             Splatoon2TimelineSheetView(timeline: self.timeline)
                                 .clearModalBackground()
+                                .environmentObject(eventViewSettings)
+
                         }
                     }
                 }
@@ -107,6 +113,7 @@ struct Splatoon3TimelineCard: View {
     let timeline : Splatoon3.TimelineType
     var numberOfEventsDisplayed: Int = 4
     @State private var showingSheet = false
+    @EnvironmentObject var eventViewSettings: EventViewSettings
 
     var body: some View {
 
@@ -122,7 +129,20 @@ struct Splatoon3TimelineCard: View {
 
                 VStack(alignment: .center, spacing: 8.0) {
 
-                    TitleView(title: mode.name, logoName: mode.logoName)
+                    if case .splatfest(let fest) = mode {
+                        if let image = SplatfestIcon.iconForSplatfest(fest) {
+                            TitleView(title: mode.name, uiImage: image)
+                        }else{
+                            TitleView(title: mode.name, logoName: mode.logoName)
+                        }
+                        Text(fest.title)
+                            .splat2Font(size: 18)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.5)
+                            .multilineTextAlignment(.center)
+                    }else{
+                        TitleView(title: mode.name, logoName: mode.logoName)
+                    }
                     ScrollView(.vertical) {
                         GameModeTimelineView(mode: .splatoon3(type: mode), events: Array(timeline.events.prefix(numberOfEventsDisplayed)))
                             .frame(minHeight: CGFloat(numberOfEventsDisplayed) * 80.0, alignment: .center)
@@ -143,6 +163,8 @@ struct Splatoon3TimelineCard: View {
                         .sheet(isPresented: $showingSheet) {
                             Splatoon3TimelineSheetView(timeline: self.timeline)
                                 .clearModalBackground()
+                                .environmentObject(eventViewSettings)
+
                         }
                     }
                 }
@@ -159,6 +181,7 @@ struct Splatoon3TimelineCard: View {
 
                     TitleView(title: mode.name, logoName: mode.logoName)
                     CoopTimelineView(coopTimeline: timeline, numberOfEventsDisplayed: numberOfEventsDisplayed)
+
                     Spacer()
                     if timeline.events.count > numberOfEventsDisplayed {
                         Button {
@@ -174,6 +197,8 @@ struct Splatoon3TimelineCard: View {
                         .sheet(isPresented: $showingSheet) {
                             Splatoon3TimelineSheetView(timeline: self.timeline)
                                 .clearModalBackground()
+                                .environmentObject(eventViewSettings)
+
                         }
                     }
                 }
