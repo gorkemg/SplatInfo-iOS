@@ -8,48 +8,97 @@
 import UIKit
 import PocketSVG
 
-struct SplatfestIcon {
+extension CALayer {
     
-    private static func snapshotImage(for layer: CALayer) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(layer.bounds.size, false, UIScreen.main.scale)
+    func snapshotImage() -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
         guard let context = UIGraphicsGetCurrentContext() else { return nil }
-        layer.render(in: context)
+        self.render(in: context)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
     }
+}
+
+struct SplatfestIcon {
     
-    static func iconForSplatfest(_ fest: Splatoon3.Schedule.Splatfest.Fest) -> UIImage? {
-        guard let iconURL = iconURLForSplatfest(fest) else { return nil }
-        let svgLayer = SVGLayer(contentsOf: iconURL)
+    let fest: Splatoon3.Schedule.Splatfest.Fest
+
+    var icon: UIImage? {
+        if !FileManager.default.fileExists(atPath: tempIconURL.path) {
+            createIcon()
+        }
+        guard FileManager.default.fileExists(atPath: tempIconURL.path) else { return nil }
+        let svgLayer = SVGLayer(contentsOf: tempIconURL)
         svgLayer.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-        let image = self.snapshotImage(for: svgLayer)
+        let image = svgLayer.snapshotImage()
         return image
     }
     
-    static func iconURLForSplatfest(_ fest: Splatoon3.Schedule.Splatfest.Fest) -> URL? {
+    private func createIcon() {
+        guard let originalTricolorIconURL else { return }
         let teams = fest.teams
-        guard let team1 = teams.first, let team2 = teams.second, let team3 = teams.third else { return nil }
-        guard let tricolorURL = Bundle.main.url(forResource: "tricolor.rgb", withExtension: ".svg") else { return nil }
-        guard let data = try? Data(contentsOf: tricolorURL) else { return nil }
-        guard var xml = String(data: data, encoding: .utf8) else { return nil }
+        guard let team1 = teams.first, let team2 = teams.second, let team3 = teams.third else { return }
+        guard let data = try? Data(contentsOf: originalTricolorIconURL) else { return }
+        guard var xml = String(data: data, encoding: .utf8) else { return }
         xml.replace("{color1.r}", with: "\(team1.color.r*255)")
         xml.replace("{color1.g}", with: "\(team1.color.g*255)")
         xml.replace("{color1.b}", with: "\(team1.color.b*255)")
-//        xml.replace("{color1.a}", with: "\(team1.color.a)")
         xml.replace("{color2.r}", with: "\(team2.color.r*255)")
         xml.replace("{color2.g}", with: "\(team2.color.g*255)")
         xml.replace("{color2.b}", with: "\(team2.color.b*255)")
-//        xml.replace("{color2.a}", with: "\(team2.color.a)")
         xml.replace("{color3.r}", with: "\(team3.color.r*255)")
         xml.replace("{color3.g}", with: "\(team3.color.g*255)")
         xml.replace("{color3.b}", with: "\(team3.color.b*255)")
-//        xml.replace("{color3.a}", with: "\(team3.color.a)")
-        let newFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("\(fest.id).svg")
-        guard let data = xml.data(using: .utf8) else { return nil }
-        guard ((try? data.write(to: newFileURL)) != nil) else { return nil }
-        return newFileURL
+        guard let data = xml.data(using: .utf8) else { return }
+        guard ((try? data.write(to: tempIconURL)) != nil) else { return }
     }
+    
+    var iconURL: URL {
+        return tempIconURL
+    }
+    
+    private var originalTricolorIconURL: URL? {
+        guard let tricolorURL = Bundle.main.url(forResource: "tricolor.rgb", withExtension: ".svg") else { return nil }
+        return tricolorURL
+    }
+    
+    private var tempIconURL: URL {
+        let fileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("\(fest.id).svg")
+        return fileURL
+    }
+    
+//    static func iconForSplatfest(_ fest: Splatoon3.Schedule.Splatfest.Fest) -> UIImage? {
+//        guard let iconURL = iconURLForSplatfest(fest) else { return nil }
+//        let svgLayer = SVGLayer(contentsOf: iconURL)
+//        svgLayer.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+//        let image = svgLayer.snapshotImage()
+//        return image
+//    }
+    
+//    func iconURLForSplatfest(_ fest: Splatoon3.Schedule.Splatfest.Fest) -> URL? {
+//        let teams = fest.teams
+//        guard let team1 = teams.first, let team2 = teams.second, let team3 = teams.third else { return nil }
+//        guard let originalTricolorIconURL else { return nil }
+//        guard let data = try? Data(contentsOf: originalTricolorIconURL) else { return nil }
+//        guard var xml = String(data: data, encoding: .utf8) else { return nil }
+//        xml.replace("{color1.r}", with: "\(team1.color.r*255)")
+//        xml.replace("{color1.g}", with: "\(team1.color.g*255)")
+//        xml.replace("{color1.b}", with: "\(team1.color.b*255)")
+////        xml.replace("{color1.a}", with: "\(team1.color.a)")
+//        xml.replace("{color2.r}", with: "\(team2.color.r*255)")
+//        xml.replace("{color2.g}", with: "\(team2.color.g*255)")
+//        xml.replace("{color2.b}", with: "\(team2.color.b*255)")
+////        xml.replace("{color2.a}", with: "\(team2.color.a)")
+//        xml.replace("{color3.r}", with: "\(team3.color.r*255)")
+//        xml.replace("{color3.g}", with: "\(team3.color.g*255)")
+//        xml.replace("{color3.b}", with: "\(team3.color.b*255)")
+////        xml.replace("{color3.a}", with: "\(team3.color.a)")
+//        let newFileURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("\(fest.id).svg")
+//        guard let data = xml.data(using: .utf8) else { return nil }
+//        guard ((try? data.write(to: newFileURL)) != nil) else { return nil }
+//        return newFileURL
+//    }
 }
 
 extension String {

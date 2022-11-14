@@ -25,7 +25,7 @@ struct GameModeEntryView : View {
                 case .systemSmall:
                     SmallGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
                 case .systemMedium:
-                    MediumGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
+                    MediumGameModeWidgetView(gameMode: gameMode, event: event, nextEvent: nextEvent, date: date)
                 case .systemLarge:
                     LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
                 case .systemExtraLarge:

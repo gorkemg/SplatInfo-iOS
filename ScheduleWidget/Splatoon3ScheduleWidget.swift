@@ -36,7 +36,7 @@ struct Splatoon3ScheduleWidget: Widget {
 
 struct Previews_Splatoon3ScheduleWidget_Previews: PreviewProvider {
     
-    static let schedule = Splatoon3.Schedule.example
+    static let schedule = Splatoon3.Schedule.splatfestFirstHalfExample
     
     static var intent : Splatoon3_ScheduleIntent {
         return Splatoon3_ScheduleIntent()
@@ -54,9 +54,16 @@ struct Previews_Splatoon3ScheduleWidget_Previews: PreviewProvider {
 #if !os(watchOS)
         Splatoon3TimelineProvider.ScheduleEntryView(entry: Splatoon3TimelineProvider.GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.anarchyBattleSeries.events), configuration: Splatoon3_ScheduleIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
+            .previewDisplayName("Anarchy Battle")
 
         Splatoon3TimelineProvider.ScheduleEntryView(entry: Splatoon3TimelineProvider.GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: [], gear: schedule.coop.gear), configuration: Splatoon3_ScheduleIntent()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
+            .previewDisplayName("Salmon Run")
+        
+        Splatoon3TimelineProvider.ScheduleEntryView(entry: Splatoon3TimelineProvider.GameModeEntry(date: Date(), events: .splatfest(splatfest: schedule.splatfest), configuration: Splatoon3_ScheduleIntent()))
+            .previewContext(WidgetPreviewContext(family: .systemMedium))
+            .previewDisplayName("Splatfest")
+
 #endif
     }
 }

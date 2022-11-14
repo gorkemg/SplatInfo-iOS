@@ -130,7 +130,7 @@ struct Splatoon3TimelineCard: View {
                 VStack(alignment: .center, spacing: 8.0) {
 
                     if case .splatfest(let fest) = mode {
-                        if let image = SplatfestIcon.iconForSplatfest(fest) {
+                        if let image = SplatfestIcon(fest: fest).icon {
                             TitleView(title: mode.name, uiImage: image)
                         }else{
                             TitleView(title: mode.name, logoName: mode.logoName)

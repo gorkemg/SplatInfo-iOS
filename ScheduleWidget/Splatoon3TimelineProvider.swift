@@ -12,6 +12,7 @@ import Intents
 struct Splatoon3TimelineProvider: IntentTimelineProvider {
         
     enum TimelineType {
+        case splatfest(_ splatfest: Splatoon3.Schedule.Splatfest)
         case game(timeline: GameTimeline)
         case coop(timeline: CoopTimeline)
     }
@@ -47,6 +48,12 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
         scheduleFetcher.fetchSplatoon3Schedule(completion: { result in
             switch result {
             case .success(let schedule):
+                
+                if configuration.scheduleType != .salmonRun, case .active(_) = schedule.splatfest.activity {
+                    let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.splatfest.timeline.events), configuration: configuration)
+                    completion(entry)
+                    return
+                }
                 
                 switch configuration.scheduleType {
                 case .turfWar, .unknown:
@@ -86,25 +93,31 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
 
                 let selectedTimeline: TimelineType
                 let urls: [URL]
-                switch mode {
-                case .turfWar, .unknown:
-                    urls = schedule.regular.allImageURLs()
-                    selectedTimeline = .game(timeline: schedule.regular)
-                case .anarchyOpen:
-                    urls = schedule.anarchyBattleOpen.allImageURLs()
-                    selectedTimeline = .game(timeline: schedule.anarchyBattleOpen)
-                case .anarchySeries:
-                    urls = schedule.anarchyBattleSeries.allImageURLs()
-                    selectedTimeline = .game(timeline: schedule.anarchyBattleSeries)
-                case .league:
-                    urls = schedule.league.allImageURLs()
-                    selectedTimeline = .game(timeline: schedule.league)
-                case .x:
-                    urls = schedule.x.allImageURLs()
-                    selectedTimeline = .game(timeline: schedule.x)
-                case .salmonRun:
-                    urls = schedule.coop.allImageURLs()
-                    selectedTimeline = .coop(timeline: schedule.coop)
+                
+                if configuration.scheduleType != .salmonRun, case .active(_) = schedule.splatfest.activity {
+                    urls = schedule.splatfest.timeline.allImageURLs()
+                    selectedTimeline = .splatfest(schedule.splatfest)
+                }else{
+                    switch mode {
+                    case .turfWar, .unknown:
+                        urls = schedule.regular.allImageURLs()
+                        selectedTimeline = .game(timeline: schedule.regular)
+                    case .anarchyOpen:
+                        urls = schedule.anarchyBattleOpen.allImageURLs()
+                        selectedTimeline = .game(timeline: schedule.anarchyBattleOpen)
+                    case .anarchySeries:
+                        urls = schedule.anarchyBattleSeries.allImageURLs()
+                        selectedTimeline = .game(timeline: schedule.anarchyBattleSeries)
+                    case .league:
+                        urls = schedule.league.allImageURLs()
+                        selectedTimeline = .game(timeline: schedule.league)
+                    case .x:
+                        urls = schedule.x.allImageURLs()
+                        selectedTimeline = .game(timeline: schedule.x)
+                    case .salmonRun:
+                        urls = schedule.coop.allImageURLs()
+                        selectedTimeline = .coop(timeline: schedule.coop)
+                    }
                 }
                 downloadImages(urls: urls, asJPEG: true) {
                     switch selectedTimeline {
@@ -116,6 +129,9 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
                             let timeline = timelineForCoopTimeline(timeline, for: configuration)
                             completion(timeline)
                         }
+                    case .splatfest(let splatfest):
+                        let timeline = timelineForGameModeTimeline(splatfest.timeline, for: configuration)
+                        completion(timeline)
                     }
                 }
                 return
@@ -165,6 +181,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
     }
 
     enum GameModeEvents {
+        case splatfest(splatfest: Splatoon3.Schedule.Splatfest)
         case gameModeEvents(events: [GameModeEvent])
         case coopEvents(events: [CoopEvent], timeframes: [EventTimeframe], gear: CoopGear?)
     }
@@ -174,6 +191,10 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
         var entry: Splatoon3TimelineProvider.Entry
         
         var gameModeType : GameModeType {
+            
+            if case .splatfest(let splatfest) = entry.events, let fest = splatfest.fest {
+                return .splatoon3(type: .splatfest(fest: fest))
+            }
             switch entry.configuration.scheduleType {
             case .unknown, .turfWar:
                 return .splatoon3(type: .turfWar)
@@ -193,7 +214,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
         var body: some View {
             Group {
                 switch entry.events {
-                case .gameModeEvents(_):
+                case .gameModeEvents(_), .splatfest(_):
                     GameModeEntryView(gameMode: gameModeType, events: gameModeEvents, date: entry.date, eventViewSettings: gameModeSettings)
                         .foregroundColor(.white)
                 case .coopEvents(events: _, timeframes: let timeframes, let gear):
@@ -224,6 +245,9 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
 
         var gameModeEvents: [GameModeEvent] {
             switch entry.events {
+            case .splatfest(let splatfest):
+                if displayNext, splatfest.timeline.events.count > 1 { return Array(splatfest.timeline.events.suffix(from: 1)) }
+                return splatfest.timeline.events
             case .gameModeEvents(events: let events):
                 if displayNext, events.count > 1 { return Array(events.suffix(from: 1)) }
                 return events

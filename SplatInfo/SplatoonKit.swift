@@ -35,6 +35,18 @@ enum GameModeType: Codable, Equatable, Hashable, Nameable, LogoNameable {
         }
     }
 
+    var isSplatfest : Bool {
+        switch self {
+        case .splatoon2(_):
+            return false
+        case .splatoon3(let type):
+            if case .splatfest(_) = type {
+                return true
+            }
+            return false
+        }
+    }
+
     var name: String {
         switch self {
         case .splatoon2(let type):
@@ -380,7 +392,7 @@ struct Splatoon3: Codable {
 
         var logoName : String {
             switch self {
-            case .splatfest(let fest):
+            case .splatfest(_):
                 return "mode-regular"
             case .turfWar:
                 return "mode-regular"
