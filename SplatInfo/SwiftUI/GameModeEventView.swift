@@ -293,9 +293,11 @@ struct Splatoon3TagView: View {
             .if(widgetRenderingMode != .accented, transform: { view in
                 view
                     .shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
+                    .drawingGroup()
             })
 #else
             .shadow(color: .black, radius: 1, x: 0.0, y: 1.0)
+            .drawingGroup()
 #endif
     }
 }

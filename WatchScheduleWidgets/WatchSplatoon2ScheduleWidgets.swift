@@ -208,10 +208,13 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
             Group {
                 switch entry.events {
                 case .gameModeEvents(let events):
-                    GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date, isPreview: entry.isPreview, eventViewSettings: eventViewSettings).foregroundColor(.white)
+                    GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date, isPreview: entry.isPreview, eventViewSettings: eventViewSettings)
+                        .foregroundColor(.white)
+                        .drawingGroup()
                 case .coopEvents(let events, let timeframes, let gear):
                     CoopEntryView(events: events, eventTimeframes: timeframes, date: entry.date, gear: gear, eventViewSettings: eventViewSettings)
                         .foregroundColor(.white)
+                        .drawingGroup()
                 }
             }
         }
@@ -454,10 +457,13 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
             Group {
                 switch entry.events {
                 case .gameModeEvents(let events):
-                    GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date, isPreview: entry.isPreview, eventViewSettings: eventViewSettings).foregroundColor(.white)
+                    GameModeEntryView(gameMode: gameModeType, events: events, date: entry.date, isPreview: entry.isPreview, eventViewSettings: eventViewSettings)
+                        .foregroundColor(.white)
+                        .drawingGroup()
                 case .coopEvents(let events, let timeframes, _):
                     CoopEntryView(events: events, eventTimeframes: timeframes, date: entry.date, gear: nil, eventViewSettings: eventViewSettings)
                         .foregroundColor(.white)
+                        .drawingGroup()
                 }
             }
         }

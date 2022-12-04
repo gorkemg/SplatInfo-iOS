@@ -34,19 +34,19 @@ struct GameModeEntryView : View {
                     if #available(iOSApplicationExtension 16.0, *) {
                         IconCircularWidgetView(startDate: event.timeframe.startDate, endDate: event.timeframe.endDate, imageName: isPreview ? event.mode.logoName : event.rule.logoName, progressTintColor: event.mode.color)
                     }else{
-                        Text("No event available").splat1Font(size: 20)
+                        Text("No event available").scaledSplat1Font(size: 20)
                     }
                 case .accessoryRectangular:
                     if #available(iOSApplicationExtension 16.0, *) {
                         GameModeRectangularWidgetView(event: event, date: date)
                     }else{
-                        Text("No event available").splat1Font(size: 20)
+                        Text("No event available").scaledSplat1Font(size: 20)
                     }
                 case .accessoryInline:
                     if #available(iOSApplicationExtension 16.0, *) {
                         GameModeInlineWidgetView(event: event, date: date)
                     }else{
-                        Text("No event available").splat1Font(size: 20)
+                        Text("No event available").scaledSplat1Font(size: 20)
                     }
                 #if os(watchOS)
                 case .accessoryCorner:
@@ -58,10 +58,10 @@ struct GameModeEntryView : View {
                         }
                 #endif
                 @unknown default:
-                    Text("No event available").splat1Font(size: 20)
+                    Text("No event available").scaledSplat1Font(size: 20)
                 }
             }else{
-                Text("No event available").splat1Font(size: 20)
+                Text("No event available").scaledSplat1Font(size: 20)
             }
         }.environmentObject(eventViewSettings)
     }

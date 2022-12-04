@@ -64,6 +64,7 @@ struct CoopRectangularWidgetView: View {
                         GearImage(gear: gear)
                             .frame(minHeight: 16, maxHeight: 24)
                             .shadow(color: .black, radius: 1.0, x: 0.0, y: 0.0)
+                            .drawingGroup()
                     }
                 }
             }

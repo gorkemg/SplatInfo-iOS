@@ -205,7 +205,9 @@ struct Splatoon2TimelinesView: View {
             
             VStack(alignment: .center){
                 Spacer()
-                Text(date, style: .relative).splat2Font(size: 9)
+                Text(date, style: .relative)
+                    .splat2Font(size: 9)
+                    .drawingGroup()
                 HStack(alignment: .bottom, spacing: 1.0) {
                     ForEach(0..<modes.count, id: \.self) { index in
                         let mode = modes[index]
@@ -265,10 +267,11 @@ struct GameSmallTimelineView: View {
             GeometryReader { geo in
                 List(events) { event in
 
-                    GameModeEventView(gameMode: gameModeTimeline.mode, event: event, /*nextEvent: nextEvent(for: event),*/ showTimeframe: true, style: .topBottom, date: Date())
+                    GameModeEventView(gameMode: gameModeTimeline.mode, event: event, showTimeframe: true, style: .topBottom, date: Date())
                         .frame(width: geo.size.width, height: geo.size.height)
                         .listRowInsets(EdgeInsets())
                         .cornerRadius(20)
+                        .drawingGroup()
                 }
                 .padding(0)
                 .environment(\.defaultMinListRowHeight, geo.size.height)
@@ -297,6 +300,7 @@ struct CoopSmallTimelineView: View {
                         .frame(width: geo.size.width, height: geo.size.height)
                         .listRowInsets(EdgeInsets())
                         .cornerRadius(20)
+                        .drawingGroup()
                 }
                 .padding(0)
                 .environment(\.defaultMinListRowHeight, geo.size.height)

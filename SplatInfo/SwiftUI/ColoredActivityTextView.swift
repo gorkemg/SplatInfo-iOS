@@ -22,9 +22,11 @@ struct ColoredActivityTextView: View {
                 .if(widgetRenderingMode != .accented, transform: { view in
                     view
                         .shadow(color: .black, radius: 1.0, x: 0.0, y: 1.0)
+                        .drawingGroup()
                 })
                 #else
                     .shadow(color: .black, radius: 1.0, x: 0.0, y: 1.0)
+                    .drawingGroup()
 
                 #endif
         }
@@ -37,6 +39,7 @@ struct ColoredActivityTextView: View {
         #else
             .background(state.color).cornerRadius(5.0)
             .shadow(color: .black, radius: 1.0, x: 0.0, y: 1.0)
+            .drawingGroup()
         #endif
     }
 }
