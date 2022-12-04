@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LargeGameModeWidgetView : View {
+    let gameMode: GameModeType
     let event: GameModeEvent
     var nextEvents: [GameModeEvent]
     let date: Date                      // widget update date
@@ -37,12 +38,12 @@ struct LargeGameModeWidgetView : View {
 
                 VStack {
 
-                    GameModeEventView(event: event, style: .large, date: date)
+                    GameModeEventView(gameMode: gameMode, event: event, style: .large, date: date)
                         .environmentObject(topSettings)
                     
                     ForEach(nextEvents.indices, id: \.self) { i in
                         let nextEvent = nextEvents[i]
-                        GameModeEventView(event: nextEvent, style: .threeColumns, date: date)
+                        GameModeEventView(gameMode: gameMode, event: nextEvent, style: .threeColumns, date: date)
                             .environmentObject(bottomSettings)
                     }
                     

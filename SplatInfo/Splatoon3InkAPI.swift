@@ -201,7 +201,8 @@ class Splatoon3InkAPI {
     /// Salmon Run
     struct CoopGroupingSchedule: Codable {
         let regularSchedules: CoopScheduleNodes
-//        let bigRunSchedules: [Schedule]
+        let bannerImage: ImageURL?
+        let bigRunSchedules: CoopScheduleNodes?
     }
     /// Splatfest
     struct FestScheduleNodes: Codable {
@@ -339,7 +340,7 @@ class Splatoon3InkAPI {
     
     struct CoopStage: Codable {
         let name: String
-        let coopStageId: Int
+        let coopStageId: Int?
         let thumbnailImage: ImageURL
         let image: ImageURL
         let id: String
@@ -355,7 +356,7 @@ class Splatoon3InkAPI {
     }
     
     struct Stage: Codable {
-        let stageId: Int
+        let vsStageId: Int
         let id: String
         let originalImage: ImageURL
         let name: String

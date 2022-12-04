@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SmallGameModeWidgetView : View {
+    let gameMode: GameModeType
     let event: GameModeEvent
     var nextEvent: GameModeEvent? = nil
     let date: Date
@@ -19,7 +20,7 @@ struct SmallGameModeWidgetView : View {
                 event.mode.color
                 event.mode.bgImage
 
-                GameModeEventView(event: event, nextEvent: nextEvent, style: .topBottom, date: date)
+                GameModeEventView(gameMode: gameMode, event: event, nextEvent: nextEvent, style: .topBottom, date: date)
             }
         }
     }

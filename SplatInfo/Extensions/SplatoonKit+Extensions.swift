@@ -126,7 +126,7 @@ extension Splatoon3.GameModeType {
                         ForEach(fest.teams, id: \.self) { team in
                             team.color.color
                         }
-                    }
+                    }.rotationEffect(Angle(degrees: -5.0)).scaleEffect(1.3)
                     Image("splatoon-card-bg").resizable(resizingMode: .tile)
                 }
             case .turfWar, .anarchyBattleOpen, .anarchyBattleSeries, .league, .x:

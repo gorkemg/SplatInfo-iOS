@@ -36,7 +36,7 @@ struct Splatoon3ScheduleWidget: Widget {
 
 struct Previews_Splatoon3ScheduleWidget_Previews: PreviewProvider {
     
-    static let schedule = Splatoon3.Schedule.splatfestFirstHalfExample
+    static let schedule = Splatoon3.Schedule.splatfestSecondHalfExample
     
     static var intent : Splatoon3_ScheduleIntent {
         return Splatoon3_ScheduleIntent()

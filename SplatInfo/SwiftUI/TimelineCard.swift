@@ -173,7 +173,7 @@ struct Splatoon3TimelineCard: View {
 
             case .coop(let timeline):
 
-                let mode = Splatoon2.GameModeType.salmonRun
+                let mode = Splatoon3.GameModeType.salmonRun
                 mode.color
                 mode.bgImage
                 

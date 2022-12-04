@@ -268,6 +268,7 @@ struct Splatoon3: Codable {
         var league: GameTimeline
         var x: GameTimeline
         var coop: CoopTimeline
+        var bigRun: CoopTimeline
         var splatfest: Splatfest
 
         struct Splatfest: Codable {
@@ -441,7 +442,7 @@ struct Splatoon3: Codable {
 
 // MARK: - Splatoon 2 specific
 
-struct GameModeTimeline: Codable {
+struct GameModeTimeline: Codable, Equatable, Hashable {
     let mode: GameModeType
     let timeline: GameTimeline
 }
@@ -509,13 +510,18 @@ extension CoopTimeline: UpcomingEvents {
 }
 
 enum TimelineType: Codable, Hashable, Equatable {
-    case game(mode: GameModeType, timeline: GameTimeline)
+    case game(timeline: GameModeTimeline)
     case coop(game: Game, timeline: CoopTimeline)
     
     var modeType: GameModeType {
         switch self {
-        case .game(let mode, _):
-            return mode
+        case .game(let modeTimeline):
+            switch modeTimeline.mode {
+            case .splatoon2(let type):
+                return .splatoon2(type: type)
+            case .splatoon3(let type):
+                return .splatoon3(type: type)
+            }
         case .coop(let game, _):
             switch game {
             case .splatoon2:

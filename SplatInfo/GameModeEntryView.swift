@@ -23,13 +23,13 @@ struct GameModeEntryView : View {
             if let event = event {
                 switch widgetFamily {
                 case .systemSmall:
-                    SmallGameModeWidgetView(event: event, nextEvent: nextEvent, date: date)
+                    SmallGameModeWidgetView(gameMode: gameMode, event: event, nextEvent: nextEvent, date: date)
                 case .systemMedium:
                     MediumGameModeWidgetView(gameMode: gameMode, event: event, nextEvent: nextEvent, date: date)
                 case .systemLarge:
-                    LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
+                    LargeGameModeWidgetView(gameMode: gameMode, event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
                 case .systemExtraLarge:
-                    LargeGameModeWidgetView(event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
+                    LargeGameModeWidgetView(gameMode: gameMode, event: event, nextEvents: Array(nextEvents.prefix(3)), date: date)
                 case .accessoryCircular:
                     if #available(iOSApplicationExtension 16.0, *) {
                         IconCircularWidgetView(startDate: event.timeframe.startDate, endDate: event.timeframe.endDate, imageName: isPreview ? event.mode.logoName : event.rule.logoName, progressTintColor: event.mode.color)

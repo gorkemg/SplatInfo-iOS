@@ -117,10 +117,12 @@ struct Splatoon3TimelinesView: View {
             TabView(selection: $selectedPage) {
                 ForEach(timelineTypes, id:\.self) { timelineType in
                     switch timelineType {
-                    case .game(_, let timeline):
-                        GameSmallTimelineView(timeline: timeline, date: date).tag(timelineType.modeType)
+                    case .game(let mode, let timeline):
+                        GameSmallTimelineView(gameModeTimeline: GameModeTimeline(mode: .splatoon3(type: mode), timeline: timeline), date: date)
+                            .tag(timelineType.modeType)
                     case .coop(let timeline):
-                        CoopSmallTimelineView(timeline: timeline).tag(timelineType.modeType)
+                        CoopSmallTimelineView(timeline: timeline)
+                            .tag(timelineType.modeType)
                     }
                 }
             }
@@ -192,8 +194,8 @@ struct Splatoon2TimelinesView: View {
             TabView(selection: $selectedPage) {
                 ForEach(modes, id:\.self) { mode in
                     switch mode {
-                    case .game(_, let timeline):
-                        GameSmallTimelineView(timeline: timeline, date: date).tag(mode.modeType)
+                    case .game(let gameMode, let timeline):
+                        GameSmallTimelineView(gameModeTimeline: GameModeTimeline(mode: .splatoon2(type: gameMode), timeline: timeline), date: date).tag(mode.modeType)
                     case .coop(let timeline):
                         CoopSmallTimelineView(timeline: timeline).tag(mode.modeType)
                     }
@@ -242,20 +244,20 @@ struct Splatoon2TimelinesView: View {
 
 struct GameSmallTimelineView: View {
     
-    let timeline: GameTimeline
+    let gameModeTimeline: GameModeTimeline
     
     var nextEvent: GameModeEvent? = nil
     let date: Date
 
     func nextEvent(for event: GameModeEvent) -> GameModeEvent? {
-        if let index = timeline.events.firstIndex(of: event) {
-            return timeline.events[safe: index+1]
+        if let index = gameModeTimeline.timeline.events.firstIndex(of: event) {
+            return gameModeTimeline.timeline.events[safe: index+1]
         }
         return nil
     }
     
     var body: some View {
-        let events: [GameModeEvent] = timeline.events
+        let events: [GameModeEvent] = gameModeTimeline.timeline.events
         if(events.isEmpty) {
             Text("Events not available: \(events.count)")
                 .splat2Font(size: 20)
@@ -263,7 +265,7 @@ struct GameSmallTimelineView: View {
             GeometryReader { geo in
                 List(events) { event in
 
-                    GameModeEventView(event: event, /*nextEvent: nextEvent(for: event),*/ showTimeframe: true, style: .topBottom, date: Date())
+                    GameModeEventView(gameMode: gameModeTimeline.mode, event: event, /*nextEvent: nextEvent(for: event),*/ showTimeframe: true, style: .topBottom, date: Date())
                         .frame(width: geo.size.width, height: geo.size.height)
                         .listRowInsets(EdgeInsets())
                         .cornerRadius(20)

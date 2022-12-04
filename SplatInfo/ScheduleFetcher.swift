@@ -47,6 +47,7 @@ extension Splatoon3.Schedule {
                                                  league: GameTimeline(events: league.upcomingEventsAfterDate(date: date)),
                                                  x: GameTimeline(events: x.upcomingEventsAfterDate(date: date)),
                                                  coop: CoopTimeline(game: .splatoon3, events: coop.events.upcomingEventsAfterDate(date: date), otherTimeframes: coop.otherTimeframes.upcomingTimeframesAfterDate(date: date), gear: coop.gear),
+                                                 bigRun: CoopTimeline(game: .splatoon3, events: bigRun.events, otherTimeframes: []),
                                                  splatfest: Splatfest(timeline: GameTimeline(events: splatfest.timeline.upcomingEventsAfterDate(date: date)), fest: splatfest.fest))
         return updatedSchedule
     }
@@ -109,7 +110,7 @@ extension Splatoon2.Schedule {
         let updatedSchedule = Splatoon2.Schedule(regular: GameTimeline(events: regular.upcomingEventsAfterDate(date: date)),
                                                  ranked: GameTimeline(events: ranked.upcomingEventsAfterDate(date: date)),
                                                  league: GameTimeline(events: league.upcomingEventsAfterDate(date: date)),
-                                                 coop: CoopTimeline(game: .splatoon3, events: coop.events.upcomingEventsAfterDate(date: date), otherTimeframes: coop.otherTimeframes.upcomingTimeframesAfterDate(date: date), gear: coop.gear))
+                                                 coop: CoopTimeline(game: .splatoon2, events: coop.events.upcomingEventsAfterDate(date: date), otherTimeframes: coop.otherTimeframes.upcomingTimeframesAfterDate(date: date), gear: coop.gear))
         return updatedSchedule
     }
     
@@ -155,6 +156,7 @@ extension Splatoon3.Schedule: ImageURLs {
                                   league: .init(events: []),
                                   x: .init(events: []),
                                   coop: .init(game: .splatoon3, events: [], otherTimeframes: []),
+                                  bigRun: .init(game: .splatoon3, events: [], otherTimeframes: []),
                                   splatfest: .init(timeline: .init(events: []), fest: nil))
     }
     
@@ -531,7 +533,7 @@ class ScheduleFetcher: ObservableObject {
                 return
             }
             
-            var schedule = Splatoon3.Schedule(regular: response.regularTimeline, anarchyBattleOpen: response.anarchyBattleOpenTimeline, anarchyBattleSeries: response.anarchyBattleSeriesTimeline, league: response.leageTimeline, x: response.xTimeline, coop: response.coopTimeline, splatfest: .init(timeline: response.splatfestTimeline, fest: response.splatfest))
+            var schedule = Splatoon3.Schedule(regular: response.regularTimeline, anarchyBattleOpen: response.anarchyBattleOpenTimeline, anarchyBattleSeries: response.anarchyBattleSeriesTimeline, league: response.leageTimeline, x: response.xTimeline, coop: response.coopTimeline, bigRun: response.bigRunTimeline, splatfest: .init(timeline: response.splatfestTimeline, fest: response.splatfest))
             
             self.splat3API.requestFestivals { response, error in
              
@@ -721,7 +723,11 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
     var coopTimeline: CoopTimeline {
         return .init(game: .splatoon3, events: coopEvents, otherTimeframes: [])
     }
-    
+
+    var bigRunTimeline: CoopTimeline {
+        return .init(game: .splatoon3, events: bigRunEvents, otherTimeframes: [])
+    }
+
     var splatfestTimeline: GameTimeline {
         let events = self.data.festSchedules.nodes.flatMap({ $0.gameModeEvents(mode: .splatoon3(type: .turfWar)) })
         return .init(events: events)
@@ -735,7 +741,17 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
     var coopEvents: [CoopEvent] {
         
         var events: [CoopEvent] = []
-        let coopEvents = self.data.coopGroupingSchedule.regularSchedules.nodes
+        let coopEvents = self.data.coopGroupingSchedule.regularSchedules.nodes + (self.data.coopGroupingSchedule.bigRunSchedules?.nodes ?? [])
+        for event in coopEvents {
+            let coopEvent = CoopEvent(game: .splatoon3, timeframe: EventTimeframe(startDate: event.startTime, endDate: event.endTime), weapons: event.setting.weapons.map({ $0.weapon }), stage: Stage(id: event.setting.coopStage.id, name: event.setting.coopStage.name, imageUrl: event.setting.coopStage.image.url))
+            events.append(coopEvent)
+        }
+        return events
+    }
+    
+    var bigRunEvents: [CoopEvent] {
+        var events: [CoopEvent] = []
+        guard let coopEvents = self.data.coopGroupingSchedule.bigRunSchedules?.nodes else { return [] }
         for event in coopEvents {
             let coopEvent = CoopEvent(game: .splatoon3, timeframe: EventTimeframe(startDate: event.startTime, endDate: event.endTime), weapons: event.setting.weapons.map({ $0.weapon }), stage: Stage(id: event.setting.coopStage.id, name: event.setting.coopStage.name, imageUrl: event.setting.coopStage.image.url))
             events.append(coopEvent)
@@ -748,7 +764,7 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
 extension Splatoon3InkAPI.SchedulesAPIResponse {
     
     var schedule: Splatoon3.Schedule {
-        let schedule = Splatoon3.Schedule(regular: regularTimeline, anarchyBattleOpen: anarchyBattleOpenTimeline, anarchyBattleSeries: anarchyBattleSeriesTimeline, league: leageTimeline, x: xTimeline, coop: coopTimeline, splatfest: .init(timeline: splatfestTimeline, fest: splatfest))
+        let schedule = Splatoon3.Schedule(regular: regularTimeline, anarchyBattleOpen: anarchyBattleOpenTimeline, anarchyBattleSeries: anarchyBattleSeriesTimeline, league: leageTimeline, x: xTimeline, coop: coopTimeline, bigRun: bigRunTimeline, splatfest: .init(timeline: splatfestTimeline, fest: splatfest))
         return schedule
     }
 }

@@ -200,7 +200,7 @@ struct GameModeTimelineView: View {
         if events.count > 0 {
             ForEach(0..<events.count, id: \.self) { i in
                 let event = events[i]
-                GameModeEventView(event: event, style: i == 0 ? .large : .threeColumns, date: Date())
+                GameModeEventView(gameMode: mode, event: event, style: i == 0 ? .large : .threeColumns, date: Date())
                     .environmentObject(i == 0 ? topSettings(event: event) : bottomSettings(event: event))
             }
         }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GameModeEventView: View {
+    let gameMode: GameModeType
     let event: GameModeEvent
     var nextEvent: GameModeEvent? = nil
     var showTimeframe: Bool = false
@@ -27,6 +28,12 @@ struct GameModeEventView: View {
         return event.mode.isTurfWar
     }
     
+    var splatfest: Splatoon3.Schedule.Splatfest.Fest? {
+        guard case .splatoon3(let type) = gameMode, case .splatfest(let fest) = type else { return nil }
+        return fest
+    }
+    
+    
     var body: some View {
         VStack {
             switch style {
@@ -39,6 +46,9 @@ struct GameModeEventView: View {
                         }
                         if let stage = event.stageB {
                             PillStageImage(stage: stage) //, height: innerGeo.size.height)
+                        }
+                        if let splatfest, let tricolorStage = splatfest.tricolorStage {
+                            PillStageImage(stage: tricolorStage)
                         }
                     }
                     
