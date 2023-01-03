@@ -741,7 +741,7 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
     var coopEvents: [CoopEvent] {
         
         var events: [CoopEvent] = []
-        let coopEvents = self.data.coopGroupingSchedule.regularSchedules.nodes + (self.data.coopGroupingSchedule.bigRunSchedules?.nodes ?? [])
+        let coopEvents = self.data.coopGroupingSchedule.regularSchedules.nodes
         for event in coopEvents {
             let coopEvent = CoopEvent(game: .splatoon3, timeframe: EventTimeframe(startDate: event.startTime, endDate: event.endTime), weapons: event.setting.weapons.map({ $0.weapon }), stage: Stage(id: event.setting.coopStage.id, name: event.setting.coopStage.name, imageUrl: event.setting.coopStage.image.url))
             events.append(coopEvent)
@@ -753,7 +753,8 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
         var events: [CoopEvent] = []
         guard let coopEvents = self.data.coopGroupingSchedule.bigRunSchedules?.nodes else { return [] }
         for event in coopEvents {
-            let coopEvent = CoopEvent(game: .splatoon3, timeframe: EventTimeframe(startDate: event.startTime, endDate: event.endTime), weapons: event.setting.weapons.map({ $0.weapon }), stage: Stage(id: event.setting.coopStage.id, name: event.setting.coopStage.name, imageUrl: event.setting.coopStage.image.url))
+            var coopEvent = CoopEvent(game: .splatoon3, timeframe: EventTimeframe(startDate: event.startTime, endDate: event.endTime), weapons: event.setting.weapons.map({ $0.weapon }), stage: Stage(id: event.setting.coopStage.id, name: event.setting.coopStage.name, imageUrl: event.setting.coopStage.image.url))
+            coopEvent.isBigRun = true
             events.append(coopEvent)
         }
         return events

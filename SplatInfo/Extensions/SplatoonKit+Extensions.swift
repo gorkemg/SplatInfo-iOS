@@ -206,7 +206,7 @@ extension GameModeType: CustomDebugStringConvertible {
 extension CoopEvent {
 
     var color : Color {
-        return Color.coopModeColor
+        return isBigRun ? Color.bigRunModeColor : Color.coopModeColor
     }
 }
 
@@ -258,6 +258,9 @@ extension Color {
     }
     static var coopModeColor: Color {
         return Color("CoopModeColor")
+    }
+    static var bigRunModeColor: Color {
+        return Color("BigRunModeColor")
     }
 }
 

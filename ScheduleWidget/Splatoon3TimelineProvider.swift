@@ -72,7 +72,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
                     let entry = GameModeEntry(date: Date(), events: .gameModeEvents(events: schedule.x.events), configuration: configuration)
                     completion(entry)
                 case .salmonRun:
-                    let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes, gear: schedule.coop.gear), configuration: configuration)
+                    let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coopWithBigRun.events, timeframes: schedule.coop.otherTimeframes, gear: schedule.coop.gear), configuration: configuration)
                     completion(entry)
                 }
             case .failure(_):
@@ -116,7 +116,7 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
                         selectedTimeline = .game(timeline: schedule.x)
                     case .salmonRun:
                         urls = schedule.coop.allImageURLs()
-                        selectedTimeline = .coop(timeline: schedule.coop)
+                        selectedTimeline = .coop(timeline: schedule.coopWithBigRun)
                     }
                 }
                 downloadImages(urls: urls, asJPEG: true) {

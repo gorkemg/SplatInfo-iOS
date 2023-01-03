@@ -99,7 +99,7 @@ struct ScheduleGrid: View {
                                         .environmentObject(eventViewSettings)
 
                                 }
-                                Splatoon3TimelineCard(timeline: .coop(timeline: splatoon3Schedule.coop))
+                                Splatoon3TimelineCard(timeline: .coop(timeline: splatoon3Schedule.coopWithBigRun))
                                     .environmentObject(eventViewSettings)
 
                             }

@@ -158,15 +158,16 @@ struct CoopEvent: Hashable, Identifiable, Event {
     let timeframe: EventTimeframe
     let weapons: [Weapon]
     let stage: Stage
+    var isBigRun = false
     
     var logoName : String {
-        return "mode-coop" // "mr-grizz-logo"
+        return isBigRun ? "mode-bigrun" : "mode-coop" // "mr-grizz-logo"
     }
     var logoNameSmall : String {
-        return "mode-coop-small" // "mr-grizz-logo-small"
+        return isBigRun ? "mode-bigrun-small" : "mode-coop-small" // "mr-grizz-logo-small"
     }
     var modeName : String {
-        return "Salmon Run"
+        return isBigRun ? "Big Run" : "Salmon Run"
     }
     static func == (lhs: CoopEvent, rhs: CoopEvent) -> Bool {
         lhs.id == rhs.id
@@ -270,6 +271,12 @@ struct Splatoon3: Codable {
         var coop: CoopTimeline
         var bigRun: CoopTimeline
         var splatfest: Splatfest
+        
+        var coopWithBigRun: CoopTimeline {
+            let events = coop.events + bigRun.events
+            return .init(game: .splatoon3, events: events.sorted(by: {$0.timeframe.startDate < $1.timeframe.startDate}), otherTimeframes: [])
+        }
+        
 
         struct Splatfest: Codable {
             let timeline: GameTimeline

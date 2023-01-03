@@ -88,7 +88,7 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
                     completion(entry)
                 case .salmonRun:
                     downloadImages(urls: schedule.coop.allWeaponImageURLs(), resizeSize: .resizeToWidth(32.0)) {
-                        let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coop.events, timeframes: schedule.coop.otherTimeframes, gear: schedule.coop.gear), configuration: configuration)
+                        let entry = GameModeEntry(date: Date(), events: .coopEvents(events: schedule.coopWithBigRun.events, timeframes: schedule.coop.otherTimeframes, gear: schedule.coop.gear), configuration: configuration)
                         completion(entry)
                     }
                 }
@@ -122,7 +122,7 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
                 case .x:
                     selectedTimeline = .game(timeline: schedule.x)
                 case .salmonRun:
-                    selectedTimeline = .coop(timeline: schedule.coop)
+                    selectedTimeline = .coop(timeline: schedule.coopWithBigRun)
                 }
                 switch selectedTimeline {
                 case .game(let timeline):

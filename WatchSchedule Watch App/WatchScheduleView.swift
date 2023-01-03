@@ -106,9 +106,9 @@ struct Splatoon3TimelinesView: View {
         let aOpen = Splatoon3.TimelineType.game(mode: .anarchyBattleOpen, timeline: schedule.anarchyBattleOpen)
         let aSeries = Splatoon3.TimelineType.game(mode: .anarchyBattleSeries, timeline: schedule.anarchyBattleSeries)
 //        let league = Splatoon3.TimelineType.game(mode: .league, timeline: schedule.league)
-//        let x = Splatoon3.TimelineType.game(mode: .x, timeline: schedule.x)
-        let salmonRun = Splatoon3.TimelineType.coop(timeline: schedule.coop)
-        return [turfWar,aOpen,aSeries,/*league,x,*/salmonRun]
+        let x = Splatoon3.TimelineType.game(mode: .x, timeline: schedule.x)
+        let salmonRun = Splatoon3.TimelineType.coop(timeline: schedule.coopWithBigRun)
+        return [turfWar,aOpen,aSeries,/*league,*/x,salmonRun]
     }
     
     var body: some View {
