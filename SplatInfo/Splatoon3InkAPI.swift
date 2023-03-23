@@ -121,14 +121,14 @@ class Splatoon3InkAPI {
     }
     
     struct Schedules: Codable {
-        let regularSchedules: RegularScheduleNodes
-        let bankaraSchedules: BankaraScheduleNodes
-        let xSchedules: XScheduleNodes
-        let leagueSchedules: LeagueScheduleNodes
-        let coopGroupingSchedule: CoopGroupingSchedule
-        let festSchedules: FestScheduleNodes
+        let regularSchedules: RegularScheduleNodes?
+        let bankaraSchedules: BankaraScheduleNodes?
+        let xSchedules: XScheduleNodes?
+        let leagueSchedules: LeagueScheduleNodes?
+        let coopGroupingSchedule: CoopGroupingSchedule?
+        let festSchedules: FestScheduleNodes?
         let currentFest: Splatfest?
-        let vsStages: StageNodes
+        let vsStages: StageNodes?
     }
     
     struct Splatfest: Codable {

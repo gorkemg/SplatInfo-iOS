@@ -696,27 +696,27 @@ extension Splatoon2InkAPI.SchedulesAPIResponse {
 extension Splatoon3InkAPI.SchedulesAPIResponse {
 
     var regularTimeline: GameTimeline {
-        let events = self.data.regularSchedules.nodes.flatMap({ $0.gameModeEvents(mode:.splatoon3(type: .turfWar)) })
+        let events = self.data.regularSchedules?.nodes.flatMap({ $0.gameModeEvents(mode:.splatoon3(type: .turfWar)) }) ?? []
         return .init(events: events)
     }
 
     var anarchyBattleOpenTimeline: GameTimeline {
-        let events: [GameModeEvent] = self.data.bankaraSchedules.nodes.map({ $0.gameModeEvents }).flatMap({ $0 })
+        let events: [GameModeEvent] = self.data.bankaraSchedules?.nodes.map({ $0.gameModeEvents }).flatMap({ $0 }) ?? []
         return .init(events: events.filter({ $0.mode == .splatoon3(type: .anarchyBattleOpen) }))
     }
 
     var anarchyBattleSeriesTimeline: GameTimeline {
-        let events: [GameModeEvent] = self.data.bankaraSchedules.nodes.map({ $0.gameModeEvents }).flatMap({ $0 })
+        let events: [GameModeEvent] = self.data.bankaraSchedules?.nodes.map({ $0.gameModeEvents }).flatMap({ $0 }) ?? []
         return .init(events: events.filter({ $0.mode == .splatoon3(type: .anarchyBattleSeries) }))
     }
 
     var leageTimeline: GameTimeline {
-        let events = self.data.leagueSchedules.nodes.flatMap({ $0.gameModeEvents(mode:.splatoon3(type: .league)) })
+        let events = self.data.leagueSchedules?.nodes.flatMap({ $0.gameModeEvents(mode:.splatoon3(type: .league)) }) ?? []
         return .init(events: events)
     }
 
     var xTimeline: GameTimeline {
-        let events = self.data.xSchedules.nodes.flatMap({ $0.gameModeEvents(mode:.splatoon3(type: .x)) })
+        let events = self.data.xSchedules?.nodes.flatMap({ $0.gameModeEvents(mode:.splatoon3(type: .x)) }) ?? []
         return .init(events: events)
     }
 
@@ -729,7 +729,7 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
     }
 
     var splatfestTimeline: GameTimeline {
-        let events = self.data.festSchedules.nodes.flatMap({ $0.gameModeEvents(mode: .splatoon3(type: .turfWar)) })
+        let events = self.data.festSchedules?.nodes.flatMap({ $0.gameModeEvents(mode: .splatoon3(type: .turfWar)) }) ?? []
         return .init(events: events)
     }
     
@@ -741,7 +741,7 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
     var coopEvents: [CoopEvent] {
         
         var events: [CoopEvent] = []
-        let coopEvents = self.data.coopGroupingSchedule.regularSchedules.nodes
+        let coopEvents = self.data.coopGroupingSchedule?.regularSchedules.nodes ?? []
         for event in coopEvents {
             let coopEvent = CoopEvent(game: .splatoon3, timeframe: EventTimeframe(startDate: event.startTime, endDate: event.endTime), weapons: event.setting.weapons.map({ $0.weapon }), stage: Stage(id: event.setting.coopStage.id, name: event.setting.coopStage.name, imageUrl: event.setting.coopStage.image.url))
             events.append(coopEvent)
@@ -751,7 +751,7 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
     
     var bigRunEvents: [CoopEvent] {
         var events: [CoopEvent] = []
-        guard let coopEvents = self.data.coopGroupingSchedule.bigRunSchedules?.nodes else { return [] }
+        guard let coopEvents = self.data.coopGroupingSchedule?.bigRunSchedules?.nodes else { return [] }
         for event in coopEvents {
             var coopEvent = CoopEvent(game: .splatoon3, timeframe: EventTimeframe(startDate: event.startTime, endDate: event.endTime), weapons: event.setting.weapons.map({ $0.weapon }), stage: Stage(id: event.setting.coopStage.id, name: event.setting.coopStage.name, imageUrl: event.setting.coopStage.image.url))
             coopEvent.isBigRun = true
