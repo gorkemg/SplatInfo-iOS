@@ -128,7 +128,7 @@ class Splatoon3InkAPI {
         let coopGroupingSchedule: CoopGroupingSchedule?
         let festSchedules: FestScheduleNodes?
         let currentFest: Splatfest?
-        let vsStages: StageNodes?
+        //let vsStages: StageNodes?
     }
     
     struct Splatfest: Codable {
@@ -279,10 +279,10 @@ class Splatoon3InkAPI {
         }
         
         var openMatchSettings: [ModeMatchSettings] {
-            return bankaraMatchSettings?.filter({ $0.mode == .open }) ?? []
+            return bankaraMatchSettings?.filter({ $0.bankaraMode == .open }) ?? []
         }
         var challengeMatchSettings: [ModeMatchSettings] {
-            return bankaraMatchSettings?.filter({ $0.mode == .challenge }) ?? []
+            return bankaraMatchSettings?.filter({ $0.bankaraMode == .challenge }) ?? []
         }
     }
 
@@ -291,7 +291,7 @@ class Splatoon3InkAPI {
         var __isVsSetting: String
         var vsStages: [VsStage]
         var vsRule: VsRule
-        let mode: VsMode
+        let bankaraMode: VsMode?
     }
     
     // MARK: -
@@ -336,6 +336,7 @@ class Splatoon3InkAPI {
         let __typename: String
         let coopStage: CoopStage
         let weapons: [Weapon]
+        let boss: CoopBoss?
     }
     
     struct CoopStage: Codable {
@@ -343,6 +344,11 @@ class Splatoon3InkAPI {
         let coopStageId: Int?
         let thumbnailImage: ImageURL
         let image: ImageURL
+        let id: String
+    }
+    
+    struct CoopBoss: Codable {
+        let name: String
         let id: String
     }
     

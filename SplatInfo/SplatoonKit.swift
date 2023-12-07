@@ -158,6 +158,7 @@ struct CoopEvent: Hashable, Identifiable, Event {
     let timeframe: EventTimeframe
     let weapons: [Weapon]
     let stage: Stage
+    var boss: CoopBoss? = nil
     var isBigRun = false
     
     var logoName : String {
@@ -172,6 +173,11 @@ struct CoopEvent: Hashable, Identifiable, Event {
     static func == (lhs: CoopEvent, rhs: CoopEvent) -> Bool {
         lhs.id == rhs.id
     }
+}
+
+struct CoopBoss: Codable, Hashable, Identifiable {
+    let name: String
+    let id: String
 }
 
 // MARK: - Stage

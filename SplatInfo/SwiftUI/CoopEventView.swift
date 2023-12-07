@@ -72,23 +72,12 @@ struct CoopLargeEventView : View {
                     
                     HStack(alignment: .top) {
                         if eventViewSettings.settings.showTitle {
-                            CoopEventTitleView(event: event)
+                            HStack {
+                                CoopEventTitleView(event: event)
+                            }
                         }
-                        if eventViewSettings.settings.showMonthlyGear, let gear = gear {
-                            GearImage(gear: gear)
-                                .frame(minHeight: 20, maxHeight: 40.0)
-                                .padding(.vertical, 2.0)
-                                .padding(.horizontal, 4.0)
-                            #if !os(watchOS)
-                                .background(.ultraThinMaterial.opacity(0.9))
-                            #else
-                                .background(Color.white.opacity(0.5))
-                            #endif
-                                .cornerRadius(8.0)
-                                .clipShape(ContainerRelativeShape())
-                        }
+                        
                         Spacer()
-
 
                         VStack(alignment: .trailing) {
                             HStack(alignment: .center, spacing: 4.0) {
@@ -106,7 +95,6 @@ struct CoopLargeEventView : View {
                             }
                             
                             ActivityTimeFrameView(timeframe: event.timeframe, state: state, fontSize: 12).lineLimit(1).minimumScaleFactor(0.5)
-                            
                         }
                     }
                     
@@ -124,8 +112,26 @@ struct CoopLargeEventView : View {
                         #endif
                             .cornerRadius(8.0)
                             .clipShape(ContainerRelativeShape())
-                                                
+                                  
+                        if eventViewSettings.settings.showMonthlyGear, let gear = gear {
+                            GearImage(gear: gear)
+                                .frame(minHeight: 18, maxHeight: 24.0)
+                                .padding(.vertical, 2.0)
+                                .padding(.horizontal, 4.0)
+                            #if !os(watchOS)
+                                .background(.ultraThinMaterial.opacity(0.9))
+                            #else
+                                .background(Color.white.opacity(0.5))
+                            #endif
+                                .cornerRadius(8.0)
+                                .clipShape(ContainerRelativeShape())
+                        }
+                        
                         Spacer()
+                        VStack() {
+                            CoopBossView(event: event).frame(maxWidth: 30)
+                            Spacer()
+                        }
                     }
                 }
                 .padding(.horizontal, 4.0)
@@ -154,21 +160,12 @@ struct CoopNarrowEventView : View {
 
                         HStack(alignment: .center) {
                             if eventViewSettings.settings.showTitle {
-                                CoopEventTitleView(event: event)
+                                HStack {
+                                    CoopEventTitleView(event: event)
+                                    CoopBossView(event: event)
+                                }
                             }
-                            if eventViewSettings.settings.showMonthlyGear, let gear = gear {
-                                GearImage(gear: gear)
-                                    .frame(minHeight: 12, maxHeight: 24.0)
-                                    .padding(.vertical, 2.0)
-                                    .padding(.horizontal, 4.0)
-                                #if !os(watchOS)
-                                    .background(.ultraThinMaterial.opacity(0.9))
-                                #else
-                                    .background(Color.white.opacity(0.5))
-                                #endif
-                                    .cornerRadius(4.0)
-                                    .clipShape(ContainerRelativeShape())
-                            }
+                            
                         }
 
                         Spacer()
@@ -185,6 +182,20 @@ struct CoopNarrowEventView : View {
                             #endif
                                 .cornerRadius(4.0)
                                 .clipShape(ContainerRelativeShape())
+
+                            if eventViewSettings.settings.showMonthlyGear, let gear = gear {
+                                GearImage(gear: gear)
+                                    .frame(minHeight: 12, maxHeight: 24.0, alignment: .leading)
+                                    .padding(.vertical, 2.0)
+                                    .padding(.horizontal, 4.0)
+                                #if !os(watchOS)
+                                    .background(.ultraThinMaterial.opacity(0.9))
+                                #else
+                                    .background(Color.white.opacity(0.5))
+                                #endif
+                                    .cornerRadius(4.0)
+                                    .clipShape(ContainerRelativeShape())
+                            }
                         }
 
                     }
@@ -222,66 +233,85 @@ struct CoopTopBottomEventView : View {
     var gear: CoopGear?
     let state: TimeframeActivityState
     @EnvironmentObject var eventViewSettings: EventViewSettings
-
+    
     var body: some View {
-        ZStack(alignment: .topLeading) {
-
-            Color.coopModeColor
-
-            Image("bg-spots").resizable(resizingMode: .tile)
-
-            PillStageImage(stage: event.stage, namePosition: .hidden)
-                        
+        
+        VStack(alignment: .leading, spacing: 0.0) {
+            
             VStack(alignment: .leading, spacing: 0.0) {
-                
-                VStack(alignment: .leading, spacing: 0.0) {
+                HStack {
                     CoopEventTitleView(event: event)
-                    HStack {
-                        Text(event.stage.name).splat2Font(size: 10)
-                        Spacer()
-                        if eventViewSettings.settings.showMonthlyGear, let gear = gear, gear.image != nil {
-                            GearImage(gear: gear)
-                                .shadow(color: .black, radius: 1.0, x: 0.0, y: 0.0)
-                                .frame(minHeight: 16, maxHeight: 24)
-                                .padding(.horizontal, 4.0)
-                            #if !os(watchOS)
-                                .background(.ultraThinMaterial.opacity(0.9))
-                            #else
-                                .background(Color.white.opacity(0.5))
-                            #endif
-                                .cornerRadius(8.0)
-                        }
+                        .frame(minHeight: 16, maxHeight: 24)
+                }
+                HStack {
+                    Text(event.stage.name).splat2Font(size: 10)
+                    Spacer()
+                    if eventViewSettings.settings.showMonthlyGear, let gear = gear, gear.image != nil {
+                        GearImage(gear: gear)
+                            .shadow(color: .black, radius: 1.0, x: 0.0, y: 0.0)
+                            .frame(minHeight: 16, maxHeight: 24)
+                            .padding(.horizontal, 4.0)
+                        #if !os(watchOS)
+                            .background(.ultraThinMaterial.opacity(0.9))
+                        #else
+                            .background(Color.white.opacity(0.5))
+                        #endif
+                            .cornerRadius(8.0)
                     }
                 }
+            }
 
-                Spacer()
-                
-                VStack(alignment: .leading, spacing: 2.0) {
-                    HStack {
-                        if event.game == .splatoon2 {
-                            ColoredActivityTextView(state: state)
-                        }
-                        RelativeTimeframeView(timeframe: event.timeframe, state: state)
-                    }.splat2Font(size: 12)
-                    
-                    ActivityTimeFrameView(timeframe: event.timeframe, state: state).lineLimit(1).minimumScaleFactor(0.5)
-                    HStack(spacing: 2.0) {
-                        Group {
-                            WeaponsList(weapons: event.weaponDetails)
-                                .frame(maxHeight: 24.0)
-                                .padding(.horizontal, 8.0)
-                            #if !os(watchOS)
-                                .background(.ultraThinMaterial.opacity(0.9))
-                            #else
-                                .background(Color.white.opacity(0.5))
-                            #endif
-                                .cornerRadius(8.0)
-                        }
-//                        Spacer()
+            //Spacer()
+            
+            VStack(alignment: .leading, spacing: 2.0) {
+                HStack {
+                    if event.game == .splatoon2 {
+                        ColoredActivityTextView(state: state)
                     }
-                }.lineSpacing(0)
-            }.padding(.horizontal, 10.0).padding(.vertical, 4.0)
-        }.foregroundColor(.white)
+                    RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                }.splat2Font(size: 12)
+                
+                ActivityTimeFrameView(timeframe: event.timeframe, state: state).lineLimit(1).minimumScaleFactor(0.5)
+                HStack(spacing: 2.0) {
+                    Group {
+                        WeaponsList(weapons: event.weaponDetails)
+                            .frame(maxHeight: 24.0)
+                            .padding(.horizontal, 2.0)
+                        #if !os(watchOS)
+                            .background(.ultraThinMaterial.opacity(0.9))
+                        #else
+                            .background(Color.white.opacity(0.5))
+                        #endif
+                            .cornerRadius(8.0)
+                    }
+
+                    Spacer()
+
+                    Group {
+                        CoopBossView(event: event)
+                            .frame(maxHeight: 24.0)
+                    }
+                    .padding(4.0)
+                    #if !os(watchOS)
+                        .background(.ultraThinMaterial.opacity(0.9))
+                    #else
+                        .background(Color.white.opacity(0.5))
+                    #endif
+                        .cornerRadius(8.0)
+                }
+            }.lineSpacing(0)
+        }
+        .foregroundColor(.white)
+    }
+}
+
+struct CoopBossView: View {
+    let event: CoopEvent
+
+    var body: some View {
+        Image(event.boss?.name ?? "")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
     }
 }
 
@@ -289,13 +319,13 @@ struct CoopSideBySideEventView : View {
     let event: CoopEvent
     var gear: CoopGear?
     let state: TimeframeActivityState
-//    var showTitle: Bool = true
     var height: CGFloat? = nil
     @EnvironmentObject var eventViewSettings: EventViewSettings
 
     var body: some View {
         HStack(alignment: .top, spacing: 8.0) {
             
+            // left side
             ZStack(alignment: .topLeading) {
                 PillStageImage(stage: event.stage, height: height)
 
@@ -305,19 +335,23 @@ struct CoopSideBySideEventView : View {
                             CoopEventTitleView(event: event)
                         }
                         ColoredActivityTextView(state: state).scaledSplat2Font(size: 10)
+                        Spacer()
                     }
                     Spacer()
-                    RelativeTimeframeView(timeframe: event.timeframe, state: state)
-                        .splat2Font(size: 10)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
-                    .multilineTextAlignment(.trailing)
+                    VStack(alignment: .trailing, spacing: 1.0) {
+                        RelativeTimeframeView(timeframe: event.timeframe, state: state)
+                            .splat2Font(size: 10)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
+                            .multilineTextAlignment(.trailing)
+                        Spacer()
+                    }
                 }
                 .padding(.horizontal, 4.0)
                 .padding(.vertical, 2.0)
-
             }
 
+            // right side
             VStack(alignment: .leading, spacing: 2.0) {
                 TimeframeView(timeframe: event.timeframe, datesStyle: .always, fontSize: 10)
                     .fixedSize(horizontal: false, vertical: true)
@@ -333,6 +367,7 @@ struct CoopSideBySideEventView : View {
                             .frame(minHeight: 20, maxHeight: 30)
                             .shadow(color: .black, radius: 1.0, x: 0.0, y: 0.0)
                     }
+                    CoopBossView(event: event).frame(maxWidth: 20, maxHeight: 20)
                 }
             }
         }.frame(maxHeight: 60)
@@ -367,7 +402,7 @@ struct WeaponsList: View {
                     WeaponImage(weapon: weapon)
                         .shadow(color: .black, radius: 1.0, x: 0.0, y: 0.0)
                 }
-            }
+            }.padding(1.0)
         case .grid:
             VStack {
                 HStack {

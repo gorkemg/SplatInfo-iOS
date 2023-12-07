@@ -216,7 +216,7 @@ struct Splatoon3_WatchTimelineProvider: IntentTimelineProvider {
                         .foregroundColor(.white)
                         .drawingGroup()
                 }
-            }
+            }.widgetBackground(backgroundView: gameModeType.color.opacity(0.2))
         }
         
         var eventViewSettings : EventViewSettings = {
@@ -465,7 +465,7 @@ struct Splatoon2_WatchTimelineProvider: IntentTimelineProvider {
                         .foregroundColor(.white)
                         .drawingGroup()
                 }
-            }
+            }.widgetBackground(backgroundView: gameModeType.color.opacity(0.2))
         }
         
         var eventViewSettings : EventViewSettings = {

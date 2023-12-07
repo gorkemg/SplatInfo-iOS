@@ -29,26 +29,17 @@ struct LargeGameModeWidgetView : View {
     }
 
     var body: some View {
-        GeometryReader { geometry in
+        VStack {
+
+            GameModeEventView(gameMode: gameMode, event: event, style: .large, date: date)
+                .environmentObject(topSettings)
             
-            ZStack(alignment: .topLeading) {
-
-                event.mode.color
-                event.mode.bgImage
-
-                VStack {
-
-                    GameModeEventView(gameMode: gameMode, event: event, style: .large, date: date)
-                        .environmentObject(topSettings)
-                    
-                    ForEach(nextEvents.indices, id: \.self) { i in
-                        let nextEvent = nextEvents[i]
-                        GameModeEventView(gameMode: gameMode, event: nextEvent, style: .threeColumns, date: date)
-                            .environmentObject(bottomSettings)
-                    }
-                    
-                }.padding(8)
+            ForEach(nextEvents.indices, id: \.self) { i in
+                let nextEvent = nextEvents[i]
+                GameModeEventView(gameMode: gameMode, event: nextEvent, style: .threeColumns, date: date)
+                    .environmentObject(bottomSettings)
             }
         }
+        .widgetBackground(backgroundView: gameMode.background)
     }
 }

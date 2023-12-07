@@ -9,19 +9,19 @@ import SwiftUI
 import WidgetKit
 
 struct Splatoon3ScheduleWidget: Widget {
-
+    
     var supportedWidgetFamilies: [WidgetFamily] {
-        #if os(watchOS)
+#if os(watchOS)
         return [.accessoryCircular, .accessoryInline, .accessoryRectangular, .accessoryCorner]
-        #else
+#else
         if #available(iOSApplicationExtension 16.0, *) {
             return [.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryInline, .accessoryRectangular]
         }else{
             return [.systemSmall, .systemMedium, .systemLarge]
         }
-        #endif
+#endif
     }
-
+    
     var body: some WidgetConfiguration {
         
         IntentConfiguration(kind: kindSplatoon3ScheduleWidget, intent: Splatoon3_ScheduleIntent.self, provider: Splatoon3TimelineProvider()) { entry in
@@ -34,9 +34,10 @@ struct Splatoon3ScheduleWidget: Widget {
 }
 
 
+@available(iOSApplicationExtension 17.0, *)
 struct Previews_Splatoon3ScheduleWidget_Previews: PreviewProvider {
     
-    static let schedule = Splatoon3.Schedule.splatfestSecondHalfExample
+    static let schedule = Splatoon3.Schedule.example20231207
     
     static var intent : Splatoon3_ScheduleIntent {
         return Splatoon3_ScheduleIntent()
@@ -47,8 +48,7 @@ struct Previews_Splatoon3ScheduleWidget_Previews: PreviewProvider {
         intent.displayNext = false
         return intent
     }
-    
-
+ 
     static var previews: some View {
 
 #if !os(watchOS)
@@ -66,4 +66,5 @@ struct Previews_Splatoon3ScheduleWidget_Previews: PreviewProvider {
 
 #endif
     }
+
 }

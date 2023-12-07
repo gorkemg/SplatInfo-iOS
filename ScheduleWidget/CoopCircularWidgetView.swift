@@ -14,11 +14,12 @@ struct CoopCircularWidgetView: View {
     let event: CoopEvent
     let date: Date                          // widget update date
     var isBackgroundBlurred: Bool = true
-    var displayStyle: DisplayStyle = .icon
+    var displayStyle: DisplayStyle = .boss
     
     enum DisplayStyle {
         case icon
         case weapons
+        case boss
     }
     
     var dateRange: ClosedRange<Date> {
@@ -36,9 +37,6 @@ struct CoopCircularWidgetView: View {
     var body: some View {
         
         ZStack{
-            if isBackgroundBlurred {
-                AccessoryWidgetBackground()
-            }
             
             switch event.timeframe.state(date: date) {
             case .active:
@@ -68,7 +66,9 @@ struct CoopCircularWidgetView: View {
                                     WeaponImage(weapon: weapon).frame(minWidth: 20, minHeight: 20)
                                 }
                             }
-                        }
+                        }.padding(2.0)
+                    case .boss:
+                        CoopBossView(event: event)
                     }
                 })
                 .progressViewStyle(.circular)
@@ -84,8 +84,19 @@ struct CoopCircularWidgetView: View {
 
             }
 
-        }.widgetAccentable()
+        }
+        .widgetBackground(backgroundView: background)
+        .widgetAccentable()
     }
+    
+    var background: some View {
+        ZStack {
+            if isBackgroundBlurred {
+                AccessoryWidgetBackground()
+            }
+        }
+    }
+    
     
     var progressViewColor: Color {
         if event.timeframe.state(date: Date()) == .active {

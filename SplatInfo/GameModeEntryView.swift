@@ -33,20 +33,24 @@ struct GameModeEntryView : View {
                 case .accessoryCircular:
                     if #available(iOSApplicationExtension 16.0, *) {
                         IconCircularWidgetView(startDate: event.timeframe.startDate, endDate: event.timeframe.endDate, imageName: isPreview ? event.mode.logoName : event.rule.logoName, progressTintColor: event.mode.color)
+                            .widgetBackground(backgroundView: gameMode.color.opacity(0.2))
                     }else{
                         Text("No event available").scaledSplat1Font(size: 20)
+                            .widgetBackground(backgroundView: gameMode.color.opacity(0.2))
                     }
                 case .accessoryRectangular:
                     if #available(iOSApplicationExtension 16.0, *) {
                         GameModeRectangularWidgetView(event: event, date: date)
                     }else{
                         Text("No event available").scaledSplat1Font(size: 20)
+                            .widgetBackground(backgroundView: gameMode.color.opacity(0.2))
                     }
                 case .accessoryInline:
                     if #available(iOSApplicationExtension 16.0, *) {
                         GameModeInlineWidgetView(event: event, date: date)
                     }else{
                         Text("No event available").scaledSplat1Font(size: 20)
+                            .widgetBackground(backgroundView: gameMode.color.opacity(0.2))
                     }
                 #if os(watchOS)
                 case .accessoryCorner:
@@ -56,14 +60,18 @@ struct GameModeEntryView : View {
                             ProgressView(timerInterval: event.timeframe.startDate...event.timeframe.endDate)
                                 .tint(event.mode.color)
                         }
+                        .widgetBackground(backgroundView: gameMode.color.opacity(0.2))
                 #endif
                 @unknown default:
                     Text("No event available").scaledSplat1Font(size: 20)
+                        .widgetBackground(backgroundView: gameMode.color.opacity(0.2))
                 }
             }else{
                 Text("No event available").scaledSplat1Font(size: 20)
+                    .widgetBackground(backgroundView: gameMode.color.opacity(0.2))
             }
-        }.environmentObject(eventViewSettings)
+        }
+        .environmentObject(eventViewSettings)
     }
     
     var event: GameModeEvent? {

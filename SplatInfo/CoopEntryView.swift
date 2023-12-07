@@ -54,14 +54,17 @@ struct CoopEntryView : View {
                             ProgressView(timerInterval: event.timeframe.startDate...event.timeframe.endDate)
                                 .tint(event.color)
                         }
+                        .widgetBackground(backgroundView: event.color.opacity(0.2))
                 #endif
                 @unknown default:
                     SmallCoopWidgetView(event: event, gear: gear, state: event.timeframe.state(date: date))
                 }
             }else{
                 Text("No event available")
+                    .widgetBackground(backgroundView: event?.color.opacity(0.2) ?? Color.clear)
             }
-        }.environmentObject(eventViewSettings)
+        }
+        .environmentObject(eventViewSettings)
     }
 
     var event: CoopEvent? {

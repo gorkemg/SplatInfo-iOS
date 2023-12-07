@@ -38,5 +38,6 @@ struct CoopInlineWidgetView: View {
                 RelativeTimeframeView(timeframe: event.timeframe, state: state)
             }
         }
+        .widgetBackground(backgroundView: event.color.opacity(0.2))
     }
 }

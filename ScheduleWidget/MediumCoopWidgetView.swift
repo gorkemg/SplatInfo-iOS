@@ -34,28 +34,32 @@ struct MediumCoopWidgetView : View {
     }
 
     var body: some View {
-        ZStack(alignment: .center) {
+//        ZStack(alignment: .center) {
+//
+//            Color.coopModeColor
+//
+//            Image("bg-spots").resizable(resizingMode: .tile)
+//                       
+//            LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.05), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
+//
+//
+//        }
+//        .foregroundColor(.white)
+//        .widgetBackground(backgroundView: GameModeType.splatoon3(type: .salmonRun).background)
+        VStack(alignment: .leading, spacing: 8.0) {
 
-            Color.coopModeColor
+            CoopEventView(event: event, gear: gear, style: .narrow, state: state)
+                .environmentObject(topSettings)
 
-            Image("bg-spots").resizable(resizingMode: .tile)
-                       
-            LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.05), Color.black.opacity(0.2)]), startPoint: .top, endPoint: .bottom)
-
-            VStack(alignment: .leading, spacing: 8.0) {
-
-                CoopEventView(event: event, gear: gear, style: .narrow, state: state)
-                    .environmentObject(topSettings)
-
-                if let nextEvent = nextEvent {
-                    let state = nextEvent.timeframe.state(date: date)
-                    CoopEventView(event: nextEvent, gear: gear, style: .sideBySide, state: state)
-                        .environmentObject(bottomSettings)
-                }
-                
+            if let nextEvent = nextEvent {
+                let state = nextEvent.timeframe.state(date: date)
+                CoopEventView(event: nextEvent, gear: gear, style: .sideBySide, state: state)
+                    .environmentObject(bottomSettings)
             }
-            .padding(.horizontal, 8.0).padding(.vertical, 8.0)
-
-        }.foregroundColor(.white)
+            
+        }
+//        .padding(.horizontal, 8.0).padding(.vertical, 8.0)
+        .foregroundColor(.white)
+        .widgetBackground(backgroundView: GameModeType.splatoon3(type: .salmonRun).background)
     }
 }

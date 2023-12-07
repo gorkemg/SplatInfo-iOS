@@ -171,7 +171,19 @@ extension Splatoon3.Schedule: ImageURLs {
         schedule.coop.gear = coopResponse.coopRewardGear
         return schedule
     }
-    
+
+    static var example20231207 : Splatoon3.Schedule {
+        guard let schedulesPath = Bundle.main.path(forResource: "schedules-20231207-103200", ofType: "json")  else { return Splatoon3.Schedule.empty }
+        guard let schedulesData = try? Data(contentsOf: URL(fileURLWithPath: schedulesPath)) else { return Splatoon3.Schedule.empty }
+        guard let scheduleResponse : Splatoon3InkAPI.SchedulesAPIResponse = Splatoon3InkAPI.shared().parseAPIResponse(data: schedulesData) else { return Splatoon3.Schedule.empty }
+        var schedule = scheduleResponse.schedule
+        guard let coopPath = Bundle.main.path(forResource: "coop", ofType: "json")  else { return schedule }
+        guard let coopData = try? Data(contentsOf: URL(fileURLWithPath: coopPath)) else { return schedule }
+        guard let coopResponse : Splatoon3InkAPI.CoopAPIResponse = Splatoon3InkAPI.shared().parseAPIResponse(data: coopData, keyDecodingStrategy: .useDefaultKeys) else { return schedule }
+        schedule.coop.gear = coopResponse.coopRewardGear
+        return schedule
+    }
+
     static var splatfestFirstHalfExample : Splatoon3.Schedule {
         guard let schedulesPath = Bundle.main.path(forResource: "schedules-20220924-210001", ofType: "json") else { return Splatoon3.Schedule.empty }
         guard let schedulesData = try? Data(contentsOf: URL(fileURLWithPath: schedulesPath)) else { return Splatoon3.Schedule.empty }
@@ -505,6 +517,7 @@ class ScheduleFetcher: ObservableObject {
     
     func fetchSplatoon3Schedule(completion: @escaping (Result<Splatoon3.Schedule, Error>) -> Void) {
         
+        //ScheduleFetcher.clearSplatoon3Cache()
         
         // load cache
         if let cachedTimeline = timelineCache.splatoon3, !cachedTimeline.isOutdated {
@@ -743,7 +756,7 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
         var events: [CoopEvent] = []
         let coopEvents = self.data.coopGroupingSchedule?.regularSchedules.nodes ?? []
         for event in coopEvents {
-            let coopEvent = CoopEvent(game: .splatoon3, timeframe: EventTimeframe(startDate: event.startTime, endDate: event.endTime), weapons: event.setting.weapons.map({ $0.weapon }), stage: Stage(id: event.setting.coopStage.id, name: event.setting.coopStage.name, imageUrl: event.setting.coopStage.image.url))
+            let coopEvent = CoopEvent(game: .splatoon3, timeframe: EventTimeframe(startDate: event.startTime, endDate: event.endTime), weapons: event.setting.weapons.map({ $0.weapon }), stage: Stage(id: event.setting.coopStage.id, name: event.setting.coopStage.name, imageUrl: event.setting.coopStage.image.url), boss: event.bossType)
             events.append(coopEvent)
         }
         return events
@@ -753,7 +766,7 @@ extension Splatoon3InkAPI.SchedulesAPIResponse {
         var events: [CoopEvent] = []
         guard let coopEvents = self.data.coopGroupingSchedule?.bigRunSchedules?.nodes else { return [] }
         for event in coopEvents {
-            var coopEvent = CoopEvent(game: .splatoon3, timeframe: EventTimeframe(startDate: event.startTime, endDate: event.endTime), weapons: event.setting.weapons.map({ $0.weapon }), stage: Stage(id: event.setting.coopStage.id, name: event.setting.coopStage.name, imageUrl: event.setting.coopStage.image.url))
+            var coopEvent = CoopEvent(game: .splatoon3, timeframe: EventTimeframe(startDate: event.startTime, endDate: event.endTime), weapons: event.setting.weapons.map({ $0.weapon }), stage: Stage(id: event.setting.coopStage.id, name: event.setting.coopStage.name, imageUrl: event.setting.coopStage.image.url), boss: event.bossType)
             coopEvent.isBigRun = true
             events.append(coopEvent)
         }
@@ -851,6 +864,23 @@ extension Splatoon3InkAPI.CoopAPIResponse.CoopData.CoopResult.MonthlyGear {
             return .head
         }
     }
+}
+
+extension Splatoon3InkAPI.CoopEvent {
+    
+    var bossType: CoopBoss? {
+        guard let eventBoss = self.setting.boss else { return nil }
+        let name: String = eventBoss.name.lowercased()
+//        if eventBoss.name == "Cohozuna" {
+//            name = "cohozuna"
+//        }else if eventBoss.name == "Megalodontia" {
+//            name = "megalodontia"
+//        }else{
+//            name = "horrorboros"
+//        }
+        return .init(name: name, id: eventBoss.id)
+    }
+    
 }
 
 extension Decodable where Self: EventDetails {

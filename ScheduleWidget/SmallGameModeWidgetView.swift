@@ -15,13 +15,7 @@ struct SmallGameModeWidgetView : View {
 
     var body: some View {
 
-        ZStack(alignment: .topTrailing){
-            ZStack(alignment: .topLeading) {
-                event.mode.color
-                event.mode.bgImage
-
-                GameModeEventView(gameMode: gameMode, event: event, nextEvent: nextEvent, style: .topBottom, date: date)
-            }
-        }
+        GameModeEventView(gameMode: gameMode, event: event, nextEvent: nextEvent, style: .topBottom, date: date)
+            .widgetBackground(backgroundView: gameMode.background)
     }
 }

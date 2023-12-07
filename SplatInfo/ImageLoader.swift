@@ -144,7 +144,12 @@ struct TemporaryImageCache: ImageCache {
 
 
 
-class MultiImageLoader {
+class MultiImageLoader: Equatable, Identifiable {
+    
+    static func == (lhs: MultiImageLoader, rhs: MultiImageLoader) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
     
     static var tempFolder: URL {
         return URL(fileURLWithPath: NSTemporaryDirectory())
@@ -158,6 +163,7 @@ class MultiImageLoader {
         return appGroupFolder ?? tempFolder
     }
     
+    let id: String = UUID().uuidString
     let urls : [URL]
     @Published var finishedURLs : [URL] = []
     let directory: URL
@@ -203,6 +209,7 @@ class MultiImageLoader {
             if fileManager.fileExists(atPath: fileURL.path) {
                 if self.useCachedImage {
                     print("MultiImageLoader: using Cache for (\(url)")
+                    print("\(count) == \(counter)")
                     self.finishedURLs.append(url)
                     counter += 1
                     if count == counter {
@@ -215,6 +222,7 @@ class MultiImageLoader {
             }else if fileManager.fileExists(atPath: jpegURL.path) {
                 if self.useCachedImage {
                     print("MultiImageLoader: using Cache for (\(url)")
+                    print("\(count) == \(counter)")
                     self.finishedURLs.append(url)
                     counter += 1
                     if count == counter {
@@ -229,12 +237,19 @@ class MultiImageLoader {
             let task = URLSession.shared.downloadTask(with: url) { [weak self] location, response, error in
 
                 guard let self = self else { return }
+
+                counter += 1
+                print("\(count) == \(counter)")
+                self.finishedURLs.append(url)
+
                 guard let tempLocation = location, error == nil else {
                     print("Error downloading image: \(String(describing: error))")
+                    if count == counter {
+                        completion()
+                    }
                     return
                 }
                 
-                counter += 1
 
                 do {
                     if self.storeAsJPEG {
@@ -255,8 +270,6 @@ class MultiImageLoader {
                 } catch {
                     print("Error downloading image: \(error)")
                 }
-                print("\(count) == \(counter)")
-                self.finishedURLs.append(url)
                 if count == counter {
                     completion()
                 }

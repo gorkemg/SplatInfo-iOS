@@ -33,24 +33,18 @@ struct MediumGameModeWidgetView : View {
     
     var body: some View {
         
-        ZStack(alignment: .topLeading) {
+        VStack(spacing: 8.0) {
+            
+            GameModeEventView(gameMode: gameMode, event: event, style: .large, date: date)
+                .environmentObject(topSettings)
 
-            gameMode.color
-            gameMode.bgImage
-
-            VStack(spacing: 8.0) {
-                
-                GameModeEventView(gameMode: gameMode, event: event, style: .large, date: date)
-                    .environmentObject(topSettings)
-
-                if let nextEvent = nextEvent {
-                    GameModeEventView(gameMode: gameMode, event: nextEvent, style: .threeColumns, date: date)
-                        .environmentObject(bottomSettings)
-                }
-                
-            }.padding(8)
+            if let nextEvent = nextEvent {
+                GameModeEventView(gameMode: gameMode, event: nextEvent, style: .threeColumns, date: date)
+                    .environmentObject(bottomSettings)
+            }
             
         }
+        .widgetBackground(backgroundView: gameMode.background)
     }
 
 }

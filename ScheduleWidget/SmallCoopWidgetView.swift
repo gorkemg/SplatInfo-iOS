@@ -24,5 +24,20 @@ struct SmallCoopWidgetView : View {
     var body: some View {
         CoopEventView(event: event, gear: gear, style: .topBottom, state: state)
             .environmentObject(settings)
+            .widgetBackground(backgroundView: topBottomBackground)
     }
+    
+    var topBottomBackground: some View {
+        
+        ZStack(alignment: .topLeading) {
+            
+            Color.coopModeColor
+            
+            Image("bg-spots").resizable(resizingMode: .tile)
+            
+            PillStageImage(stage: event.stage, namePosition: .hidden)
+        }
+        .environmentObject(settings)
+    }
+    
 }

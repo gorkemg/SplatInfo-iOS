@@ -82,6 +82,7 @@ struct GameModeRectangularWidgetView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        .widgetBackground(backgroundView: event.mode.color.opacity(0.2))
         .widgetAccentable()
     }
 }

@@ -8,28 +8,43 @@
 import UIKit
 import SwiftUI
 
-struct ClearBackgroundView: UIViewRepresentable {
-    func makeUIView(context: Context) -> some UIView {
-        let view = UIView()
-        DispatchQueue.main.async {
-            view.superview?.superview?.backgroundColor = .clear
-        }
-        return view
-    }
-    func updateUIView(_ uiView: UIViewType, context: Context) {
-    }
-}
-
-struct ClearBackgroundViewModifier: ViewModifier {
-    
-    func body(content: Content) -> some View {
-        content
-            .background(ClearBackgroundView())
-    }
-}
+extension Bool {
+     static var isWatchOSExtension10: Bool {
+         guard #available(watchOSApplicationExtension 10.0, *) else {
+             return true
+         }
+         return false
+     }
+ }
 
 extension View {
-    func clearModalBackground()->some View {
-        self.modifier(ClearBackgroundViewModifier())
+    func emptyWidgetBackground() -> some View {
+        if #available(watchOS 10.0, iOSApplicationExtension 17.0, iOS 17.0, macOSApplicationExtension 14.0, *) {
+            return containerBackground(for: .widget) {
+            }
+        } else {
+            return Color.clear
+        }
+    }
+    
+    func widgetBackground(backgroundView: some View) -> some View {
+        if #available(watchOS 10.0, iOSApplicationExtension 17.0, iOS 17.0, macOSApplicationExtension 14.0, *) {
+            return containerBackground(for: .widget) {
+                backgroundView
+            }
+        } else {
+            return background(backgroundView)
+        }
+    }
+}
+
+extension WidgetConfiguration {
+
+    func contentMarginsDisabledIfAvailable() -> some WidgetConfiguration {
+        if #available(iOSApplicationExtension 17.0, *) {
+            return self.contentMarginsDisabled()
+        } else {
+            return self
+        }
     }
 }

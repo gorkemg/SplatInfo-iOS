@@ -203,6 +203,25 @@ extension GameModeType: CustomDebugStringConvertible {
     }
 }
 
+extension GameModeType {
+    var background: some View {
+        Group {
+            switch self {
+            case .splatoon2(let type):
+                ZStack(alignment: .topLeading) {
+                    type.color
+                    type.bgImage
+                }
+            case .splatoon3(let type):
+                ZStack(alignment: .topLeading) {
+                    type.color
+                    type.bgImage
+                }
+            }
+        }
+    }
+}
+
 extension CoopEvent {
 
     var color : Color {

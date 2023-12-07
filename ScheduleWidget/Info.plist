@@ -30,5 +30,10 @@
 		<string>Splatoon1.otf</string>
 		<string>Splatoon2.otf</string>
 	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

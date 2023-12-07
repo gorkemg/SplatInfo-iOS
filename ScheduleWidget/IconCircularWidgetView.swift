@@ -36,6 +36,7 @@ struct IconCircularWidgetView: View {
             })
             .progressViewStyle(.circular)
             .tint(progressTintColor)
-        }.widgetAccentable()
+        }
+        .widgetAccentable()
     }
 }

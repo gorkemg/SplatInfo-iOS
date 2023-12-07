@@ -23,10 +23,10 @@ struct CoopRectangularWidgetView: View {
     
     var body: some View {
         ZStack{
-            if isBackgroundBlurred {
-                AccessoryWidgetBackground()
-            }
-            
+//            if isBackgroundBlurred {
+//                AccessoryWidgetBackground()
+//            }
+
             VStack(alignment: .leading, spacing: 2.0) {
                 
                 HStack(alignment: .center){
@@ -57,23 +57,36 @@ struct CoopRectangularWidgetView: View {
                 }.foregroundColor(.primary)
 
                 HStack(alignment: .center) {
+                    CoopBossView(event: event)
+                        .frame(maxHeight: 20)
                     WeaponsList(weapons: event.weaponDetails)
-                        .frame(maxHeight: 24)
+                        .frame(maxHeight: 20)
                     Spacer()
                     if let gear = gear {
                         GearImage(gear: gear)
-                            .frame(minHeight: 16, maxHeight: 24)
+                            .frame(minHeight: 16, maxHeight: 20)
                             .shadow(color: .black, radius: 1.0, x: 0.0, y: 0.0)
                             .drawingGroup()
                     }
                 }
             }
-            .padding(.horizontal, 4.0)
-            .padding(.vertical, 2.0)
+//            .padding(.horizontal, 4.0)
+//            .padding(.vertical, 2.0)
 
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        .widgetBackground(backgroundView: background)
         .widgetAccentable()
     }
+    
+    var background: some View {
+        ZStack {
+            if isBackgroundBlurred {
+                AccessoryWidgetBackground()
+            }
+            PillStageImage(stage: event.stage)
+        }
+    }
+    
 }

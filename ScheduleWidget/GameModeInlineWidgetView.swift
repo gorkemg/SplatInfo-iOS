@@ -37,6 +37,8 @@ struct GameModeInlineWidgetView: View {
             .scaledSplat2Font(size: 10)
             .minimumScaleFactor(0.5)
 
-        }.widgetAccentable()
+        }
+        .widgetBackground(backgroundView: event.mode.color.opacity(0.2))
+        .widgetAccentable()
     }
 }

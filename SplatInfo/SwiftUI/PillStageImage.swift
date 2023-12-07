@@ -36,7 +36,6 @@ struct StageImage: View {
     var body: some View {
             ZStack(alignment: .bottomTrailing) {
 
-
                 if let image = (eventViewSettings.settings.useThumbnailQuality ? stage.thumbImage : stage.image) {
                     Image(uiImage: image).centerCropped()//.scaledToFill()
                         .frame(maxWidth: width, maxHeight: height, alignment: .center)

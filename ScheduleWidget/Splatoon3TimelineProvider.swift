@@ -21,8 +21,9 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
     let imageLoaderManager = ImageLoaderManager()
     
     static var exampleSchedule: Splatoon3.Schedule {
+        return Splatoon3.Schedule.empty
         // if available, use cached schedule
-        guard let cache = ScheduleFetcher.loadCachedSplatoon3Schedule() else { return Splatoon3.Schedule.example }
+        guard let cache = ScheduleFetcher.loadCachedSplatoon3Schedule() else { return Splatoon3.Schedule.empty }
         return cache.schedule
     }
     
@@ -119,7 +120,8 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
                         selectedTimeline = .coop(timeline: schedule.coopWithBigRun)
                     }
                 }
-                downloadImages(urls: urls, asJPEG: true) {
+                
+                downloadImages(urls: urls, asJPEG: true, maxWidth: 200.0) {
                     switch selectedTimeline {
                     case .game(let timeline):
                         let timeline = timelineForGameModeTimeline(timeline, for: configuration)
@@ -272,13 +274,17 @@ struct Splatoon3TimelineProvider: IntentTimelineProvider {
     
     // MARK: -
 
-    func downloadImages(urls: [URL], asJPEG: Bool = true, completion: @escaping ()->Void) {
+    func downloadImages(urls: [URL], asJPEG: Bool = true, maxWidth: CGFloat? = nil, completion: @escaping ()->Void) {
         let destination = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.appGroupName) ?? URL(fileURLWithPath: NSTemporaryDirectory())
         let multiImageLoader = MultiImageLoader(urls: urls, directory: destination)
         multiImageLoader.storeAsJPEG = asJPEG
+        if let maxWidth {
+            multiImageLoader.resizeOption = .resizeToWidth(maxWidth)
+        }
         imageLoaderManager.imageLoaders.append(multiImageLoader)
         multiImageLoader.load {
             completion()
+            imageLoaderManager.imageLoaders.remove(element: multiImageLoader)
         }
     }
 
